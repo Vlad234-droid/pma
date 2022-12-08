@@ -9,6 +9,7 @@ import {
   updateCalibrationSessionMeta,
   startCalibrationSession,
   closeCalibrationSession,
+  cancelCalibrationSession,
   clearCalibrationSessionData,
 } from './actions';
 
@@ -162,6 +163,27 @@ export default createReducer(initialState)
     };
   })
   .handleAction(deleteCalibrationSession.failure, (state, { payload }) => {
+    return {
+      ...state,
+      ...payload,
+      meta: { ...state.meta, loading: false, loaded: true, error: payload },
+    };
+  })
+
+  .handleAction(cancelCalibrationSession.request, (state) => {
+    return {
+      ...state,
+      meta: { ...state.meta, loading: true, error: null, loaded: false },
+    };
+  })
+  .handleAction(cancelCalibrationSession.success, (state, { payload }) => {
+    return {
+      ...state,
+      data: state.data.filter((cs) => cs.uuid !== payload.data?.uuid),
+      meta: { ...state.meta, loading: false, loaded: true },
+    };
+  })
+  .handleAction(cancelCalibrationSession.failure, (state, { payload }) => {
     return {
       ...state,
       ...payload,

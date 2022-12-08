@@ -81,6 +81,8 @@ declare namespace NodeJS {
     IDENTITY_CLIENT_SECRET: string;
     IDENTITY_USER_SCOPED_TOKEN_COOKIE_NAME: string;
     IDENTITY_USER_SCOPED_TOKEN_COOKIE_SECRET: string;
+
+    CICD_RELEASE_RELEASENAME: string | undefined;
   }
 
   export interface Process {

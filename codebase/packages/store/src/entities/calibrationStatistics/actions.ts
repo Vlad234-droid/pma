@@ -1,4 +1,4 @@
-import { createAsyncAction } from 'typesafe-actions';
+import { createAction, createAsyncAction } from 'typesafe-actions';
 import { RestResponseListRatingStatistic } from '@pma/openapi';
 
 export const getCalibrationStatistics = createAsyncAction(
@@ -7,6 +7,9 @@ export const getCalibrationStatistics = createAsyncAction(
   'calibrationUsersStatistics/FETCH_FAILURE',
 )<any, RestResponseListRatingStatistic, Error>();
 
+export const clearCalibrationStatistics = createAction('calibrationStatistics/CLEAR')<undefined>();
+
 export const Actions = {
   getCalibrationStatistics: getCalibrationStatistics.request,
+  clearCalibrationStatistics,
 };

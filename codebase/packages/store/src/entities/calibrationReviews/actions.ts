@@ -1,7 +1,7 @@
-import { createAsyncAction } from 'typesafe-actions';
+import { createAsyncAction, createAction } from 'typesafe-actions';
 import { RestResponseListColleagueReview } from '@pma/openapi';
 
-export const getCalibrationUsersReviews = createAsyncAction(
+export const getUserCalibrationReviews = createAsyncAction(
   'calibrationUsersReviews/FETCH_REQUEST',
   'calibrationUsersReviews/FETCH_SUCCESS',
   'calibrationUsersReviews/FETCH_FAILURE',
@@ -13,7 +13,10 @@ export const uploadCalibrationUsersReviews = createAsyncAction(
   'uploadCalibrationUsersReviews/FETCH_FAILURE',
 )<any, { data: RestResponseListColleagueReview; rating: string }, Error>();
 
+export const clearCalibrationReviewsData = createAction('calibrationReviews/CLEAR')<undefined>();
+
 export const Actions = {
-  getCalibrationUsersReviews: getCalibrationUsersReviews.request,
+  getUserCalibrationReviews: getUserCalibrationReviews.request,
   uploadCalibrationUsersReviews: uploadCalibrationUsersReviews.request,
+  clearCalibrationReviewsData,
 };

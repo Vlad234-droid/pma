@@ -33,15 +33,20 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
   useEffect(() => {
     onUpload &&
       activeList === ActiveList.TABLE &&
-      Object.keys(data).forEach((rating) => {
-        onUpload(rating);
+      Object.keys(data).forEach((item) => {
+        //TODO: double call
+        !data[item].length &&
+          //@ts-ignore
+          //TODO: temporary solution
+          // statistics?.find(({ rating }) => rating === item?.toLowerCase())?.count > 0 &&
+          onUpload(item);
       });
   }, []);
 
-  const handleView = (uuid: string) =>
-    navigate(buildPath(paramsReplacer(`${Page.USER_REVIEWS}`, { ':uuid': uuid })), {
+  const handleView = (userUuid: string, uuid: string) =>
+    navigate(buildPath(paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':userUuid': userUuid, ':uuid': uuid })), {
       state: {
-        backPath: `${pathname}`,
+        backPath: pathname,
       },
     });
 
@@ -59,7 +64,10 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
           <Accordion
             id={`colleague-review-accordion-${title}`}
             key={`${title}`}
-            customStyle={{ marginTop: '0px', ...(activeList === ActiveList.TABLE && { border: 'none' }) }}
+            customStyle={{
+              marginTop: '0px',
+              ...(activeList === ActiveList.TABLE && { border: 'none', minWidth: '350px !important' }),
+            }}
           >
             <BaseAccordion id={`colleague-review-accordion-${title}`}>
               {() => (
@@ -81,9 +89,7 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
                       <InfinityScrollLoad
                         loadOnScroll={false}
                         loadMore={(_limit, _start) => {
-                          (activeList === ActiveList.LIST || activeList === ActiveList.TABLE) &&
-                            onUpload &&
-                            onUpload(rating, _start, _limit);
+                          onUpload && onUpload(rating, _start, _limit);
                         }}
                         loading={loading}
                         limit={10}
@@ -98,9 +104,10 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
                                       <ViewColleagueProfile
                                         title={'view'}
                                         colleague={item.colleague as ColleagueSimple}
-                                        //TODO: replace to review uuid
-                                        onClick={() => handleView(item?.colleague?.uuid as string)}
-                                        properties={item?.review?.properties}
+                                        onClick={() =>
+                                          handleView(item?.colleague?.uuid as string, item?.review?.uuid as string)
+                                        }
+                                        properties={activeList === ActiveList.LIST ? item?.review?.properties : {}}
                                       />
                                     </div>
                                   );

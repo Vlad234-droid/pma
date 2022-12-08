@@ -25,8 +25,13 @@ export const deleteCalibrationSessions = (params: { uuid: string }) => {
 export const startCalibrationSession = (data: CalibrationSession) => {
   return httpClient.put(`${domain}/sessions/${data.uuid}/start`, data);
 };
+
 export const closeCalibrationSession = (data: CalibrationSession) => {
   return httpClient.put(`${domain}/sessions/${data.uuid}/close`, data);
+};
+
+export const cancelCalibrationSession = (uuid: string) => {
+  return httpClient.delete(`${domain}/sessions/${uuid}/cancel`);
 };
 
 export const getCalibrationReviews = ({ colleagueUuid, cycleUuid }: Config) =>
@@ -59,23 +64,28 @@ export const getCalibrationColleagues = (params: RequestQuery) => {
   });
 };
 
-export const getCalibrationUsersReviews = (params: any) => {
-  return httpClient.get(`${domain}/reviews`, {
-    params,
-    paramsSerializer: (params) => {
-      return qs.stringify(params, { arrayFormat: 'indices' });
-    },
+export const getUserCalibrationReviews = (params: any) => {
+  const { sessionUuid, ...restParams } = params;
+  const URL = sessionUuid ? `${domain}/sessions/${sessionUuid}/reviews` : `${domain}/reviews`;
+  return httpClient.get(URL, {
+    params: restParams,
   });
 };
 
-export const getCalibrationStatistics = (params = {}) =>
-  httpClient.get(`${domain}/statistics`, {
-    params,
-    paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'indices' }),
-  });
+export const getCalibrationStatistics = (params = {}) => {
+  //@ts-ignore
+  const { sessionUuid, ...restParams } = params;
+  const URL = sessionUuid ? `${domain}/sessions/${sessionUuid}/statistics` : `${domain}/statistics`;
 
-export const uploadCalibrationUsersReviews = (params: any) =>
-  httpClient.get(`${domain}/reviews`, {
-    params,
-    paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'indices' }),
+  return httpClient.get(URL, {
+    params: restParams,
   });
+};
+
+export const uploadCalibrationUsersReviews = (params: any) => {
+  const { sessionUuid, ...restParams } = params;
+  const URL = sessionUuid ? `${domain}/sessions/${sessionUuid}/reviews` : `${domain}/reviews`;
+  return httpClient.get(URL, {
+    params: restParams,
+  });
+};

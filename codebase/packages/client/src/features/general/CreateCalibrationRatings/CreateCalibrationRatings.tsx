@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Icon, Rule, useStyle } from '@pma/dex-wrapper';
 import {
@@ -43,13 +43,13 @@ const CreateCalibrationRatings: FC = () => {
   };
   const { profile } = useSelector(getColleagueSelector) || {};
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const { backPath } = (state as any) || {};
   const dispatch = useDispatch();
   const { components } = useSelector(getFormByCode(STANDARD_CALIBRATION_FORM_CODE)) || {};
   const { loading, loaded, updated } = useSelector(calibrationReviewMetaSelector);
   const calibrationReview = useSelector(calibrationReviewDataSelector(colleagueUuid)) || {};
   const { loaded: colleagueLoaded } = useSelector(getColleagueMetaSelector);
-
-  console.log({ calibrationReview });
 
   const isNew = uuid === 'new';
   const isDraft = calibrationReview?.status === Status.DRAFT;
@@ -68,7 +68,7 @@ const CreateCalibrationRatings: FC = () => {
   if (!components) return null;
 
   const handleBack = () => {
-    navigate(paramsReplacer(buildPath(Page.USER_REVIEWS), { ':uuid': colleagueUuid as string }));
+    navigate(backPath || paramsReplacer(buildPath(Page.USER_REVIEWS), { ':uuid': colleagueUuid as string }));
   };
 
   const buildData = (data: any) => {

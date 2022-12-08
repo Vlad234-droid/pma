@@ -1,15 +1,11 @@
 import React, { FC, useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ConditionOperandEnum } from '@pma/openapi';
 import * as Yup from 'yup';
 import get from 'lodash.get';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import {
-  ColleagueFilterAction,
-  ColleagueSimpleAction,
-  colleagueSimpleMetaSelector,
-  getColleagueFilterSelector,
-} from '@pma/store';
+import { ColleagueFilterAction, getColleagueFilterSelector } from '@pma/store';
 
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import { SearchOption } from 'config/enum';
@@ -24,9 +20,10 @@ import Spinner from 'components/Spinner';
 import { Buttons } from '../Buttons';
 import { ColleaguesRemover } from '../ColleaguesRemover';
 import { ColleaguesFinder } from '../ColleaguesFinder';
-import { CalibrationSessionUiType } from '../../types';
+import { CalibrationSessionUiType, ColleagueSimpleExtended } from '../../types';
 import { createSchema } from '../../config';
-import { filterToRequest } from '../../utils';
+import { filterToRequest, prepareColleaguesForUI, getSelectedGroups } from '../../utils';
+import useColleagueSimple from '../../hooks/useColleagueSimple';
 
 type Props = {
   defaultValues: CalibrationSessionUiType;
@@ -39,14 +36,14 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
   const { css, matchMedia } = useStyle();
   const { t } = useTranslation();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const { participants: { filters = [] } = {} } = defaultValues;
+
+  const [savedFilter, setSavedFilter] = useState<any>(defaultValues.filter || {});
   const dispatch = useDispatch();
 
-  const { loading: colleagueSimpleLoading, loaded: colleagueSimpleLoaded } =
-    useSelector(colleagueSimpleMetaSelector) || [];
   const colleagueFilter = useSelector(getColleagueFilterSelector) || {};
 
   const [isVisibleFilterModal, setFilterModal] = useState<boolean>(false);
-  const [savedFilter, setSavedFilter] = useState<any>(defaultValues.filter || {});
 
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
@@ -62,16 +59,35 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
   } = methods;
 
   const formValues = getValues();
+  const selectedGroupLength = getSelectedGroups(colleagueFilter, formValues.filter)?.length || null;
+
+  const {
+    colleagues: colleaguesRemover,
+    loading: colleaguesRemoverLoading,
+    loaded: colleaguesRemoverLoaded,
+  } = useColleagueSimple(filterToRequest(savedFilter));
+  const {
+    colleagues: colleaguesFinder,
+    loading: colleaguesFinderLoading,
+    loaded: colleaguesFinderLoaded,
+  } = useColleagueSimple({});
 
   const handleAddColleagues = (colleagues) => {
-    setValue('colleaguesAdd', colleagues, { shouldDirty: true, shouldValidate: true });
+    const add = colleagues?.filter(({ type }) => type === 'add');
+    const remove = colleagues?.filter(({ type }) => type === 'remove');
+    setValue('colleaguesAdd', add, { shouldDirty: true, shouldValidate: true });
+    setValue('colleaguesRemoved', [...formValues.colleaguesRemoved, ...remove], {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
   };
+
   const handleRemoveColleague = (colleagues) => {
     setValue('colleaguesRemoved', colleagues, { shouldDirty: true, shouldValidate: true });
   };
+
   const handleFilter = (filter) => {
     setValue('filter', filter, { shouldDirty: true, shouldValidate: true });
-    dispatch(ColleagueSimpleAction.getColleagueSimple(filterToRequest(filter)));
   };
 
   const handleBlur = (fieldName: string | any) => {
@@ -81,7 +97,7 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
   const handleRemoveCancellation = () => {
     setSavedFilter({});
     setValue('filter', {}, { shouldDirty: true, shouldValidate: true });
-    dispatch(ColleagueSimpleAction.getColleagueSimple({}));
+    dispatch(ColleagueFilterAction.getColleagueFilter({}));
   };
 
   const updateFilter = useCallback((data) => {
@@ -89,14 +105,22 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
   }, []);
 
   useEffect(() => {
-    if (!colleagueSimpleLoading && colleagueSimpleLoaded) {
+    if (colleaguesRemoverLoaded && colleaguesFinderLoaded) {
       reset({
         ...formValues,
-        colleaguesRemoved: defaultValues.colleaguesRemoved,
-        colleaguesAdd: defaultValues.colleaguesAdd,
+        colleaguesRemoved: prepareColleaguesForUI(colleaguesRemover, filters, ConditionOperandEnum.NotIn),
+        colleaguesAdd: prepareColleaguesForUI(colleaguesFinder, filters, ConditionOperandEnum.In),
       });
     }
-  }, [colleagueSimpleLoading, colleagueSimpleLoaded]);
+  }, [colleaguesRemoverLoaded, colleaguesFinderLoaded]);
+
+  const colleaguesRemoverIds = colleaguesRemover.map(({ uuid }) => uuid);
+  const allColleagues = colleaguesFinder.map((colleague) => {
+    return {
+      ...colleague,
+      type: colleague?.uuid && colleaguesRemoverIds.includes(colleague.uuid) ? 'remove' : 'add',
+    } as ColleagueSimpleExtended;
+  });
 
   return (
     <form data-test-id={'CALIBRATION_SESSION_FORM_MODAL'}>
@@ -137,10 +161,10 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
             iconProps={{ title: `Filter and add`, fill: '#fff', size: '16px' }}
           >
             <Trans i18nKey='filter_and_add'>Filter and add</Trans>
-            {Object.keys(formValues.filter)?.length ? ` (${Object.keys(formValues.filter)?.length})` : ''}
+            {selectedGroupLength ? ` (${selectedGroupLength})` : ''}
           </IconButton>
         </div>
-        {colleagueSimpleLoading ? (
+        {colleaguesRemoverLoading ? (
           <Spinner />
         ) : (
           <ColleaguesRemover
@@ -148,12 +172,13 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
             onRemove={handleRemoveColleague}
             onCancel={handleRemoveCancellation}
             filter={savedFilter}
+            colleagues={colleaguesRemover}
           />
         )}
         <div className={css({ padding: '30px 0' })}>
           <div className={css(labelTextStyle)}>Add or remove people</div>
           <div>
-            {colleagueSimpleLoading ? (
+            {colleaguesFinderLoading ? (
               <Spinner />
             ) : (
               <ColleaguesFinder
@@ -168,6 +193,7 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
                 marginBot={false}
                 customIcon={true}
                 multiple={true}
+                colleagues={allColleagues}
               />
             )}
           </div>

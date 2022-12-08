@@ -67,6 +67,8 @@ export type ProcessConfig = {
   identityClientSecret: () => string;
   identityUserScopedTokenCookieName: () => string;
   identityUserScopedTokenCookieSecret: () => string;
+
+  releaseName: () => string;
 };
 
 export class ConfigAccessor {
@@ -182,6 +184,8 @@ export class ConfigAccessor {
       identityClientSecret: () => processEnv.IDENTITY_CLIENT_SECRET,
       identityUserScopedTokenCookieName: () => processEnv.IDENTITY_USER_SCOPED_TOKEN_COOKIE_NAME,
       identityUserScopedTokenCookieSecret: () => processEnv.IDENTITY_USER_SCOPED_TOKEN_COOKIE_SECRET,
+
+      releaseName: () => processEnv.CICD_RELEASE_RELEASENAME || 'unknown',
     };
   }
 

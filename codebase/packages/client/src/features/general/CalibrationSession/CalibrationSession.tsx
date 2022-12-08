@@ -1,50 +1,62 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { CalibrationSessionStatusEnum } from '@pma/openapi';
 import useDispatch from 'hooks/useDispatch';
 
-import { getCalibrationSessionsSelector, CalibrationSessionsAction, calibrationSessionsMetaSelector } from '@pma/store';
+import {
+  calibrationReviewsDataSelector,
+  CalibrationSessionsAction,
+  calibrationSessionsMetaSelector,
+  getCalibrationSessionSelector,
+} from '@pma/store';
 
 import { buildPath } from 'features/general/Routes';
+import ColleaguesRatings from './components/ColleaguesRatings';
+import { SuccessModal } from './components/SuccessModal';
 import { useTranslation } from 'components/Translation';
 import { ListView } from './components/ListView';
-import { Line } from 'components/Line';
-import { Footer } from './components/Footer';
-import { SuccessModal } from './components/SuccessModal';
-import ColleaguesRatings from './components/ColleaguesRatings';
-import Graph from 'components/Graph';
-import { Rating } from 'config/enum';
 import { TileWrapper } from 'components/Tile';
+import { Footer } from './components/Footer';
+import Spinner from 'components/Spinner';
+import { Line } from 'components/Line';
+import Graph from 'components/Graph';
 import { ActiveList } from './types';
 
 import { Page } from 'pages';
+import { useCalibrationStatistics, useClearCalibrationData, useReviewsCalibrationList } from './hook';
+import { buildData } from './utils';
+import omit from 'lodash.omit';
 
-const CalibrationSession = () => {
+const CalibrationSession: FC<{ uuid: string }> = ({ uuid }) => {
   const { css, matchMedia } = useStyle();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const mediumScreen = matchMedia({ xSmall: false, small: false, medium: true }) || false;
-  const { uuid } = useParams<{ uuid: string }>();
-  const calibrationSessions = useSelector(getCalibrationSessionsSelector) || [];
+  const calibrationSession = useSelector(getCalibrationSessionSelector(uuid || '')) || {};
   const { loading: csLoading, updating: csUpdating } = useSelector(calibrationSessionsMetaSelector);
 
-  const calibrationSession = uuid ? calibrationSessions.find((cs) => cs.uuid === uuid) || null : {};
   const isStarted =
     calibrationSession?.status === CalibrationSessionStatusEnum.Started ||
     calibrationSession?.status === CalibrationSessionStatusEnum.Updated;
 
   const { t } = useTranslation();
   const [showSuccessModal, toggleSuccessModal] = useState<boolean>(false);
-  const [period, setPeriod] = useState<string>('2021 - 2022');
   const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
   const listRef = useRef<HTMLDivElement>();
   const bottomPanelRef = useRef<HTMLDivElement>();
 
+  const data = useSelector(calibrationReviewsDataSelector);
+  const { statistics, loading: statisticsLoading } = useCalibrationStatistics(activeList, uuid as string);
+  const getCalibrationReviewsList = useReviewsCalibrationList(activeList, uuid);
+  useClearCalibrationData();
+
   const handleCancellation = () => {
+    if (isStarted) {
+      dispatch(CalibrationSessionsAction.cancelCalibrationSession(calibrationSession));
+    }
     navigate(buildPath(Page.CALIBRATION_SESSION_LIST));
   };
   const handleSave = () => {
@@ -63,89 +75,6 @@ const CalibrationSession = () => {
     dispatch(CalibrationSessionsAction.getCalibrationSessions({}));
   }, []);
 
-  const data = {
-    outstanding: [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        type: 'Outstanding',
-        value: 'how',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        type: 'Outstanding',
-        value: 'how',
-      },
-    ],
-    great: [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        type: 'Outstanding',
-        value: 'how',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        type: 'Outstanding',
-        value: 'how',
-      },
-    ],
-    satisfactory: [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        type: 'Outstanding',
-        value: 'how',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        type: 'Outstanding',
-        value: 'how',
-      },
-    ],
-    below_expected: [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        type: 'Outstanding',
-        value: 'how',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        type: 'Outstanding',
-        value: 'how',
-      },
-    ],
-  };
-
   if (showSuccessModal) {
     return (
       <SuccessModal
@@ -156,39 +85,36 @@ const CalibrationSession = () => {
   }
 
   return (
-    <>
+    <div>
       <div className={css(listHeaderContainer({ width: listRef?.current?.clientWidth, mediumScreen, mobileScreen }))}>
-        <p>{t('ratings_period', 'Ratings', { period })}</p>
+        <p>{t('ratings_period', 'Ratings', { period: '' })}</p>
         <ListView active={activeList} setActive={(active) => setActiveList(active)} ref={listRef} />
       </div>
       <Line styles={lineStyles} />
-      {activeList !== ActiveList.GRAPH ? (
+      {statisticsLoading ? (
+        <Spinner fullHeight />
+      ) : activeList !== ActiveList.GRAPH ? (
         <ColleaguesRatings
-          //TODO: replace to data from selector
-          //@ts-ignore
-          data={data}
+          data={activeList === ActiveList.TABLE ? omit(data, 'unsubmitted') : data}
           activeList={activeList}
-          key={activeList}
           styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
+          onUpload={(rating, _start, _limit) => getCalibrationReviewsList(rating, _start, _limit)}
+          statistics={statistics}
         />
       ) : (
-        <TileWrapper customStyle={tileStyles}>
+        <TileWrapper customStyle={tileStyles({ mobileScreen })}>
           <Graph
-            title={t('calibration_submission', 'Calibration submission', { year: '2021' })}
+            title={''}
+            properties={buildData(statistics, t, 'count')}
             currentData={{
-              title: '2022',
-              ratings: {
-                [Rating.OUTSTANDING]: 30,
-                [Rating.GREAT]: 20,
-                [Rating.SATISFACTORY]: 50,
-                [Rating.BELOW_EXPECTED]: 70,
-              },
+              title: '',
+              ratings: buildData(statistics, t, 'percentage'),
             }}
           />
         </TileWrapper>
       )}
       {isStarted && <Footer ref={bottomPanelRef} onCancel={handleCancellation} onSave={handleSave} />}
-    </>
+    </div>
   );
 };
 
@@ -196,10 +122,10 @@ const lineStyles: Rule = {
   marginTop: '16px',
   marginBottom: '8px',
 };
-const tileStyles: Rule = {
-  padding: '24px',
+const tileStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  padding: mobileScreen ? '24px 24px 24px 0px' : '24px',
   marginTop: '24px',
-};
+});
 const tableStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) =>
   ({
     display: 'flex',

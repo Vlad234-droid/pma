@@ -39,7 +39,7 @@ const CalibrationSessionPage: FC = () => {
             <DownloadReport uuid={uuid as string} />
           </div>
         </div>
-        <CalibrationSessionDetails />
+        <CalibrationSessionDetails uuid={uuid as string} />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC } from 'react';
+import React, { CSSProperties, FC, useCallback } from 'react';
 import { Rule, useStyle, Styles } from '@pma/dex-wrapper';
 import { Item } from 'components/Form';
 import SearchInput from 'components/SearchInput';
@@ -9,6 +9,7 @@ import useSearchColleagues from 'hooks/useSearchColleagues';
 
 import { SearchOption } from 'config/enum';
 import { Icon } from '../Icon';
+import debounce from 'lodash.debounce';
 
 export const TEST_ID = 'colleagues-finder';
 
@@ -58,6 +59,11 @@ const ColleaguesFinder: FC<Props> = ({
     onSelect(colleagueUUID);
   };
 
+  const handleSearch = useCallback(
+    debounce((e) => handleSearchColleagues(e.target.value, searchOption), 300),
+    [],
+  );
+
   return (
     <div className={css({ marginTop: '32px', ...customStyles })} data-test-id={TEST_ID}>
       <Item
@@ -71,7 +77,7 @@ const ColleaguesFinder: FC<Props> = ({
           styles={inputStyles}
           name={'search_option'}
           onChange={handleChange}
-          onSearch={(e) => handleSearchColleagues(e.target.value, searchOption)}
+          onSearch={handleSearch}
           placeholder={t('search', 'Search')}
           options={value ? [] : colleagues}
           selected={selected}

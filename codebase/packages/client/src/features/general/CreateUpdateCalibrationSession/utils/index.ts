@@ -1,4 +1,4 @@
-import { Condition, ConditionOperandEnum, ColleagueSimple } from '@pma/openapi';
+import { Condition, ConditionOperandEnum, ColleagueSimple, ColleagueFilterOptions } from '@pma/openapi';
 import { Operand } from 'config/enum';
 import { CalibrationSessionUiType } from '../types';
 
@@ -87,4 +87,16 @@ export const prepareColleaguesForUI = (
   return colleagueSimple
     .filter((c) => c.uuid && colleaguesAddIds.includes(c.uuid))
     .map(({ uuid, firstName, lastName }) => ({ value: uuid, label: `${firstName} ${lastName}` }));
+};
+
+export const getSelectedGroups = (colleagueFilter: ColleagueFilterOptions, filter): string[] => {
+  const acc: string[] = [];
+  for (const [key, value] of Object.entries(colleagueFilter)) {
+    const valueIds = value?.map((v) => (v.uuid ? v.uuid : v.code));
+    const filterKeys = filter?.[key];
+    if (key && Object.keys(filterKeys || {}).some((fk) => valueIds.includes(fk) && filterKeys[fk] === true)) {
+      acc.push(key);
+    }
+  }
+  return acc;
 };
