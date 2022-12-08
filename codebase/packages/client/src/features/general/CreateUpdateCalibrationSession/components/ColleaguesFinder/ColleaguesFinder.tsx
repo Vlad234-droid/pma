@@ -1,14 +1,15 @@
 import React, { CSSProperties, FC } from 'react';
-import { Rule, useStyle, Styles } from '@pma/dex-wrapper';
+import { Rule, useStyle, Styles, Button } from '@pma/dex-wrapper';
 import { Item } from 'components/Form';
 import SearchInput from 'components/SearchInput';
-import { useTranslation } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { ColleagueProfile } from 'components/ColleagueProfile';
 
 import useSearchColleaguesSimple from '../../hooks/useSearchColleaguesSimple';
 
 import { SearchOption } from 'config/enum';
 import { Icon } from 'components/Icon';
+import { ColleagueSimpleExtended } from '../../types';
 
 export const TEST_ID = 'colleagues-simple-finder';
 
@@ -26,6 +27,7 @@ type Props = {
   withIcon?: boolean;
   marginBot?: boolean;
   customIcon?: boolean;
+  colleagues: ColleagueSimpleExtended[];
 };
 
 const ColleaguesFinder: FC<Props> = ({
@@ -42,17 +44,22 @@ const ColleaguesFinder: FC<Props> = ({
   withIcon = true,
   marginBot = true,
   customIcon,
+  colleagues,
 }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
-  const { colleagues, handleSearchColleagues, clearColleagueList } = useSearchColleaguesSimple(options);
+  const {
+    colleagues: filteredColleagues,
+    handleSearchColleagues,
+    clearColleagueList,
+  } = useSearchColleaguesSimple(colleagues);
 
   const handleChange = (e: any) => {
-    const { uuid, firstName, lastName } = e;
+    const { uuid, firstName, lastName, type } = e;
 
     if (multiple) {
-      onSelect([...selected, { value: uuid, label: `${firstName} ${lastName}` }]);
+      onSelect([...selected, { value: uuid, label: `${firstName} ${lastName}`, type }]);
       return clearColleagueList();
     }
     onSelect(uuid);
@@ -74,7 +81,7 @@ const ColleaguesFinder: FC<Props> = ({
           onChange={handleChange}
           onSearch={(e) => handleSearchColleagues(e.target.value, searchOption)}
           placeholder={t('search', 'Search')}
-          options={value ? [] : colleagues}
+          options={value ? [] : filteredColleagues}
           selected={selected}
           value={value}
           disabled={Boolean(value)}
@@ -89,6 +96,11 @@ const ColleaguesFinder: FC<Props> = ({
               lastName={item?.lastName}
               job={item?.jobName}
               department={''}
+              action={
+                <div className={css(optionActionStyle)}>
+                  <Trans i18nKey={item?.type}>{item?.type}</Trans>
+                </div>
+              }
             />
           )}
         />
@@ -100,5 +112,11 @@ const ColleaguesFinder: FC<Props> = ({
 const iconStyles: Rule = {
   marginTop: '4px',
 };
+const optionActionStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f14,
+  marginLeft: 'auto',
+  fontWeight: 'bold',
+  color: theme.colors.tescoBlue,
+});
 
 export default ColleaguesFinder;

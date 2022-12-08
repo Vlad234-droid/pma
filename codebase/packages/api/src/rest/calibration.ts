@@ -25,8 +25,13 @@ export const deleteCalibrationSessions = (params: { uuid: string }) => {
 export const startCalibrationSession = (data: CalibrationSession) => {
   return httpClient.put(`${domain}/sessions/${data.uuid}/start`, data);
 };
+
 export const closeCalibrationSession = (data: CalibrationSession) => {
   return httpClient.put(`${domain}/sessions/${data.uuid}/close`, data);
+};
+
+export const cancelCalibrationSession = (uuid: string) => {
+  return httpClient.delete(`${domain}/sessions/${uuid}/cancel`);
 };
 
 export const getCalibrationReviews = ({ colleagueUuid, cycleUuid }: Config) =>

@@ -17,3 +17,8 @@ export const getCalibrationSessionsSelector = createSelector(
   calibrationSessionsSelector,
   (calibrationSessions) => calibrationSessions.data,
 );
+
+export const getCalibrationSessionSelector = (uuid: string) =>
+  createSelector(getCalibrationSessionsSelector, (calibrationSessions) => {
+    return calibrationSessions.find((cs) => cs.uuid === uuid);
+  });

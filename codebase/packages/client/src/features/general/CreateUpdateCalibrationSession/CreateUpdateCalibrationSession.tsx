@@ -42,13 +42,13 @@ const CreateUpdateCalibrationSession: FC<Props> = ({ onClose }) => {
     error: calibrationSessionError,
   } = useSelector(calibrationSessionsMetaSelector);
   const calibrationSessions = useSelector(getCalibrationSessionsSelector) || [];
-  const { defaultFilters, colleaguesRemoved, colleaguesAdd } = useFilter(uuid);
+  const { defaultFilters } = useFilter(uuid);
 
   const calibrationSession = uuid ? calibrationSessions.find((cs) => cs.uuid === uuid) || null : {};
   const defaultValues: CalibrationSessionUiType = {
     ...calibrationSession,
-    colleaguesRemoved,
-    colleaguesAdd,
+    colleaguesRemoved: [],
+    colleaguesAdd: [],
     filter: defaultFilters,
   };
 

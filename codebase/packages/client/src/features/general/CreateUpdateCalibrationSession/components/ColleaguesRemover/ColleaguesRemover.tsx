@@ -1,36 +1,27 @@
 import React, { FC, useState } from 'react';
-import { ColleagueFilterOptions } from '@pma/openapi';
+import { ColleagueSimple } from '@pma/openapi';
 import { colors, Rule, Styles, useStyle, Button } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import { useTranslation, Trans } from 'components/Translation';
 import { ColleagueProfile } from 'components/ColleagueProfile';
 import { Icon } from 'components/Icon';
 import { useSelector } from 'react-redux';
-import { getColleagueFilterSelector, getColleagueSimpleSelector } from '@pma/store';
+import { getColleagueFilterSelector } from '@pma/store';
 
-const getSelectedNamesGroup = (colleagueFilter: ColleagueFilterOptions, filter): string[] => {
-  const acc: string[] = [];
-  for (const [key, value] of Object.entries(colleagueFilter)) {
-    const valueIds = value?.map((v) => (v.uuid ? v.uuid : v.code));
-    const filterKeys = filter?.[key];
-    if (key && Object.keys(filterKeys || {}).some((fk) => valueIds.includes(fk) && filterKeys[fk] === true)) {
-      acc.push(key);
-    }
-  }
-  return acc;
-};
+import { getSelectedGroups } from '../../utils';
 
-const ColleaguesRemover: FC<{ colleaguesRemoved: any; onRemove: any; onCancel: () => void; filter: any }> = ({
-  colleaguesRemoved,
-  onRemove,
-  filter,
-}) => {
+const ColleaguesRemover: FC<{
+  colleaguesRemoved: any;
+  onRemove: any;
+  onCancel: () => void;
+  filter: any;
+  colleagues: ColleagueSimple[];
+}> = ({ colleaguesRemoved, onRemove, filter, colleagues }) => {
   const { t } = useTranslation();
-  const colleagues = useSelector(getColleagueSimpleSelector) || [];
   const colleagueFilter = useSelector(getColleagueFilterSelector) || {};
   const { css } = useStyle(['lineHeight']);
   const [isPeopleListOpen, togglePeopleList] = useState<boolean>(false);
-  const selectedNamesGroup = getSelectedNamesGroup(colleagueFilter, filter)
+  const selectedNamesGroup = getSelectedGroups(colleagueFilter, filter)
     .map((name) => t(`group_name_${name}`, name))
     .join(' | ');
 
@@ -41,7 +32,7 @@ const ColleaguesRemover: FC<{ colleaguesRemoved: any; onRemove: any; onCancel: (
 
   const handleRemove = (colleague: any) => {
     const { uuid, firstName, lastName } = colleague;
-    onRemove([...colleaguesRemoved, { value: uuid, label: `${firstName} ${lastName}` }]);
+    onRemove([...colleaguesRemoved, { value: uuid, label: `${firstName} ${lastName}`, type: 'remove' }]);
   };
 
   const onUndoRemove = (uuid) => {
@@ -79,7 +70,7 @@ const ColleaguesRemover: FC<{ colleaguesRemoved: any; onRemove: any; onCancel: (
                   key={idx}
                   className={css(optionStyle)}
                   onMouseDown={(e) => e.preventDefault()}
-                  onClick={console.log}
+                  onClick={() => handleRemove(item)}
                 >
                   <ColleagueProfile
                     firstName={item?.firstName}
@@ -87,13 +78,9 @@ const ColleaguesRemover: FC<{ colleaguesRemoved: any; onRemove: any; onCancel: (
                     job={item?.jobName}
                     department={''}
                     action={
-                      <Button
-                        styles={[{ marginLeft: 'auto', fontWeight: 'bold' }]}
-                        onPress={() => handleRemove(item)}
-                        mode={'inverse'}
-                      >
-                        <Trans i18nKey={'remove'}>Remove</Trans>
-                      </Button>
+                      <div className={css(optionActionStyle)}>
+                        <Trans i18nKey='remove'>Remove</Trans>
+                      </div>
                     }
                   />
                 </div>
@@ -186,5 +173,12 @@ const bottomBorderStyle: Rule = ({ theme }) => ({
 });
 
 const blockContainerStyle: Rule = { display: 'flex', justifyContent: 'space-between', alignItems: 'center' };
+
+const optionActionStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f14,
+  marginLeft: 'auto',
+  fontWeight: 'bold',
+  color: theme.colors.tescoBlue,
+});
 
 export default ColleaguesRemover;

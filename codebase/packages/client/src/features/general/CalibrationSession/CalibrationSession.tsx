@@ -9,7 +9,7 @@ import {
   calibrationReviewsDataSelector,
   CalibrationSessionsAction,
   calibrationSessionsMetaSelector,
-  getCalibrationSessionsSelector,
+  getCalibrationSessionSelector,
 } from '@pma/store';
 
 import { buildPath } from 'features/general/Routes';
@@ -35,10 +35,9 @@ const CalibrationSession: FC<{ uuid: string }> = ({ uuid }) => {
   const navigate = useNavigate();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const mediumScreen = matchMedia({ xSmall: false, small: false, medium: true }) || false;
-  const calibrationSessions = useSelector(getCalibrationSessionsSelector) || [];
+  const calibrationSession = useSelector(getCalibrationSessionSelector(uuid || '')) || {};
   const { loading: csLoading, updating: csUpdating } = useSelector(calibrationSessionsMetaSelector);
 
-  const calibrationSession = uuid ? calibrationSessions.find((cs) => cs.uuid === uuid) || null : {};
   const isStarted =
     calibrationSession?.status === CalibrationSessionStatusEnum.Started ||
     calibrationSession?.status === CalibrationSessionStatusEnum.Updated;
@@ -55,6 +54,9 @@ const CalibrationSession: FC<{ uuid: string }> = ({ uuid }) => {
   useClearCalibrationData();
 
   const handleCancellation = () => {
+    if (isStarted) {
+      dispatch(CalibrationSessionsAction.cancelCalibrationSession(calibrationSession));
+    }
     navigate(buildPath(Page.CALIBRATION_SESSION_LIST));
   };
   const handleSave = () => {

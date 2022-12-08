@@ -1,13 +1,9 @@
 import { useState, useCallback } from 'react';
-import { useSelector } from 'react-redux';
-import { getColleagueSimpleSelector, colleagueSimpleMetaSelector } from '@pma/store';
 import { SearchOption } from 'config/enum';
+import { ColleagueSimple } from '@pma/openapi';
 
-const useSearchColleaguesSimple = (fields: Record<string, string> = {}) => {
-  const [localColleagues, setLocalColleagues] = useState<any>([]);
-  const { loaded } = useSelector(colleagueSimpleMetaSelector) || [];
-  const colleagues = useSelector(getColleagueSimpleSelector) || [];
-
+const useSearchColleaguesSimple = (colleagues: ColleagueSimple[]) => {
+  const [localColleagues, setLocalColleagues] = useState<ColleagueSimple[]>([]);
   const clearColleagueList = () => setLocalColleagues([]);
 
   const handleSearchColleagues = useCallback(
@@ -18,7 +14,9 @@ const useSearchColleaguesSimple = (fields: Record<string, string> = {}) => {
       }
 
       const result = colleagues.filter((obj) =>
-        Object.values(obj).some((val) => val.toLowerCase().includes(value.toLowerCase())),
+        Object.values(obj).some((val) => {
+          return val.toLowerCase().includes(value.toLowerCase());
+        }),
       );
 
       setLocalColleagues(result);
@@ -27,7 +25,6 @@ const useSearchColleaguesSimple = (fields: Record<string, string> = {}) => {
   );
 
   return {
-    loaded,
     handleSearchColleagues,
     colleagues: localColleagues,
     clearColleagueList,

@@ -51,11 +51,9 @@ const SearchInput: FC<Props> = ({
   const { css } = useStyle();
   const { inputRef } = useFormContainer();
 
-  const handleSearch = useCallback(debounce(onSearch, 300), []);
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrentValue(e.target.value);
-    handleSearch(e);
+    onSearch(e);
   };
 
   useEffect(() => {
