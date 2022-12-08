@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Icon, Rule, useStyle } from '@pma/dex-wrapper';
@@ -38,6 +38,7 @@ const CreateCalibrationRatings: FC = () => {
     uuid: string;
     userUuid: string;
   };
+  const [currentStatus, setCurrentStatus] = useState('');
   const { profile } = useSelector(getColleagueSelector) || {};
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -84,10 +85,12 @@ const CreateCalibrationRatings: FC = () => {
   };
 
   const handleSave = (data: any) => {
+    setCurrentStatus(data.status);
     dispatch(CalibrationReviewAction.saveCalibrationReview(buildData(data)));
   };
 
   const handleUpdate = (data) => {
+    setCurrentStatus(data.status);
     dispatch(CalibrationReviewAction.updateCalibrationReview(buildData(data)));
   };
 
@@ -100,7 +103,11 @@ const CreateCalibrationRatings: FC = () => {
 
   if (loading) return null;
 
-  if (!loading && updated)
+  if (!loading && updated) {
+    if (currentStatus === Status.DRAFT) {
+      handleBack();
+      return null;
+    }
     return (
       <SuccessModal
         customButtonStyles={{ background: theme.colors.tescoBlue, color: theme.colors.white }}
@@ -111,6 +118,7 @@ const CreateCalibrationRatings: FC = () => {
         mark={<SuccessMark />}
       />
     );
+  }
 
   if (!isNew && loaded && !calibrationReview?.properties) {
     navigate(buildPath(paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':uuid': 'new' })), { replace: true });
