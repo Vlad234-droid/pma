@@ -53,17 +53,20 @@ const RatingForm: FC<Props> = ({ onSubmit, onCancel, components, defaultValues, 
     }
   }, [overall_rating]);
 
+  const handleSave = (data: any) => onSubmit({ ...data, status: 'WAITING_FOR_APPROVAL' });
+  const handleSaveDraft = (data: any) => onSubmit({ ...data, status: 'DRAFT' });
+
   return (
     <div>
       <DynamicForm components={components} formValues={values} errors={errors} setValue={setValue} />
       <ButtonsWrapper
         isValid={isValid}
         isLeftDisabled={!Object.keys(values).length}
-        onLeftPress={mode === Mode.CREATE ? () => onSubmit({ ...values, status: 'DRAFT' }) : onCancel}
+        onLeftPress={mode === Mode.CREATE ? () => handleSaveDraft(values) : onCancel}
+        leftText={mode === Mode.CREATE ? 'save_as_draft' : 'cancel'}
         rightIcon={false}
         rightTextNotIcon={'submit'}
-        leftText={mode === Mode.CREATE ? 'save_as_draft' : 'cancel'}
-        onRightPress={handleSubmit((data) => onSubmit({ ...data, status: 'WAITING_FOR_APPROVAL' }))}
+        onRightPress={handleSubmit(handleSave)}
       />
     </div>
   );

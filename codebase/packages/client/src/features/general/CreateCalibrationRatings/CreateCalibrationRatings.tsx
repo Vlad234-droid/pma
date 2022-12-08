@@ -34,27 +34,29 @@ export enum Statuses {
 const STANDARD_CALIBRATION_FORM_CODE = 'forms/standard_calibration.form';
 
 const CreateCalibrationRatings: FC = () => {
+  const { t } = useTranslation();
+  const { css, theme } = useStyle();
+  const [currentStatus, setCurrentStatus] = useState('');
   const { uuid, userUuid: colleagueUuid } = useParams<{ uuid: string; userUuid: string }>() as {
     uuid: string;
     userUuid: string;
   };
-  const [currentStatus, setCurrentStatus] = useState('');
   const { profile } = useSelector(getColleagueSelector) || {};
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { components } = useSelector(getFormByCode(STANDARD_CALIBRATION_FORM_CODE)) || {};
   const { loading, loaded, updated } = useSelector(calibrationReviewMetaSelector);
   const calibrationReview = useSelector(calibrationReviewDataSelector(colleagueUuid)) || {};
-  const { t } = useTranslation();
-  const { css, theme } = useStyle();
-
   const { loaded: colleagueLoaded } = useSelector(getColleagueMetaSelector);
+
+  console.log({ calibrationReview });
+
+  const isNew = uuid === 'new';
+  const isDraft = calibrationReview?.status === Status.DRAFT;
 
   useEffect(() => {
     dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid }));
   }, [colleagueUuid, colleagueLoaded]);
-
-  const isNew = uuid === 'new';
 
   useEffect(() => {
     if (!isNew) {
@@ -94,12 +96,7 @@ const CreateCalibrationRatings: FC = () => {
     dispatch(CalibrationReviewAction.updateCalibrationReview(buildData(data)));
   };
 
-  const { properties, status } = calibrationReview;
-
-  if ([Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(status)) {
-    handleBack();
-    return null;
-  }
+  const { properties } = calibrationReview;
 
   if (loading) return null;
 
@@ -125,7 +122,10 @@ const CreateCalibrationRatings: FC = () => {
   }
 
   return (
-    <WrapperModal onClose={handleBack} title={isNew ? t('submit_calibration_ratings') : t('edit_calibration_ratings')}>
+    <WrapperModal
+      onClose={handleBack}
+      title={isNew || isDraft ? t('submit_calibration_ratings') : t('edit_calibration_ratings')}
+    >
       <div className={css(ratingWrapper)}>
         <div className={css({ display: 'flex', alignItems: 'center' })}>
           <Icon graphic='information' />
@@ -145,7 +145,7 @@ const CreateCalibrationRatings: FC = () => {
           onCancel={handleBack}
           components={components}
           defaultValues={!isNew ? properties : {}}
-          mode={isNew ? Mode.CREATE : Mode.UPDATE}
+          mode={isNew || isDraft ? Mode.CREATE : Mode.UPDATE}
         />
       </div>
     </WrapperModal>
