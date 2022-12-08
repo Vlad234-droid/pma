@@ -34,7 +34,7 @@ const ViewColleagueProfile: FC<Props> = ({ colleague, onClick, title, properties
           </div>
         </div>
 
-        {(properties?.what_rating || properties?.how_rating || properties?.overall_rating) && (
+        {(properties?.what_rating || properties?.how_rating) && (
           <div className={css(ratingContainer)}>
             {properties?.what_rating && (
               <div className={css(ratingType)}>
@@ -49,14 +49,6 @@ const ViewColleagueProfile: FC<Props> = ({ colleague, onClick, title, properties
                 <span>{properties?.how_rating}</span>
                 <span>
                   <Trans i18nKey={'how'} />
-                </span>
-              </div>
-            )}
-            {properties?.overall_rating && (
-              <div className={css(ratingType)}>
-                <span>{properties?.overall_rating}</span>
-                <span>
-                  <Trans i18nKey={'Overall'} />
                 </span>
               </div>
             )}
