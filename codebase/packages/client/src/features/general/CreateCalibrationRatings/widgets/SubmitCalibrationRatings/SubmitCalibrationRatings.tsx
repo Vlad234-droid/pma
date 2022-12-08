@@ -41,7 +41,7 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
 
   const { uuid = 'new', status } = calibrationReview;
 
-  if (status === Status.WAITING_FOR_APPROVAL) return null;
+  if ([Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(status)) return null;
 
   return (
     <BaseWidget

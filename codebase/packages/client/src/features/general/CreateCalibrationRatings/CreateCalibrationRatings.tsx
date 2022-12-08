@@ -14,7 +14,7 @@ import {
 } from '@pma/store';
 
 import WrapperModal from 'features/general/Modal/components/WrapperModal';
-import { useTranslation, Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import AvatarName from 'components/AvatarName';
 import { SuccessMark } from 'components/Icon';
 import useDispatch from 'hooks/useDispatch';
@@ -93,7 +93,7 @@ const CreateCalibrationRatings: FC = () => {
 
   const { properties, status } = calibrationReview;
 
-  if (status === Status.WAITING_FOR_APPROVAL) {
+  if ([Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(status)) {
     handleBack();
     return null;
   }

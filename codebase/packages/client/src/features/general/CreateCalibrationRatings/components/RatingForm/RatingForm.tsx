@@ -58,6 +58,7 @@ const RatingForm: FC<Props> = ({ onSubmit, onCancel, components, defaultValues, 
       <DynamicForm components={components} formValues={values} errors={errors} setValue={setValue} />
       <ButtonsWrapper
         isValid={isValid}
+        isLeftDisabled={!Object.keys(values).length}
         onLeftPress={mode === Mode.CREATE ? () => onSubmit({ ...values, status: 'DRAFT' }) : onCancel}
         rightIcon={false}
         rightTextNotIcon={'submit'}
