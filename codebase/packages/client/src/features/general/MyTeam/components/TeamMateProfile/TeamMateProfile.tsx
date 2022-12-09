@@ -3,7 +3,7 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Panel, Section } from 'components/Accordion';
-import { Rating, Status } from 'config/enum';
+import { Status } from 'config/enum';
 import { Employee } from 'config/types';
 
 import TimeLines from '../Timelines';
@@ -14,20 +14,11 @@ type Props = {
   status: Status;
   employee: Employee;
   fullTeamView?: boolean;
-  rating?: Rating;
   onClick?: () => void;
   customWrapperStyle?: React.CSSProperties | {};
 };
 
-const TeamMateProfile: FC<Props> = ({
-  uuid,
-  status,
-  employee,
-  fullTeamView = false,
-  rating,
-  onClick,
-  customWrapperStyle,
-}) => {
+const TeamMateProfile: FC<Props> = ({ uuid, status, employee, fullTeamView = false, onClick, customWrapperStyle }) => {
   const { css } = useStyle();
 
   return (
@@ -42,7 +33,11 @@ const TeamMateProfile: FC<Props> = ({
                     status={status}
                     employee={employee}
                     fullTeamView={fullTeamView}
-                    rating={rating}
+                    hasCalibrationRating={
+                      !!employee.reviews.find(
+                        ({ type, status }) => type === 'CALIBRATION' && status === Status.WAITING_FOR_APPROVAL,
+                      )
+                    }
                     onClick={onClick}
                   />
                   <Panel>

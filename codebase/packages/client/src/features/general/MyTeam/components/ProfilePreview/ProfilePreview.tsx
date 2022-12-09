@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Icon, getIcon } from 'components/Icon';
 import { ExpandButton } from 'components/Accordion';
-import { Rating, Status } from 'config/enum';
+import { Status } from 'config/enum';
 import { Page } from 'pages/general/types';
 import { paramsReplacer } from 'utils';
 import { buildPath } from 'features/general/Routes';
@@ -17,11 +17,19 @@ type Props = {
   status: Status;
   employee: Employee;
   fullTeamView?: boolean;
-  rating?: Rating;
+  rating?: string;
+  hasCalibrationRating: boolean;
   onClick?: () => void;
 };
 
-const ProfilePreview: FC<Props> = ({ status, employee, fullTeamView = false, rating, onClick }) => {
+const ProfilePreview: FC<Props> = ({
+  status,
+  employee,
+  fullTeamView = false,
+  hasCalibrationRating = false,
+  rating,
+  onClick,
+}) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -47,26 +55,26 @@ const ProfilePreview: FC<Props> = ({ status, employee, fullTeamView = false, rat
         manager={fullTeamView ? employee.lineManager : undefined}
       />
       <div className={css(contentStyles)}>
-        <div className={css(buttonWrapperStyles)}>
-          {rating ? (
-            <span className={css(ratingStyles)}>{rating}</span>
-          ) : (
-            <button onClick={() => viewUserObjectives(employee.uuid)} className={css(buttonStyles)}>
-              {t('view_profile', 'View profile')}
-            </button>
-          )}
-        </div>
-        <div className={css({ display: 'flex' })}>
-          {!rating && (
+        {rating && <span className={css(ratingStyles)}>{rating}</span>}
+        {hasCalibrationRating && (
+          <div className={css(buttonWrapperStyles)}>
             <div className={css(iconWrapperStyles)}>
               <Icon graphic={graphics} fill={color} title={title} testId='timeline-icon' />
             </div>
-          )}
-          {!rating && (
-            <div className={css(expandButtonStyles)}>
-              <ExpandButton />
-            </div>
-          )}
+          </div>
+        )}
+        <div className={css(buttonWrapperStyles)}>
+          <div className={css(iconWrapperStyles)}>
+            <Icon graphic={graphics} fill={color} title={title} testId='timeline-icon' />
+          </div>
+        </div>
+        <div className={css({ display: 'flex' })}>
+          <button onClick={() => viewUserObjectives(employee.uuid)} className={css(buttonStyles)}>
+            {t('view_profile', 'View profile')}
+          </button>
+          <div className={css(expandButtonStyles)}>
+            <ExpandButton />
+          </div>
         </div>
       </div>
     </div>

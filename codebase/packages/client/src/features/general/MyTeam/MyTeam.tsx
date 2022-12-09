@@ -46,6 +46,8 @@ const MyTeam: FC<Props> = ({ view, searchValue, sortValue }) => {
 
   if (!loaded) return <Spinner />;
 
+  colleagues.forEach(console.log);
+
   return (
     <div className={css(listStyles)}>
       {colleagues.map((employee: Employee) => (
