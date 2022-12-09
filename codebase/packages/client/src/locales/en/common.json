@@ -585,7 +585,7 @@
   "end_day_mast_be_after": "End day mast be after {{ min }}",
   "size_limit_exceeded": "{{ fileName }} exceeds maximum limit. Maximum allowed file size is {{ size }}.",
   "view_previous_ratings": "View previous ratings",
-  "submit_calibration_ratings": "Submit calibration ratings",
+  "submit_calibration_ratings": "Submit Calibration Ratings",
   "ratings_ready_to_submit": "Ratings ready to submit",
   "managing_performance": "Managing performance",
   "ratings_are_submitted": "Ratings are submitted",
