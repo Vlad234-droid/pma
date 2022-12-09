@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { CreateRule, useStyle, Rule } from '@pma/dex-wrapper';
-import { BarChart, Legend, XAxis, YAxis, Bar, ResponsiveContainer, Cell } from 'recharts';
+import { BarChart, Legend, XAxis, YAxis, Bar, ResponsiveContainer, Cell, CartesianGrid } from 'recharts';
 
 import { Trans } from 'components/Translation';
 
@@ -28,17 +28,35 @@ const Graph: FC<Props> = ({ currentData, compareData, title, properties }) => {
   return (
     <div className={css(graphContainer({ height }))} data-test-id={BAR_WRAPPER}>
       <div className={css(titleStyle)}>{title}</div>
+      {small && (
+        <span className={css(verticalLegend)}>
+          <Trans i18nKey='percentages_of_colleague'>% of Colleagues</Trans>
+        </span>
+      )}
+      {small && (
+        <span className={css(horizontalLegend)}>
+          <Trans i18nKey='rating'>Rating</Trans>
+        </span>
+      )}
       <ResponsiveContainer width='100%' height={'100%'}>
         <BarChart
-          barCategoryGap={small ? '0%' : undefined}
           width={730}
           height={Number(height.slice(0, -2))}
+          barCategoryGap={small ? '0%' : undefined}
           data={data}
           layout={small ? 'horizontal' : 'vertical'}
-          margin={{ top: 32, right: 50, left: 100, bottom: 50 }}
+          margin={!small ? { top: 32, right: 50, left: 100, bottom: 50 } : { top: 29, right: 0, left: 23, bottom: 150 }}
         >
+          <CartesianGrid horizontal={false} vertical={false} fill={theme.colors.backgroundDark} />
           {small ? (
-            <XAxis dataKey={'name'} type={'category'} tickLine={false} axisLine={false} tick={<CustomizedAXisTick />} />
+            <XAxis
+              interval={0}
+              dataKey={'name'}
+              type={'category'}
+              tickLine={false}
+              axisLine={false}
+              tick={<CustomizedAXisTick />}
+            />
           ) : (
             <XAxis
               type='number'
@@ -63,22 +81,6 @@ const Graph: FC<Props> = ({ currentData, compareData, title, properties }) => {
             />
           )}
           {!small && <Legend content={renderLegend} />}
-          {/*{small && <Legend content={renderLegend} />}*/}
-          {small && <Legend height={60} payload={[{ value: 'hey', type: 'none' }]} />}
-          {/*{small && <Legend payload={[{ value: 'h2fwefw' }]} align={'right'} verticalAlign={'middle'} />}*/}
-          {/*//TODO: use not legend, broke on mobile*/}
-          {/*{!small && (*/}
-          {/*  <Legend*/}
-          {/*    align={'right'}*/}
-          {/*    verticalAlign={'middle'}*/}
-          {/*    wrapperStyle={{*/}
-          {/*      position: 'absolute',*/}
-          {/*      top: '320px',*/}
-          {/*      transform: 'rotate(-90deg)',*/}
-          {/*    }}*/}
-          {/*    payload={[{ value: '% of Colleagues', type: 'line' }]}*/}
-          {/*  />*/}
-          {/*)}*/}
           {bars.map((bar) => {
             return (
               <Bar
@@ -174,19 +176,20 @@ const CustomizedYAxisTick = (props) => {
   } = props;
 
   const { theme } = useStyle();
+  const last = 9;
 
   return (
     <>
       {index !== visibleTicksCount - 1 && (
         <line
+          data-set-f={index}
           type={'number'}
           orientation={'right'}
-          height={30}
           x={x - 4}
           stroke={theme.colors.tescoBlue}
           fill={'none'}
           y2={!index ? y : y + 9}
-          y1={y - 34}
+          y1={index === last ? y - 39 : y - 30}
           x1={x - 4}
           x2={x - 4}
           strokeWidth={'6px'}
@@ -265,11 +268,11 @@ const renderLegend = () => {
 };
 
 const titleStyle: Rule = ({ theme }) => ({
-  fontSize: `${theme.font.fixed.f20.fontSize}`,
-  lineHeight: `${theme.font.fixed.f20.lineHeight}`,
+  lineHeight: theme.font.fixed.f20.lineHeight,
+  fontSize: theme.font.fixed.f20.fontSize,
+  color: theme.colors.tescoBlue,
   letterSpacing: '0px',
   textAlign: 'center',
-  color: `${theme.colors.tescoBlue}`,
   fontWeight: '600',
 });
 
@@ -278,24 +281,44 @@ const labelVertical: Rule = ({ theme }) => ({
   top: '-405%',
   left: '-115px',
   transform: 'rotate(-90deg)',
-  fontSize: `${theme.font.fixed.f14.fontSize}`,
-  lineHeight: `${theme.font.fixed.f14.lineHeight}`,
+  fontSize: theme.font.fixed.f14.fontSize,
+  lineHeight: theme.font.fixed.f14.lineHeight,
   letterSpacing: '0px',
   fontWeight: '600',
 });
 
 const labelHorizontal: Rule = ({ theme }) => ({
-  width: '100%',
+  lineHeight: theme.font.fixed.f14.lineHeight,
+  fontSize: theme.font.fixed.f14.fontSize,
   textAlign: 'center',
-  fontSize: `${theme.font.fixed.f14.fontSize}`,
-  lineHeight: `${theme.font.fixed.f14.lineHeight}`,
   letterSpacing: '0px',
-  fontWeight: '600',
   marginTop: '16px',
+  fontWeight: '600',
+  width: '100%',
 });
 
 const graphContainer: CreateRule<{ height: string }> = ({ height }) => ({
   //@ts-ignore
   height,
+  position: 'relative',
+});
+
+const verticalLegend: Rule = (theme) => ({
+  position: 'absolute',
+  top: '50%',
+  right: '-46px',
+  transform: 'translateY(50%) rotate(-90deg)',
+  color: theme.colors.grayscale,
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f14.fontSize,
+});
+const horizontalLegend: Rule = (theme) => ({
+  position: 'absolute',
+  bottom: '0px',
+  right: '50%',
+  transform: 'translateX(-100%)',
+  color: theme.colors.grayscale,
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f14.fontSize,
 });
 export default Graph;
