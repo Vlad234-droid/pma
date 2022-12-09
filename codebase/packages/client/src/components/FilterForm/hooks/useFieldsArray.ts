@@ -7,7 +7,6 @@ export const useFieldsArray = (filters: any, control: Control) =>
       name,
     });
     (filters[name] as Array<{ name: string }>).forEach(({ name }) => {
-      console.log({ name });
       append({ name, checked: false });
     });
     return { fields, type: name, update, replace };

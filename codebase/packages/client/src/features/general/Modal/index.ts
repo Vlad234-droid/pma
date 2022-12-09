@@ -1,3 +1,4 @@
+//TODO: should move to src/components
 export { default as ConfirmModal } from './components/ConfirmModal';
 export { default as InfoModal } from './components/InfoModal';
 export { default as WrapperModal } from './components/WrapperModal';
