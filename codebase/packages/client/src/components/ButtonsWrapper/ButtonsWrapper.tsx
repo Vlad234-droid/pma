@@ -34,6 +34,7 @@ const ButtonsWrapper: FC<ButtonsProps> = ({
   customStyles = {},
 }) => {
   const { css, theme } = useStyle();
+
   return (
     <div className={css(blockStyle, customStyles)}>
       <div className={css(wrapperStyle)}>

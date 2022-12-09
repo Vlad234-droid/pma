@@ -25,6 +25,7 @@ import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import { paramsReplacer } from 'utils';
 import { Mode, Status } from 'config/types';
+import { role, usePermission } from '../Permission';
 
 export enum Statuses {
   PENDING = 'PENDING',
@@ -41,6 +42,9 @@ const CreateCalibrationRatings: FC = () => {
     uuid: string;
     userUuid: string;
   };
+  const isPerformForPP = usePermission([role.PEOPLE_TEAM]);
+  const isPerformForLN = usePermission([role.LINE_MANAGER]);
+
   const { profile } = useSelector(getColleagueSelector) || {};
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -146,6 +150,10 @@ const CreateCalibrationRatings: FC = () => {
           components={components}
           defaultValues={!isNew ? properties : {}}
           mode={isNew || isDraft ? Mode.CREATE : Mode.UPDATE}
+          readOnly={
+            (isPerformForLN && calibrationReview?.status === Status.APPROVED) ||
+            (isPerformForPP && calibrationReview?.status === Status.WAITING_FOR_APPROVAL)
+          }
         />
       </div>
     </WrapperModal>
