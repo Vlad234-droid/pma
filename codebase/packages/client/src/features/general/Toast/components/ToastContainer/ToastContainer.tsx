@@ -28,7 +28,7 @@ const wrapperStyles: Rule = ({ zIndex }) => ({
   position: 'fixed',
   top: '75px',
   right: '16px',
-  zIndex: zIndex.i40,
+  zIndex: zIndex.i50,
   marginLeft: '16px',
   gap: '10px',
   display: 'flex',
