@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
-import { ColleagueSimple } from '@pma/openapi';
-import { colors, Rule, Styles, useStyle, Button } from '@pma/dex-wrapper';
+import { CalibrationColleague } from '@pma/openapi';
+import { colors, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import { useTranslation, Trans } from 'components/Translation';
 import { ColleagueProfile } from 'components/ColleagueProfile';
@@ -15,7 +15,7 @@ const ColleaguesRemover: FC<{
   onRemove: any;
   onCancel: () => void;
   filter: any;
-  colleagues: ColleagueSimple[];
+  colleagues: CalibrationColleague[];
 }> = ({ colleaguesRemoved, onRemove, filter, colleagues }) => {
   const { t } = useTranslation();
   const colleagueFilter = useSelector(getColleagueFilterSelector) || {};
@@ -26,12 +26,12 @@ const ColleaguesRemover: FC<{
     .join(' | ');
 
   const colleaguesRemovedUUID = colleaguesRemoved.map((colleagueRemoved) => colleagueRemoved.value);
-  const colleaguesAvailable = colleagues?.filter((colleague) => {
-    return !colleaguesRemovedUUID.includes(colleague.uuid);
+  const colleaguesAvailable = colleagues?.filter(({ colleague }) => {
+    return colleague?.uuid && !colleaguesRemovedUUID.includes(colleague.uuid);
   });
 
   const handleRemove = (colleague: any) => {
-    const { uuid, firstName, lastName } = colleague;
+    const { uuid, firstName, lastName } = colleague.colleague;
     onRemove([...colleaguesRemoved, { value: uuid, label: `${firstName} ${lastName}`, type: 'remove' }]);
   };
 
@@ -73,9 +73,9 @@ const ColleaguesRemover: FC<{
                   onClick={() => handleRemove(item)}
                 >
                   <ColleagueProfile
-                    firstName={item?.firstName}
-                    lastName={item?.lastName}
-                    job={item?.jobName}
+                    firstName={item?.colleague?.firstName}
+                    lastName={item?.colleague?.lastName}
+                    job={item?.colleague?.jobName}
                     department={''}
                     action={
                       <div className={css(optionActionStyle)}>

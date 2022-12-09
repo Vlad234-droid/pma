@@ -1,9 +1,9 @@
 import { useState, useCallback } from 'react';
 import { SearchOption } from 'config/enum';
-import { ColleagueSimple } from '@pma/openapi';
+import { ColleagueSimpleExtended } from '../types';
 
-const useSearchColleaguesSimple = (colleagues: ColleagueSimple[]) => {
-  const [localColleagues, setLocalColleagues] = useState<ColleagueSimple[]>([]);
+const useSearchColleaguesSimple = (colleagues: ColleagueSimpleExtended[]) => {
+  const [localColleagues, setLocalColleagues] = useState<ColleagueSimpleExtended[]>([]);
   const clearColleagueList = () => setLocalColleagues([]);
 
   const handleSearchColleagues = useCallback(

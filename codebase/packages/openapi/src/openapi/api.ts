@@ -147,6 +147,25 @@ export interface BusinessGroup {
 /**
  * 
  * @export
+ * @interface CalibrationColleague
+ */
+export interface CalibrationColleague {
+    /**
+     * 
+     * @type {ColleagueSimple}
+     * @memberof CalibrationColleague
+     */
+    'colleague'?: ColleagueSimple;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CalibrationColleague
+     */
+    'includedToAnotherSession'?: boolean;
+}
+/**
+ * 
+ * @export
  * @interface CalibrationSession
  */
 export interface CalibrationSession {
@@ -1216,25 +1235,25 @@ export interface DecisionInfo {
      * @type {string}
      * @memberof DecisionInfo
      */
-    'deploymentId'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DecisionInfo
-     */
-    'tenantId'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DecisionInfo
-     */
     'versionTag'?: string;
     /**
      * 
      * @type {string}
      * @memberof DecisionInfo
      */
+    'deploymentId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DecisionInfo
+     */
     'diagramResourceName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DecisionInfo
+     */
+    'tenantId'?: string;
 }
 /**
  * 
@@ -1290,13 +1309,13 @@ export interface DeploymentInfo {
      * @type {string}
      * @memberof DeploymentInfo
      */
-    'tenantId'?: string;
+    'deploymentTime'?: string;
     /**
      * 
      * @type {string}
      * @memberof DeploymentInfo
      */
-    'deploymentTime'?: string;
+    'tenantId'?: string;
 }
 /**
  * 
@@ -1392,12 +1411,6 @@ export interface Event {
     'eventId'?: string;
     /**
      * 
-     * @type {{ [key: string]: object; }}
-     * @memberof Event
-     */
-    'eventProperties'?: { [key: string]: object; };
-    /**
-     * 
      * @type {Event}
      * @memberof Event
      */
@@ -1410,6 +1423,18 @@ export interface Event {
     'eventName'?: string;
     /**
      * 
+     * @type {{ [key: string]: object; }}
+     * @memberof Event
+     */
+    'eventProperties'?: { [key: string]: object; };
+    /**
+     * 
+     * @type {string}
+     * @memberof Event
+     */
+    'eventPriority'?: EventEventPriorityEnum;
+    /**
+     * 
      * @type {string}
      * @memberof Event
      */
@@ -1420,12 +1445,6 @@ export interface Event {
      * @memberof Event
      */
     'callbackServiceURL'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Event
-     */
-    'eventPriority'?: EventEventPriorityEnum;
 }
 
 /**
@@ -3138,25 +3157,25 @@ export interface ProcessInfo {
      * @type {string}
      * @memberof ProcessInfo
      */
-    'deploymentId'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProcessInfo
-     */
-    'tenantId'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProcessInfo
-     */
     'versionTag'?: string;
     /**
      * 
      * @type {string}
      * @memberof ProcessInfo
      */
+    'deploymentId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProcessInfo
+     */
     'diagramResourceName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProcessInfo
+     */
+    'tenantId'?: string;
 }
 /**
  * 
@@ -3741,6 +3760,31 @@ export interface RestResponseListAuditOrgObjectiveReport {
 /**
  * 
  * @export
+ * @interface RestResponseListCalibrationColleague
+ */
+export interface RestResponseListCalibrationColleague {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RestResponseListCalibrationColleague
+     */
+    'success'?: boolean;
+    /**
+     * 
+     * @type {Array<CalibrationColleague>}
+     * @memberof RestResponseListCalibrationColleague
+     */
+    'data'?: Array<CalibrationColleague>;
+    /**
+     * 
+     * @type {Array<ApiError>}
+     * @memberof RestResponseListCalibrationColleague
+     */
+    'errors'?: Array<ApiError>;
+}
+/**
+ * 
+ * @export
  * @interface RestResponseListCalibrationSession
  */
 export interface RestResponseListCalibrationSession {
@@ -3860,31 +3904,6 @@ export interface RestResponseListColleagueReview {
      * 
      * @type {Array<ApiError>}
      * @memberof RestResponseListColleagueReview
-     */
-    'errors'?: Array<ApiError>;
-}
-/**
- * 
- * @export
- * @interface RestResponseListColleagueSimple
- */
-export interface RestResponseListColleagueSimple {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RestResponseListColleagueSimple
-     */
-    'success'?: boolean;
-    /**
-     * 
-     * @type {Array<ColleagueSimple>}
-     * @memberof RestResponseListColleagueSimple
-     */
-    'data'?: Array<ColleagueSimple>;
-    /**
-     * 
-     * @type {Array<ApiError>}
-     * @memberof RestResponseListColleagueSimple
      */
     'errors'?: Array<ApiError>;
 }
@@ -6726,7 +6745,7 @@ export const CalibrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getColleagues(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListColleagueSimple>> {
+        async getColleagues(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListCalibrationColleague>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getColleagues(requestQuery, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -6950,7 +6969,7 @@ export const CalibrationApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getColleagues(requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseListColleagueSimple> {
+        getColleagues(requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseListCalibrationColleague> {
             return localVarFp.getColleagues(requestQuery, options).then((request) => request(axios, basePath));
         },
         /**

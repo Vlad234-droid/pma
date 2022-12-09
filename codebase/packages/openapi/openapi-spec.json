@@ -5091,7 +5091,8 @@
                 "WAITING_FOR_COMPLETION",
                 "REQUESTED_TO_AMEND",
                 "COMPLETED"
-              ]
+              ],
+              "review-type_in": ["OBJECTIVE", "MYR", "EYR", "QUARTER", "CALIBRATION"]
             }
           }
         ],
@@ -5144,7 +5145,8 @@
                 "WAITING_FOR_COMPLETION",
                 "REQUESTED_TO_AMEND",
                 "COMPLETED"
-              ]
+              ],
+              "review-type_in": ["OBJECTIVE", "MYR", "EYR", "QUARTER", "CALIBRATION"]
             }
           }
         ],
@@ -6544,7 +6546,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RestResponseListColleagueSimple"
+                  "$ref": "#/components/schemas/RestResponseListCalibrationColleague"
                 }
               }
             }
@@ -8612,12 +8614,12 @@
           "source": {
             "type": "string"
           },
-          "tenantId": {
-            "type": "string"
-          },
           "deploymentTime": {
             "type": "string",
             "format": "date-time"
+          },
+          "tenantId": {
+            "type": "string"
           }
         }
       },
@@ -8856,24 +8858,17 @@
           "eventId": {
             "type": "string"
           },
-          "eventProperties": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "object"
-            }
-          },
           "callbackEvent": {
             "$ref": "#/components/schemas/Event"
           },
           "eventName": {
             "type": "string"
           },
-          "eventCreationDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "callbackServiceURL": {
-            "type": "string"
+          "eventProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
           },
           "eventPriority": {
             "type": "string",
@@ -8890,6 +8885,13 @@
               "LOW_L",
               "LOWEST"
             ]
+          },
+          "eventCreationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "callbackServiceURL": {
+            "type": "string"
           }
         }
       },
@@ -9286,16 +9288,16 @@
           "category": {
             "type": "string"
           },
-          "deploymentId": {
-            "type": "string"
-          },
-          "tenantId": {
-            "type": "string"
-          },
           "versionTag": {
             "type": "string"
           },
+          "deploymentId": {
+            "type": "string"
+          },
           "diagramResourceName": {
+            "type": "string"
+          },
+          "tenantId": {
             "type": "string"
           }
         }
@@ -9931,16 +9933,16 @@
           "category": {
             "type": "string"
           },
-          "deploymentId": {
-            "type": "string"
-          },
-          "tenantId": {
-            "type": "string"
-          },
           "versionTag": {
             "type": "string"
           },
+          "deploymentId": {
+            "type": "string"
+          },
           "diagramResourceName": {
+            "type": "string"
+          },
+          "tenantId": {
             "type": "string"
           }
         }
@@ -10584,7 +10586,18 @@
           }
         }
       },
-      "RestResponseListColleagueSimple": {
+      "CalibrationColleague": {
+        "type": "object",
+        "properties": {
+          "colleague": {
+            "$ref": "#/components/schemas/ColleagueSimple"
+          },
+          "includedToAnotherSession": {
+            "type": "boolean"
+          }
+        }
+      },
+      "RestResponseListCalibrationColleague": {
         "type": "object",
         "properties": {
           "success": {
@@ -10593,7 +10606,7 @@
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ColleagueSimple"
+              "$ref": "#/components/schemas/CalibrationColleague"
             }
           },
           "errors": {

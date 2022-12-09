@@ -1,4 +1,4 @@
-import { Condition, ConditionOperandEnum, ColleagueSimple, ColleagueFilterOptions } from '@pma/openapi';
+import { Condition, ConditionOperandEnum, ColleagueFilterOptions, CalibrationColleague } from '@pma/openapi';
 import { Operand } from 'config/enum';
 import { CalibrationSessionUiType } from '../types';
 
@@ -36,12 +36,12 @@ export const filterToRequest = (filter) =>
 export const filterFromSessionResponse = (filter: Condition[]) =>
   filter.reduce((acc, val) => {
     if (Array.isArray(val.value) && val.property) {
-      acc[filterMap[val.property]] = val.value.reduce((acc, val) => {
+      acc[filterMap[val.property] || val.property] = val.value.reduce((acc, val) => {
         acc[val] = true;
         return acc;
       }, {});
     } else if (typeof val.value === 'string' && val.property) {
-      acc[filterMap[val.property]] = val?.value ? { [val.value]: true } : {};
+      acc[filterMap[val.property] || val.property] = val?.value ? { [val.value]: true } : {};
     }
     return acc;
   }, {});
@@ -76,7 +76,7 @@ export const prepareFormData = (data: CalibrationSessionUiType) => {
 };
 
 export const prepareColleaguesForUI = (
-  colleagueSimple: ColleagueSimple[],
+  calibrationColleague: CalibrationColleague[],
   filters: Condition[],
   operand: ConditionOperandEnum.In | ConditionOperandEnum.NotIn,
 ) => {
@@ -84,9 +84,9 @@ export const prepareColleaguesForUI = (
     (filters.find((f) => f?.property && ['colleague-uuid'].includes(f?.property) && f.operand === operand)
       ?.value as string[]) || [];
 
-  return colleagueSimple
-    .filter((c) => c.uuid && colleaguesAddIds.includes(c.uuid))
-    .map(({ uuid, firstName, lastName }) => ({ value: uuid, label: `${firstName} ${lastName}` }));
+  return calibrationColleague
+    .filter((c) => c.colleague && c.colleague.uuid && colleaguesAddIds.includes(c.colleague.uuid))
+    .map(({ colleague }) => ({ value: colleague?.uuid, label: `${colleague?.firstName} ${colleague?.lastName}` }));
 };
 
 export const getSelectedGroups = (colleagueFilter: ColleagueFilterOptions, filter): string[] => {

@@ -1,12 +1,12 @@
 import { createAction, createAsyncAction } from 'typesafe-actions';
-import { RestResponseListColleagueSimple } from '@pma/openapi';
+import { RestResponseListCalibrationColleague } from '@pma/openapi';
 
 export const getColleagueSimple = createAsyncAction(
   'colleagueSimple/FETCH_REQUEST',
   'colleagueSimple/FETCH_SUCCESS',
   'colleagueSimple/FETCH_FAILURE',
   'colleagueSimple/FETCH_CANCEL',
-)<any, RestResponseListColleagueSimple, Error>();
+)<any, RestResponseListCalibrationColleague, Error>();
 
 export const clearColleagueSimple = createAction('colleagueSimple/CLEAR')<undefined>();
 

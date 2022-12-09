@@ -4,7 +4,7 @@ import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 
-import { RestResponseListColleagueSimple } from '@pma/openapi';
+import { RestResponseListCalibrationColleague } from '@pma/openapi';
 import { getColleagueSimple } from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
@@ -14,7 +14,7 @@ export const getCalibrationColleaguesEpic: Epic = (action$, _, { api }) =>
     switchMap(({ payload }) =>
       from(api.getCalibrationColleagues(payload)).pipe(
         //@ts-ignore
-        map(({ success, data, errors }: RestResponseListColleagueSimple) => {
+        map(({ success, data, errors }: RestResponseListCalibrationColleague) => {
           if (!success) {
             return getColleagueSimple.failure(new Error(errors?.[0].message || undefined));
           }

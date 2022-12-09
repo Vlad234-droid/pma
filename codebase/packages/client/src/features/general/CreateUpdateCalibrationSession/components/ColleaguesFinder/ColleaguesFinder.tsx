@@ -1,5 +1,5 @@
 import React, { CSSProperties, FC } from 'react';
-import { Rule, useStyle, Styles, Button } from '@pma/dex-wrapper';
+import { Rule, useStyle, Styles } from '@pma/dex-wrapper';
 import { Item } from 'components/Form';
 import SearchInput from 'components/SearchInput';
 import { Trans, useTranslation } from 'components/Translation';
@@ -49,11 +49,14 @@ const ColleaguesFinder: FC<Props> = ({
   const { css } = useStyle();
   const { t } = useTranslation();
 
+  const disabledColleagues = colleagues.filter((colleague) => colleague.type === 'disabled');
+  const availableColleagues = colleagues.filter((colleague) => colleague.type !== 'disabled');
+
   const {
     colleagues: filteredColleagues,
     handleSearchColleagues,
     clearColleagueList,
-  } = useSearchColleaguesSimple(colleagues);
+  } = useSearchColleaguesSimple(availableColleagues);
 
   const handleChange = (e: any) => {
     const { uuid, firstName, lastName, type } = e;
@@ -82,6 +85,7 @@ const ColleaguesFinder: FC<Props> = ({
           onSearch={(e) => handleSearchColleagues(e.target.value, searchOption)}
           placeholder={t('search', 'Search')}
           options={value ? [] : filteredColleagues}
+          disabledOptions={disabledColleagues}
           selected={selected}
           value={value}
           disabled={Boolean(value)}

@@ -114,11 +114,15 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
     }
   }, [colleaguesRemoverLoaded, colleaguesFinderLoaded]);
 
-  const colleaguesRemoverIds = colleaguesRemover.map(({ uuid }) => uuid);
-  const allColleagues = colleaguesFinder.map((colleague) => {
+  const colleaguesRemoverIds = colleaguesRemover.map(({ colleague }) => colleague?.uuid);
+  const allColleagues = colleaguesFinder.map(({ colleague, includedToAnotherSession }) => {
     return {
       ...colleague,
-      type: colleague?.uuid && colleaguesRemoverIds.includes(colleague.uuid) ? 'remove' : 'add',
+      type: includedToAnotherSession
+        ? 'disabled'
+        : colleague?.uuid && colleaguesRemoverIds.includes(colleague.uuid)
+        ? 'remove'
+        : 'add',
     } as ColleagueSimpleExtended;
   });
 
