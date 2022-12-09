@@ -42,6 +42,7 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
       title={t('submit_calibration_ratings', 'Submit calibration ratings')}
       description={t('ratings_ready_to_submit', 'Ratings ready to submit')}
       customStyle={{ cursor: 'pointer' }}
+      background={'tescoBlue'}
       onClick={() =>
         navigate(buildPath(paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':userUuid': userUuid, ':uuid': uuid })))
       }
