@@ -8,7 +8,7 @@ import DynamicForm from 'components/DynamicForm';
 import useOverallRating from 'hooks/useOverallRating';
 import { Mode } from 'config/types';
 
-import { createYupSchema } from 'utils/yup';
+import { createYupSchema, createYupSchemaForDraft } from 'utils/yup';
 
 const overallRatingListeners: string[] = ['what_rating', 'how_rating'];
 
@@ -25,6 +25,7 @@ const RatingForm: FC<Props> = ({ onSubmit, onCancel, components, defaultValues, 
   const { t } = useTranslation();
 
   const schema = Yup.object().shape(components.reduce(createYupSchema(t), {}));
+  const draftSchema = Yup.object().shape(components.reduce(createYupSchemaForDraft(t), {}));
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(schema),
@@ -34,7 +35,7 @@ const RatingForm: FC<Props> = ({ onSubmit, onCancel, components, defaultValues, 
     getValues,
     handleSubmit,
     setValue,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isDirty },
     watch,
   } = methods;
   const values = getValues();
@@ -54,6 +55,10 @@ const RatingForm: FC<Props> = ({ onSubmit, onCancel, components, defaultValues, 
     }
   }, [overall_rating]);
 
+  const hasValue = useMemo(() => {
+    return Object.values(values).filter((val) => !!val).length;
+  }, [JSON.stringify(values)]);
+
   const handleSave = (data: any) => onSubmit({ ...data, status: 'WAITING_FOR_APPROVAL' });
   const handleSaveDraft = (data: any) => onSubmit({ ...data, status: 'DRAFT' });
 
@@ -69,7 +74,7 @@ const RatingForm: FC<Props> = ({ onSubmit, onCancel, components, defaultValues, 
       {!readOnly && (
         <ButtonsWrapper
           isValid={isValid}
-          isLeftDisabled={!Object.keys(values).length}
+          isLeftDisabled={!hasValue || !draftSchema.isValidSync(values)}
           onLeftPress={mode === Mode.CREATE ? () => handleSaveDraft(values) : onCancel}
           leftText={mode === Mode.CREATE ? 'save_as_draft' : 'cancel'}
           rightIcon={false}
