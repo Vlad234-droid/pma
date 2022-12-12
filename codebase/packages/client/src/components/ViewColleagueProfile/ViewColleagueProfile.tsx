@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { ColleagueSimple } from '@pma/openapi';
-import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
+import { useStyle, Rule, Styles, CreateRule } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Trans } from 'components/Translation';
 
@@ -17,7 +17,8 @@ export type Props = {
 };
 
 const ViewColleagueProfile: FC<Props> = ({ colleague, onClick, title, properties }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
     <TileWrapper customStyle={wrapperStyles}>
@@ -35,7 +36,7 @@ const ViewColleagueProfile: FC<Props> = ({ colleague, onClick, title, properties
         </div>
 
         {(properties?.what_rating || properties?.how_rating) && (
-          <div className={css(ratingContainer)}>
+          <div className={css(ratingContainer({ mobileScreen }))}>
             {properties?.what_rating && (
               <div className={css(ratingType)}>
                 <span>{properties?.what_rating}</span>
@@ -73,20 +74,22 @@ const industryStyle: Rule = {
   lineHeight: '20px',
   margin: '4px 0px 0px 0px',
 };
-const ratingContainer: Rule = {
+const ratingContainer: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
   display: 'flex',
   justifyContent: 'space-between',
   gap: '5%',
   flexWrap: 'wrap',
-  flexBasis: '370px',
-};
+  flexBasis: mobileScreen ? '0px' : '300px',
+  margin: '0 20px',
+});
 
 const ratingType: Rule = (theme) =>
   ({
     flexGrow: '1',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    alignSelf: 'center',
     '& > span:first-child': {
       whiteSpace: 'nowrap',
       fontWeight: theme.font.weight.bold,
@@ -122,6 +125,8 @@ const sectionStyle: Rule = {
 const blockInfo: Rule = {
   display: 'inline-flex',
   alignItems: 'center',
+  //@ts-ignore
+  width: 'min(100%, 220px)',
 };
 
 const imgStyle: Rule = {

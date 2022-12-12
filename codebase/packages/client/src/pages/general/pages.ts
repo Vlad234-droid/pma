@@ -133,7 +133,7 @@ const pages: Record<Page, PageComponent> = {
   [Page.CREATE_CALIBRATION_RATING]: {
     Element: CreateCalibrationRating,
     withHeader: false,
-    perform: [role.LINE_MANAGER],
+    perform: [role.LINE_MANAGER, role.PEOPLE_TEAM, role.TALENT_ADMIN],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.NOTES]: {

@@ -55,3 +55,18 @@ export const getFields = (t, values) => [
 export const defaultValues = {
   longTerm: 'Yes',
 };
+
+export const buildData = (data: any, colleagueUuid) => {
+  const { status, ...properties } = data;
+  return {
+    data: {
+      number: 1,
+      properties,
+      lastUpdatedTime: new Date(),
+      colleagueUuid,
+      status,
+    },
+    colleagueUuid,
+    cycleUuid: 'CURRENT',
+  };
+};

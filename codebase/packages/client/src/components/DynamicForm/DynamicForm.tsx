@@ -110,6 +110,8 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
           );
         }
         if (type === FormType.SELECT) {
+          const viewValue = values.find((item) => item.value === value)?.label || value;
+
           return (
             <div key={id} className={css(borderStyle, onlyView ? componentCustomStyle : {})}>
               <Field
@@ -123,7 +125,7 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
                   </Item>
                 )}
                 setValue={setValue}
-                value={value}
+                value={onlyView ? viewValue : value}
                 error={error}
                 placeholder={description || t('please_select', 'Please select')}
                 options={values}
@@ -133,6 +135,8 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
           );
         }
         if (type === FormType.RADIO) {
+          const viewValue = values.find((item) => item.value === value)?.label || value;
+
           return (
             <div key={id} className={css(borderStyle, onlyView ? componentCustomStyle : {})}>
               <Field
@@ -146,7 +150,7 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
                   </Item>
                 )}
                 setValue={setValue}
-                value={value}
+                value={onlyView ? viewValue : value}
                 error={error}
                 options={values}
                 readonly={readonly}

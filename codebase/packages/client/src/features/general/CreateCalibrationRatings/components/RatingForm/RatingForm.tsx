@@ -25,6 +25,7 @@ const RatingForm: FC<Props> = ({ onSubmit, onCancel, components, defaultValues, 
   const { t } = useTranslation();
 
   const schema = Yup.object().shape(components.reduce(createYupSchema(t), {}));
+
   const draftSchema = Yup.object().shape(components.reduce(createYupSchemaForDraft(t), {}));
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
@@ -35,7 +36,7 @@ const RatingForm: FC<Props> = ({ onSubmit, onCancel, components, defaultValues, 
     getValues,
     handleSubmit,
     setValue,
-    formState: { errors, isValid, isDirty },
+    formState: { errors, isValid },
     watch,
   } = methods;
   const values = getValues();

@@ -1,31 +1,34 @@
-import React, { FC, useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import React, { FC, useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
 import { Icon, Rule, useStyle } from '@pma/dex-wrapper';
 import {
   CalibrationReviewAction,
   calibrationReviewDataSelector,
   calibrationReviewMetaSelector,
-  ColleagueActions,
+  colleagueInfo,
+  colleagueUUIDSelector,
   getColleagueMetaSelector,
   getColleagueSelector,
   getFormByCode,
-  SchemaActions,
 } from '@pma/store';
+import useDispatch from 'hooks/useDispatch';
 
 import WrapperModal from 'features/general/Modal/components/WrapperModal';
+import { role, usePermission } from 'features/general/Permission';
+import { buildPath } from 'features/general/Routes';
 import { Trans, useTranslation } from 'components/Translation';
+import SuccessModal from 'components/SuccessModal';
+import RatingForm from './components/RatingForm';
 import AvatarName from 'components/AvatarName';
 import { SuccessMark } from 'components/Icon';
-import useDispatch from 'hooks/useDispatch';
-import RatingForm from './components/RatingForm';
-import SuccessModal from 'components/SuccessModal';
-import User from 'config/entities/User';
-import { buildPath } from 'features/general/Routes';
-import { Page } from 'pages';
-import { paramsReplacer } from 'utils';
 import { Mode, Status } from 'config/types';
-import { role, usePermission } from '../Permission';
+import { buildData } from './utils';
+import { useCalibrationReview, useColleague } from './hooks';
+import User from 'config/entities/User';
+import { paramsReplacer } from 'utils';
+import { Page } from 'pages';
 
 export enum Statuses {
   PENDING = 'PENDING',
@@ -46,61 +49,52 @@ const CreateCalibrationRatings: FC = () => {
   const isPerformForLN = usePermission([role.LINE_MANAGER]);
 
   const { profile } = useSelector(getColleagueSelector) || {};
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { state } = useLocation();
   const { backPath } = (state as any) || {};
-  const dispatch = useDispatch();
   const { components } = useSelector(getFormByCode(STANDARD_CALIBRATION_FORM_CODE)) || {};
   const { loading, loaded, updated } = useSelector(calibrationReviewMetaSelector);
   const calibrationReview = useSelector(calibrationReviewDataSelector(colleagueUuid)) || {};
+  const { properties } = calibrationReview;
   const { loaded: colleagueLoaded } = useSelector(getColleagueMetaSelector);
+  const { managerUuid } = useSelector(colleagueInfo);
+  const userUuid = useSelector(colleagueUUIDSelector);
 
   const isNew = uuid === 'new';
   const isDraft = calibrationReview?.status === Status.DRAFT;
+  const LNDisabledStatuses =
+    calibrationReview?.status === Status.APPROVED ||
+    calibrationReview?.status === Status.COMPLETED ||
+    calibrationReview?.status === Status.WAITING_FOR_COMPLETION;
 
-  useEffect(() => {
-    dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid }));
-  }, [colleagueUuid, colleagueLoaded]);
+  const isLineManagerForColleague = isPerformForLN && isPerformForPP && userUuid === managerUuid;
 
-  useEffect(() => {
-    if (!isNew) {
-      dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid, cycleUuid: 'CURRENT' }));
-    }
-    dispatch(SchemaActions.getSchema({ colleagueUuid }));
-  }, []);
+  const readOnly =
+    isLineManagerForColleague && isPerformForLN
+      ? LNDisabledStatuses
+      : isPerformForPP
+      ? calibrationReview?.status === Status.WAITING_FOR_APPROVAL
+      : isPerformForLN && LNDisabledStatuses;
+
+  useCalibrationReview(isNew, colleagueUuid);
+  useColleague(colleagueUuid, colleagueLoaded);
 
   if (!components) return null;
 
-  const handleBack = () => {
-    navigate(backPath || paramsReplacer(buildPath(Page.USER_REVIEWS), { ':uuid': colleagueUuid as string }));
-  };
-
-  const buildData = (data: any) => {
-    const { status, ...properties } = data;
-    return {
-      data: {
-        number: 1,
-        properties,
-        lastUpdatedTime: new Date(),
-        colleagueUuid,
-        status,
-      },
-      colleagueUuid,
-      cycleUuid: 'CURRENT',
-    };
-  };
-
   const handleSave = (data: any) => {
     setCurrentStatus(data.status);
-    dispatch(CalibrationReviewAction.saveCalibrationReview(buildData(data)));
+    dispatch(CalibrationReviewAction.saveCalibrationReview(buildData(data, colleagueUuid)));
   };
 
   const handleUpdate = (data) => {
     setCurrentStatus(data.status);
-    dispatch(CalibrationReviewAction.updateCalibrationReview(buildData(data)));
+    dispatch(CalibrationReviewAction.updateCalibrationReview(buildData(data, colleagueUuid)));
   };
 
-  const { properties } = calibrationReview;
+  const handleBack = () =>
+    navigate(backPath || paramsReplacer(buildPath(Page.USER_REVIEWS), { ':uuid': colleagueUuid as string }));
 
   if (loading) return null;
 
@@ -121,20 +115,33 @@ const CreateCalibrationRatings: FC = () => {
     );
   }
 
-  if (!isNew && loaded && !calibrationReview?.properties) {
-    navigate(buildPath(paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':uuid': 'new' })), { replace: true });
-  }
+  if (!isNew && loaded && !calibrationReview?.properties)
+    navigate(
+      buildPath(paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':uuid': 'new', ':userUuid': colleagueUuid })),
+      {
+        replace: true,
+        state: {
+          backPath,
+        },
+      },
+    );
 
   return (
     <WrapperModal
       onClose={handleBack}
-      title={isNew || isDraft ? t('submit_calibration_ratings') : t('edit_calibration_ratings')}
+      title={
+        isNew || isDraft
+          ? t('submit_calibration_ratings')
+          : readOnly
+          ? t('view_calibration_ratings', 'View Calibration Ratings')
+          : t('edit_calibration_ratings')
+      }
     >
       <div className={css(ratingWrapper)}>
         <div className={css({ display: 'flex', alignItems: 'center' })}>
           <Icon graphic='information' />
           <span className={css(helpTitleStyle)}>
-            <Trans i18nKey={'guidence_how_to_use_page'}>Guidence on how to use this page</Trans>
+            <Trans i18nKey={'guidance_how_to_use_page'}>Guidance on how to use this page</Trans>
           </span>
         </div>
         <p>
@@ -150,10 +157,7 @@ const CreateCalibrationRatings: FC = () => {
           components={components}
           defaultValues={!isNew ? properties : {}}
           mode={isNew || isDraft ? Mode.CREATE : Mode.UPDATE}
-          readOnly={
-            (isPerformForLN && calibrationReview?.status === Status.APPROVED) ||
-            (isPerformForPP && calibrationReview?.status === Status.WAITING_FOR_APPROVAL)
-          }
+          readOnly={readOnly}
         />
       </div>
     </WrapperModal>
