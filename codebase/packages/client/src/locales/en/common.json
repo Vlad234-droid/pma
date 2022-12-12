@@ -741,5 +741,7 @@
   "ratings_to_change_in_calibration_until_they_confirmed": "Ratings are subject to change in calibration and should not be communicated to colleagues until they are confirmed.",
   "guidence_how_to_use_page": "Guidence on how to use this page",
   "percentages_of_colleague": "% of Colleagues",
-  "rating": "Rating"
+  "rating": "Rating",
+  "delete_session": "Delete Session",
+  "calibration_session_delete": "You are about to delete the calibration session. Once the session is deleted all changes will be lost."
 }

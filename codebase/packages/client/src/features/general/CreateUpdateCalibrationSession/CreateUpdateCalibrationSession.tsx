@@ -3,7 +3,12 @@ import { useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CalibrationSessionStatusEnum } from '@pma/openapi';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
-import { CalibrationSessionsAction, calibrationSessionsMetaSelector, getCalibrationSessionsSelector } from '@pma/store';
+import {
+  CalibrationSessionsAction,
+  calibrationSessionsMetaSelector,
+  getCalibrationSessionsSelector,
+  getCreatedCalibrationSessionsUuidSelector,
+} from '@pma/store';
 
 import useDispatch from 'hooks/useDispatch';
 import { Page } from 'pages';
@@ -41,6 +46,7 @@ const CreateUpdateCalibrationSession: FC<Props> = ({ onClose }) => {
     loaded: calibrationSessionLoaded,
     error: calibrationSessionError,
   } = useSelector(calibrationSessionsMetaSelector);
+  const createCalibrationSessionsUuid = useSelector(getCreatedCalibrationSessionsUuidSelector) || null;
   const calibrationSessions = useSelector(getCalibrationSessionsSelector) || [];
   const { defaultFilters } = useFilter(uuid);
 
@@ -92,8 +98,8 @@ const CreateUpdateCalibrationSession: FC<Props> = ({ onClose }) => {
 
   useEffect(() => {
     if (isSubmittedData && !calibrationSessionUpdating) {
-      if (!calibrationSessionError && calibrationSession?.uuid) {
-        navigate(buildPath(paramsReplacer(`${Page.CALIBRATION_SESSION}`, { ':uuid': calibrationSession?.uuid })));
+      if (!calibrationSessionError && createCalibrationSessionsUuid) {
+        navigate(buildPath(paramsReplacer(`${Page.CALIBRATION_SESSION}`, { ':uuid': createCalibrationSessionsUuid })));
       } else {
         onClose();
       }

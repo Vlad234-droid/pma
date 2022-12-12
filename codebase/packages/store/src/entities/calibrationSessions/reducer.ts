@@ -15,6 +15,7 @@ import {
 
 export type InitialStateType = {
   data: CalibrationSession[];
+  createdUuid: string | null;
   meta: {
     loading: boolean;
     loaded: boolean;
@@ -26,6 +27,7 @@ export type InitialStateType = {
 
 export const initialState: InitialStateType = {
   data: [],
+  createdUuid: null,
   meta: { loading: false, loaded: false, error: null, updating: false, updated: false },
 };
 
@@ -80,7 +82,8 @@ export default createReducer(initialState)
   })
   .handleAction(createCalibrationSession.success, (state, { payload }) => {
     return {
-      data: [...state.data, payload],
+      data: [...state.data, payload.data],
+      createdUuid: payload?.data?.uuid || null,
       meta: { ...state.meta, updating: false, updated: true },
     };
   })

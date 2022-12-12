@@ -14,6 +14,11 @@ export const calibrationSessionsMetaSelector = createSelector(
   (calibrationSessions) => calibrationSessions.meta,
 );
 
+export const getCreatedCalibrationSessionsUuidSelector = createSelector(
+  calibrationSessionsSelector,
+  (calibrationSessions) => calibrationSessions.createdUuid,
+);
+
 export const getCalibrationSessionsSelector = createSelector(
   calibrationSessionsSelector,
   (calibrationSessions) => calibrationSessions.data,
