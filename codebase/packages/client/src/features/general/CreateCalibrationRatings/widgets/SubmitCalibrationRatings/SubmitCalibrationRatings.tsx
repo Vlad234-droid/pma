@@ -6,12 +6,13 @@ import {
   calibrationReviewDataSelector,
   calibrationReviewMetaSelector,
   isAnniversaryTimelineType,
+  getCalibrationPointSelector,
 } from '@pma/store';
 
 import BaseWidget from 'components/BaseWidget';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
-import { paramsReplacer } from 'utils';
+import { paramsReplacer, isDateFromISOBeforeNow, isDateFromISOAfterNow } from 'utils';
 import { useTranslation } from 'components/Translation';
 import useDispatch from 'hooks/useDispatch';
 import { Status } from 'config/enum';
@@ -25,16 +26,19 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const calibrationReview = useSelector(calibrationReviewDataSelector(userUuid)) || {};
+  const { endTime, startTime } = useSelector(getCalibrationPointSelector(userUuid, 'CURRENT'));
   const isAnniversary = useSelector(isAnniversaryTimelineType(userUuid, 'CURRENT'));
   const { loading } = useSelector(calibrationReviewMetaSelector);
   const { uuid = 'new', status } = calibrationReview;
+
+  const iseStartedPoint = isDateFromISOAfterNow(startTime) && isDateFromISOBeforeNow(endTime);
 
   useEffect(() => {
     !isAnniversary &&
       dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: 'CURRENT' }));
   }, []);
 
-  if (isAnniversary || loading || status === Status.WAITING_FOR_APPROVAL) return null;
+  if (isAnniversary || loading || !iseStartedPoint) return null;
 
   return (
     <BaseWidget

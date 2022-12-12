@@ -45,17 +45,32 @@ export const getTimelineSelector = (colleagueUuid: string, cycle = 'CURRENT') =>
     // TODO: bugfix. extract to separate function
     const uuid = colleagueUuid === USER.current ? user?.current.info.colleague.colleagueUUID : colleagueUuid;
     const data = timeline.data?.[uuid]?.[cycle];
-    const codes = data?.map(({ code }) => code);
-    const types = data?.map(({ type }) => type);
-    const descriptions = data?.map(({ description }) => description);
-    const summaryStatuses = data?.map(({ summaryStatus }) => summaryStatus);
-    const startDates = data?.map(({ code, startTime, endTime }) => {
+    const filteredData =
+      data?.filter(({ properties }) => {
+        return properties?.TIMELINE_POINT_HIDDEN !== 'true';
+      }) || [];
+    const codes = filteredData?.map(({ code }) => code);
+    const types = filteredData?.map(({ type }) => type);
+    const descriptions = filteredData?.map(({ description }) => description);
+    const summaryStatuses = filteredData?.map(({ summaryStatus }) => summaryStatus);
+    const startDates = filteredData?.map(({ code, startTime, endTime }) => {
       if (code === 'Q1' || code === 'Q3') return '';
       return `${new Date(code === Type.EYR ? endTime : startTime).toLocaleString('default', {
         month: 'long',
       })} ${new Date(code === Type.EYR ? endTime : startTime).getFullYear()}`;
     });
     return { descriptions, startDates, summaryStatuses, codes, types };
+  });
+
+export const getCalibrationPointSelector = (colleagueUuid: string, cycle = 'CURRENT') =>
+  createSelector(usersSelector, timelineSelector, (user, timeline) => {
+    const uuid = colleagueUuid === USER.current ? user?.current.info.colleague.colleagueUUID : colleagueUuid;
+    const data = timeline.data?.[uuid]?.[cycle];
+    return (
+      data?.find(({ code }) => {
+        return code === 'CALIBRATION';
+      }) || {}
+    );
   });
 
 export const getBankTimelineSelector = (colleagueUuid: string, cycle = 'CURRENT') =>

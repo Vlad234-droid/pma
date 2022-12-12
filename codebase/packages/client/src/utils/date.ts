@@ -93,3 +93,7 @@ export const getToday = () => {
   now.setMilliseconds(0);
   return now;
 };
+
+export const isDateFromISOBeforeNow = (date: string) => DateTime.now() <= DateTime.fromISO(date);
+
+export const isDateFromISOAfterNow = (date: string) => DateTime.now() >= DateTime.fromISO(date);
