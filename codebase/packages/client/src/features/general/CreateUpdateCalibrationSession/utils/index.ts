@@ -16,20 +16,16 @@ export const filterMapRevers = Object.fromEntries(Object.entries(filterMap).map(
 
 export const filterToRequest = (filter) =>
   Object.entries(filter).reduce((acc, [key, val]) => {
-    if (!filterMapRevers[key]) {
-      throw new Error('Filter key not exist');
-    }
-
     if (typeof val === 'object') {
       const keys = Object.entries(val || {})
         .filter(([, value]) => !!value)
         .map(([key]) => key);
       if (keys.length) {
-        return { ...acc, [`${filterMapRevers[key]}${Operand.IN}`]: keys };
+        return { ...acc, [`${filterMapRevers[key] || key}${Operand.IN}`]: keys };
       }
       return acc;
     } else {
-      return { ...acc, [`${filterMapRevers[key]}${Operand.IN}`]: val };
+      return { ...acc, [`${filterMapRevers[key] || key}${Operand.IN}`]: val };
     }
   }, {});
 
