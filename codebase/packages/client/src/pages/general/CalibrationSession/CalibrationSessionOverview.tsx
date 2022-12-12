@@ -15,6 +15,7 @@ import { buildPath } from 'features/general/Routes';
 import { useTranslation } from 'components/Translation';
 import { Page } from 'pages/general/types';
 import useDownloadExelFile from 'hooks/useDownloadExelFile';
+import { getCurrentYear } from 'utils';
 
 const REPORT_URL = 'reports/calibration-overview';
 
@@ -24,7 +25,7 @@ const CalibrationSessionPage: FC = () => {
   const navigate = useNavigate();
   const isPerform = usePermission([role.PEOPLE_TEAM]);
 
-  const [period, setPeriod] = useState<string>('2022');
+  const [period, setPeriod] = useState<string>(getCurrentYear().toString());
 
   const downloadReport = useDownloadExelFile({
     resource: { url: REPORT_URL, params: { year: period } },

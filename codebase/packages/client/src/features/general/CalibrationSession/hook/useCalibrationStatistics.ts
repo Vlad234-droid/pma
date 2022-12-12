@@ -9,10 +9,15 @@ import useDispatch from 'hooks/useDispatch';
 import { ActiveList, statisticsType } from '../types';
 import { initialRatings, initialStatistics } from '../config';
 
-export const useCalibrationStatistics = (
-  activeList: ActiveList,
-  uuid = '',
-): { statistics: statisticsType; loading: boolean } => {
+export const useCalibrationStatistics = ({
+  activeList,
+  uuid,
+  period,
+}: {
+  activeList: ActiveList;
+  uuid?: string | undefined;
+  period?: string | undefined;
+}): { statistics: statisticsType; loading: boolean } => {
   const dispatch = useDispatch();
 
   const data = useSelector(calibrationStatisticsDataSelector);
@@ -22,9 +27,10 @@ export const useCalibrationStatistics = (
     const params = {
       sessionUuid: uuid,
       ...(activeList !== ActiveList.LIST ? { 'review-rating_in': initialRatings } : {}),
+      ...(period ? { year: period } : {}),
     };
     dispatch(CalibrationStatisticsAction.getCalibrationStatistics(params));
-  }, [activeList]);
+  }, [activeList, period]);
 
   return {
     loading,

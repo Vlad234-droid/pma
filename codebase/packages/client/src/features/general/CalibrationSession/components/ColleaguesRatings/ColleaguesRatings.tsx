@@ -1,7 +1,7 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { calibrationReviewsMetaSelector } from '@pma/store';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
-import { ColleagueSimple } from '@pma/openapi';
+import { ColleagueSimple, RatingStatisticRatingEnum } from '@pma/openapi';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
@@ -16,7 +16,7 @@ import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
 
 type Props = {
-  data: RatingsType | Omit<RatingsType, 'unsubmitted'>;
+  data: RatingsType;
   activeList: ActiveList;
   statistics?: statisticsType;
   styles?: Rule | Styles | {};
@@ -30,19 +30,6 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
   const { loading } = useSelector(calibrationReviewsMetaSelector);
   const { pathname } = useLocation();
 
-  useEffect(() => {
-    onUpload &&
-      activeList === ActiveList.TABLE &&
-      Object.keys(data).forEach((item) => {
-        //TODO: double call
-        !data[item].length &&
-          //@ts-ignore
-          //TODO: temporary solution
-          // statistics?.find(({ rating }) => rating === item?.toLowerCase())?.count > 0 &&
-          onUpload(item);
-      });
-  }, []);
-
   const handleView = (userUuid: string, uuid: string) =>
     navigate(buildPath(paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':userUuid': userUuid, ':uuid': uuid })), {
       state: {
@@ -53,6 +40,9 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
   return (
     <div className={css(styles)}>
       {Object.entries(data).map(([title, data], i) => {
+        if (title === RatingStatisticRatingEnum.Unsubmitted.toLowerCase() && activeList === ActiveList.TABLE)
+          return null;
+
         const ratingStatistics = statistics && statistics?.[i];
         const rating = ratingStatistics?.rating as string;
         const isExpandable = ratingStatistics && ratingStatistics?.count >= 1;

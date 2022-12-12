@@ -12,7 +12,6 @@ import { Line } from 'components/Line';
 import Graph from 'components/Graph';
 
 import { ActiveList } from './types';
-import omit from 'lodash.omit';
 import { useCalibrationStatistics, useClearCalibrationData, useReviewsCalibrationList } from './hook';
 import { buildData } from './utils';
 
@@ -25,8 +24,8 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
   const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
   const listRef = useRef<HTMLDivElement>();
 
-  const { statistics, loading: statisticsLoading } = useCalibrationStatistics(activeList);
-  const getCalibrationReviewsList = useReviewsCalibrationList(activeList);
+  const { statistics, loading: statisticsLoading } = useCalibrationStatistics({ activeList, period });
+  const getCalibrationReviewsList = useReviewsCalibrationList({ activeList, period });
   useClearCalibrationData();
 
   return (
@@ -40,10 +39,10 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
         <Spinner fullHeight />
       ) : activeList !== ActiveList.GRAPH ? (
         <ColleaguesRatings
-          data={activeList === ActiveList.TABLE ? omit(data, 'unsubmitted') : data}
+          data={data}
           activeList={activeList}
           styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
-          onUpload={(rating, _start, _limit) => getCalibrationReviewsList(rating, _start, _limit)}
+          onUpload={(rating, _start, _limit) => getCalibrationReviewsList({ rating, _start, _limit })}
           statistics={statistics}
         />
       ) : (

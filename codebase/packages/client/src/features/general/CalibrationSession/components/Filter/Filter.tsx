@@ -3,6 +3,7 @@ import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 
 import { Filters, SortBy } from 'features/general/Filters';
 import { Option, Select } from 'components/Form';
+import { getCurrentYear, getYearsFromCurrentYear } from 'utils';
 
 type WithDateProps = {
   withDateFilter: boolean;
@@ -10,22 +11,16 @@ type WithDateProps = {
   onChangePeriod: (value: string) => void;
 };
 
-type WithoutDateProps = {
-  withDateFilter?: never;
-  onChangePeriod?: never;
-  period?: never;
-};
+type Props = WithDateProps;
 
-type Props = WithDateProps | WithoutDateProps;
-
-const Filter: FC<Props> = ({ withDateFilter, onChangePeriod, period = '' }) => {
+const Filter: FC<Props> = ({ withDateFilter, onChangePeriod, period }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
-  const fieldOptions: Option[] = [
-    { value: '2021', label: '2021 - 2022' },
-    { value: '2022', label: '2022 - 2023' },
-  ];
+  const fieldOptions: Option[] = getYearsFromCurrentYear(getCurrentYear()).map(({ value }) => ({
+    value,
+    label: `${value} - ${Number(value) + 1}`,
+  }));
 
   return (
     <div className={css(headStyle({ mobileScreen }))}>

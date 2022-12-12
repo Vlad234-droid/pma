@@ -27,7 +27,6 @@ import { ActiveList } from './types';
 import { Page } from 'pages';
 import { useCalibrationStatistics, useClearCalibrationData, useReviewsCalibrationList } from './hook';
 import { buildData } from './utils';
-import omit from 'lodash.omit';
 
 const CalibrationSession: FC<{ uuid: string }> = ({ uuid }) => {
   const { css, matchMedia } = useStyle();
@@ -49,8 +48,8 @@ const CalibrationSession: FC<{ uuid: string }> = ({ uuid }) => {
   const bottomPanelRef = useRef<HTMLDivElement>();
 
   const data = useSelector(calibrationReviewsDataSelector);
-  const { statistics, loading: statisticsLoading } = useCalibrationStatistics(activeList, uuid as string);
-  const getCalibrationReviewsList = useReviewsCalibrationList(activeList, uuid);
+  const { statistics, loading: statisticsLoading } = useCalibrationStatistics({ activeList, uuid });
+  const getCalibrationReviewsList = useReviewsCalibrationList({ activeList, uuid });
   useClearCalibrationData();
 
   const handleCancellation = () => {
@@ -95,10 +94,10 @@ const CalibrationSession: FC<{ uuid: string }> = ({ uuid }) => {
         <Spinner fullHeight />
       ) : activeList !== ActiveList.GRAPH ? (
         <ColleaguesRatings
-          data={activeList === ActiveList.TABLE ? omit(data, 'unsubmitted') : data}
+          data={data}
           activeList={activeList}
           styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
-          onUpload={(rating, _start, _limit) => getCalibrationReviewsList(rating, _start, _limit)}
+          onUpload={(rating, _start, _limit) => getCalibrationReviewsList({ rating, _start, _limit })}
           statistics={statistics}
         />
       ) : (
