@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 
 import CalibrationSessionOverview, {
   CalibrationsCompleted,
+  CreateCalibrationSession,
   RatingsChange,
   RatingsSubmitted,
   Widget,
@@ -47,12 +48,7 @@ const CalibrationSessionPage: FC = () => {
             onClick={() => navigate(buildPath(Page.CALIBRATION_SESSION_LIST))}
             isDisabled={!isPerform}
           />
-          <Widget
-            title={t('create_calibration_session', 'Create calibration session')}
-            graphics={'add'}
-            onClick={() => navigate(buildPath(Page.CREATE_CALIBRATION_SESSION))}
-            isDisabled={!isPerform}
-          />
+          <CreateCalibrationSession />
           <RatingsSubmitted />
           <CalibrationsCompleted />
           <RatingsChange />

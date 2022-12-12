@@ -47,7 +47,7 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
 
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(createSchema),
+    resolver: yupResolver<Yup.AnyObjectSchema>(createSchema(t)),
     defaultValues,
   });
 

@@ -20,7 +20,7 @@ const Buttons: FC<ButtonsProps> = ({ isValid, onSaveDraft, onSave }) => {
     <div className={css(containerStyle)} data-test-id={TEST_WRAPPER_ID}>
       <div className={css(wrapperStyle)}>
         <div className={css(buttonWrapperStyle({ mobileScreen }))}>
-          <Button onPress={onSaveDraft} styles={[buttonWhiteStyle]}>
+          <Button onPress={onSaveDraft} styles={[buttonWhiteStyle]} isDisabled={!isValid}>
             <Trans i18nKey='save_and_exit'>Save and exit</Trans>
           </Button>
           <ButtonWithConfirmation

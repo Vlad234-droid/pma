@@ -49,14 +49,14 @@ const ColleaguesFinder: FC<Props> = ({
   const { css } = useStyle();
   const { t } = useTranslation();
 
-  const disabledColleagues = colleagues.filter((colleague) => colleague.type === 'disabled');
-  const availableColleagues = colleagues.filter((colleague) => colleague.type !== 'disabled');
-
   const {
     colleagues: filteredColleagues,
     handleSearchColleagues,
     clearColleagueList,
-  } = useSearchColleaguesSimple(availableColleagues);
+  } = useSearchColleaguesSimple(colleagues);
+
+  const disabledColleagues = filteredColleagues.filter((colleague) => colleague.type === 'disabled');
+  const availableColleagues = filteredColleagues.filter((colleague) => colleague.type !== 'disabled');
 
   const handleChange = (e: any) => {
     const { uuid, firstName, lastName, type } = e;
@@ -84,7 +84,7 @@ const ColleaguesFinder: FC<Props> = ({
           onChange={handleChange}
           onSearch={(e) => handleSearchColleagues(e.target.value, searchOption)}
           placeholder={t('search', 'Search')}
-          options={value ? [] : filteredColleagues}
+          options={value ? [] : availableColleagues}
           disabledOptions={disabledColleagues}
           selected={selected}
           value={value}

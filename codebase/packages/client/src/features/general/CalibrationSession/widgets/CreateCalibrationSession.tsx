@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import { Rule, theme } from '@pma/dex-wrapper';
 
 import { Page } from 'pages';
@@ -12,8 +12,13 @@ import { buildPath } from '../../Routes';
 const CreateCalibrationSession: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const onClick = () => {
-    navigate(buildPath(Page.CREATE_CALIBRATION_SESSION));
+    navigate(buildPath(Page.CREATE_CALIBRATION_SESSION), {
+      state: {
+        backPath: `${pathname}`,
+      },
+    });
   };
 
   return (
