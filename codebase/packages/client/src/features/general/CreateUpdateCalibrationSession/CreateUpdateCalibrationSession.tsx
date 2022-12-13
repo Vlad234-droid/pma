@@ -142,7 +142,7 @@ const CreateUpdateCalibrationSession: FC<Props> = ({ onClose }) => {
               <div>HelpModal</div>
             </TriggerModal>
             <div className={css(helperTextStyle)}>
-              {t('complete_all_fields', 'Please complete all fields, before moving on.')}
+              {t('complete_all_fields', 'Please complete all fields before moving on.')}
             </div>
             <Form
               onSubmit={handleSubmitData}

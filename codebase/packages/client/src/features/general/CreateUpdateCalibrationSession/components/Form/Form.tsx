@@ -132,7 +132,7 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
         <Field
           name={'title'}
           Wrapper={FormItem}
-          label={'**Calibration title**'}
+          label={`**${t('calibration_session_title', 'Calibration Session Title')}**`}
           Element={Input}
           placeholder={'Add title here'}
           value={formValues.title}
@@ -143,7 +143,7 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
         <Field
           name={'startTime'}
           Wrapper={FormItem}
-          label={'**Day**'}
+          label={`**${t('day_and_time', 'Day and Time')}**`}
           Element={Datepicker}
           placeholder={'DD/MM/YY'}
           value={formValues.startTime}

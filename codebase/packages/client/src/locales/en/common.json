@@ -394,7 +394,7 @@
   "file_limit_exceeded": "File limit exceeded",
   "are_you_sure_you_want_to_save_this_goal": "Are you sure you want to save this goal?",
   "goal": "Goal",
-  "save_and_exit": "Save & Exit",
+  "save_and_exit": "Save and exit",
   "save_and_create_new_goal": "Save & create a new goal",
   "update": "Update",
   "create": "Create",
@@ -720,7 +720,7 @@
   "total_reviews_not_submitted": "Total reviews not submitted",
   "total_reviews_submitted_&_approved_by_manager": "Total reviews submitted & approved by manager",
   "total_reviews_submitted_approved_and_not_approved": "Total reviews submitted (approved and not approved)",
-  "complete_all_fields": "Please complete all fields, before moving on.",
+  "complete_all_fields": "Please complete all fields before moving on.",
   "review_completed": "Review completed",
   "reviews_completed": "Reviews completed",
   "filters_applied": "Filters applied",
@@ -744,5 +744,7 @@
   "percentages_of_colleague": "% of Colleagues",
   "rating": "Rating",
   "delete_session": "Delete Session",
-  "calibration_session_delete": "You are about to delete the calibration session. Once the session is deleted all changes will be lost."
+  "calibration_session_delete": "You are about to delete the calibration session. Once the session is deleted all changes will be lost.",
+  "day_and_time": "Day and Time",
+  "calibration_session_title": "Calibration Session Title"
 }
