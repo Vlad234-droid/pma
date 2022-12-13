@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import useDispatch from 'hooks/useDispatch';
 import { ActiveList, statisticsType } from '../types';
 import { initialRatings, initialStatistics } from '../config';
+import { Status } from 'config/enum';
 
 export const useCalibrationStatistics = ({
   activeList,
@@ -25,6 +26,7 @@ export const useCalibrationStatistics = ({
 
   useEffect(() => {
     const params = {
+      'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED],
       sessionUuid: uuid,
       ...(activeList !== ActiveList.LIST ? { 'review-rating_in': initialRatings } : {}),
       ...(period ? { year: period } : {}),
