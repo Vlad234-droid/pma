@@ -4,8 +4,7 @@ import { useStyle } from '@pma/dex-wrapper';
 import { useTranslation } from 'components/Translation';
 
 import ConfirmModal from './ConfirmModal';
-import { useTenant } from 'features/general/Permission';
-import { Tenant } from 'utils';
+import { Tenant, useTenant } from 'features/general/Permission';
 
 type Props = {
   onSave: (hasReason?: boolean, reason?: string) => void;
@@ -28,6 +27,7 @@ const ApproveModal: FC<Props> = ({ onSave, onClose }) => {
       )}
       onSave={onSave}
       onClose={onClose}
+      submitBtnTitle={t('approve_objectives', tenant === Tenant.GENERAL ? 'Approve' : 'Agree', { ns: tenant })}
     >
       <div className={css({ padding: '16px 0' })}>
         {t(
