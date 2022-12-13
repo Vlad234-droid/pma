@@ -2,7 +2,7 @@
 import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
-import { catchError, filter, mergeMap, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, filter, mergeMap, takeUntil } from 'rxjs/operators';
 import { getTimeline, getUserTimeline } from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 import { addModalError } from '../appState/actions';
@@ -10,7 +10,7 @@ import { addModalError } from '../appState/actions';
 export const getTimelineEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getTimeline.request)),
-    switchMap(({ payload }) =>
+    mergeMap(({ payload }) =>
       from(api.getTimeline(payload)).pipe(
         mergeMap((response: any) => {
           if (!response.data.length) {
