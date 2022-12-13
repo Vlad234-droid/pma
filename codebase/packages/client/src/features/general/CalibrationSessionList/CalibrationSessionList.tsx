@@ -160,6 +160,7 @@ const CalibrationSessionList: FC<{ filterStatus: FilterStatus; searchValue: stri
                               graphic={'delete'}
                               onSave={() => handleDelete(calibrationSession.uuid || null)}
                               buttonName={t('delete_session', 'Delete Session')}
+                              confirmationButtonTitle={t('delete_session', 'Delete Session')}
                               styles={iconButtonStyles}
                               isDisabled={false}
                               confirmationTitle={''}

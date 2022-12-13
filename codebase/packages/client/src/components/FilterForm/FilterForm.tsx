@@ -104,7 +104,7 @@ const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = fa
                               }}
                               checked={
                                 Object.values(values?.[key] || {}).length === properties.length &&
-                                Object.values(values?.[key]).every((val) => val)
+                                Object.values(values?.[key] || {}).every((val) => val)
                               }
                               indeterminate={true}
                             />
