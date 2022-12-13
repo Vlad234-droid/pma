@@ -35,7 +35,7 @@ const ReviewButtons: FC<ReviewButtonsProps> = ({ readonly, isValid, onClose, onS
                   <Trans i18nKey='cancel'>Cancel</Trans>
                 </Button>
               ) : (
-                <Button onPress={onSaveDraft} styles={[buttonWhiteStyle]}>
+                <Button onPress={onSaveDraft} styles={[buttonWhiteStyle]} isDisabled={!isValid}>
                   <Trans i18nKey='save_as_draft'>Save as draft</Trans>
                 </Button>
               )}

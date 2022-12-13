@@ -45,7 +45,11 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
   const { components = [], display: newSchemaVersion, markup } = schema;
   const markupMin = markup?.min;
   const isSingleStep = useSingleStep || markupMin < currentNumber;
-  const title = isSingleStep ? t('edit_objective', 'Edit objective') : t('edit_objectives', 'Edit objectives');
+  const title = create
+    ? t('create_objectives', 'Create objectives')
+    : isSingleStep
+    ? t('edit_objective', 'Edit objective')
+    : t('edit_objectives', 'Edit objectives');
 
   useEffect(() => {
     if (editNumber !== currentNumber) setCurrentNumber(editNumber);
