@@ -26,19 +26,20 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const calibrationReview = useSelector(calibrationReviewDataSelector(userUuid)) || {};
-  const { endTime, startTime } = useSelector(getCalibrationPointSelector(userUuid, 'CURRENT'));
+  const { endTime, startTime, status: TLPStatus } = useSelector(getCalibrationPointSelector(userUuid, 'CURRENT'));
   const isAnniversary = useSelector(isAnniversaryTimelineType(userUuid, 'CURRENT'));
   const { loading } = useSelector(calibrationReviewMetaSelector);
   const { uuid = 'new', status } = calibrationReview;
 
-  const iseStartedPoint = isDateFromISOAfterNow(startTime) && isDateFromISOBeforeNow(endTime);
+  const isStartedPoint =
+    TLPStatus === Status.STARTED && isDateFromISOAfterNow(startTime) && isDateFromISOBeforeNow(endTime);
 
   useEffect(() => {
     !isAnniversary &&
       dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: 'CURRENT' }));
   }, []);
 
-  if (isAnniversary || loading || !iseStartedPoint) return null;
+  if (isAnniversary || loading || !isStartedPoint) return null;
 
   return (
     <BaseWidget
