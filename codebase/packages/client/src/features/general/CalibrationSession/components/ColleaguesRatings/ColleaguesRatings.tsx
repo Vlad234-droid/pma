@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import { calibrationReviewsMetaSelector } from '@pma/store';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
-import { ColleagueSimple, RatingStatisticRatingEnum } from '@pma/openapi';
+import { ColleagueSimple, RatingStatisticRatingEnum, ReviewStatusEnum } from '@pma/openapi';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
 
-import { buildPath } from 'features/general/Routes';
+import { buildPath, buildPathWithParams } from 'features/general/Routes';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import ViewColleagueProfile from 'components/ViewColleagueProfile';
 import InfinityScrollLoad from 'components/InfinityScrollLoad';
@@ -14,6 +14,7 @@ import { useTranslation } from 'components/Translation';
 import { ActiveList, RatingsType, statisticsType } from '../../types';
 import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
+import { role, usePermission } from 'features/general/Permission';
 
 type Props = {
   data: RatingsType;
@@ -21,21 +22,29 @@ type Props = {
   statistics?: statisticsType;
   styles?: Rule | Styles | {};
   onUpload?: (rating: string, _start?: number, _limit?: number) => void;
+  sessionUuid?: string;
 };
 
-const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload, statistics }) => {
+const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload, statistics, sessionUuid = '' }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
+  const isPerform = usePermission([role.TALENT_ADMIN]);
   const navigate = useNavigate();
   const { loading } = useSelector(calibrationReviewsMetaSelector);
   const { pathname } = useLocation();
 
   const handleView = (userUuid: string, uuid: string) =>
-    navigate(buildPath(paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':userUuid': userUuid, ':uuid': uuid })), {
-      state: {
-        backPath: pathname,
+    navigate(
+      buildPathWithParams(
+        buildPath(paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':userUuid': userUuid, ':uuid': uuid })),
+        sessionUuid ? { sessionMode: 'true' } : {},
+      ),
+      {
+        state: {
+          backPath: pathname,
+        },
       },
-    });
+    );
 
   return (
     <div className={css(styles)}>
@@ -89,14 +98,23 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
                             <div key={title} className={css({ marginBottom: '24px', width: '100%' })}>
                               {!!data?.length &&
                                 data.map((item, i) => {
+                                  const isDisabled =
+                                    isPerform &&
+                                    title === RatingStatisticRatingEnum.Unsubmitted.toLowerCase() &&
+                                    (item?.review?.status === ReviewStatusEnum.Draft || true);
+
                                   return (
                                     <div key={`${title}${i}`} className={css(profileStyles)}>
                                       <ViewColleagueProfile
                                         title={'view'}
                                         colleague={item.colleague as ColleagueSimple}
-                                        onClick={() =>
-                                          handleView(item?.colleague?.uuid as string, item?.review?.uuid as string)
-                                        }
+                                        viewCustomStyles={{
+                                          pointerEvents: isDisabled ? 'none' : 'all',
+                                          opacity: isDisabled ? '0.4' : '1',
+                                        }}
+                                        onClick={() => {
+                                          handleView(item?.colleague?.uuid as string, item?.review?.uuid as string);
+                                        }}
                                         properties={activeList === ActiveList.LIST ? item?.review?.properties : {}}
                                       />
                                     </div>

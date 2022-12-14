@@ -1,22 +1,12 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
 import { Icon, Rule, useStyle } from '@pma/dex-wrapper';
-import {
-  CalibrationReviewAction,
-  calibrationReviewDataSelector,
-  calibrationReviewMetaSelector,
-  colleagueInfo,
-  colleagueUUIDSelector,
-  getColleagueMetaSelector,
-  getColleagueSelector,
-  getFormByCode,
-} from '@pma/store';
+import { CalibrationReviewAction, getColleagueSelector, getFormByCode } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 
 import WrapperModal from 'features/general/Modal/components/WrapperModal';
-import { role, usePermission } from 'features/general/Permission';
 import { buildPath } from 'features/general/Routes';
 import { Trans, useTranslation } from 'components/Translation';
 import SuccessModal from 'components/SuccessModal';
@@ -25,7 +15,7 @@ import AvatarName from 'components/AvatarName';
 import { SuccessMark } from 'components/Icon';
 import { Mode, Status } from 'config/types';
 import { buildData } from './utils';
-import { useCalibrationReview, useColleague } from './hooks';
+import { useCalibrationReview, useColleague, usePermissions } from './hooks';
 import User from 'config/entities/User';
 import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
@@ -41,45 +31,21 @@ const CreateCalibrationRatings: FC = () => {
   const { t } = useTranslation();
   const { css, theme } = useStyle();
   const [currentStatus, setCurrentStatus] = useState('');
-  const { uuid, userUuid: colleagueUuid } = useParams<{ uuid: string; userUuid: string }>() as {
-    uuid: string;
+  const { userUuid: colleagueUuid } = useParams<{ uuid: string; userUuid: string }>() as {
     userUuid: string;
   };
-  const isPerformForPP = usePermission([role.PEOPLE_TEAM]);
-  const isPerformForLN = usePermission([role.LINE_MANAGER]);
-
-  const { profile } = useSelector(getColleagueSelector) || {};
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { state } = useLocation();
   const { backPath } = (state as any) || {};
+
+  const { profile } = useSelector(getColleagueSelector) || {};
   const { components } = useSelector(getFormByCode(STANDARD_CALIBRATION_FORM_CODE)) || {};
-  const { loading, loaded, updated } = useSelector(calibrationReviewMetaSelector);
-  const calibrationReview = useSelector(calibrationReviewDataSelector(colleagueUuid)) || {};
-  const { properties } = calibrationReview;
-  const { loaded: colleagueLoaded } = useSelector(getColleagueMetaSelector);
-  const { managerUuid } = useSelector(colleagueInfo);
-  const userUuid = useSelector(colleagueUUIDSelector);
 
-  const isNew = uuid === 'new';
-  const isDraft = calibrationReview?.status === Status.DRAFT;
-  const LNDisabledStatuses =
-    calibrationReview?.status === Status.APPROVED ||
-    calibrationReview?.status === Status.COMPLETED ||
-    calibrationReview?.status === Status.WAITING_FOR_COMPLETION;
-
-  const isLineManagerForColleague = isPerformForLN && isPerformForPP && userUuid === managerUuid;
-
-  const readOnly =
-    isLineManagerForColleague && isPerformForLN
-      ? LNDisabledStatuses
-      : isPerformForPP
-      ? calibrationReview?.status === Status.WAITING_FOR_APPROVAL
-      : isPerformForLN && LNDisabledStatuses;
-
-  useCalibrationReview(isNew, colleagueUuid);
-  useColleague(colleagueUuid, colleagueLoaded);
+  const { loading, loaded, updated, calibrationReview } = useCalibrationReview();
+  useColleague();
+  const { isNew, isDraft, readOnly } = usePermissions();
 
   if (!components) return null;
 
@@ -130,7 +96,7 @@ const CreateCalibrationRatings: FC = () => {
     <WrapperModal
       onClose={handleBack}
       title={
-        isNew || isDraft
+        isDraft
           ? t('submit_calibration_ratings')
           : readOnly
           ? t('view_calibration_ratings', 'View Calibration Ratings')
@@ -155,8 +121,8 @@ const CreateCalibrationRatings: FC = () => {
           onSubmit={isNew ? handleSave : handleUpdate}
           onCancel={handleBack}
           components={components}
-          defaultValues={!isNew ? properties : {}}
-          mode={isNew || isDraft ? Mode.CREATE : Mode.UPDATE}
+          defaultValues={!isNew ? calibrationReview?.properties : {}}
+          mode={isDraft ? Mode.CREATE : Mode.UPDATE}
           readOnly={readOnly}
         />
       </div>

@@ -14,9 +14,10 @@ export type Props = {
   onClick: (uuid: string) => void;
   title?: string;
   properties?: { [key: string]: string };
+  viewCustomStyles?: Rule | Styles;
 };
 
-const ViewColleagueProfile: FC<Props> = ({ colleague, onClick, title, properties }) => {
+const ViewColleagueProfile: FC<Props> = ({ colleague, onClick, title, properties, viewCustomStyles = {} }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
@@ -58,7 +59,7 @@ const ViewColleagueProfile: FC<Props> = ({ colleague, onClick, title, properties
 
         <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
           <div className={css({ display: 'flex', alignItems: 'center' })}>
-            <span className={css(viewStyle)} onClick={() => onClick(colleague.uuid as string)}>
+            <span className={css(viewStyle, viewCustomStyles)} onClick={() => onClick(colleague.uuid as string)}>
               <Trans i18nKey={title ? title : 'view_profile'} />
             </span>
           </div>
@@ -105,9 +106,9 @@ const ratingType: Rule = (theme) =>
 const viewStyle: Rule = ({ theme }) => ({
   fontStyle: 'normal',
   fontWeight: '700',
-  fontSize: `${theme.font.fixed.f16.fontSize}`,
-  lineHeight: `${theme.font.fixed.f20.lineHeight}`,
-  color: `${theme.colors.link}`,
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f20.lineHeight,
+  color: theme.colors.link,
   cursor: 'pointer',
   padding: '2px',
   whiteSpace: 'nowrap',

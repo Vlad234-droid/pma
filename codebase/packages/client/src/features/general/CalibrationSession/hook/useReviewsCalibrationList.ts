@@ -1,11 +1,12 @@
 import { useCallback, useEffect } from 'react';
-import { CalibrationReviewsAction } from '@pma/store';
+import { CalibrationReviewsAction, calibrationReviewsDataSelector } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 import { initialFields, initialRatings } from '../config';
 import { toLocalRating } from '../utils';
 import { ActiveList } from '../types';
 import { isNegative } from 'utils';
 import { Status } from 'config/enum';
+import { useSelector } from 'react-redux';
 
 export const useReviewsCalibrationList = ({
   activeList,
@@ -17,6 +18,7 @@ export const useReviewsCalibrationList = ({
   period?: string | undefined;
 }) => {
   const dispatch = useDispatch();
+  const data = useSelector(calibrationReviewsDataSelector);
 
   const getCalibrationReviewsList = useCallback(
     ({ rating, _start, _limit }) => {
@@ -54,5 +56,5 @@ export const useReviewsCalibrationList = ({
       });
   }, [activeList, period]);
 
-  return getCalibrationReviewsList;
+  return { getCalibrationReviewsList, data };
 };

@@ -1,8 +1,6 @@
 import React, { FC, useRef, useState } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
-import { calibrationReviewsDataSelector } from '@pma/store';
 
-import { useSelector } from 'react-redux';
 import ColleaguesRatings from './components/ColleaguesRatings';
 import { useTranslation } from 'components/Translation';
 import { ListView } from './components/ListView';
@@ -20,12 +18,11 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const mediumScreen = matchMedia({ xSmall: false, small: false, medium: true }) || false;
   const { t } = useTranslation();
-  const data = useSelector(calibrationReviewsDataSelector);
   const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
   const listRef = useRef<HTMLDivElement>();
 
   const { statistics, loading: statisticsLoading } = useCalibrationStatistics({ activeList, period });
-  const getCalibrationReviewsList = useReviewsCalibrationList({ activeList, period });
+  const { getCalibrationReviewsList, data } = useReviewsCalibrationList({ activeList, period });
   useClearCalibrationData();
 
   return (

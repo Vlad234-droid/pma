@@ -1,10 +1,17 @@
 import { useEffect } from 'react';
-import { ColleagueActions } from '@pma/store';
+import { ColleagueActions, getColleagueMetaSelector } from '@pma/store';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import useDispatch from 'hooks/useDispatch';
 
-export const useColleague = (colleagueUuid, colleagueLoaded) => {
+export const useColleague = () => {
+  const { userUuid: colleagueUuid } = useParams<{ uuid: string; userUuid: string }>() as {
+    userUuid: string;
+  };
   const dispatch = useDispatch();
+  const { loaded } = useSelector(getColleagueMetaSelector);
+
   useEffect(() => {
     dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid }));
-  }, [colleagueUuid, colleagueLoaded]);
+  }, [colleagueUuid, loaded]);
 };

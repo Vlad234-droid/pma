@@ -5,12 +5,7 @@ import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { CalibrationSessionStatusEnum } from '@pma/openapi';
 import useDispatch from 'hooks/useDispatch';
 
-import {
-  calibrationReviewsDataSelector,
-  CalibrationSessionsAction,
-  calibrationSessionsMetaSelector,
-  getCalibrationSessionSelector,
-} from '@pma/store';
+import { CalibrationSessionsAction, calibrationSessionsMetaSelector, getCalibrationSessionSelector } from '@pma/store';
 
 import { buildPath } from 'features/general/Routes';
 import ColleaguesRatings from './components/ColleaguesRatings';
@@ -47,9 +42,8 @@ const CalibrationSession: FC<{ uuid: string }> = ({ uuid }) => {
   const listRef = useRef<HTMLDivElement>();
   const bottomPanelRef = useRef<HTMLDivElement>();
 
-  const data = useSelector(calibrationReviewsDataSelector);
   const { statistics, loading: statisticsLoading } = useCalibrationStatistics({ activeList, uuid });
-  const getCalibrationReviewsList = useReviewsCalibrationList({ activeList, uuid });
+  const { getCalibrationReviewsList, data } = useReviewsCalibrationList({ activeList, uuid });
   useClearCalibrationData();
 
   const handleCancellation = () => {
@@ -95,6 +89,7 @@ const CalibrationSession: FC<{ uuid: string }> = ({ uuid }) => {
           <Spinner fullHeight />
         ) : activeList !== ActiveList.GRAPH ? (
           <ColleaguesRatings
+            sessionUuid={uuid}
             data={data}
             activeList={activeList}
             styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
