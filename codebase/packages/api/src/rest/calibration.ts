@@ -64,6 +64,12 @@ export const getCalibrationColleagues = (params: RequestQuery) => {
   });
 };
 
+export const getCalibrationSessionColleagues = (params: any, sessionUuid: string) => {
+  return httpClient.get(`${domain}/sessions/${sessionUuid}/colleagues`, {
+    params,
+  });
+};
+
 export const getUserCalibrationReviews = (params: any) => {
   const { sessionUuid, ...restParams } = params;
   const URL = sessionUuid ? `${domain}/sessions/${sessionUuid}/reviews` : `${domain}/reviews`;

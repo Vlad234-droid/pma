@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, RefObject, useEffect, useState } from 'react';
+import React, { ChangeEvent, RefObject, useEffect, useState } from 'react';
 import { useStyle, Styles, Rule, CreateRule } from '@pma/dex-wrapper';
 import mergeRefs from 'react-merge-refs';
 import { useFormContainer } from 'components/Form/context/input';
@@ -17,6 +17,7 @@ interface Props<T> {
   onClear?: () => void;
   renderOption: (item: T) => JSX.Element;
   onBlur?: () => void;
+  onFocus?: () => void;
   domRef?: RefObject<any>;
   isValid?: boolean;
   id?: string;
@@ -35,6 +36,7 @@ const SearchInput = <T extends object>({
   onDelete,
   onClear,
   onBlur,
+  onFocus,
   name,
   optionDataLiner,
   value,
@@ -69,6 +71,7 @@ const SearchInput = <T extends object>({
         onChange={handleChange}
         autoComplete={'off'}
         onBlur={onBlur}
+        onFocus={onFocus}
         disabled={disabled}
         type={'text'}
         className={css(inputStyles({ isValid }), styles)}
@@ -169,6 +172,8 @@ const optionsWrapperStyles: Rule = ({ theme }) => ({
   borderRadius: theme.border.radius.sm,
   background: theme.colors.white,
   zIndex: theme.zIndex.i40,
+  maxHeight: '400px',
+  overflowY: 'auto',
 });
 
 const inputStyles: CreateRule<{ isValid: boolean }> =

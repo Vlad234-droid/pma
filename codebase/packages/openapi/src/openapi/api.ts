@@ -1241,12 +1241,6 @@ export interface DecisionInfo {
      * @type {string}
      * @memberof DecisionInfo
      */
-    'deploymentId'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DecisionInfo
-     */
     'diagramResourceName'?: string;
     /**
      * 
@@ -1254,6 +1248,12 @@ export interface DecisionInfo {
      * @memberof DecisionInfo
      */
     'tenantId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DecisionInfo
+     */
+    'deploymentId'?: string;
 }
 /**
  * 
@@ -1309,13 +1309,13 @@ export interface DeploymentInfo {
      * @type {string}
      * @memberof DeploymentInfo
      */
-    'deploymentTime'?: string;
+    'tenantId'?: string;
     /**
      * 
      * @type {string}
      * @memberof DeploymentInfo
      */
-    'tenantId'?: string;
+    'deploymentTime'?: string;
 }
 /**
  * 
@@ -1411,6 +1411,12 @@ export interface Event {
     'eventId'?: string;
     /**
      * 
+     * @type {{ [key: string]: object; }}
+     * @memberof Event
+     */
+    'eventProperties'?: { [key: string]: object; };
+    /**
+     * 
      * @type {Event}
      * @memberof Event
      */
@@ -1423,12 +1429,6 @@ export interface Event {
     'eventName'?: string;
     /**
      * 
-     * @type {{ [key: string]: object; }}
-     * @memberof Event
-     */
-    'eventProperties'?: { [key: string]: object; };
-    /**
-     * 
      * @type {string}
      * @memberof Event
      */
@@ -1438,13 +1438,13 @@ export interface Event {
      * @type {string}
      * @memberof Event
      */
-    'eventCreationDate'?: string;
+    'callbackServiceURL'?: string;
     /**
      * 
      * @type {string}
      * @memberof Event
      */
-    'callbackServiceURL'?: string;
+    'eventCreationDate'?: string;
 }
 
 /**
@@ -3163,12 +3163,6 @@ export interface ProcessInfo {
      * @type {string}
      * @memberof ProcessInfo
      */
-    'deploymentId'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProcessInfo
-     */
     'diagramResourceName'?: string;
     /**
      * 
@@ -3176,6 +3170,12 @@ export interface ProcessInfo {
      * @memberof ProcessInfo
      */
     'tenantId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProcessInfo
+     */
+    'deploymentId'?: string;
 }
 /**
  * 
@@ -3904,6 +3904,31 @@ export interface RestResponseListColleagueReview {
      * 
      * @type {Array<ApiError>}
      * @memberof RestResponseListColleagueReview
+     */
+    'errors'?: Array<ApiError>;
+}
+/**
+ * 
+ * @export
+ * @interface RestResponseListColleagueSimple
+ */
+export interface RestResponseListColleagueSimple {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RestResponseListColleagueSimple
+     */
+    'success'?: boolean;
+    /**
+     * 
+     * @type {Array<ColleagueSimple>}
+     * @memberof RestResponseListColleagueSimple
+     */
+    'data'?: Array<ColleagueSimple>;
+    /**
+     * 
+     * @type {Array<ApiError>}
+     * @memberof RestResponseListColleagueSimple
      */
     'errors'?: Array<ApiError>;
 }
@@ -6484,6 +6509,47 @@ export const CalibrationApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @summary Gets colleagues by Calibration Sessions
+         * @param {string} sessionUuid 
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSuggestions1: async (sessionUuid: string, requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sessionUuid' is not null or undefined
+            assertParamExists('getSuggestions1', 'sessionUuid', sessionUuid)
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getSuggestions1', 'requestQuery', requestQuery)
+            const localVarPath = `/calibration/sessions/{sessionUuid}/colleagues`
+                .replace(`{${"sessionUuid"}}`, encodeURIComponent(String(sessionUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Start Calibration Session
          * @param {string} sessionUuid 
          * @param {*} [options] Override http request option.
@@ -6831,6 +6897,18 @@ export const CalibrationApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Gets colleagues by Calibration Sessions
+         * @param {string} sessionUuid 
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSuggestions1(sessionUuid: string, requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListColleagueSimple>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSuggestions1(sessionUuid, requestQuery, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Start Calibration Session
          * @param {string} sessionUuid 
          * @param {*} [options] Override http request option.
@@ -7044,6 +7122,17 @@ export const CalibrationApiFactory = function (configuration?: Configuration, ba
          */
         getSessions(requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseListCalibrationSession> {
             return localVarFp.getSessions(requestQuery, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Gets colleagues by Calibration Sessions
+         * @param {string} sessionUuid 
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSuggestions1(sessionUuid: string, requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseListColleagueSimple> {
+            return localVarFp.getSuggestions1(sessionUuid, requestQuery, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -7347,6 +7436,27 @@ export interface CalibrationApiGetSessionsRequest {
 }
 
 /**
+ * Request parameters for getSuggestions1 operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiGetSuggestions1Request
+ */
+export interface CalibrationApiGetSuggestions1Request {
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiGetSuggestions1
+     */
+    readonly sessionUuid: string
+
+    /**
+     * 
+     * @type {RequestQuery}
+     * @memberof CalibrationApiGetSuggestions1
+     */
+    readonly requestQuery: RequestQuery
+}
+
+/**
  * Request parameters for startSession operation in CalibrationApi.
  * @export
  * @interface CalibrationApiStartSessionRequest
@@ -7629,6 +7739,18 @@ export class CalibrationApi extends BaseAPI {
      */
     public getSessions(requestParameters: CalibrationApiGetSessionsRequest, options?: AxiosRequestConfig) {
         return CalibrationApiFp(this.configuration).getSessions(requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Gets colleagues by Calibration Sessions
+     * @param {CalibrationApiGetSuggestions1Request} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public getSuggestions1(requestParameters: CalibrationApiGetSuggestions1Request, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).getSuggestions1(requestParameters.sessionUuid, requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

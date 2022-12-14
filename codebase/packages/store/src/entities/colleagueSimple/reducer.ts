@@ -1,7 +1,7 @@
 import { createReducer } from 'typesafe-actions';
 import { ColleagueSimple } from '@pma/openapi';
 
-import { getColleagueSimple, clearColleagueSimple } from './actions';
+import { getColleagueSimple, getSessionColleagueSimple, clearColleagueSimple } from './actions';
 
 export type InitialStateType = {
   data: ColleagueSimple[];
@@ -25,6 +25,18 @@ export default createReducer(initialState)
     };
   })
   .handleAction(getColleagueSimple.success, (state, { payload }) => {
+    return {
+      ...payload,
+      meta: { ...state.meta, loading: false, loaded: true },
+    };
+  })
+  .handleAction(getSessionColleagueSimple.request, (state) => {
+    return {
+      ...state,
+      meta: { ...state.meta, loading: true, error: null, loaded: false },
+    };
+  })
+  .handleAction(getSessionColleagueSimple.success, (state, { payload }) => {
     return {
       ...payload,
       meta: { ...state.meta, loading: false, loaded: true },

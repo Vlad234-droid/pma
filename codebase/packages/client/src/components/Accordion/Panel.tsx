@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef, CSSProperties, FC, useState, useEffect } from 'react';
+import React, { ReactNode, useRef, FC, useState, useEffect } from 'react';
 import { useStyle, Rule } from '@pma/dex-wrapper';
 
 import useEventListener from 'hooks/useEventListener';

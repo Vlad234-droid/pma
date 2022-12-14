@@ -6496,6 +6496,44 @@
         }
       }
     },
+    "/calibration/sessions/{sessionUuid}/colleagues": {
+      "get": {
+        "tags": ["calibration"],
+        "summary": "Gets colleagues by Calibration Sessions",
+        "operationId": "getSuggestions_1",
+        "parameters": [
+          {
+            "name": "sessionUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "requestQuery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/RequestQuery"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of session colleagues",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseListColleagueSimple"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/calibration/sessions/filters": {
       "get": {
         "tags": ["calibration"],
@@ -8614,12 +8652,12 @@
           "source": {
             "type": "string"
           },
+          "tenantId": {
+            "type": "string"
+          },
           "deploymentTime": {
             "type": "string",
             "format": "date-time"
-          },
-          "tenantId": {
-            "type": "string"
           }
         }
       },
@@ -8858,17 +8896,17 @@
           "eventId": {
             "type": "string"
           },
-          "callbackEvent": {
-            "$ref": "#/components/schemas/Event"
-          },
-          "eventName": {
-            "type": "string"
-          },
           "eventProperties": {
             "type": "object",
             "additionalProperties": {
               "type": "object"
             }
+          },
+          "callbackEvent": {
+            "$ref": "#/components/schemas/Event"
+          },
+          "eventName": {
+            "type": "string"
           },
           "eventPriority": {
             "type": "string",
@@ -8886,12 +8924,12 @@
               "LOWEST"
             ]
           },
+          "callbackServiceURL": {
+            "type": "string"
+          },
           "eventCreationDate": {
             "type": "string",
             "format": "date-time"
-          },
-          "callbackServiceURL": {
-            "type": "string"
           }
         }
       },
@@ -9291,13 +9329,13 @@
           "versionTag": {
             "type": "string"
           },
-          "deploymentId": {
-            "type": "string"
-          },
           "diagramResourceName": {
             "type": "string"
           },
           "tenantId": {
+            "type": "string"
+          },
+          "deploymentId": {
             "type": "string"
           }
         }
@@ -9936,13 +9974,13 @@
           "versionTag": {
             "type": "string"
           },
-          "deploymentId": {
-            "type": "string"
-          },
           "diagramResourceName": {
             "type": "string"
           },
           "tenantId": {
+            "type": "string"
+          },
+          "deploymentId": {
             "type": "string"
           }
         }
@@ -10505,6 +10543,26 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ColleagueReview"
+            }
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        }
+      },
+      "RestResponseListColleagueSimple": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ColleagueSimple"
             }
           },
           "errors": {
