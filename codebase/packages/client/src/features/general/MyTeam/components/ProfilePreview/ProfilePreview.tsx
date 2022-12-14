@@ -57,7 +57,7 @@ const ProfilePreview: FC<Props> = ({
         <div className={css(buttonWrapperStyles)}>
           {hasCalibrationRating && (
             <div className={css(iconWrapperStyles)}>
-              <Icon graphic={'rating'} color={'pending'} title={title} testId='timeline-icon' />
+              <Icon graphic={'rating'} color={'pending'} title={title} />
             </div>
           )}
           <div className={css(iconWrapperStyles)}>
