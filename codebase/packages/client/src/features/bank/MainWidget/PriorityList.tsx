@@ -28,7 +28,7 @@ export const PriorityList: FC<Props> = ({ statistics }) => {
       <PriorityElement title={t('waiting_agreement', 'Waiting agreement')} count={WAITING_FOR_APPROVAL} />
       <PriorityElement title={t('requires_review', 'Requires review')} count={DECLINED} />
       <PriorityElement title={t('agreed', 'Agreed')} count={APPROVED} />
-      <PriorityElement title={t('waiting_for_manager', 'Waiting for manager')} count={WAITING_FOR_COMPLETION} />
+      <PriorityElement title={t('waiting_for_manager', 'Awaiting manager action')} count={WAITING_FOR_COMPLETION} />
       <PriorityElement title={t('completed', 'Completed')} count={COMPLETED} />
     </div>
   );
