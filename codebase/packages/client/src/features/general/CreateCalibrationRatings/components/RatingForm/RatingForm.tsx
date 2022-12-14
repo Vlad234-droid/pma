@@ -11,6 +11,8 @@ import { Mode } from 'config/types';
 import { createYupSchema, createYupSchemaForDraft } from 'utils/yup';
 
 const overallRatingListeners: string[] = ['what_rating', 'how_rating'];
+const LONG_TERM_ANSENCE = 'long_term_ansence';
+const REASON_COLLEAGUE_ABSENCE = 'reason_colleague_absence';
 
 type Props = {
   components: Array<any>;
@@ -42,6 +44,7 @@ const RatingForm: FC<Props> = ({ onSubmit, onCancel, components, defaultValues, 
   const values = getValues();
 
   const [what_rating, how_rating] = watch(overallRatingListeners);
+  const longTermAnsence = watch(LONG_TERM_ANSENCE);
 
   const params = useMemo(
     () => (what_rating && how_rating ? { what_rating, how_rating } : null),
@@ -55,6 +58,12 @@ const RatingForm: FC<Props> = ({ onSubmit, onCancel, components, defaultValues, 
       setValue('overall_rating', overall_rating, { shouldValidate: true, shouldTouch: true });
     }
   }, [overall_rating]);
+
+  useEffect(() => {
+    if (longTermAnsence === 'false') {
+      setValue(REASON_COLLEAGUE_ABSENCE, undefined);
+    }
+  }, [longTermAnsence]);
 
   const hasValue = useMemo(() => {
     return Object.values(values).filter((val) => !!val).length;
