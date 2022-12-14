@@ -7,7 +7,6 @@ import {
   calibrationReviewMetaSelector,
   isAnniversaryTimelineType,
   getCalibrationPointSelector,
-  colleagueUUIDSelector,
 } from '@pma/store';
 
 import BaseWidget from 'components/BaseWidget';
@@ -27,15 +26,15 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const calibrationReview = useSelector(calibrationReviewDataSelector(userUuid)) || {};
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
   const { endTime, startTime, status: TLPStatus } = useSelector(getCalibrationPointSelector(userUuid, 'CURRENT'));
-  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, 'CURRENT'));
   const isAnniversaryColleague = useSelector(isAnniversaryTimelineType(userUuid, 'CURRENT'));
 
   const { loading } = useSelector(calibrationReviewMetaSelector);
   const { uuid = 'new', status } = calibrationReview;
   const isStartedPoint =
-    TLPStatus === Status.STARTED && isDateFromISOAfterNow(startTime) && isDateFromISOBeforeNow(endTime);
+    ![Status.NOT_STARTED, Status.COMPLETED].includes(TLPStatus) &&
+    isDateFromISOAfterNow(startTime) &&
+    isDateFromISOBeforeNow(endTime);
   const isSubmitting = uuid === 'new' || calibrationReview?.status === Status.DRAFT;
   const isEditing = uuid !== 'new' && calibrationReview?.status === Status.WAITING_FOR_APPROVAL;
   const isViewing =
@@ -45,11 +44,10 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
 
   useEffect(() => {
     !isAnniversaryColleague &&
-      !isAnniversary &&
       dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: 'CURRENT' }));
   }, []);
 
-  if (isAnniversary || isAnniversaryColleague || loading || !isStartedPoint) return null;
+  if (isAnniversaryColleague || loading || !isStartedPoint) return null;
 
   return (
     <BaseWidget
