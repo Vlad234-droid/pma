@@ -42,6 +42,7 @@ export enum ReviewType {
   OBJECTIVE = 'OBJECTIVE',
   MYR = 'MYR',
   EYR = 'EYR',
+  CALIBRATION = 'CALIBRATION',
 }
 export enum ReportType {
   NTB = 'NEW_TO_BUSINESS',

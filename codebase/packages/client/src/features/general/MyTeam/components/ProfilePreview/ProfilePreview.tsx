@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Icon, getIcon } from 'components/Icon';
 import { ExpandButton } from 'components/Accordion';
-import { Rating, Status } from 'config/enum';
+import { Status } from 'config/enum';
 import { Page } from 'pages/general/types';
 import { paramsReplacer } from 'utils';
 import { buildPath } from 'features/general/Routes';
@@ -17,11 +17,18 @@ type Props = {
   status: Status;
   employee: Employee;
   fullTeamView?: boolean;
-  rating?: Rating;
+  rating?: string;
+  hasCalibrationRating: boolean;
   onClick?: () => void;
 };
 
-const ProfilePreview: FC<Props> = ({ status, employee, fullTeamView = false, rating, onClick }) => {
+const ProfilePreview: FC<Props> = ({
+  status,
+  employee,
+  fullTeamView = false,
+  hasCalibrationRating = false,
+  onClick,
+}) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -48,25 +55,22 @@ const ProfilePreview: FC<Props> = ({ status, employee, fullTeamView = false, rat
       />
       <div className={css(contentStyles)}>
         <div className={css(buttonWrapperStyles)}>
-          {rating ? (
-            <span className={css(ratingStyles)}>{rating}</span>
-          ) : (
-            <button onClick={() => viewUserObjectives(employee.uuid)} className={css(buttonStyles)}>
-              {t('view_profile', 'View profile')}
-            </button>
+          {hasCalibrationRating && (
+            <div className={css(iconWrapperStyles)}>
+              <Icon graphic={'rating'} color={'pending'} title={title} testId='timeline-icon' />
+            </div>
           )}
+          <div className={css(iconWrapperStyles)}>
+            <Icon graphic={graphics} fill={color} title={title} testId='timeline-icon' />
+          </div>
         </div>
         <div className={css({ display: 'flex' })}>
-          {!rating && (
-            <div className={css(iconWrapperStyles)}>
-              <Icon graphic={graphics} fill={color} title={title} testId='timeline-icon' />
-            </div>
-          )}
-          {!rating && (
-            <div className={css(expandButtonStyles)}>
-              <ExpandButton />
-            </div>
-          )}
+          <button onClick={() => viewUserObjectives(employee.uuid)} className={css(buttonStyles)}>
+            {t('view_profile', 'View profile')}
+          </button>
+          <div className={css(expandButtonStyles)}>
+            <ExpandButton />
+          </div>
         </div>
       </div>
     </div>
@@ -80,7 +84,7 @@ const wrapperStyles: Rule = {
   display: 'flex',
 };
 
-const contentStyles: Rule = ({ theme }) => {
+const contentStyles: Rule = () => {
   const { matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true });
 
@@ -93,11 +97,12 @@ const contentStyles: Rule = ({ theme }) => {
   };
 };
 
-const buttonWrapperStyles: Rule = ({ theme }) => {
+const buttonWrapperStyles: Rule = () => {
   const { matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true });
 
   return {
+    display: 'flex',
     padding: mobileScreen ? '0 0 12px 0' : '12px 12px',
   };
 };

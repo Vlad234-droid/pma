@@ -1,40 +1,30 @@
 import React, { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { colors, fontWeight, Rule, useStyle } from '@pma/dex-wrapper';
-import { colleagueUUIDSelector, getEmployeesWithReviewStatuses, ManagersActions } from '@pma/store';
+import { colleagueUUIDSelector, getEmployeesWithCalibrationStatus, ManagersActions } from '@pma/store';
 
 import { Status } from 'config/enum';
 import { TileWrapper } from 'components/Tile';
 import { useTranslation } from 'components/Translation';
 import useDispatch from 'hooks/useDispatch';
+import { Icon } from 'components/Icon';
 
 const ActionCount: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const pendingEmployee = useSelector((state) => getEmployeesWithReviewStatuses(state, Status.PENDING)) || [];
-  const draftEmployee = useSelector((state) => getEmployeesWithReviewStatuses(state, Status.DRAFT)) || [];
+  const pendingEmployee = useSelector((state) => getEmployeesWithCalibrationStatus(state, Status.PENDING)) || [];
 
   const waitingCount = pendingEmployee.length;
-  const draftCount = draftEmployee.length;
 
   useEffect(() => {
     if (colleagueUuid) {
       dispatch(
-        ManagersActions.getManagerReviews({
+        ManagersActions.getManagerCalibrations({
           colleagueUuid,
           'colleague-cycle-status_in': [Status.STARTED, Status.FINISHING, Status.FINISHED],
-          'review-status_in': [Status.DRAFT],
-          'review-type_in': ['CALIBRATION'],
-          status: Status.DRAFT,
-        }),
-      );
-      dispatch(
-        ManagersActions.getManagerReviews({
-          colleagueUuid,
-          'colleague-cycle-status_in': [Status.STARTED, Status.FINISHING, Status.FINISHED],
-          'review-status_in': [Status.WAITING_FOR_APPROVAL, Status.WAITING_FOR_COMPLETION],
+          'review-status_in': [Status.WAITING_FOR_APPROVAL],
           'review-type_in': ['CALIBRATION'],
           status: Status.PENDING,
         }),
@@ -46,19 +36,14 @@ const ActionCount: FC = () => {
     <>
       <TileWrapper customStyle={tileWrapperStyles}>
         <div data-test-id='actions' className={css(wrapperStyles)}>
-          <div className={css(titleStyles)}>{t('your_actions', 'Your actions')}</div>
-          <div className={css(contentStyles)}>
-            <div className={css(blockStyles)}>
-              <div className={css(countStyles, { color: colors.pending })}>{waitingCount}</div>
-              <div className={css(subtitleStyles)}>{t('your_pending_actions', 'Your pending actions')}</div>
-            </div>
-            <div className={css(blockStyles)}>
-              <div className={css(countStyles, { color: colors.base })}>{draftCount}</div>
-              <div className={css(subtitleStyles)}>
-                {t('your_colleagues_pending_actions', 'Your colleagues pending actions')}
-              </div>
-            </div>
+          <div className={css(iconStyles)}>
+            <Icon graphic={'rating'} color={'black'} />
           </div>
+          <div className={css(titleStyles)}>{t('submit_calibration', 'Submit calibration')}</div>
+          <div className={css(contentStyles)}>
+            <div className={css(countStyles, { color: colors.pending })}>{waitingCount}</div>
+          </div>
+          <div>{t('colleagues_pending_submission', 'Colleagues ratings are pending submission')}</div>
         </div>
       </TileWrapper>
     </>
@@ -72,6 +57,12 @@ const tileWrapperStyles: Rule = { minWidth: '350px' };
 const wrapperStyles: Rule = {
   textAlign: 'center',
   padding: '24px',
+};
+
+const iconStyles: Rule = {
+  display: 'flex',
+  justifyContent: 'center',
+  marginBottom: '10px',
 };
 
 const titleStyles: Rule = ({ theme }) => ({

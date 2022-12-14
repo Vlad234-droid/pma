@@ -24,6 +24,7 @@ const generateTimeline = (config?: Config) => {
     summaryStatus: config?.status || Status.PENDING,
     type: config?.type || TimelineType.CYCLE,
     uuid: 'mocked_timeline_uuid',
+    properties: {},
   };
 
   // const timeline: Timeline = {
