@@ -1,11 +1,10 @@
-import React, { ChangeEvent, FC, RefObject, useCallback, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, RefObject, useEffect, useState } from 'react';
 import { useStyle, Styles, Rule, CreateRule } from '@pma/dex-wrapper';
 import mergeRefs from 'react-merge-refs';
-import debounce from 'lodash.debounce';
 import { useFormContainer } from 'components/Form/context/input';
 import { Icon } from 'components/Icon';
 
-type Props = {
+interface Props<T> {
   disabled?: boolean;
   value?: string;
   name?: string;
@@ -13,21 +12,21 @@ type Props = {
   placeholder?: string;
   styles?: Styles | Rule;
   onSearch: (e: ChangeEvent<HTMLInputElement>) => void;
-  onChange: (item: object) => void;
+  onChange: (item: T) => void;
   onDelete?: (item: string) => void;
   onClear?: () => void;
-  renderOption: (item) => JSX.Element;
+  renderOption: (item: T) => JSX.Element;
   onBlur?: () => void;
   domRef?: RefObject<any>;
   isValid?: boolean;
   id?: string;
-  options?: Array<object>;
-  disabledOptions?: Array<object>;
+  options?: Array<T>;
+  disabledOptions?: Array<T>;
   selected?: Array<{ label: string; value: string }>;
   multiple?: boolean;
-};
+}
 
-const SearchInput: FC<Props> = ({
+const SearchInput = <T extends object>({
   domRef,
   placeholder = '',
   styles = {},
@@ -46,7 +45,7 @@ const SearchInput: FC<Props> = ({
   disabled = false,
   renderOption,
   multiple = false,
-}) => {
+}: Props<T>) => {
   const [currentValue, setCurrentValue] = useState(value);
   const { css } = useStyle();
   const { inputRef } = useFormContainer();

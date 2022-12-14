@@ -101,9 +101,13 @@ const ColleaguesFinder: FC<Props> = ({
               job={item?.jobName}
               department={''}
               action={
-                <div className={css(optionActionStyle)}>
-                  <Trans i18nKey={item?.type}>{item?.type}</Trans>
-                </div>
+                item?.type !== 'disabled' ? (
+                  <div className={css(optionActionStyle)}>
+                    <Trans i18nKey={item?.type}>{item?.type}</Trans>
+                  </div>
+                ) : (
+                  <div />
+                )
               }
             />
           )}

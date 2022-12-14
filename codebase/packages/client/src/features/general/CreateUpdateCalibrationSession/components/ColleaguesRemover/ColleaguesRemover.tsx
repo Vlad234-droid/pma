@@ -26,8 +26,8 @@ const ColleaguesRemover: FC<{
     .join(' | ');
 
   const colleaguesRemovedUUID = colleaguesRemoved.map((colleagueRemoved) => colleagueRemoved.value);
-  const colleaguesAvailable = colleagues?.filter(({ colleague }) => {
-    return colleague?.uuid && !colleaguesRemovedUUID.includes(colleague.uuid);
+  const colleaguesAvailable = colleagues?.filter(({ colleague, includedToAnotherSession }) => {
+    return colleague?.uuid && !colleaguesRemovedUUID.includes(colleague.uuid) && !includedToAnotherSession;
   });
 
   const handleRemove = (colleague: any) => {

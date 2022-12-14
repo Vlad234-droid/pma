@@ -1,6 +1,8 @@
-import React, { FC, useRef } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import { calibrationSessionsMetaSelector, getCalibrationSessionSelector } from '@pma/store';
 
 import { CalibrationSession as CalibrationSessionDetails } from 'features/general/CalibrationSession';
 import {
@@ -10,12 +12,26 @@ import {
 } from 'features/general/CalibrationSession/widgets';
 import { Filters, SortBy } from 'features/general/Filters';
 
+import { Page } from '../types';
+import { useHeaderContainer } from 'contexts/headerContext';
+import { useTranslation } from 'components/Translation';
+
 const CalibrationSessionPage: FC = () => {
   const { uuid } = useParams<{ uuid: string }>();
   const { css, matchMedia } = useStyle();
+  const { t } = useTranslation();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
+  const calibrationSession = useSelector(getCalibrationSessionSelector(uuid || '')) || {};
+  const { loaded } = useSelector(calibrationSessionsMetaSelector);
+  const { setLinkTitle } = useHeaderContainer();
 
   const bottomPanelRef = useRef<HTMLDivElement>();
+
+  useEffect(() => {
+    setLinkTitle({
+      [Page.CALIBRATION_SESSION]: `${t('calibration', 'Calibration')}: ${calibrationSession.title || ''}`,
+    });
+  }, [loaded]);
 
   return (
     <div>

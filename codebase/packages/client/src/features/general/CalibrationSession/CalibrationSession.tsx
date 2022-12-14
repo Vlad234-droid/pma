@@ -85,33 +85,35 @@ const CalibrationSession: FC<{ uuid: string }> = ({ uuid }) => {
 
   return (
     <div>
-      <div className={css(listHeaderContainer({ width: listRef?.current?.clientWidth, mediumScreen, mobileScreen }))}>
-        <p>{t('ratings_period', 'Ratings', { period: '' })}</p>
-        <ListView active={activeList} setActive={(active) => setActiveList(active)} ref={listRef} />
-      </div>
-      <Line styles={lineStyles} />
-      {statisticsLoading ? (
-        <Spinner fullHeight />
-      ) : activeList !== ActiveList.GRAPH ? (
-        <ColleaguesRatings
-          data={data}
-          activeList={activeList}
-          styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
-          onUpload={(rating, _start, _limit) => getCalibrationReviewsList({ rating, _start, _limit })}
-          statistics={statistics}
-        />
-      ) : (
-        <TileWrapper customStyle={tileStyles({ mobileScreen })}>
-          <Graph
-            title={''}
-            properties={buildData(statistics, t, 'count')}
-            currentData={{
-              title: '',
-              ratings: buildData(statistics, t, 'percentage'),
-            }}
+      <div className={css(contentBlockStyle({ height: bottomPanelRef?.current?.clientHeight }))}>
+        <div className={css(listHeaderContainer({ width: listRef?.current?.clientWidth, mediumScreen, mobileScreen }))}>
+          <p>{t('ratings_period', 'Ratings', { period: '' })}</p>
+          <ListView active={activeList} setActive={(active) => setActiveList(active)} ref={listRef} />
+        </div>
+        <Line styles={lineStyles} />
+        {statisticsLoading ? (
+          <Spinner fullHeight />
+        ) : activeList !== ActiveList.GRAPH ? (
+          <ColleaguesRatings
+            data={data}
+            activeList={activeList}
+            styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
+            onUpload={(rating, _start, _limit) => getCalibrationReviewsList({ rating, _start, _limit })}
+            statistics={statistics}
           />
-        </TileWrapper>
-      )}
+        ) : (
+          <TileWrapper customStyle={tileStyles({ mobileScreen })}>
+            <Graph
+              title={''}
+              properties={buildData(statistics, t, 'count')}
+              currentData={{
+                title: '',
+                ratings: buildData(statistics, t, 'percentage'),
+              }}
+            />
+          </TileWrapper>
+        )}
+      </div>
       {isStarted && <Footer ref={bottomPanelRef} onCancel={handleCancellation} onSave={handleSave} />}
     </div>
   );
@@ -151,5 +153,13 @@ const listHeaderContainer: CreateRule<{ width: undefined | number; mediumScreen:
         margin: 0,
       },
     } as Styles);
+
+const contentBlockStyle: CreateRule<{ height: number | undefined }> = ({ height }) => {
+  if (height) {
+    return { paddingBottom: `${height}px` };
+  }
+
+  return {};
+};
 
 export default CalibrationSession;

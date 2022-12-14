@@ -37,11 +37,10 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
   const { t } = useTranslation();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { participants: { filters = [] } = {} } = defaultValues;
-
-  const [savedFilter, setSavedFilter] = useState<any>(defaultValues.filter || {});
   const dispatch = useDispatch();
 
   const colleagueFilter = useSelector(getColleagueFilterSelector) || {};
+  const [savedFilter, setSavedFilter] = useState<any>(defaultValues.filter || {});
 
   const [isVisibleFilterModal, setFilterModal] = useState<boolean>(false);
 
@@ -65,7 +64,8 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
     colleagues: colleaguesRemover,
     loading: colleaguesRemoverLoading,
     loaded: colleaguesRemoverLoaded,
-  } = useColleagueSimple(filterToRequest(savedFilter));
+  } = useColleagueSimple(filterToRequest(savedFilter), !!Object.keys(savedFilter)?.length);
+
   const {
     colleagues: colleaguesFinder,
     loading: colleaguesFinderLoading,

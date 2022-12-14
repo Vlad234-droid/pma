@@ -8,7 +8,7 @@ const useSearchColleaguesSimple = (colleagues: ColleagueSimpleExtended[]) => {
 
   const handleSearchColleagues = useCallback(
     (value: string, searchOption = SearchOption.NAME) => {
-      if (value === '' || value.length < 3) {
+      if (value === '' || value.length < 2) {
         clearColleagueList();
         return;
       }
