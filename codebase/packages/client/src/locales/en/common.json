@@ -512,6 +512,7 @@
   "field_is_required": "Field is required",
   "field_must_be_at_least_number_characters": "Field must be at least {{value}} characters",
   "field_must_be_less_than_number_characters": "Field must be less than {{value}} characters",
+  "must_be_at_most_number_characters": "Must be at most {{value}} characters",
   "wL4_5_report": "WL4 & 5 report",
   "feedback_report": "Feedback report",
   "percentage_of_objectives_submitted_by_colleagues": "Percentage of objectives submitted by colleagues, prior to being reviewed and approved by their line manager.",
