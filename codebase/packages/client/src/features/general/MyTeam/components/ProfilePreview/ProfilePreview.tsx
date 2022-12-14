@@ -27,7 +27,6 @@ const ProfilePreview: FC<Props> = ({
   employee,
   fullTeamView = false,
   hasCalibrationRating = false,
-  rating,
   onClick,
 }) => {
   const { css } = useStyle();
@@ -55,15 +54,12 @@ const ProfilePreview: FC<Props> = ({
         manager={fullTeamView ? employee.lineManager : undefined}
       />
       <div className={css(contentStyles)}>
-        {rating && <span className={css(ratingStyles)}>{rating}</span>}
-        {hasCalibrationRating && (
-          <div className={css(buttonWrapperStyles)}>
-            <div className={css(iconWrapperStyles)}>
-              <Icon graphic={graphics} fill={color} title={title} testId='timeline-icon' />
-            </div>
-          </div>
-        )}
         <div className={css(buttonWrapperStyles)}>
+          {hasCalibrationRating && (
+            <div className={css(iconWrapperStyles)}>
+              <Icon graphic={'rating'} color={'pending'} title={title} testId='timeline-icon' />
+            </div>
+          )}
           <div className={css(iconWrapperStyles)}>
             <Icon graphic={graphics} fill={color} title={title} testId='timeline-icon' />
           </div>
@@ -88,7 +84,7 @@ const wrapperStyles: Rule = {
   display: 'flex',
 };
 
-const contentStyles: Rule = ({ theme }) => {
+const contentStyles: Rule = () => {
   const { matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true });
 
@@ -101,11 +97,12 @@ const contentStyles: Rule = ({ theme }) => {
   };
 };
 
-const buttonWrapperStyles: Rule = ({ theme }) => {
+const buttonWrapperStyles: Rule = () => {
   const { matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true });
 
   return {
+    display: 'flex',
     padding: mobileScreen ? '0 0 12px 0' : '12px 12px',
   };
 };

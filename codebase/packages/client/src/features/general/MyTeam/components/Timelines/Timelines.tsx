@@ -17,7 +17,9 @@ const TimeLines: FC<Props> = ({ employee }) => {
   const { timeline: timelines } = employee;
 
   const hasQuarterTimeline = timelines.some(({ reviewType }) => reviewType === ReviewType.QUARTER);
-  const reviews = timelines?.filter((review) => review.type !== TimelineType.TIMELINE_POINT);
+  const reviews = timelines?.filter(
+    (timeline) => timeline.type !== TimelineType.TIMELINE_POINT && timeline.properties.TIMELINE_POINT_HIDDEN !== 'true',
+  );
 
   return (
     <>

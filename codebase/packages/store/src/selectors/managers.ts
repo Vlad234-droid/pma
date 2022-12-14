@@ -10,12 +10,41 @@ import {
 } from '@pma/client/src/features/general/Filters';
 import { Employee } from '@pma/client/src/config/types';
 
-export const managersSelector = (state: RootState) => state.managers.data || {};
-export const getManagersMetaSelector = (state: RootState) => state.managers.meta || {};
+export const managersReviewsSelector = (state: RootState) => state.managers.reviews.data || {};
+export const managersCalibrationsSelector = (state: RootState) => state.managers.calibrations.data || {};
+export const getManagersMetaSelector = (state: RootState) => state.managers.reviews.meta || {};
 
 export const getEmployeesWithReviewStatuses: ParametricSelector<RootState, string, any> = createSelector(
   [
-    managersSelector,
+    managersReviewsSelector,
+    (_, status: string) => status,
+    (_, __, search?: string) => search,
+    (_, __, ___?, sort?: SortBy) => sort,
+  ],
+  // @ts-ignore
+  (data = {}, status: string, searchValue = '', sortValue) => {
+    const filteredWithStatusData = (data[status] || [])
+      ?.filter((employee) => employee.reviews.length)
+      ?.map((employee) => {
+        const reviews = employee.reviews;
+        const timelineIds = reviews.map(({ tlPointUuid }) => tlPointUuid);
+        const timeline = employee.timeline.filter((timeline) => timelineIds.includes(timeline.uuid));
+        return {
+          ...employee,
+          reviews,
+          timeline,
+        };
+      });
+
+    return filteredWithStatusData
+      ? sortEmployeesFn(searchEmployeesFn(filteredWithStatusData, searchValue), sortValue)
+      : [];
+  },
+);
+
+export const getEmployeesWithCalibrationStatus: ParametricSelector<RootState, string, any> = createSelector(
+  [
+    managersCalibrationsSelector,
     (_, status: string) => status,
     (_, __, search?: string) => search,
     (_, __, ___?, sort?: SortBy) => sort,
@@ -43,7 +72,7 @@ export const getEmployeesWithReviewStatuses: ParametricSelector<RootState, strin
 
 export const getAllEmployees: Selector<RootState, any, any> = createSelector(
   [
-    managersSelector,
+    managersReviewsSelector,
     (_, status: string) => status,
     (_, __, search?: string) => search,
     (_, __?, sort?: SortBy) => sort,
@@ -56,7 +85,7 @@ export const getAllEmployees: Selector<RootState, any, any> = createSelector(
 
 export const getAllEmployeesWithManagerSearch: Selector<RootState, any, any> = createSelector(
   [
-    managersSelector,
+    managersReviewsSelector,
     (_, status: string) => status,
     (_, __, search?: string) => search,
     (_, __?, sort?: SortBy) => sort,
@@ -68,7 +97,7 @@ export const getAllEmployeesWithManagerSearch: Selector<RootState, any, any> = c
 );
 
 export const getPendingEmployees: Selector<RootState, any, any> = createSelector(
-  [managersSelector, (_, search?: string) => search, (_, __?, sort?: SortBy) => sort],
+  [managersReviewsSelector, (_, search?: string) => search, (_, __?, sort?: SortBy) => sort],
   // @ts-ignore
   ({ data }, search = '', sort) => {
     const filteredData = data ? sortEmployeesFn(searchEmployeesFn(data, search), sort) : [];
@@ -106,7 +135,7 @@ const isAnniversaryTimeline = (timeline: any) => {
 };
 
 export const getOutstandingPendingEmployees: Selector<RootState, any, any> = createSelector(
-  [managersSelector, (_, search?: string) => search, (_, __?, sort?: SortBy) => sort],
+  [managersReviewsSelector, (_, search?: string) => search, (_, __?, sort?: SortBy) => sort],
   // @ts-ignore
   ({ data }, search = '', sort) => {
     const filteredData = data ? sortEmployeesFn(searchEmployeesFn(data, search), sort) : [];

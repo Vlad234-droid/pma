@@ -63,6 +63,7 @@ import { Link } from './link';
 import { FileAttached } from './fileAttached';
 import { Upload } from './upload';
 import { Chart } from './chart';
+import { Clock } from './clock';
 
 /**
  * Each icon we add needs to have viewbox set to "0 0 24 24".
@@ -107,6 +108,7 @@ export type Graphics =
   | 'roundAlert'
   | 'roundCircle'
   | 'roundClock'
+  | 'clock'
   | 'roundPencil'
   | 'roundStop'
   | 'roundTick'
@@ -152,6 +154,7 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   roundStop: RoundStop,
   roundCircle: RoundCircle,
   roundClock: RoundClock,
+  clock: Clock,
   roundPencil: RoundPencil,
   roundTick: RoundTick,
   roundAlert: RoundAlert,

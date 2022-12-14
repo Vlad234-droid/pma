@@ -6,6 +6,7 @@ import { colleagueUUIDSelector, getEmployeesWithReviewStatuses, ManagersActions 
 import { Status } from 'config/enum';
 import { TileWrapper } from 'components/Tile';
 import { useTranslation } from 'components/Translation';
+import { Icon } from 'components/Icon';
 import useDispatch from 'hooks/useDispatch';
 
 const ActionCount: FC = () => {
@@ -46,7 +47,10 @@ const ActionCount: FC = () => {
     <>
       <TileWrapper customStyle={tileWrapperStyles}>
         <div data-test-id='actions' className={css(wrapperStyles)}>
-          <div className={css(titleStyles)}>{t('your_actions', 'Your actions')}</div>
+          <div className={css(iconStyles)}>
+            <Icon graphic={'clock'} color={'black'} />
+          </div>
+          <div className={css(titleStyles)}>{t('objectives_and_reviews', 'Objectives & Reviews')}</div>
           <div className={css(contentStyles)}>
             <div className={css(blockStyles)}>
               <div className={css(countStyles, { color: colors.pending })}>{waitingCount}</div>
@@ -82,6 +86,12 @@ const titleStyles: Rule = ({ theme }) => ({
   paddingBottom: '10px',
   fontWeight: fontWeight.bold,
 });
+
+const iconStyles: Rule = {
+  display: 'flex',
+  justifyContent: 'center',
+  marginBottom: '10px',
+};
 
 const contentStyles: Rule = {
   justifyContent: 'space-around',

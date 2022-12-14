@@ -27,6 +27,7 @@ export type Timeline = {
   uuid: string;
   statistics?: TimelineStatistics;
   lastUpdatedTime?: string;
+  properties: any;
 };
 
 export type Review = {
