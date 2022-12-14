@@ -35,12 +35,9 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
     ![Status.NOT_STARTED, Status.COMPLETED].includes(TLPStatus) &&
     isDateFromISOAfterNow(startTime) &&
     isDateFromISOBeforeNow(endTime);
-  const isSubmitting = uuid === 'new' || calibrationReview?.status === Status.DRAFT;
-  const isEditing = uuid !== 'new' && calibrationReview?.status === Status.WAITING_FOR_APPROVAL;
-  const isViewing =
-    uuid !== 'new' &&
-    calibrationReview?.status !== Status.WAITING_FOR_APPROVAL &&
-    calibrationReview?.status !== Status.DRAFT;
+  const isSubmitting = uuid === 'new' || status === Status.DRAFT;
+  const isEditing = !isSubmitting && status === Status.WAITING_FOR_APPROVAL;
+  const isViewing = !isEditing && status !== Status.WAITING_FOR_APPROVAL;
 
   useEffect(() => {
     !isAnniversaryColleague &&
@@ -51,7 +48,7 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
 
   return (
     <BaseWidget
-      iconGraphic={'edit'}
+      iconGraphic={isSubmitting || isEditing ? 'edit' : undefined}
       title={
         isSubmitting
           ? t('submit_calibration_ratings', 'Submit Calibration ratings')
@@ -61,11 +58,7 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
           ? t('view_calibration_ratings', 'View Calibration ratings')
           : ''
       }
-      description={
-        status === Status.APPROVED || status === Status.WAITING_FOR_APPROVAL
-          ? ''
-          : t('ratings_ready_to_submit', 'Ratings ready to submit')
-      }
+      description={isSubmitting ? t('ratings_ready_to_submit', 'Ratings ready to submit') : ''}
       customStyle={{ cursor: 'pointer' }}
       background={'tescoBlue'}
       onClick={() =>
