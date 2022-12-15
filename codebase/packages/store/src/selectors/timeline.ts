@@ -45,21 +45,29 @@ export const getTimelineSelector = (colleagueUuid: string, cycle = 'CURRENT') =>
     // TODO: bugfix. extract to separate function
     const uuid = colleagueUuid === USER.current ? user?.current.info.colleague.colleagueUUID : colleagueUuid;
     const data = timeline.data?.[uuid]?.[cycle];
-    const filteredData =
-      data?.filter(({ properties }) => {
-        return properties?.TIMELINE_POINT_HIDDEN !== 'true';
-      }) || [];
-    const codes = filteredData?.map(({ code }) => code);
-    const types = filteredData?.map(({ type }) => type);
-    const descriptions = filteredData?.map(({ description }) => description);
-    const summaryStatuses = filteredData?.map(({ summaryStatus }) => summaryStatus);
-    const startDates = filteredData?.map(({ code, startTime, endTime }) => {
-      if (code === 'Q1' || code === 'Q3') return '';
-      return `${new Date(code === Type.EYR ? endTime : startTime).toLocaleString('default', {
-        month: 'long',
-      })} ${new Date(code === Type.EYR ? endTime : startTime).getFullYear()}`;
+
+    const isActive = (status) => status !== TimelineStatus.STARTED && status !== TimelineStatus.NOT_STARTED;
+    const getStartDate = (startTime, endTime, code) => getDateString(code === Type.EYR ? endTime : startTime, code);
+    const getDateString = (time, code) =>
+      ['Q1', 'Q3'].includes(code)
+        ? ''
+        : `${new Date(time).toLocaleString('default', { month: 'long' })} ${new Date(time).getFullYear()}`;
+
+    const filteredData = data?.filter(({ properties }) => properties?.TIMELINE_POINT_HIDDEN !== 'true') || [];
+    const result = { codes: [], types: [], summaryStatuses: [], descriptions: [], startDates: [], currentStep: 0 };
+
+    filteredData.forEach(({ code, type, description, summaryStatus, startTime, endTime }, index) => {
+      const { codes, types, summaryStatuses, descriptions, startDates, currentStep } = result as any;
+
+      codes.push(code);
+      types.push(type);
+      summaryStatuses.push(summaryStatus);
+      descriptions.push(description);
+      startDates.push(getStartDate(startTime, endTime, code));
+      result.currentStep = isActive(summaryStatus) ? index : currentStep;
     });
-    return { descriptions, startDates, summaryStatuses, codes, types };
+
+    return result;
   });
 
 export const getCalibrationPointSelector = (colleagueUuid: string, cycle = 'CURRENT') =>
@@ -78,33 +86,26 @@ export const getBankTimelineSelector = (colleagueUuid: string, cycle = 'CURRENT'
     const uuid = colleagueUuid === USER.current ? user?.current.info.colleague.colleagueUUID : colleagueUuid;
     const data = timeline.data?.[uuid]?.[cycle];
 
-    const result = { codes: [], types: [], summaryStatuses: [], descriptions: [], startDates: [], currentStep: 0 };
-    let currentStep = 0;
-    let step = 0;
-
+    const getDesc = (description) => description.replace(/(review)/g, '');
+    const isActive = (status) => status !== TimelineStatus.STARTED && status !== TimelineStatus.NOT_STARTED;
     const getStartDate = (startTime, endTime, code) => getDateString(code === Type.EYR ? endTime : startTime);
     const getDateString = (time) =>
       `${new Date(time).toLocaleString('default', { month: 'short' })} ${new Date(time).getFullYear()}`;
-    const isActive = (status) => status !== TimelineStatus.STARTED && status !== TimelineStatus.NOT_STARTED;
-    const getStep = (step) => (step <= 0 ? 0 : step - 1);
-    const getDesc = (description) => description.replace(/(review)/g, '');
 
-    data?.map(({ code, type, summaryStatus, description, startTime, endTime }) => {
-      const { codes, types, summaryStatuses, descriptions, startDates } = result as any;
+    const result = { codes: [], types: [], summaryStatuses: [], descriptions: [], startDates: [], currentStep: 0 };
+
+    data?.forEach(({ code, type, summaryStatus, description, startTime, endTime }, index) => {
+      const { codes, types, summaryStatuses, descriptions, startDates, currentStep } = result as any;
 
       codes.push(code);
       types.push(type);
       summaryStatuses.push(summaryStatus);
       descriptions.push(getDesc(description));
       startDates.push(getStartDate(startTime, endTime, code));
-      step++;
-
-      if (isActive(summaryStatus)) {
-        currentStep = step;
-      }
+      result.currentStep = isActive(summaryStatus) ? index : currentStep;
     });
 
-    return { ...result, currentStep: getStep(currentStep) };
+    return result;
   });
 
 // todo think about remove this selector

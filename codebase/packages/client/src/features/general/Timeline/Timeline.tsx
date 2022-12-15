@@ -29,7 +29,7 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const { loading } = useSelector(timelinesMetaSelector);
   const cycles = useSelector(colleaguePerformanceCyclesSelector);
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
-  const { descriptions, startDates, summaryStatuses, types } =
+  const { descriptions, startDates, summaryStatuses, types, currentStep } =
     useSelector(getTimelineSelector(colleagueUuid, currentCycle)) || {};
   const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, currentCycle));
 
@@ -79,7 +79,13 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
             {loading ? (
               <Spinner />
             ) : (
-              <StepIndicator titles={descriptions} descriptions={startDates} statuses={summaryStatuses} types={types} />
+              <StepIndicator
+                activeStep={currentStep}
+                titles={descriptions}
+                descriptions={startDates}
+                statuses={summaryStatuses}
+                types={types}
+              />
             )}
           </div>
         </Tile>
