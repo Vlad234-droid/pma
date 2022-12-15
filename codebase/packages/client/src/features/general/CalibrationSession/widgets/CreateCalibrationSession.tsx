@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useNavigate, useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { Rule, theme } from '@pma/dex-wrapper';
 
 import { Page } from 'pages';
@@ -7,12 +7,14 @@ import { Page } from 'pages';
 import { useTranslation } from 'components/Translation';
 import BaseWidget from 'components/BaseWidget';
 
-import { buildPath } from '../../Routes';
+import { buildPath } from 'features/general/Routes';
+import { role, usePermission } from 'features/general/Permission';
 
 const CreateCalibrationSession: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const isPerform = usePermission([role.TALENT_ADMIN]);
   const onClick = () => {
     navigate(buildPath(Page.CREATE_CALIBRATION_SESSION), {
       state: {
@@ -34,6 +36,7 @@ const CreateCalibrationSession: FC = () => {
         letterSpacing: '0px',
         cursor: 'pointer',
         ...tileWrapperStyles,
+        ...(isPerform && { opacity: 0.6, pointerEvents: 'none' }),
         '& span': {
           '&:last-child': {
             fontSize: theme.font.fixed.f16.fontSize,

@@ -23,8 +23,7 @@ const CalibrationSessionPage: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const isPerform = usePermission([role.PEOPLE_TEAM]);
-
+  const isPerform = usePermission([role.TALENT_ADMIN]);
   const [period, setPeriod] = useState<string>(getCurrentYear().toString());
 
   const downloadReport = useDownloadExelFile({
@@ -47,7 +46,7 @@ const CalibrationSessionPage: FC = () => {
             title={t('calibration_sessions', 'Calibration sessions')}
             graphics={'chart'}
             onClick={() => navigate(buildPath(Page.CALIBRATION_SESSION_LIST))}
-            isDisabled={!isPerform}
+            isDisabled={isPerform}
           />
           <CreateCalibrationSession />
           <RatingsSubmitted />

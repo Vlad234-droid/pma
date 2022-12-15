@@ -6,12 +6,13 @@ import { Page } from 'pages';
 
 import { useTranslation } from 'components/Translation';
 import BaseWidget from 'components/BaseWidget';
-
-import { buildPath } from '../../Routes';
+import { role, usePermission } from 'features/general/Permission';
+import { buildPath } from 'features/general/Routes';
 
 const CreateCalibrationSession: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const isPerform = usePermission([role.TALENT_ADMIN]);
   const onClick = () => {
     navigate(buildPath(Page.CALIBRATION_SESSION_LIST));
   };
@@ -29,6 +30,10 @@ const CreateCalibrationSession: FC = () => {
         letterSpacing: '0px',
         cursor: 'pointer',
         ...tileWrapperStyles,
+        ...(isPerform && {
+          cursor: 'none',
+          display: 'none',
+        }),
         '& span': {
           '&:last-child': {
             fontSize: theme.font.fixed.f16.fontSize,
