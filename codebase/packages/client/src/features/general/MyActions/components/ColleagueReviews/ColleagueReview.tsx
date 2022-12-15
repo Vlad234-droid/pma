@@ -188,6 +188,7 @@ const styledMarkdown: Rule = ({ theme }) => {
     letterSpacing: '0px',
     '& > p': { margin: 0, padding: '20px 0' },
     '& > h2': { margin: 0, padding: '20px 0' },
+    '& > h3': { margin: 0, padding: '20px 0' },
   };
 };
 
