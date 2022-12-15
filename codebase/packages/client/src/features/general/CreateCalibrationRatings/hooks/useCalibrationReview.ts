@@ -17,6 +17,7 @@ export const useCalibrationReview = () => {
     userUuid: string;
   };
   const { loading, loaded, updated } = useSelector(calibrationReviewMetaSelector);
+
   const calibrationReview = useSelector(calibrationReviewDataSelector(colleagueUuid)) || {};
 
   const isNew = uuid === 'new';
@@ -28,6 +29,10 @@ export const useCalibrationReview = () => {
       cycle && dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid, cycleUuid: 'CURRENT' }));
     }
     dispatch(SchemaActions.getSchema({ colleagueUuid }));
+
+    return () => {
+      dispatch(CalibrationReviewAction.clearCalibrationReview());
+    };
   }, [cycle]);
   return {
     loading,

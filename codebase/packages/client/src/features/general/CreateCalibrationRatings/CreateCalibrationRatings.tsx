@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { Icon, Rule, useStyle } from '@pma/dex-wrapper';
 import { CalibrationReviewAction, getColleagueSelector, getFormByCode } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
+import isEqual from 'lodash.isequal';
 
 import WrapperModal from 'features/general/Modal/components/WrapperModal';
 import { buildPath } from 'features/general/Routes';
@@ -45,7 +46,7 @@ const CreateCalibrationRatings: FC = () => {
 
   const { loading, loaded, updated, calibrationReview } = useCalibrationReview();
   useColleague();
-  const { isNew, isDraft, readOnly } = usePermissions();
+  const { isNew, isDraft, readOnly, sessionMode, editablePPSession } = usePermissions();
 
   if (!components) return null;
 
@@ -54,7 +55,15 @@ const CreateCalibrationRatings: FC = () => {
     dispatch(CalibrationReviewAction.saveCalibrationReview(buildData(data, colleagueUuid)));
   };
 
-  const handleUpdate = (data) => {
+  const handleUpdate = (values) => {
+    const data = {
+      ...values,
+    };
+    if (sessionMode && editablePPSession) {
+      const status = calibrationReview?.status;
+      const isFormChanged = isEqual(values, calibrationReview?.properties);
+      data.status = status === Status.APPROVED && !isFormChanged ? Status.APPROVED : Status.WAITING_FOR_COMPLETION;
+    }
     setCurrentStatus(data.status);
     dispatch(CalibrationReviewAction.updateCalibrationReview(buildData(data, colleagueUuid)));
   };

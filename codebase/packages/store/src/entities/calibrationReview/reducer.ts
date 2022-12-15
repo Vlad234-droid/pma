@@ -1,5 +1,10 @@
 import { createReducer } from 'typesafe-actions';
-import { saveCalibrationReview, updateCalibrationReview, getCalibrationReview } from './actions';
+import {
+  saveCalibrationReview,
+  updateCalibrationReview,
+  getCalibrationReview,
+  clearCalibrationReview,
+} from './actions';
 
 export type InitialStateType = {
   data: any;
@@ -83,4 +88,5 @@ export default createReducer(initialState)
       ...state,
       meta: { ...state.meta, updating: false, updated: false, error: payload },
     };
-  });
+  })
+  .handleAction(clearCalibrationReview, () => initialState);

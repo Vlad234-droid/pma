@@ -1,4 +1,4 @@
-import { createAsyncAction } from 'typesafe-actions';
+import { createAsyncAction, createAction } from 'typesafe-actions';
 
 export const getCalibrationReview = createAsyncAction(
   'calibration/review/GET_REQUEST',
@@ -21,8 +21,11 @@ export const updateCalibrationReview = createAsyncAction(
   'calibration/review/UPDATE_CANCEL',
 )<any, any, Error>();
 
+export const clearCalibrationReview = createAction('calibration/review-rating/CLEAR')<undefined>();
+
 export const Actions = {
   getCalibrationReview: getCalibrationReview.request,
   saveCalibrationReview: saveCalibrationReview.request,
   updateCalibrationReview: updateCalibrationReview.request,
+  clearCalibrationReview,
 };

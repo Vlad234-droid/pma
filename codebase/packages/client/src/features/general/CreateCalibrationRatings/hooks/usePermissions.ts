@@ -50,5 +50,5 @@ export const usePermissions = () => {
     ? !isDraft && LNDisabledStatuses
     : true;
 
-  return { isNew, isDraft, readOnly };
+  return { isNew, isDraft, readOnly, sessionMode, editablePPSession };
 };
