@@ -28,7 +28,7 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
   return (
     <div>
       <div className={css(listHeaderContainer({ width: listRef?.current?.clientWidth, mediumScreen, mobileScreen }))}>
-        <p>{t('ratings_period', 'Ratings', { period })}</p>
+        <p>{t('ratings_period', 'Ratings', { period: `${period} - ${Number(period) + 1}` })}</p>
         <ListView active={activeList} setActive={(active) => setActiveList(active)} ref={listRef} />
       </div>
       <Line styles={lineStyles} />
@@ -45,7 +45,7 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
       ) : (
         <TileWrapper customStyle={tileStyles({ mobileScreen })}>
           <Graph
-            title={t('calibration_submission', 'Calibration submission', { year: period })}
+            title={t('calibration_submission', 'Calibration submission', { year: `${period} - ${Number(period) + 1}` })}
             properties={buildData(statistics, t, 'count')}
             currentData={{
               title: period,
