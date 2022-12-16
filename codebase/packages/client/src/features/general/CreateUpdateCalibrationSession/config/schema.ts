@@ -13,7 +13,7 @@ export const createSchema = (t: TFunction) =>
       },
       then: (validator) =>
         validator.test({
-          message: 'Minimum one colleague should be selected',
+          message: 'You must add at least one colleague before saving the session',
           test: (v) => {
             return !!v && v.length > 0;
           },

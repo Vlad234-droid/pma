@@ -113,10 +113,12 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
   }, [colleaguesRemoverLoaded, colleaguesFinderLoaded]);
 
   const colleaguesRemoverIds = colleaguesRemover.map(({ colleague }) => colleague?.uuid);
-  const allColleagues = colleaguesFinder.map(({ colleague, includedToAnotherSession }) => {
+
+  //@ts-ignore
+  const allColleagues = colleaguesFinder.map(({ colleague, includedToSession }) => {
     return {
       ...colleague,
-      type: includedToAnotherSession
+      type: includedToSession
         ? ActionType.DISABLED
         : colleague?.uuid && colleaguesRemoverIds.includes(colleague.uuid)
         ? ActionType.REMOVE
