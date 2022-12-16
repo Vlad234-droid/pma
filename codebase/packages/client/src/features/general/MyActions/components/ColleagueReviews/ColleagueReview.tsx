@@ -64,7 +64,7 @@ const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timeline, schema, v
   });
 
   const {
-    formState: { isValid },
+    formState: { isValid, errors },
     watch,
     setValue,
     getValues,
@@ -110,6 +110,7 @@ const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timeline, schema, v
               borderStyle = {},
             } = component;
             const value = formValues[key] || '';
+            const error = errors?.[key]?.message;
 
             if (type === FormType.TEXT) {
               return (
@@ -135,6 +136,7 @@ const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timeline, schema, v
                       placeholder={description}
                       value={value}
                       readonly={false}
+                      error={error}
                     />
                   </div>
                 );

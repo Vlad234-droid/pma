@@ -35,6 +35,8 @@ const TITLES: Record<string, [string, string]> = {
   [ReviewType.OBJECTIVE]: ['objectives', 'Objectives'],
   [ReviewType.MYR]: ['mid_year_review', 'Mid-year review'],
   [ReviewType.EYR]: ['year_end_review', 'Year-end review'],
+  // TODO: Add correct titles
+  [ReviewType.CALIBRATION]: ['TODO: Change title', 'TODO: Change title'],
 };
 
 const statusMap: Record<Status.WAITING_FOR_APPROVAL | Status.WAITING_FOR_COMPLETION, (approve: boolean) => Status> = {
