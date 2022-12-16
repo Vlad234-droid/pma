@@ -42,7 +42,7 @@ const managerReviewsFailure = (state, { payload }) => ({
 const managerCalibrationsRequest = (state) => ({
   ...state,
   calibrations: {
-    data: { ...state.reviews.data },
+    data: { ...state.calibrations.data },
     meta: { ...state.meta, loading: true, loaded: false },
   },
 });
@@ -61,7 +61,7 @@ const managerCalibrationsSuccess = (state, { payload }) => ({
 const managerCalibrationsFailure = (state, { payload }) => ({
   ...state,
   calibrations: {
-    data: { ...state.reviews.data },
+    data: { ...state.calibrations.data },
     meta: { ...state.meta, loading: false, loaded: false, error: payload },
   },
 });
