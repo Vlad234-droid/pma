@@ -20,7 +20,7 @@ import Spinner from 'components/Spinner';
 import { Buttons } from '../Buttons';
 import { ColleaguesRemover } from '../ColleaguesRemover';
 import { ColleaguesFinder } from '../ColleaguesFinder';
-import { CalibrationSessionUiType, ColleagueSimpleExtended } from '../../types';
+import { CalibrationSessionUiType, ColleagueSimpleExtended, ActionType } from '../../types';
 import { createSchema } from '../../config';
 import { filterToRequest, prepareColleaguesForUI, getSelectedGroups } from '../../utils';
 import useColleagueSimple from '../../hooks/useColleagueSimple';
@@ -54,7 +54,6 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
     formState: { errors, isValid },
     getValues,
     setValue,
-    reset,
   } = methods;
 
   const formValues = getValues();
@@ -105,13 +104,12 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
   }, []);
 
   useEffect(() => {
-    if (colleaguesRemoverLoaded && colleaguesFinderLoaded) {
-      reset({
-        ...formValues,
-        colleaguesRemoved: prepareColleaguesForUI(colleaguesRemover, filters, ConditionOperandEnum.NotIn),
-        colleaguesAdd: prepareColleaguesForUI(colleaguesFinder, filters, ConditionOperandEnum.In),
-      });
-    }
+    setValue('colleaguesRemoved', prepareColleaguesForUI(colleaguesRemover, filters, ConditionOperandEnum.NotIn), {
+      shouldTouch: true,
+    });
+    setValue('colleaguesAdd', prepareColleaguesForUI(colleaguesFinder, filters, ConditionOperandEnum.In), {
+      shouldTouch: true,
+    });
   }, [colleaguesRemoverLoaded, colleaguesFinderLoaded]);
 
   const colleaguesRemoverIds = colleaguesRemover.map(({ colleague }) => colleague?.uuid);
@@ -119,12 +117,12 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
     return {
       ...colleague,
       type: includedToAnotherSession
-        ? 'disabled'
+        ? ActionType.DISABLED
         : colleague?.uuid && colleaguesRemoverIds.includes(colleague.uuid)
-        ? 'remove'
-        : 'add',
-    } as ColleagueSimpleExtended;
-  });
+        ? ActionType.REMOVE
+        : ActionType.ADD,
+    };
+  }) as ColleagueSimpleExtended[];
 
   return (
     <form data-test-id={'CALIBRATION_SESSION_FORM_MODAL'}>
@@ -151,9 +149,7 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
           error={get(errors, 'startTime.message')}
           readonly={!canEdit}
         />
-        <div className={css(dataLineStyle)}>
-          <div></div>
-        </div>
+        <div className={css(dataLineStyle)} />
         <div className={css({ display: 'flex', justifyContent: 'space-between', alignItems: 'center' })}>
           <div className={css(labelTextStyle)}>Add groups / departments to calibration session</div>
           <IconButton
@@ -255,11 +251,9 @@ const formContainerStyle: Rule = {
 };
 
 const dataLineStyle: Rule = ({ theme }) => ({
-  padding: '20px 0',
-  '& > div': {
-    //@ts-ignore
-    borderTop: `2px solid ${theme.colors.lightGray}`,
-  },
+  margin: '20px 0',
+  //@ts-ignore
+  borderTop: `2px solid ${theme.colors.lightGray}`,
 });
 
 const iconBtnAddStyle: Rule = ({ theme }) => ({

@@ -6,6 +6,12 @@ export type CalibrationSessionUiType = CalibrationSession & {
   filter: any;
 };
 
+export enum ActionType {
+  ADD = 'add',
+  REMOVE = 'remove',
+  DISABLED = 'disabled',
+}
+
 export interface ColleagueSimpleExtended extends ColleagueSimple {
-  type?: 'add' | 'remove' | 'disabled';
+  type?: ActionType;
 }

@@ -34,7 +34,6 @@ export const createYupSchema = (t: TFunction) => (schema: Yup.AnyObjectSchema, c
   if (dependent) {
     validator = validator.when(dependent.key[0], {
       is: (val) => {
-        console.log(dependent.value.includes(val), val);
         return dependent.value.includes(val);
       },
       then: validator.required('Title is a required field'),
