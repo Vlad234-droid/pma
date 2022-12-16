@@ -140,6 +140,7 @@ const explanationDescriptionStyles: Rule = ({ theme }) => ({
   fontSize: theme.font.fixed.f16.fontSize,
   lineHeight: theme.font.fixed.f16.lineHeight,
   letterSpacing: '0px',
+  whiteSpace: 'pre-wrap',
 });
 
 const explanationStyles: Rule = {

@@ -202,6 +202,6 @@ const titleStyles: Rule = ({ theme }) => ({
   paddingBottom: '20px',
 });
 
-const valueStyle: Rule = ({ theme }) => ({ ...theme.font.fixed.f16, letterSpacing: '0px' });
+const valueStyle: Rule = ({ theme }) => ({ ...theme.font.fixed.f16, letterSpacing: '0px', whiteSpace: 'pre-wrap' });
 
 const fileListStyle: Rule = { padding: '0px 20px 20px' };
