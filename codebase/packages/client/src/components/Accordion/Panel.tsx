@@ -57,7 +57,8 @@ const Panel: FC = ({ children, ...props }) => {
   useEventListener('resize', updateHeight);
 
   useEffect(() => {
-    updateHeight();
+    // Wait until all components are rendered to set correct height
+    setTimeout(updateHeight, 100);
   });
 
   return (
