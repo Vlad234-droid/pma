@@ -58,6 +58,7 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
           colleagueUuid,
           'review-status_in': reviewStatuses,
           'colleague-cycle-status_in': colleagueCycleStatuses,
+          'review-type_nin': ['CALIBRATION'],
           status,
         }),
       );
