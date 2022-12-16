@@ -1,11 +1,11 @@
 import { createAction, createAsyncAction } from 'typesafe-actions';
-import { RestResponseListRatingStatistic } from '@pma/openapi';
+import { RestResponseMapStringTotalCount } from '@pma/openapi';
 
 export const getCalibrationStatistics = createAsyncAction(
   'calibrationUsersStatistics/FETCH_REQUEST',
   'calibrationUsersStatistics/FETCH_SUCCESS',
   'calibrationUsersStatistics/FETCH_FAILURE',
-)<any, RestResponseListRatingStatistic, Error>();
+)<any, RestResponseMapStringTotalCount, Error>();
 
 export const clearCalibrationStatistics = createAction('calibrationStatistics/CLEAR')<undefined>();
 

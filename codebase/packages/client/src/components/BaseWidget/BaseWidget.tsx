@@ -9,7 +9,7 @@ export type Props = {
   iconGraphic?: IconProps['graphic'];
   title: string;
   data?: string;
-  number?: string;
+  number?: string | number;
   type?: string;
   date?: string;
   onClick?: () => void;

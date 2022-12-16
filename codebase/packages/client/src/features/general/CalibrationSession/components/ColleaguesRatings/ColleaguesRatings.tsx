@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { calibrationReviewsMetaSelector } from '@pma/store';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
-import { ColleagueSimple, RatingStatisticRatingEnum, ReviewStatusEnum } from '@pma/openapi';
+import { ColleagueSimple, ReviewStatusEnum, TotalCount } from '@pma/openapi';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
@@ -11,15 +11,15 @@ import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'componen
 import ViewColleagueProfile from 'components/ViewColleagueProfile';
 import InfinityScrollLoad from 'components/InfinityScrollLoad';
 import { useTranslation } from 'components/Translation';
-import { ActiveList, RatingsType, statisticsType } from '../../types';
 import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
 import { role, usePermission } from 'features/general/Permission';
+import { ActiveList, RatingStatisticRatingEnum, RatingsType } from '../../types';
 
 type Props = {
   data: RatingsType;
   activeList: ActiveList;
-  statistics?: statisticsType;
+  statistics?: { [key: string]: TotalCount };
   styles?: Rule | Styles | {};
   onUpload?: (rating: string, _start?: number, _limit?: number) => void;
   sessionUuid?: string;
@@ -48,16 +48,15 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
 
   return (
     <div className={css(styles)}>
-      {Object.entries(data).map(([title, data], i) => {
+      {Object.entries(data).map(([title, data]) => {
         if (title === RatingStatisticRatingEnum.Unsubmitted.toLowerCase() && activeList === ActiveList.TABLE)
           return null;
 
-        const ratingStatistics = statistics && statistics?.[i];
-        const rating = ratingStatistics?.rating as string;
+        const ratingStatistics = statistics?.[title.toUpperCase()];
+
+        // @ts-ignore
         const isExpandable = ratingStatistics && ratingStatistics?.count >= 1;
-        const hasMore = !!(
-          statistics && statistics.find(({ rating }) => rating.toLowerCase() === title)?.count !== data.length
-        );
+        const hasMore = !!(statistics && ratingStatistics?.count !== data?.length);
 
         return (
           <Accordion
@@ -74,7 +73,7 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
                   <div className={css(scrollContainer)}>
                     <div className={css(wrapperStyles)}>
                       <span className={css(titleStyles)}>
-                        {t(rating.toLowerCase())}: {ratingStatistics?.count}
+                        {t(title)}: {ratingStatistics?.count}
                       </span>
                       {isExpandable && activeList === ActiveList.LIST && (
                         <div className={css(expandButtonStyles)}>
@@ -88,7 +87,7 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
                       <InfinityScrollLoad
                         loadOnScroll={false}
                         loadMore={(_limit, _start) => {
-                          onUpload && onUpload(rating, _start, _limit);
+                          onUpload && onUpload(title, _start, _limit);
                         }}
                         loading={loading}
                         limit={10}

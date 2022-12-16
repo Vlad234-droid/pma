@@ -1,12 +1,12 @@
 import { createReducer } from 'typesafe-actions';
 
 import { TotalCount } from '@pma/openapi';
-import { clearCalibrationStatistics, getCalibrationStatistics } from './actions';
+import { clearCalibrationStatisticsRatings, getCalibrationStatisticsRatings } from './actions';
 
-export type CSData = { [key: string]: TotalCount };
+export type CSRatings = { [key: string]: TotalCount };
 
 export type InitialStateType = {
-  data: CSData;
+  data: CSRatings;
   meta: {
     loading: boolean;
     loaded: boolean;
@@ -20,23 +20,23 @@ export const initialState: InitialStateType = {
 };
 
 export default createReducer(initialState)
-  .handleAction(getCalibrationStatistics.request, (state) => {
+  .handleAction(getCalibrationStatisticsRatings.request, (state) => {
     return {
       ...state,
       meta: { ...state.meta, loading: true, error: null, loaded: false },
     };
   })
-  .handleAction(getCalibrationStatistics.success, (state, { payload }) => {
+  .handleAction(getCalibrationStatisticsRatings.success, (state, { payload }) => {
     return {
       ...state,
       data: payload,
       meta: { ...state.meta, loading: false, loaded: true },
     };
   })
-  .handleAction(getCalibrationStatistics.failure, (state, { payload }) => {
+  .handleAction(getCalibrationStatisticsRatings.failure, (state, { payload }) => {
     return {
       ...state,
       meta: { ...state.meta, loading: false, loaded: true, error: payload },
     };
   })
-  .handleAction(clearCalibrationStatistics, () => initialState);
+  .handleAction(clearCalibrationStatisticsRatings, () => initialState);

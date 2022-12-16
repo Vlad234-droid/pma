@@ -1223,25 +1223,13 @@ export interface DecisionInfo {
      * @type {string}
      * @memberof DecisionInfo
      */
-    'resourceName'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DecisionInfo
-     */
     'category'?: string;
     /**
      * 
      * @type {string}
      * @memberof DecisionInfo
      */
-    'versionTag'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DecisionInfo
-     */
-    'diagramResourceName'?: string;
+    'resourceName'?: string;
     /**
      * 
      * @type {string}
@@ -1254,6 +1242,18 @@ export interface DecisionInfo {
      * @memberof DecisionInfo
      */
     'deploymentId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DecisionInfo
+     */
+    'diagramResourceName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DecisionInfo
+     */
+    'versionTag'?: string;
 }
 /**
  * 
@@ -1417,16 +1417,16 @@ export interface Event {
     'eventProperties'?: { [key: string]: object; };
     /**
      * 
-     * @type {Event}
-     * @memberof Event
-     */
-    'callbackEvent'?: Event;
-    /**
-     * 
      * @type {string}
      * @memberof Event
      */
     'eventName'?: string;
+    /**
+     * 
+     * @type {Event}
+     * @memberof Event
+     */
+    'callbackEvent'?: Event;
     /**
      * 
      * @type {string}
@@ -1438,13 +1438,13 @@ export interface Event {
      * @type {string}
      * @memberof Event
      */
-    'callbackServiceURL'?: string;
+    'eventCreationDate'?: string;
     /**
      * 
      * @type {string}
      * @memberof Event
      */
-    'eventCreationDate'?: string;
+    'callbackServiceURL'?: string;
 }
 
 /**
@@ -3145,25 +3145,13 @@ export interface ProcessInfo {
      * @type {string}
      * @memberof ProcessInfo
      */
-    'resourceName'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProcessInfo
-     */
     'category'?: string;
     /**
      * 
      * @type {string}
      * @memberof ProcessInfo
      */
-    'versionTag'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProcessInfo
-     */
-    'diagramResourceName'?: string;
+    'resourceName'?: string;
     /**
      * 
      * @type {string}
@@ -3176,6 +3164,18 @@ export interface ProcessInfo {
      * @memberof ProcessInfo
      */
     'deploymentId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProcessInfo
+     */
+    'diagramResourceName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProcessInfo
+     */
+    'versionTag'?: string;
 }
 /**
  * 
@@ -3220,44 +3220,6 @@ export interface Profile {
      */
     'dateOfBirth'?: string;
 }
-/**
- * 
- * @export
- * @interface RatingStatistic
- */
-export interface RatingStatistic {
-    /**
-     * 
-     * @type {number}
-     * @memberof RatingStatistic
-     */
-    'count'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof RatingStatistic
-     */
-    'percentage'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof RatingStatistic
-     */
-    'rating'?: RatingStatisticRatingEnum;
-}
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum RatingStatisticRatingEnum {
-    Outstanding = 'OUTSTANDING',
-    Great = 'GREAT',
-    Satisfactory = 'SATISFACTORY',
-    BelowExpected = 'BELOW_EXPECTED',
-    Unsubmitted = 'UNSUBMITTED'
-}
-
 /**
  * 
  * @export
@@ -4435,31 +4397,6 @@ export interface RestResponseListProcessInfo {
 /**
  * 
  * @export
- * @interface RestResponseListRatingStatistic
- */
-export interface RestResponseListRatingStatistic {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RestResponseListRatingStatistic
-     */
-    'success'?: boolean;
-    /**
-     * 
-     * @type {Array<RatingStatistic>}
-     * @memberof RestResponseListRatingStatistic
-     */
-    'data'?: Array<RatingStatistic>;
-    /**
-     * 
-     * @type {Array<ApiError>}
-     * @memberof RestResponseListRatingStatistic
-     */
-    'errors'?: Array<ApiError>;
-}
-/**
- * 
- * @export
  * @interface RestResponseListReportStatistics
  */
 export interface RestResponseListReportStatistics {
@@ -4654,6 +4591,31 @@ export interface RestResponseMapStringString {
      * 
      * @type {Array<ApiError>}
      * @memberof RestResponseMapStringString
+     */
+    'errors'?: Array<ApiError>;
+}
+/**
+ * 
+ * @export
+ * @interface RestResponseMapStringTotalCount
+ */
+export interface RestResponseMapStringTotalCount {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RestResponseMapStringTotalCount
+     */
+    'success'?: boolean;
+    /**
+     * 
+     * @type {{ [key: string]: TotalCount; }}
+     * @memberof RestResponseMapStringTotalCount
+     */
+    'data'?: { [key: string]: TotalCount; };
+    /**
+     * 
+     * @type {Array<ApiError>}
+     * @memberof RestResponseMapStringTotalCount
      */
     'errors'?: Array<ApiError>;
 }
@@ -5666,6 +5628,31 @@ export interface Tip {
 /**
  * 
  * @export
+ * @interface TotalCount
+ */
+export interface TotalCount {
+    /**
+     * 
+     * @type {number}
+     * @memberof TotalCount
+     */
+    'count'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TotalCount
+     */
+    'percentage'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TotalCount
+     */
+    'total'?: number;
+}
+/**
+ * 
+ * @export
  * @interface UpdateReviewsStatusRequest
  */
 export interface UpdateReviewsStatusRequest {
@@ -6170,6 +6157,43 @@ export const CalibrationApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @summary Returns calibration statistics accessible for the user
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCalibrationStatistics: async (requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getCalibrationStatistics', 'requestQuery', requestQuery)
+            const localVarPath = `/calibration/statistics`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get filters by permissions and selected filters
          * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
@@ -6252,7 +6276,7 @@ export const CalibrationApiAxiosParamCreator = function (configuration?: Configu
         getRatingStatistics: async (requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'requestQuery' is not null or undefined
             assertParamExists('getRatingStatistics', 'requestQuery', requestQuery)
-            const localVarPath = `/calibration/statistics`;
+            const localVarPath = `/calibration/statistics/ratings`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6401,7 +6425,7 @@ export const CalibrationApiAxiosParamCreator = function (configuration?: Configu
             assertParamExists('getSessionRatingStatistics', 'sessionUuid', sessionUuid)
             // verify required parameter 'requestQuery' is not null or undefined
             assertParamExists('getSessionRatingStatistics', 'requestQuery', requestQuery)
-            const localVarPath = `/calibration/sessions/{sessionUuid}/statistics`
+            const localVarPath = `/calibration/sessions/{sessionUuid}/statistics/ratings`
                 .replace(`{${"sessionUuid"}}`, encodeURIComponent(String(sessionUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -6795,6 +6819,17 @@ export const CalibrationApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Returns calibration statistics accessible for the user
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCalibrationStatistics(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseMapStringTotalCount>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCalibrationStatistics(requestQuery, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get filters by permissions and selected filters
          * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
@@ -6822,7 +6857,7 @@ export const CalibrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getRatingStatistics(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListRatingStatistic>> {
+        async getRatingStatistics(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseMapStringTotalCount>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getRatingStatistics(requestQuery, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -6868,7 +6903,7 @@ export const CalibrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSessionRatingStatistics(sessionUuid: string, requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListRatingStatistic>> {
+        async getSessionRatingStatistics(sessionUuid: string, requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseMapStringTotalCount>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSessionRatingStatistics(sessionUuid, requestQuery, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -7032,6 +7067,16 @@ export const CalibrationApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
+         * @summary Returns calibration statistics accessible for the user
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCalibrationStatistics(requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseMapStringTotalCount> {
+            return localVarFp.getCalibrationStatistics(requestQuery, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get filters by permissions and selected filters
          * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
@@ -7057,7 +7102,7 @@ export const CalibrationApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRatingStatistics(requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseListRatingStatistic> {
+        getRatingStatistics(requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseMapStringTotalCount> {
             return localVarFp.getRatingStatistics(requestQuery, options).then((request) => request(axios, basePath));
         },
         /**
@@ -7099,7 +7144,7 @@ export const CalibrationApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSessionRatingStatistics(sessionUuid: string, requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseListRatingStatistic> {
+        getSessionRatingStatistics(sessionUuid: string, requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseMapStringTotalCount> {
             return localVarFp.getSessionRatingStatistics(sessionUuid, requestQuery, options).then((request) => request(axios, basePath));
         },
         /**
@@ -7286,6 +7331,20 @@ export interface CalibrationApiDeleteSessionRequest {
      * @memberof CalibrationApiDeleteSession
      */
     readonly sessionUuid: string
+}
+
+/**
+ * Request parameters for getCalibrationStatistics operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiGetCalibrationStatisticsRequest
+ */
+export interface CalibrationApiGetCalibrationStatisticsRequest {
+    /**
+     * 
+     * @type {RequestQuery}
+     * @memberof CalibrationApiGetCalibrationStatistics
+     */
+    readonly requestQuery: RequestQuery
 }
 
 /**
@@ -7631,6 +7690,18 @@ export class CalibrationApi extends BaseAPI {
      */
     public deleteSession(requestParameters: CalibrationApiDeleteSessionRequest, options?: AxiosRequestConfig) {
         return CalibrationApiFp(this.configuration).deleteSession(requestParameters.sessionUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Returns calibration statistics accessible for the user
+     * @param {CalibrationApiGetCalibrationStatisticsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public getCalibrationStatistics(requestParameters: CalibrationApiGetCalibrationStatisticsRequest, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).getCalibrationStatistics(requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

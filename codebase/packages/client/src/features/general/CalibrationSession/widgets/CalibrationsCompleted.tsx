@@ -5,7 +5,7 @@ import { useTranslation } from 'components/Translation';
 
 import BaseWidget from 'components/BaseWidget';
 
-const CalibrationsCompleted: FC<{ number?: string }> = ({ number = '0' }) => {
+const CalibrationsCompleted: FC<{ count?: number }> = ({ count = '0' }) => {
   const { t } = useTranslation();
 
   return (
@@ -14,7 +14,7 @@ const CalibrationsCompleted: FC<{ number?: string }> = ({ number = '0' }) => {
       onClick={console.log}
       hover={false}
       withButton={false}
-      number={number}
+      number={count}
       description={t('calibrations', 'Calibrations')}
       customStyle={{
         fontSize: theme.font.fixed.f16.fontSize,

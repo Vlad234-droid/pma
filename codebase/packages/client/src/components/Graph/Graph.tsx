@@ -233,7 +233,7 @@ const CustomizedLabel = (props) => {
           fontWeight='Bold'
           textAnchor='start'
         >
-          {`${value}%`}
+          {value ? `${value}%` : ''}
         </text>
         <text
           x={small ? x + width / 16 : x + width + 4}

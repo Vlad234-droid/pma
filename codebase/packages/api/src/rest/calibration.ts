@@ -87,6 +87,15 @@ export const getCalibrationStatistics = (params = {}) => {
     params: restParams,
   });
 };
+export const getCalibrationStatisticsRatings = (params = {}) => {
+  //@ts-ignore
+  const { sessionUuid, ...restParams } = params;
+  const URL = sessionUuid ? `${domain}/sessions/${sessionUuid}/statistics/ratings` : `${domain}/statistics/ratings`;
+
+  return httpClient.get(URL, {
+    params: restParams,
+  });
+};
 
 export const uploadCalibrationUsersReviews = (params: any) => {
   const { sessionUuid, ...restParams } = params;

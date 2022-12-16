@@ -10,7 +10,7 @@ import { Line } from 'components/Line';
 import Graph from 'components/Graph';
 
 import { ActiveList } from './types';
-import { useCalibrationStatistics, useClearCalibrationData, useReviewsCalibrationList } from './hook';
+import { useCalibrationStatisticsRatings, useClearCalibrationData, useReviewsCalibrationList } from './hook';
 import { buildData } from './utils';
 
 const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
@@ -21,7 +21,7 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
   const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
   const listRef = useRef<HTMLDivElement>();
 
-  const { statistics, loading: statisticsLoading } = useCalibrationStatistics({ activeList, period });
+  const { statistics, loading: statisticsLoading } = useCalibrationStatisticsRatings({ activeList, period });
   const { getCalibrationReviewsList, data } = useReviewsCalibrationList({ activeList, period });
   useClearCalibrationData();
 

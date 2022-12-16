@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { InitialStateType } from '../entities/calibrationStatistics/reducer';
+import { InitialStateType, CSData } from '../entities/calibrationStatistics/reducer';
 
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
@@ -15,5 +15,5 @@ export const calibrationStatisticsMetaSelector = createSelector(
 
 export const calibrationStatisticsDataSelector = createSelector(
   calibrationStatisticsSelector,
-  (calibrationStatistics) => calibrationStatistics.data,
+  (calibrationStatistics): CSData => calibrationStatistics.data,
 );

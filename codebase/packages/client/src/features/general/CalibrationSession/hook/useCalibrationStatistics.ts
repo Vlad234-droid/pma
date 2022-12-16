@@ -4,21 +4,15 @@ import {
   calibrationStatisticsDataSelector,
   calibrationStatisticsMetaSelector,
 } from '@pma/store';
+import { TotalCount } from '@pma/openapi';
 import { useSelector } from 'react-redux';
 import useDispatch from 'hooks/useDispatch';
-import { ActiveList, statisticsType } from '../types';
-import { initialRatings, initialStatistics } from '../config';
-import { Status } from 'config/enum';
 
 export const useCalibrationStatistics = ({
-  activeList,
-  uuid,
   period,
 }: {
-  activeList: ActiveList;
-  uuid?: string | undefined;
   period?: string | undefined;
-}): { statistics: statisticsType; loading: boolean } => {
+}): { statistics: { [key: string]: TotalCount }; loading: boolean } => {
   const dispatch = useDispatch();
 
   const data = useSelector(calibrationStatisticsDataSelector);
@@ -26,20 +20,13 @@ export const useCalibrationStatistics = ({
 
   useEffect(() => {
     const params = {
-      'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED],
-      sessionUuid: uuid,
-      ...(activeList !== ActiveList.LIST ? { 'review-rating_in': initialRatings } : {}),
       ...(period ? { year: period } : {}),
     };
     dispatch(CalibrationStatisticsAction.getCalibrationStatistics(params));
-  }, [activeList, period]);
+  }, [period]);
 
   return {
     loading,
-    statistics: !data.length
-      ? initialStatistics
-      : (initialStatistics.map(
-          (item) => data?.find(({ rating }) => rating === item?.rating) || item,
-        ) as statisticsType),
+    statistics: data,
   };
 };

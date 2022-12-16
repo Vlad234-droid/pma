@@ -10,9 +10,11 @@ import CalibrationSessionOverview, {
   Widget,
 } from 'features/general/CalibrationSession';
 import { Filter } from 'features/general/CalibrationSession/components/Filter';
+import { useCalibrationStatistics } from 'features/general/CalibrationSession/hook';
 import { role, usePermission } from 'features/general/Permission';
 import { buildPath } from 'features/general/Routes';
 import { useTranslation } from 'components/Translation';
+import Spinner from 'components/Spinner';
 import { Page } from 'pages/general/types';
 import useDownloadExelFile from 'hooks/useDownloadExelFile';
 import { getCurrentYear } from 'utils';
@@ -35,24 +37,30 @@ const CalibrationSessionPage: FC = () => {
       description: t('try_to_select_another_year', 'Try to select another year.'),
     },
   });
+  //TODO: temp solution
+  const { loading, statistics } = useCalibrationStatistics({ period });
 
   return (
     <div>
       <div>
         <Filter withDateFilter onChangePeriod={(active) => setPeriod(active)} period={period} />
-        <div className={css(widgetContainerStyles)}>
-          <Widget title={t('download_report', 'Download report')} graphics={'download'} onClick={downloadReport} />
-          <Widget
-            title={t('calibration_sessions', 'Calibration sessions')}
-            graphics={'chart'}
-            onClick={() => navigate(buildPath(Page.CALIBRATION_SESSION_LIST))}
-            isDisabled={isPerform}
-          />
-          <CreateCalibrationSession />
-          <RatingsSubmitted />
-          <CalibrationsCompleted />
-          <RatingsChange />
-        </div>
+        {loading ? (
+          <Spinner fullHeight />
+        ) : (
+          <div className={css(widgetContainerStyles)}>
+            <Widget title={t('download_report', 'Download report')} graphics={'download'} onClick={downloadReport} />
+            <Widget
+              title={t('calibration_sessions', 'Calibration sessions')}
+              graphics={'chart'}
+              onClick={() => navigate(buildPath(Page.CALIBRATION_SESSION_LIST))}
+              isDisabled={isPerform}
+            />
+            <CreateCalibrationSession />
+            <RatingsSubmitted count={statistics.submitted?.count} total={statistics?.submitted?.total} />
+            <CalibrationsCompleted count={statistics?.completed?.count} />
+            <RatingsChange count={statistics?.['rating-changed']?.count} />
+          </div>
+        )}
       </div>
       <CalibrationSessionOverview period={period} />
     </div>

@@ -30,6 +30,7 @@ import { initialState as colleagueSimpleState } from '../entities/colleagueSimpl
 import { initialState as completedReviewsState } from '../entities/completedReviews/reducer';
 import { initialState as calibrationReviewsState } from '../entities/calibrationReviews/reducer';
 import { initialState as calibrationStatisticsState } from '../entities/calibrationStatistics/reducer';
+import { initialState as calibrationStatisticsRatingsState } from '../entities/calibrationStatisticsRatings/reducer';
 import { State as TimelineState } from 'entities/timeline/types';
 
 //@ts-ignore
@@ -65,6 +66,7 @@ export const initialState = {
   colleagueSimple: colleagueSimpleState,
   completedReviews: completedReviewsState,
   calibrationStatistics: calibrationStatisticsState,
+  calibrationStatisticsRatings: calibrationStatisticsRatingsState,
 };
 
 type InitialStateType = Omit<typeof initialState, 'timeline'>;

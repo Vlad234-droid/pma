@@ -32,6 +32,7 @@ import colleagueFilterReducer from '../entities/colleagueFilter/reducer';
 import colleagueSimpleReducer from '../entities/colleagueSimple/reducer';
 import completedReviewsReducer from '../entities/completedReviews/reducer';
 import calibrationStatisticsReducer from '../entities/calibrationStatistics/reducer';
+import calibrationStatisticsRatingsReducer from '../entities/calibrationStatisticsRatings/reducer';
 
 export const rootReducer = combineReducers({
   users: userReducer,
@@ -66,4 +67,5 @@ export const rootReducer = combineReducers({
   colleagueSimple: colleagueSimpleReducer,
   completedReviews: completedReviewsReducer,
   calibrationStatistics: calibrationStatisticsReducer,
+  calibrationStatisticsRatings: calibrationStatisticsRatingsReducer,
 });

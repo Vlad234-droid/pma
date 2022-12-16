@@ -6388,6 +6388,35 @@
     "/calibration/statistics": {
       "get": {
         "tags": ["calibration"],
+        "summary": "Returns calibration statistics accessible for the user",
+        "operationId": "getCalibrationStatistics",
+        "parameters": [
+          {
+            "name": "requestQuery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/RequestQuery"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Calibration statistics were found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseMapStringTotalCount"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calibration/statistics/ratings": {
+      "get": {
+        "tags": ["calibration"],
         "summary": "Returns calibration rating statistics accessible for the user",
         "operationId": "getRatingStatistics",
         "parameters": [
@@ -6406,7 +6435,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RestResponseListRatingStatistic"
+                  "$ref": "#/components/schemas/RestResponseMapStringTotalCount"
                 }
               }
             }
@@ -6414,7 +6443,7 @@
         }
       }
     },
-    "/calibration/sessions/{sessionUuid}/statistics": {
+    "/calibration/sessions/{sessionUuid}/statistics/ratings": {
       "get": {
         "tags": ["calibration"],
         "summary": "Returns calibration rating statistics by calibration session",
@@ -6447,7 +6476,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RestResponseListRatingStatistic"
+                  "$ref": "#/components/schemas/RestResponseMapStringTotalCount"
                 }
               }
             }
@@ -8902,11 +8931,11 @@
               "type": "object"
             }
           },
-          "callbackEvent": {
-            "$ref": "#/components/schemas/Event"
-          },
           "eventName": {
             "type": "string"
+          },
+          "callbackEvent": {
+            "$ref": "#/components/schemas/Event"
           },
           "eventPriority": {
             "type": "string",
@@ -8924,12 +8953,12 @@
               "LOWEST"
             ]
           },
-          "callbackServiceURL": {
-            "type": "string"
-          },
           "eventCreationDate": {
             "type": "string",
             "format": "date-time"
+          },
+          "callbackServiceURL": {
+            "type": "string"
           }
         }
       },
@@ -9320,22 +9349,22 @@
             "type": "integer",
             "format": "int32"
           },
-          "resourceName": {
-            "type": "string"
-          },
           "category": {
             "type": "string"
           },
-          "versionTag": {
-            "type": "string"
-          },
-          "diagramResourceName": {
+          "resourceName": {
             "type": "string"
           },
           "tenantId": {
             "type": "string"
           },
           "deploymentId": {
+            "type": "string"
+          },
+          "diagramResourceName": {
+            "type": "string"
+          },
+          "versionTag": {
             "type": "string"
           }
         }
@@ -9965,22 +9994,22 @@
             "type": "integer",
             "format": "int32"
           },
-          "resourceName": {
-            "type": "string"
-          },
           "category": {
             "type": "string"
           },
-          "versionTag": {
-            "type": "string"
-          },
-          "diagramResourceName": {
+          "resourceName": {
             "type": "string"
           },
           "tenantId": {
             "type": "string"
           },
           "deploymentId": {
+            "type": "string"
+          },
+          "diagramResourceName": {
+            "type": "string"
+          },
+          "versionTag": {
             "type": "string"
           }
         }
@@ -10465,7 +10494,27 @@
           }
         }
       },
-      "RatingStatistic": {
+      "RestResponseMapStringTotalCount": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TotalCount"
+            }
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        }
+      },
+      "TotalCount": {
         "type": "object",
         "properties": {
           "count": {
@@ -10476,29 +10525,9 @@
             "type": "integer",
             "format": "int32"
           },
-          "rating": {
-            "type": "string",
-            "enum": ["OUTSTANDING", "GREAT", "SATISFACTORY", "BELOW_EXPECTED", "UNSUBMITTED"]
-          }
-        }
-      },
-      "RestResponseListRatingStatistic": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/RatingStatistic"
-            }
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ApiError"
-            }
+          "total": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },

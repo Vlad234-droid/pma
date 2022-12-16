@@ -38,3 +38,4 @@ export * from './colleagueSimple';
 export * from './completedReviews';
 export * from './calibrationReviews';
 export * from './calibrationStatistics';
+export * from './calibrationStatisticsRatings';

@@ -29,6 +29,7 @@ import colleagueSimple from '../entities/colleagueSimple/epic';
 import completedReviewsEpic from '../entities/completedReviews/epic';
 import calibrationUsersReviewsEpic from '../entities/calibrationReviews/epic';
 import calibrationStatisticsEpic from '../entities/calibrationStatistics/epic';
+import calibrationStatisticsRatingsEpic from '../entities/calibrationStatisticsRatings/epic';
 
 export const rootEpic = combineEpics(
   userEpic,
@@ -61,4 +62,5 @@ export const rootEpic = combineEpics(
   completedReviewsEpic,
   calibrationUsersReviewsEpic,
   calibrationStatisticsEpic,
+  calibrationStatisticsRatingsEpic,
 );

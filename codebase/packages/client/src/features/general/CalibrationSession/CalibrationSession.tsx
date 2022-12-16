@@ -20,7 +20,7 @@ import Graph from 'components/Graph';
 import { ActiveList } from './types';
 
 import { Page } from 'pages';
-import { useCalibrationStatistics, useClearCalibrationData, useReviewsCalibrationList } from './hook';
+import { useCalibrationStatisticsRatings, useClearCalibrationData, useReviewsCalibrationList } from './hook';
 import { buildData } from './utils';
 
 const CalibrationSession: FC<{ uuid: string }> = ({ uuid }) => {
@@ -42,7 +42,8 @@ const CalibrationSession: FC<{ uuid: string }> = ({ uuid }) => {
   const listRef = useRef<HTMLDivElement>();
   const bottomPanelRef = useRef<HTMLDivElement>();
 
-  const { statistics, loading: statisticsLoading } = useCalibrationStatistics({ activeList, uuid });
+  const { statistics, loading: statisticsLoading } = useCalibrationStatisticsRatings({ activeList, uuid });
+
   const { getCalibrationReviewsList, data } = useReviewsCalibrationList({ activeList, uuid });
   useClearCalibrationData();
 

@@ -1,4 +1,4 @@
-import { RatingStatisticRatingEnum } from '@pma/openapi';
+import { RatingStatisticRatingEnum } from '../types';
 
 const _limit = 10;
 const _start = 0;
@@ -14,6 +14,14 @@ export const initialStatistics = [
   { rating: RatingStatisticRatingEnum.Satisfactory, count: 0, percentage: 0 },
   { rating: RatingStatisticRatingEnum.BelowExpected, count: 0, percentage: 0 },
   { rating: RatingStatisticRatingEnum.Unsubmitted, count: 0, percentage: 0 },
+];
+
+export const initialRatingEnums = [
+  RatingStatisticRatingEnum.Outstanding,
+  RatingStatisticRatingEnum.Great,
+  RatingStatisticRatingEnum.Satisfactory,
+  RatingStatisticRatingEnum.BelowExpected,
+  RatingStatisticRatingEnum.Unsubmitted,
 ];
 
 export const initialRatings = [
