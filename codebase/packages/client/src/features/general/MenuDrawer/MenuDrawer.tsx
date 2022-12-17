@@ -78,7 +78,7 @@ const menuDrawerWrapperStyle: CreateRule<{ isOpen: boolean }> =
     height: '100%',
     overflow: 'auto',
     backgroundColor: colors.link30,
-    zIndex: zIndex.i50,
+    zIndex: zIndex.i40,
   });
 
 const menuDrawerContentStyle: Rule = ({ theme }) => ({
