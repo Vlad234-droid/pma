@@ -190,7 +190,7 @@ const componentCustomStyle: Rule = {
     marginBottom: 0,
   },
   '& > p': {
-    paddingBottom: '8px',
+    paddingBottom: '16px',
   },
 } as Styles;
 
