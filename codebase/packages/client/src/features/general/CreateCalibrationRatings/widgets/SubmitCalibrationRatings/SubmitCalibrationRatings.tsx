@@ -48,6 +48,7 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
 
   return (
     <BaseWidget
+      buttonTitle={isEditing ? 'edit' : 'view'}
       iconGraphic={isSubmitting || isEditing ? 'edit' : undefined}
       title={
         isSubmitting
@@ -61,8 +62,8 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
       description={
         isSubmitting
           ? t('ratings_ready_to_submit', 'Ratings ready to submit')
-          : isEditing
-          ? 'Ratings are submitted'
+          : isViewing
+          ? t('ratings_are_submitted', 'Ratings are submitted')
           : ''
       }
       customStyle={{ cursor: 'pointer' }}

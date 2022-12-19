@@ -14,6 +14,7 @@ export type Props = {
   date?: string;
   onClick?: () => void;
   description?: string;
+  buttonTitle?: string;
   customStyle?: React.CSSProperties | {};
   withButton?: boolean;
   background?: Colors;
@@ -35,6 +36,7 @@ const BaseWidget: FC<Props> = ({
   withButton = true,
   background = 'white',
   hover = true,
+  buttonTitle = 'view',
   size,
 }) => {
   const { css } = useStyle();
@@ -54,7 +56,7 @@ const BaseWidget: FC<Props> = ({
           <div className={css(bodyStyle)}>
             <div>
               <Button mode='inverse' styles={[btnStyle({ background })]} onPress={onClick}>
-                <Trans i18nKey='view'>View</Trans>
+                <Trans i18nKey={buttonTitle} />
               </Button>
             </div>
           </div>

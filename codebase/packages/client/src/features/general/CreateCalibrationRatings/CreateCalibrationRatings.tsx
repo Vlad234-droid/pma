@@ -106,23 +106,27 @@ const CreateCalibrationRatings: FC = () => {
         isDraft
           ? t('submit_calibration_ratings')
           : readOnly
-          ? t('view_calibration_ratings', 'View Calibration Ratings')
+          ? t('calibration_ratings', 'Calibration ratings')
           : t('edit_calibration_ratings')
       }
     >
       <div className={css(ratingWrapper)}>
-        <div className={css({ display: 'flex', alignItems: 'center' })}>
-          <Icon graphic='information' />
-          <span className={css(helpTitleStyle)}>
-            <Trans i18nKey={'guidance_how_to_use_page'}>Guidance on how to use this page</Trans>
-          </span>
-        </div>
-        <p>
-          <Trans i18nKey={'ratings_to_change_in_calibration_until_they_confirmed'}>
-            Ratings are subject to change in calibration and should not be communicated to colleagues until they are
-            confirmed.
-          </Trans>
-        </p>
+        {!readOnly && (
+          <>
+            <div className={css({ display: 'flex', alignItems: 'center' })}>
+              <Icon graphic='information' />
+              <span className={css(helpTitleStyle)}>
+                <Trans i18nKey={'guidance_how_to_use_page'}>Guidance on how to use this page</Trans>
+              </span>
+            </div>
+            <p>
+              <Trans i18nKey={'ratings_to_change_in_calibration_until_they_confirmed'}>
+                Ratings are subject to change in calibration and should not be communicated to colleagues until they are
+                confirmed.
+              </Trans>
+            </p>
+          </>
+        )}
         <AvatarName user={profile as User} />
         <RatingForm
           onSubmit={isNew ? handleSave : handleUpdate}
