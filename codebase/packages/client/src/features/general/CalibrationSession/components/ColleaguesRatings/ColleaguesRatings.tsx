@@ -102,10 +102,14 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
                                     title === RatingStatisticRatingEnum.Unsubmitted.toLowerCase() &&
                                     (item?.review?.status === ReviewStatusEnum.Draft || true);
 
+                                  const discussWithPP = JSON.parse(
+                                    item?.review?.properties?.discuss_with_pp ?? 'false',
+                                  );
+
                                   return (
                                     <div key={`${title}${i}`} className={css(profileStyles)}>
                                       <ViewColleagueProfile
-                                        withIcon={!!item?.review?.properties?.comment}
+                                        withIcon={discussWithPP}
                                         title={'view'}
                                         colleague={item.colleague as ColleagueSimple}
                                         viewCustomStyles={{
