@@ -105,6 +105,7 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
                                   return (
                                     <div key={`${title}${i}`} className={css(profileStyles)}>
                                       <ViewColleagueProfile
+                                        withIcon={!!item?.review?.properties?.comment}
                                         title={'view'}
                                         colleague={item.colleague as ColleagueSimple}
                                         viewCustomStyles={{

@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import { ColleagueSimple } from '@pma/openapi';
 import { useStyle, Rule, Styles, CreateRule } from '@pma/dex-wrapper';
-import { TileWrapper } from 'components/Tile';
 import { Trans } from 'components/Translation';
+import { TileWrapper } from 'components/Tile';
+import { Icon } from 'components/Icon';
 
 import defaultImg from 'images/default.png';
 
@@ -15,10 +16,18 @@ export type Props = {
   title?: string;
   properties?: { [key: string]: string };
   viewCustomStyles?: Rule | Styles;
+  withIcon?: boolean;
 };
 
-const ViewColleagueProfile: FC<Props> = ({ colleague, onClick, title, properties, viewCustomStyles = {} }) => {
-  const { css, matchMedia } = useStyle();
+const ViewColleagueProfile: FC<Props> = ({
+  colleague,
+  onClick,
+  title,
+  properties,
+  viewCustomStyles = {},
+  withIcon = false,
+}) => {
+  const { css, matchMedia, theme } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
@@ -58,6 +67,11 @@ const ViewColleagueProfile: FC<Props> = ({ colleague, onClick, title, properties
         )}
 
         <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
+          {withIcon && (
+            <div className={css({ marginRight: '10px' })}>
+              <Icon graphic={'roundChat'} fill={theme.colors.pending} />
+            </div>
+          )}
           <div className={css({ display: 'flex', alignItems: 'center' })}>
             <span className={css(viewStyle, viewCustomStyles)} onClick={() => onClick(colleague.uuid as string)}>
               <Trans i18nKey={title ? title : 'view_profile'} />
@@ -75,6 +89,7 @@ const industryStyle: Rule = {
   lineHeight: '20px',
   margin: '4px 0px 0px 0px',
 };
+
 const ratingContainer: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
   display: 'flex',
   justifyContent: 'space-between',

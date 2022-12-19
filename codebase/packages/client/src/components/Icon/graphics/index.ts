@@ -37,6 +37,7 @@ import { Full } from './full';
 import { Less } from './less';
 import { Rating } from './rating';
 import { Goal } from './goal';
+import { RoundChat } from './round-chat';
 import { View } from './view';
 import { Play } from './play';
 import { Bell } from './bell';
@@ -73,6 +74,7 @@ import { Clock } from './clock';
 
 export type Graphics =
   | 'account'
+  | 'roundChat'
   | 'add'
   | 'alert'
   | 'archive'
@@ -141,6 +143,7 @@ export type Graphics =
 export const icons: Record<Graphics, FCGraphicProps> = {
   attention: Attention,
   add: Add,
+  roundChat: RoundChat,
   arrowLeft: ArrowLeft,
   arrowRight: ArrowRight,
   chat: ChatSq,
