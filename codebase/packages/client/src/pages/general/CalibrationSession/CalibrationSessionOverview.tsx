@@ -56,9 +56,12 @@ const CalibrationSessionPage: FC = () => {
               isDisabled={isPerform}
             />
             <CreateCalibrationSession />
-            <RatingsSubmitted count={statistics.submitted?.count} total={statistics?.submitted?.total} />
-            <CalibrationsCompleted count={statistics?.completed?.count} />
-            <RatingsChange count={statistics?.['rating-changed']?.count} />
+            <RatingsSubmitted
+              count={statistics.submitted?.count?.toString() ?? '0'}
+              total={statistics?.submitted?.total?.toString() ?? '0'}
+            />
+            <CalibrationsCompleted count={statistics?.completed?.count?.toString() ?? '0'} />
+            <RatingsChange count={statistics?.['rating-changed']?.count?.toString() ?? '0'} />
           </div>
         )}
       </div>

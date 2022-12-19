@@ -5,7 +5,7 @@ import { useTranslation } from 'components/Translation';
 
 import BaseWidget from 'components/BaseWidget';
 
-const RatingsChange: FC<{ count?: number }> = ({ count = '0' }) => {
+const RatingsChange: FC<{ count?: number | string }> = ({ count = '0' }) => {
   const { t } = useTranslation();
 
   return (

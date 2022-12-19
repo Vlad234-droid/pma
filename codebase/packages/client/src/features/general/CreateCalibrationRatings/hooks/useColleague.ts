@@ -9,9 +9,10 @@ export const useColleague = () => {
     userUuid: string;
   };
   const dispatch = useDispatch();
-  const { loaded } = useSelector(getColleagueMetaSelector);
+  const { loaded, loading } = useSelector(getColleagueMetaSelector);
 
   useEffect(() => {
     dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid }));
   }, [colleagueUuid, loaded]);
+  return { loading };
 };

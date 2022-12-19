@@ -81,17 +81,16 @@ const RatingForm: FC<Props> = ({ onSubmit, onCancel, components, defaultValues, 
         setValue={setValue}
         onlyView={readOnly}
       />
-      {!readOnly && (
-        <ButtonsWrapper
-          isValid={isValid}
-          isLeftDisabled={!hasValue || !draftSchema.isValidSync(values)}
-          onLeftPress={mode === Mode.CREATE ? () => handleSaveDraft(values) : onCancel}
-          leftText={mode === Mode.CREATE ? 'save_as_draft' : 'cancel'}
-          rightIcon={false}
-          rightTextNotIcon={'submit'}
-          onRightPress={handleSubmit(handleSave)}
-        />
-      )}
+      <ButtonsWrapper
+        isValid={isValid}
+        isLeftDisabled={!hasValue || !draftSchema.isValidSync(values)}
+        onLeftPress={mode === Mode.CREATE ? () => handleSaveDraft(values) : onCancel}
+        leftText={mode === Mode.CREATE ? 'save_as_draft' : 'cancel'}
+        rightIcon={false}
+        rightTextNotIcon={readOnly ? 'okay' : 'submit'}
+        onRightPress={readOnly ? onCancel : handleSubmit(handleSave)}
+        single={readOnly}
+      />
     </div>
   );
 };

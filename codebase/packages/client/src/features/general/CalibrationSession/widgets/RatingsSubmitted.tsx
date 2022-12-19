@@ -4,7 +4,7 @@ import { Rule, theme } from '@pma/dex-wrapper';
 import { useTranslation } from 'components/Translation';
 import BaseWidget from 'components/BaseWidget';
 
-const RatingsSubmitted: FC<{ count?: number; total?: number }> = ({ count = 0, total = 0 }) => {
+const RatingsSubmitted: FC<{ count?: number | string; total?: number | string }> = ({ count = 0, total = 0 }) => {
   const { t } = useTranslation();
 
   return (

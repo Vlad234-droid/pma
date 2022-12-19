@@ -5,7 +5,7 @@ import { useTranslation } from 'components/Translation';
 
 import BaseWidget from 'components/BaseWidget';
 
-const CalibrationsCompleted: FC<{ count?: number }> = ({ count = '0' }) => {
+const CalibrationsCompleted: FC<{ count?: number | string }> = ({ count = '0' }) => {
   const { t } = useTranslation();
 
   return (

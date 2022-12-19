@@ -45,10 +45,8 @@ const CreateCalibrationRatings: FC = () => {
   const { components } = useSelector(getFormByCode(STANDARD_CALIBRATION_FORM_CODE)) || {};
 
   const { loading, loaded, updated, calibrationReview } = useCalibrationReview();
-  useColleague();
+  const { loading: colleagueLoading } = useColleague();
   const { isNew, isDraft, readOnly, sessionMode, editablePPSession } = usePermissions();
-
-  if (!components) return null;
 
   const handleSave = (data: any) => {
     setCurrentStatus(data.status);
@@ -71,7 +69,7 @@ const CreateCalibrationRatings: FC = () => {
   const handleBack = () =>
     navigate(backPath || paramsReplacer(buildPath(Page.USER_REVIEWS), { ':uuid': colleagueUuid as string }));
 
-  if (loading) return null;
+  if (!components || loading || colleagueLoading) return null;
 
   if (!loading && updated) {
     if (currentStatus === Status.DRAFT) {
