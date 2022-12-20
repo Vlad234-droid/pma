@@ -50,7 +50,7 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
   return (
     <BaseWidget
       buttonTitle={isEditing ? 'edit' : 'view'}
-      iconGraphic={isSubmitting || isEditing ? 'edit' : undefined}
+      iconGraphic={isSubmitting || isEditing ? 'edit' : 'rating'}
       title={
         isSubmitting
           ? t('submit_calibration_ratings', 'Submit Calibration ratings')
