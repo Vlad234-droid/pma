@@ -35,6 +35,7 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
     ![Status.NOT_STARTED, Status.COMPLETED].includes(TLPStatus) &&
     isDateFromISOAfterNow(startTime) &&
     isDateFromISOBeforeNow(endTime);
+
   const isSubmitting = uuid === 'new' || status === Status.DRAFT;
   const isEditing = !isSubmitting && status === Status.WAITING_FOR_APPROVAL;
   const isViewing = !isSubmitting && !isEditing && status !== Status.WAITING_FOR_APPROVAL;

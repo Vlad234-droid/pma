@@ -7,3 +7,4 @@ export { default as RatingsChange } from './RatingsChange';
 export { default as CalibrationSessions } from './CalibrationSessions';
 export { default as DownloadReport } from './Download';
 export { default as Widget } from './Widget';
+export { default as AccessCalibration } from './AccessCalibration';

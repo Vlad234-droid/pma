@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { Button, Rule, Styles, useStyle, CreateRule } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
@@ -8,7 +8,7 @@ import { Colors } from 'config/types';
 export type Props = {
   iconGraphic?: IconProps['graphic'];
   title: string;
-  data?: string;
+  data?: string | ReactNode;
   number?: string | number;
   type?: string;
   date?: string;

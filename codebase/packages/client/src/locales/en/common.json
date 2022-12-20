@@ -750,5 +750,7 @@
   "delete_session": "Delete Session",
   "calibration_session_delete": "You are about to delete the calibration session. Once the session is deleted all changes will be lost.",
   "day_and_time": "Day and Time",
-  "calibration_session_title": "Calibration Session Title"
+  "calibration_session_title": "Calibration Session Title",
+  "view_and_set_up_calibration": "View and set up Calibration",
+  "access_your_team_reporting_dashboard": "Access your team reporting dashboard"
 }
