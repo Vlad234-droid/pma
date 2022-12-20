@@ -13,7 +13,11 @@ import { ActiveList } from './types';
 import { useCalibrationStatisticsRatings, useClearCalibrationData, useReviewsCalibrationList } from './hook';
 import { buildData } from './utils';
 
-const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
+type Props = {
+  filters: any;
+  period: string;
+};
+const CalibrationSessionOverview: FC<Props> = ({ period, filters }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const mediumScreen = matchMedia({ xSmall: false, small: false, medium: true }) || false;
@@ -21,8 +25,8 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
   const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
   const listRef = useRef<HTMLDivElement>();
 
-  const { statistics, loading: statisticsLoading } = useCalibrationStatisticsRatings({ activeList, period });
-  const { getCalibrationReviewsList, data } = useReviewsCalibrationList({ activeList, period });
+  const { statistics, loading: statisticsLoading } = useCalibrationStatisticsRatings({ activeList, period, filters });
+  const { getCalibrationReviewsList, data } = useReviewsCalibrationList({ activeList, period, filters });
   useClearCalibrationData();
 
   return (

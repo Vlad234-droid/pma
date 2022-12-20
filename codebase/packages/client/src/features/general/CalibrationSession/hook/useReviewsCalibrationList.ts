@@ -1,21 +1,24 @@
 import { useCallback, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { CalibrationReviewsAction, calibrationReviewsDataSelector } from '@pma/store';
+
 import useDispatch from 'hooks/useDispatch';
+import { Status } from 'config/enum';
 import { initialFields, initialRatings } from '../config';
 import { toLocalRating } from '../utils';
 import { ActiveList } from '../types';
-import { isNegative } from 'utils';
-import { Status } from 'config/enum';
-import { useSelector } from 'react-redux';
+import { isNegative, filterToRequest } from 'utils';
 
 export const useReviewsCalibrationList = ({
   activeList,
   uuid,
   period,
+  filters,
 }: {
   activeList: ActiveList;
-  uuid?: string | undefined;
-  period?: string | undefined;
+  uuid?: string;
+  period?: string;
+  filters?: Array<any>;
 }) => {
   const dispatch = useDispatch();
   const data = useSelector(calibrationReviewsDataSelector);
@@ -30,6 +33,7 @@ export const useReviewsCalibrationList = ({
         ...(isScroll ? { _start, _limit } : initialFields),
         ...(uuid ? { sessionUuid: uuid } : {}),
         ...(period ? { year: period } : {}),
+        ...filterToRequest(filters),
       };
 
       isScroll
@@ -46,15 +50,16 @@ export const useReviewsCalibrationList = ({
             }),
           );
     },
-    [activeList, period],
+    [activeList, period, filters],
   );
 
   useEffect(() => {
+    console.log({ filters });
     activeList === ActiveList.TABLE &&
       initialRatings.forEach((rating) => {
         getCalibrationReviewsList({ rating });
       });
-  }, [activeList, period]);
+  }, [activeList, period, filters]);
 
   return { getCalibrationReviewsList, data };
 };
