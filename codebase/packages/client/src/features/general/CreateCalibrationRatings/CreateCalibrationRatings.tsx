@@ -41,7 +41,7 @@ const CreateCalibrationRatings: FC = () => {
   const { backPath } = (state as any) || {};
 
   const { profile } = useSelector(getColleagueSelector) || {};
-  console.log({ profile });
+
   const { components } = useSelector(getFormByCode(STANDARD_CALIBRATION_FORM_CODE)) || {};
 
   const { loading, loaded, updated, calibrationReview } = useCalibrationReview();
@@ -119,7 +119,7 @@ const CreateCalibrationRatings: FC = () => {
       }
     >
       <div className={css(ratingWrapper)}>
-        {!readOnly && (
+        {isDraft && (
           <>
             <div className={css({ display: 'flex', alignItems: 'center' })}>
               <Icon graphic='information' />
