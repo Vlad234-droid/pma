@@ -8,6 +8,7 @@ import { Employee } from 'config/types';
 
 import TimeLines from '../Timelines';
 import ProfilePreview from '../ProfilePreview';
+import { isDateFromISOAfterNow, isDateFromISOBeforeNow } from 'utils';
 
 type Props = {
   uuid: string;
@@ -20,6 +21,20 @@ type Props = {
 
 const TeamMateProfile: FC<Props> = ({ uuid, status, employee, fullTeamView = false, onClick, customWrapperStyle }) => {
   const { css } = useStyle();
+  const hasCalibrationRating = !!employee.reviews.find(
+    ({ type, status }) => type === 'CALIBRATION' && status !== Status.DRAFT,
+  );
+
+  const calibrationPoint = employee.timeline.find(({ code }) => code === 'CALIBRATION');
+  const { status: TLPStatus, startTime, endTime } = calibrationPoint || {};
+
+  const isStartedCalibration =
+    !!TLPStatus &&
+    !!startTime &&
+    !!endTime &&
+    ![Status.NOT_STARTED, Status.COMPLETED].includes(TLPStatus) &&
+    isDateFromISOAfterNow(startTime) &&
+    isDateFromISOBeforeNow(endTime);
 
   return (
     <div data-test-id='team-mate-profile'>
@@ -33,11 +48,7 @@ const TeamMateProfile: FC<Props> = ({ uuid, status, employee, fullTeamView = fal
                     status={status}
                     employee={employee}
                     fullTeamView={fullTeamView}
-                    hasCalibrationRating={
-                      !!employee.reviews.find(
-                        ({ type, status }) => type === 'CALIBRATION' && status === Status.WAITING_FOR_APPROVAL,
-                      )
-                    }
+                    showCalibrationRating={isStartedCalibration && !hasCalibrationRating}
                     onClick={onClick}
                   />
                   <Panel>

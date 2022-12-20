@@ -18,7 +18,7 @@ type Props = {
   employee: Employee;
   fullTeamView?: boolean;
   rating?: string;
-  hasCalibrationRating: boolean;
+  showCalibrationRating: boolean;
   onClick?: () => void;
 };
 
@@ -26,7 +26,7 @@ const ProfilePreview: FC<Props> = ({
   status,
   employee,
   fullTeamView = false,
-  hasCalibrationRating = false,
+  showCalibrationRating = false,
   onClick,
 }) => {
   const { css } = useStyle();
@@ -55,7 +55,7 @@ const ProfilePreview: FC<Props> = ({
       />
       <div className={css(contentStyles)}>
         <div className={css(buttonWrapperStyles)}>
-          {hasCalibrationRating && (
+          {showCalibrationRating && (
             <div className={css(iconWrapperStyles)}>
               <Icon graphic={'rating'} color={'pending'} title={title} />
             </div>
