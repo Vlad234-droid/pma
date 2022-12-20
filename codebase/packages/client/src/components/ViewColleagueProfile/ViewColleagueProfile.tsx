@@ -3,6 +3,7 @@ import { ColleagueSimple } from '@pma/openapi';
 import { useStyle, Rule, Styles, CreateRule } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
+import { Line } from 'components/Line';
 import { Icon } from 'components/Icon';
 
 import defaultImg from 'images/default.png';
@@ -29,9 +30,37 @@ const ViewColleagueProfile: FC<Props> = ({
 }) => {
   const { css, matchMedia, theme } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const isRatingExist = properties?.what_rating || properties?.how_rating;
+
+  const discuss = (
+    <div className={css({ marginRight: '10px', opacity: withIcon ? '1' : '0' })}>
+      <Icon graphic={'roundChat'} fill={theme.colors.pending} />
+    </div>
+  );
+  const ratings = (
+    <div className={css(ratingContainer({ mobileScreen }))}>
+      {properties?.what_rating && (
+        <div className={css(ratingType({ mobileScreen }))}>
+          <span>{properties?.what_rating}</span>
+          <span>
+            <Trans i18nKey={'what'} />
+          </span>
+        </div>
+      )}
+      {properties?.how_rating && (
+        <div className={css(ratingType({ mobileScreen }))}>
+          <span>{properties?.how_rating}</span>
+          <span>
+            <Trans i18nKey={'how'} />
+          </span>
+        </div>
+      )}
+      {mobileScreen && withIcon && discuss}
+    </div>
+  );
 
   return (
-    <TileWrapper customStyle={wrapperStyles}>
+    <TileWrapper customStyle={wrapperStyles({ mobileScreen })}>
       <div className={css(sectionStyle)}>
         <div className={css(blockInfo)}>
           <div className={css({ alignSelf: 'flex-start' })}>
@@ -45,33 +74,10 @@ const ViewColleagueProfile: FC<Props> = ({
           </div>
         </div>
 
-        {(properties?.what_rating || properties?.how_rating) && (
-          <div className={css(ratingContainer({ mobileScreen }))}>
-            {properties?.what_rating && (
-              <div className={css(ratingType)}>
-                <span>{properties?.what_rating}</span>
-                <span>
-                  <Trans i18nKey={'what'} />
-                </span>
-              </div>
-            )}
-            {properties?.how_rating && (
-              <div className={css(ratingType)}>
-                <span>{properties?.how_rating}</span>
-                <span>
-                  <Trans i18nKey={'how'} />
-                </span>
-              </div>
-            )}
-          </div>
-        )}
+        {!mobileScreen && isRatingExist && ratings}
 
         <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
-          {withIcon && (
-            <div className={css({ marginRight: '10px' })}>
-              <Icon graphic={'roundChat'} fill={theme.colors.pending} />
-            </div>
-          )}
+          {!mobileScreen && discuss}
           <div className={css({ display: 'flex', alignItems: 'center' })}>
             <span className={css(viewStyle, viewCustomStyles)} onClick={() => onClick(colleague.uuid as string)}>
               <Trans i18nKey={title ? title : 'view_profile'} />
@@ -79,8 +85,22 @@ const ViewColleagueProfile: FC<Props> = ({
           </div>
         </div>
       </div>
+      {mobileScreen && isRatingExist && (
+        <>
+          <Line styles={lineStyles} />
+          <div className={css(ratingsContainer)}>{ratings}</div>
+        </>
+      )}
     </TileWrapper>
   );
+};
+
+const lineStyles: Rule = {
+  margin: '16px -100px 0px -100px',
+};
+
+const ratingsContainer: Rule = {
+  paddingTop: '16px',
 };
 
 const industryStyle: Rule = {
@@ -92,31 +112,34 @@ const industryStyle: Rule = {
 
 const ratingContainer: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
   display: 'flex',
-  justifyContent: 'space-between',
-  gap: '5%',
-  flexWrap: 'wrap',
-  flexBasis: mobileScreen ? '0px' : '300px',
+  justifyContent: 'center',
+  gap: '10%',
+  flexWrap: mobileScreen ? 'nowrap' : 'wrap',
+  flexBasis: mobileScreen ? '0px' : '360px',
   margin: '0 20px',
+  ...(mobileScreen && { alignItems: 'center' }),
 });
 
-const ratingType: Rule = (theme) =>
-  ({
-    flexGrow: '1',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    alignSelf: 'center',
-    '& > span:first-child': {
-      whiteSpace: 'nowrap',
-      fontWeight: theme.font.weight.bold,
-      fontSize: theme.font.fixed.f18.fontSize,
-    },
-    '& > span:last-child': {
-      whiteSpace: 'nowrap',
-      fontSize: theme.font.fixed.f16.fontSize,
-      marginTop: '4px',
-    },
-  } as Styles);
+const ratingType: CreateRule<{ mobileScreen }> =
+  ({ mobileScreen }) =>
+  (theme) =>
+    ({
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      ...(!mobileScreen && { minWidth: '150px' }),
+      alignSelf: 'center',
+      '& > span:first-child': {
+        whiteSpace: 'nowrap',
+        fontWeight: theme.font.weight.bold,
+        fontSize: !mobileScreen ? theme.font.fixed.f18.fontSize : theme.font.fixed.f16.fontSize,
+      },
+      '& > span:last-child': {
+        whiteSpace: 'nowrap',
+        fontSize: !mobileScreen ? theme.font.fixed.f16.fontSize : theme.font.fixed.f14.fontSize,
+        marginTop: '4px',
+      },
+    } as Styles);
 
 const viewStyle: Rule = ({ theme }) => ({
   fontStyle: 'normal',
@@ -129,9 +152,9 @@ const viewStyle: Rule = ({ theme }) => ({
   whiteSpace: 'nowrap',
 });
 
-const wrapperStyles: Rule = {
-  padding: '24px 24px 24px 24px',
-};
+const wrapperStyles: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
+  padding: mobileScreen ? '16px' : '24px',
+});
 
 const sectionStyle: Rule = {
   display: 'flex',
