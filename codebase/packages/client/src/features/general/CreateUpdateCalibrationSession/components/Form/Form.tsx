@@ -212,7 +212,13 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
           readonly={!canEdit}
         />
         {isVisibleFilterModal && (
-          <UnderlayModal onClose={() => setFilterModal(false)} styles={{ maxWidth: !mobileScreen ? '500px' : '100%' }}>
+          <UnderlayModal
+            onClose={() => {
+              setFilterModal(false);
+              handleRemoveCancellation();
+            }}
+            styles={{ maxWidth: !mobileScreen ? '500px' : '100%' }}
+          >
             {({ onClose }) => (
               <FilterForm
                 defaultValues={savedFilter}
