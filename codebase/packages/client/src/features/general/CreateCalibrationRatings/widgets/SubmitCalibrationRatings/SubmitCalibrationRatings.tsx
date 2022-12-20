@@ -37,7 +37,7 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
     isDateFromISOBeforeNow(endTime);
   const isSubmitting = uuid === 'new' || status === Status.DRAFT;
   const isEditing = !isSubmitting && status === Status.WAITING_FOR_APPROVAL;
-  const isViewing = !isEditing && status !== Status.WAITING_FOR_APPROVAL;
+  const isViewing = !isSubmitting && !isEditing && status !== Status.WAITING_FOR_APPROVAL;
 
   useEffect(() => {
     !isAnniversaryColleague &&

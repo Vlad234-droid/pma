@@ -1,12 +1,10 @@
-import React, { FC, HTMLProps } from 'react';
+import React, { FC } from 'react';
 import { CreateRule, Icon, useStyle } from '@pma/dex-wrapper';
 
 export type AvatarProps = {
   img?: string;
   size?: number;
 };
-
-type Props = HTMLProps<HTMLInputElement> & AvatarProps;
 
 const contentStyle: CreateRule<{ size?: number }> =
   ({ size = 56 }) =>
@@ -46,7 +44,7 @@ const imageStyle = {
   height: '100%',
 };
 
-export const Avatar: FC<Props> = ({ img, size = 56 }) => {
+export const Avatar: FC<AvatarProps> = ({ img, size = 56 }) => {
   const { css } = useStyle(['backgroundColor']);
   return (
     <div data-test-id='avatar' className={css(contentStyle({ size }))}>

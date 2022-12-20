@@ -12,12 +12,12 @@ import { buildPath } from 'features/general/Routes';
 import { Trans, useTranslation } from 'components/Translation';
 import SuccessModal from 'components/SuccessModal';
 import RatingForm from './components/RatingForm';
-import AvatarName from 'components/AvatarName';
+import User from 'components/User';
 import { SuccessMark } from 'components/Icon';
 import { Mode, Status } from 'config/types';
 import { buildData } from './utils';
 import { useCalibrationReview, useColleague, usePermissions } from './hooks';
-import User from 'config/entities/User';
+import { Profile } from 'config/entities/User';
 import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
 
@@ -42,6 +42,7 @@ const CreateCalibrationRatings: FC = () => {
   const { backPath } = (state as any) || {};
 
   const { profile } = useSelector(getColleagueSelector) || {};
+  console.log({ profile });
   const { components } = useSelector(getFormByCode(STANDARD_CALIBRATION_FORM_CODE)) || {};
 
   const { loading, loaded, updated, calibrationReview } = useCalibrationReview();
@@ -127,7 +128,7 @@ const CreateCalibrationRatings: FC = () => {
             </p>
           </>
         )}
-        <AvatarName user={profile as User} />
+        <User user={profile as Profile} />
         <RatingForm
           onSubmit={isNew ? handleSave : handleUpdate}
           onCancel={handleBack}
