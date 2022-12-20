@@ -62,14 +62,13 @@ const CreateCalibrationRatings: FC = () => {
       const status = calibrationReview?.status;
       if (status === Status.WAITING_FOR_COMPLETION) {
         data.status = Status.WAITING_FOR_COMPLETION;
-        return;
+      } else {
+        const isFormChanged = !Object.entries(calibrationReview?.properties)?.every(
+          ([key, value]) => data?.[key] === value,
+        );
+
+        data.status = status === Status.APPROVED && isFormChanged ? Status.WAITING_FOR_COMPLETION : Status.APPROVED;
       }
-
-      const isFormChanged = !Object.entries(calibrationReview?.properties)?.every(
-        ([key, value]) => data?.[key] === value,
-      );
-
-      data.status = status === Status.APPROVED && isFormChanged ? Status.WAITING_FOR_COMPLETION : Status.APPROVED;
     }
     setCurrentStatus(data.status);
     dispatch(CalibrationReviewAction.updateCalibrationReview(buildData(data, colleagueUuid)));
@@ -89,15 +88,9 @@ const CreateCalibrationRatings: FC = () => {
       <SuccessModal
         customButtonStyles={{ background: theme.colors.tescoBlue, color: theme.colors.white }}
         onClose={handleBack}
-        title={t('submit_calibration_ratings', 'Submit Calibration Ratings')}
-        description={t(
-          'you_have_submitted_your_colleague_final_ratings',
-          'You have submitted your colleague’ final ratings.',
-        )}
-        additionalText={t(
-          'any_changes_agreed_in_calibration_will_be_saved_here',
-          'Any changes agreed in calibration will be saved here.',
-        )}
+        title={t('calibration_ratings')}
+        description={t('you_have_submitted_your_colleague_final_ratings')}
+        additionalText={t('any_changes_agreed_in_calibration_will_be_saved_here')}
         mark={<SuccessMark />}
       />
     );
