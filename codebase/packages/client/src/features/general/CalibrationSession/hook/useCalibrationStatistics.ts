@@ -7,6 +7,7 @@ import {
 import { TotalCount } from '@pma/openapi';
 import { useSelector } from 'react-redux';
 import useDispatch from 'hooks/useDispatch';
+import { Status } from 'config/enum';
 
 export const useCalibrationStatistics = ({
   period,
@@ -20,6 +21,7 @@ export const useCalibrationStatistics = ({
 
   useEffect(() => {
     const params = {
+      'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED],
       ...(period ? { year: period } : {}),
     };
     dispatch(CalibrationStatisticsAction.getCalibrationStatistics(params));
