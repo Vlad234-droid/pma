@@ -100,11 +100,12 @@ const Filter: FC<Props> = ({ withDateFilter, onChangePeriod, period, onChangeFil
         </div>
         {isFilterOpen && (
           <UnderlayModal onClose={() => setFilterOpen(false)} styles={{ maxWidth: !mobileScreen ? '500px' : '100%' }}>
-            {({ onClose }) => (
+            {() => (
               <FilterForm
                 defaultValues={filterValues}
                 onCancel={() => {
-                  onClose();
+                  updateFilter({});
+                  handleChangeFilterValues({});
                 }}
                 filters={colleagueFilter as { [key: string]: Array<{ [key: string]: string }> }}
                 onSubmit={handleChangeFilterValues}
