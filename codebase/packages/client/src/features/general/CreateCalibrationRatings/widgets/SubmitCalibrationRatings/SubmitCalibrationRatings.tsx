@@ -63,7 +63,7 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
       description={
         isSubmitting
           ? t('ratings_ready_to_submit', 'Ratings ready to submit')
-          : isViewing
+          : isViewing || isEditing
           ? t('ratings_are_submitted', 'Ratings are submitted')
           : ''
       }
