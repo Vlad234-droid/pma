@@ -55,12 +55,6 @@ const CalibrationSession: FC<{ uuid: string }> = ({ uuid }) => {
   };
   const handleSave = () => {
     if (isStarted) {
-      dispatch(
-        CalibrationSessionsAction.closeCalibrationSession({
-          ...calibrationSession,
-          status: CalibrationSessionStatusEnum.Completed,
-        }),
-      );
       toggleSuccessModal(!showSuccessModal);
     }
   };

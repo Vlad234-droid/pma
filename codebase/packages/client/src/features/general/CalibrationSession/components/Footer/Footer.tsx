@@ -47,19 +47,22 @@ const Footer = forwardRef<any, Props>(({ onCancel, onSave }, ref) => {
       </div>
       {fullScreen && (
         <div className={css(buttonContainerStyle({ mobileScreen }))}>
+          {/*<Button*/}
+          {/*  onPress={onCancel}*/}
+          {/*  styles={[buttonStyle({ mobileScreen }), colorBackgroundStyle({}), colorStyle({ color: 'tescoBlue' })]}*/}
+          {/*>*/}
+          {/*  <Trans i18nKey='cancel_and_exit'>Cancel and exit</Trans>*/}
+          {/*</Button>*/}
           <Button
-            onPress={onCancel}
-            styles={[buttonStyle({ mobileScreen }), colorBackgroundStyle({}), colorStyle({ color: 'tescoBlue' })]}
+            onPress={onSave}
+            styles={[
+              buttonStyle({ mobileScreen }),
+              colorBackgroundStyle({ color: 'tescoBlue' }),
+              colorStyle({ color: 'white' }),
+            ]}
           >
-            <Trans i18nKey='cancel_and_exit'>Cancel and exit</Trans>
+            <Trans i18nKey='leave_session'>Leave session</Trans>
           </Button>
-          <ButtonWithConfirmation
-            onSave={onSave}
-            buttonName={t('save_and_end_calibration_session', 'Save and end calibration session')}
-            styles={[buttonStyle({ mobileScreen }), colorBackgroundStyle({ color: 'tescoBlue' }), colorStyle({})]}
-            confirmationDescription={<ConfirmationDescription />}
-            confirmationButtonTitle={t('end_session', 'End session')}
-          />
         </div>
       )}
     </div>
@@ -73,7 +76,7 @@ const footerBlockStyle: CreateRule<{ fullScreen: boolean; mobileScreen: boolean 
     bottom: 0,
     left: 0,
     width: '100%',
-    height: fullScreen ? (mobileScreen ? '180px' : '152px') : '70px',
+    height: fullScreen ? (mobileScreen ? '120px' : '152px') : '70px',
     background: theme.colors['paleOrange'],
     paddingLeft: '10px',
     paddingRight: '10px',

@@ -18,9 +18,8 @@ const ReviewSuccessModal: FC<{ title: string; loading?: boolean }> = ({ title, l
       title={title}
       onClose={handleClose}
       mark={<SuccessMark />}
-      description={'You have saved your changes to calibration.'}
       additionalText={
-        'These changes will now be reflected on the colleagues profile as a record. This will remain confidential from the colleague'
+        'All changes made during the session have been captured. To make further changes, you can revisit this session at any time during the calibration period. The session will close automatically when the calibration period ends, and all ratings will be locked from that point.'
       }
       loading={loading}
     />

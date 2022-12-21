@@ -104,7 +104,6 @@ const pages: Record<Page, PageComponent> = {
     Element: CalibrationSession,
     title: (_, t) => t('calibration'),
     withHeader: true,
-    backPath: Page.CALIBRATION_SESSION_LIST,
     perform: [role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },

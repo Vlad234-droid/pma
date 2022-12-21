@@ -67,7 +67,7 @@ export const filterMap = {
 export const filterMapRevers = Object.fromEntries(Object.entries(filterMap).map((a) => a.reverse()));
 
 export const filterToRequest = (filter) =>
-  Object.entries(filter).reduce((acc, [key, val]) => {
+  Object.entries(filter || {}).reduce((acc, [key, val]) => {
     if (typeof val === 'object') {
       const keys = Object.entries(val || {})
         .filter(([, value]) => !!value)

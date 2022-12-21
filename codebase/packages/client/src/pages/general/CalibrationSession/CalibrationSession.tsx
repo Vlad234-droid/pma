@@ -2,6 +2,7 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import { CalibrationSessionStatusEnum } from '@pma/openapi';
 import { calibrationSessionsMetaSelector, getCalibrationSessionSelector } from '@pma/store';
 
 import { CalibrationSession as CalibrationSessionDetails } from 'features/general/CalibrationSession';
@@ -18,6 +19,7 @@ import { useTranslation } from 'components/Translation';
 import useSearchColleaguesSimple from 'features/general/CalibrationSession/hook/useSearchColleaguesSimple';
 import { buildPath } from 'features/general/Routes';
 import { paramsReplacer } from 'utils';
+import { Backward } from 'components/Backward';
 
 const CalibrationSessionPage: FC = () => {
   const { uuid } = useParams<{ uuid: string }>();
@@ -27,9 +29,13 @@ const CalibrationSessionPage: FC = () => {
   const { pathname } = useLocation();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const calibrationSession = useSelector(getCalibrationSessionSelector(uuid || '')) || {};
+  const isStarted =
+    calibrationSession?.status === CalibrationSessionStatusEnum.Started ||
+    calibrationSession?.status === CalibrationSessionStatusEnum.Updated;
   const { loaded } = useSelector(calibrationSessionsMetaSelector);
   const { setLinkTitle } = useHeaderContainer();
   const { colleagues, handleSearchColleagues, clearColleagueList } = useSearchColleaguesSimple({}, uuid);
+  const navigateTo = () => navigate(buildPath(paramsReplacer(Page.CALIBRATION_SESSION, { ':uuid': uuid || '' })));
 
   const bottomPanelRef = useRef<HTMLDivElement>();
   const searchRef = useRef<any>(null);
@@ -59,6 +65,7 @@ const CalibrationSessionPage: FC = () => {
 
   return (
     <div>
+      {!isStarted && <Backward onPress={navigateTo} />}
       <div className={css(contentBlockStyle({ height: bottomPanelRef?.current?.clientHeight }))}>
         <div>
           <div className={css(headStyle)}>

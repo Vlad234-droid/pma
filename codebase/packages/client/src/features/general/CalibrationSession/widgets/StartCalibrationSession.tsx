@@ -41,7 +41,7 @@ const StartCalibrationSession: FC = () => {
       iconGraphic={'chart'}
       title={
         isStarted
-          ? t('calibration_session_in_progress', 'Calibration session in progress')
+          ? t('calibration_session_open', 'Calibration session open')
           : t('start_calibration_session_edit_rating', 'Start calibration session and edit ratings')
       }
       onClick={handleStart}
