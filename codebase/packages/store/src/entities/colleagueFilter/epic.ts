@@ -8,6 +8,8 @@ import { RestResponseColleagueFilterOptions } from '@pma/openapi';
 import { getColleagueFilter } from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
+import CODES from '../../utils/errorCode.json';
+
 export const getCalibrationFilterEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getColleagueFilter.request)),
@@ -22,9 +24,11 @@ export const getCalibrationFilterEpic: Epic = (action$, _, { api }) =>
         }),
         catchError((e) => {
           const errors = e?.data?.errors;
+          const { code, message } = errors?.[0];
+          const errorMessage = CODES[code] || message;
           return concatWithErrorToast(
             of(getColleagueFilter.failure(errors?.[0])),
-            errorPayloadConverter({ ...errors?.[0], title: errors?.[0].message }),
+            errorPayloadConverter({ ...errors?.[0], title: errorMessage, message: '' }),
           );
         }),
         takeUntil(action$.pipe(filter(isActionOf(getColleagueFilter.cancel)))),
