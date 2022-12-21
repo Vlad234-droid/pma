@@ -88,7 +88,11 @@ const CreateCalibrationRatings: FC = () => {
       <SuccessModal
         customButtonStyles={{ background: theme.colors.tescoBlue, color: theme.colors.white }}
         onClose={handleBack}
-        title={t('submit_calibration_ratings', 'Submit Calibration Ratings')}
+        title={
+          isDraft
+            ? t('submit_calibration_ratings', 'Submit calibration ratings')
+            : t('edit_calibration_ratings', 'Edit calibration ratings')
+        }
         description={t(
           'you_have_submitted_your_colleague_final_ratings',
           'You have submitted your colleague’ final ratings.',
