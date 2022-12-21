@@ -1,21 +1,26 @@
 import { useCallback, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { CalibrationReviewsAction, calibrationReviewsDataSelector } from '@pma/store';
+
 import useDispatch from 'hooks/useDispatch';
+import { Status } from 'config/enum';
 import { initialFields, initialRatings } from '../config';
 import { toLocalRating } from '../utils';
 import { ActiveList } from '../types';
-import { isNegative } from 'utils';
-import { Status } from 'config/enum';
-import { useSelector } from 'react-redux';
+import { isNegative, filterToRequest } from 'utils';
 
 export const useReviewsCalibrationList = ({
   activeList,
   uuid,
   period,
+  filters,
+  searchValue,
 }: {
   activeList: ActiveList;
-  uuid?: string | undefined;
-  period?: string | undefined;
+  uuid?: string;
+  period?: string;
+  filters?: Array<any>;
+  searchValue?: string;
 }) => {
   const dispatch = useDispatch();
   const data = useSelector(calibrationReviewsDataSelector);
@@ -27,9 +32,11 @@ export const useReviewsCalibrationList = ({
       const params = {
         'review-rating_in': isSpaced ? [rating.toUpperCase().replace(' ', '_')] : [rating.toUpperCase()],
         'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED],
+        _search: searchValue,
         ...(isScroll ? { _start, _limit } : initialFields),
         ...(uuid ? { sessionUuid: uuid } : {}),
         ...(period ? { year: period } : {}),
+        ...filterToRequest(filters),
       };
 
       isScroll
@@ -46,7 +53,7 @@ export const useReviewsCalibrationList = ({
             }),
           );
     },
-    [activeList, period],
+    [activeList, period, filters],
   );
 
   useEffect(() => {
@@ -54,7 +61,7 @@ export const useReviewsCalibrationList = ({
       initialRatings.forEach((rating) => {
         getCalibrationReviewsList({ rating });
       });
-  }, [activeList, period]);
+  }, [activeList, period, filters]);
 
   return { getCalibrationReviewsList, data };
 };

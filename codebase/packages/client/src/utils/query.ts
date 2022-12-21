@@ -1,4 +1,4 @@
-import { SearchOption } from 'config/enum';
+import { Operand, SearchOption } from 'config/enum';
 
 export type QueryType = Record<string, string | Array<Record<string, string>>>;
 
@@ -53,3 +53,30 @@ export const buildSearchColleaguesReviews = (value: string): any => {
   }
   return query;
 };
+
+export const filterMap = {
+  'department-uuid': 'departments',
+  'legal-entity-uuid': 'legal-entities',
+  'line-manager-uuid': 'line-managers',
+  'function-uuid': 'functions',
+  'business-group-uuid': 'business-groups',
+  'country-code': 'countries',
+  'work-level': 'work-levels',
+};
+
+export const filterMapRevers = Object.fromEntries(Object.entries(filterMap).map((a) => a.reverse()));
+
+export const filterToRequest = (filter) =>
+  Object.entries(filter).reduce((acc, [key, val]) => {
+    if (typeof val === 'object') {
+      const keys = Object.entries(val || {})
+        .filter(([, value]) => !!value)
+        .map(([key]) => key);
+      if (keys.length) {
+        return { ...acc, [`${filterMapRevers[key] || key}${Operand.IN}`]: keys };
+      }
+      return acc;
+    } else {
+      return { ...acc, [`${filterMapRevers[key] || key}${Operand.IN}`]: val };
+    }
+  }, {});

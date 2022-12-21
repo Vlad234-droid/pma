@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import {
   calibrationStatisticsRatingsDataSelector,
   calibrationStatisticsRatingsMetaSelector,
   CalibrationStatisticsRatingsAction,
 } from '@pma/store';
-import { useSelector } from 'react-redux';
+
 import useDispatch from 'hooks/useDispatch';
+import { filterToRequest } from 'utils';
 import { ActiveList, RatingStatisticRatingEnum } from '../types';
 import { initialRatingEnums, initialRatings } from '../config';
 import { Status } from 'config/enum';
@@ -20,10 +22,14 @@ export const useCalibrationStatisticsRatings = ({
   activeList,
   uuid,
   period,
+  filters,
+  searchValue,
 }: {
   activeList: ActiveList;
   uuid?: string | undefined;
   period?: string | undefined;
+  filters?: Record<string, Record<string, boolean>>;
+  searchValue?: string;
 }) => {
   const dispatch = useDispatch();
 
@@ -33,12 +39,14 @@ export const useCalibrationStatisticsRatings = ({
   useEffect(() => {
     const params = {
       'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED],
+      _search: searchValue,
       sessionUuid: uuid,
       ...(activeList !== ActiveList.LIST ? { 'review-rating_in': initialRatings } : {}),
       ...(period ? { year: period } : {}),
+      ...filterToRequest(filters),
     };
     dispatch(CalibrationStatisticsRatingsAction.getCalibrationStatisticsRatings(params));
-  }, [activeList, period]);
+  }, [activeList, period, filters, searchValue]);
 
   return {
     loading,
