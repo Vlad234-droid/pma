@@ -1,22 +1,45 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { colors, fontWeight, Rule, useStyle } from '@pma/dex-wrapper';
-import { colleagueUUIDSelector, getEmployeesWithCalibrationStatus, ManagersActions } from '@pma/store';
+import { colleagueUUIDSelector, getAllEmployees, ManagersActions } from '@pma/store';
 
 import { Status } from 'config/enum';
 import { TileWrapper } from 'components/Tile';
 import { useTranslation } from 'components/Translation';
 import useDispatch from 'hooks/useDispatch';
 import { Icon } from 'components/Icon';
+import { isDateFromISOAfterNow, isDateFromISOBeforeNow } from 'utils';
 
 const ActionCount: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const pendingEmployee = useSelector((state) => getEmployeesWithCalibrationStatus(state, Status.PENDING)) || [];
+  const colleagues = useSelector((state) => getAllEmployees(state, 'ALL')) || [];
 
-  const waitingCount = pendingEmployee.length;
+  const waitingCount = useMemo(() => {
+    const colleaguesWithCalibration = colleagues.filter(({ timeline }) => {
+      const calibrationPoint = timeline.find(({ code }) => code === 'CALIBRATION');
+      if (!calibrationPoint) return false;
+      const { status, startTime, endTime } = calibrationPoint;
+
+      return (
+        ![Status.NOT_STARTED, Status.COMPLETED].includes(status) &&
+        isDateFromISOAfterNow(startTime) &&
+        isDateFromISOBeforeNow(endTime)
+      );
+    });
+
+    const colleaguesToSubmit = colleaguesWithCalibration.filter(({ reviews }) => {
+      const calibrationReview = reviews.find(({ type }) => {
+        return type === 'CALIBRATION';
+      });
+
+      if (!calibrationReview) return true;
+      return calibrationReview.status === 'DRAFT';
+    });
+    return colleaguesToSubmit.length;
+  }, [colleagues]);
 
   useEffect(() => {
     if (colleagueUuid) {
