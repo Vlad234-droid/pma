@@ -18,11 +18,12 @@ type WithDateProps = {
   period: string;
   onChangePeriod: (value: string) => void;
   onChangeFilters: (value: Record<string, Record<string, boolean>>) => void;
+  onSearch: (search: string) => void;
 };
 
 type Props = WithDateProps;
 
-const Filter: FC<Props> = ({ withDateFilter, onChangePeriod, period, onChangeFilters }) => {
+const Filter: FC<Props> = ({ withDateFilter, onChangePeriod, period, onChangeFilters, onSearch }) => {
   const [searchOpened, setSearchOpen] = useState<boolean>(false);
   const [isFilterOpen, setFilterOpen] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>('');
@@ -47,6 +48,7 @@ const Filter: FC<Props> = ({ withDateFilter, onChangePeriod, period, onChangeFil
   };
 
   const handleSearch = (value: string) => {
+    onSearch(value);
     setSearchValue(value);
   };
 

@@ -14,11 +14,13 @@ export const useReviewsCalibrationList = ({
   uuid,
   period,
   filters,
+  searchValue,
 }: {
   activeList: ActiveList;
   uuid?: string;
   period?: string;
   filters?: Array<any>;
+  searchValue?: string;
 }) => {
   const dispatch = useDispatch();
   const data = useSelector(calibrationReviewsDataSelector);
@@ -30,6 +32,7 @@ export const useReviewsCalibrationList = ({
       const params = {
         'review-rating_in': isSpaced ? [rating.toUpperCase().replace(' ', '_')] : [rating.toUpperCase()],
         'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED],
+        _search: searchValue,
         ...(isScroll ? { _start, _limit } : initialFields),
         ...(uuid ? { sessionUuid: uuid } : {}),
         ...(period ? { year: period } : {}),
@@ -54,7 +57,6 @@ export const useReviewsCalibrationList = ({
   );
 
   useEffect(() => {
-    console.log({ filters });
     activeList === ActiveList.TABLE &&
       initialRatings.forEach((rating) => {
         getCalibrationReviewsList({ rating });

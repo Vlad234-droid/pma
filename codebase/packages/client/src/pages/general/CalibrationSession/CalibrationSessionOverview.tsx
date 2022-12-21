@@ -28,6 +28,7 @@ const CalibrationSessionPage: FC = () => {
   const isPerform = usePermission([role.TALENT_ADMIN]);
   const [period, setPeriod] = useState<string>(getCurrentYear().toString());
   const [filters, setFilters] = useState<Record<string, Record<string, boolean>>>({});
+  const [searchValue, setSearchValue] = useState<string>('');
 
   const downloadReport = useDownloadExelFile({
     resource: { url: REPORT_URL, params: { year: period } },
@@ -49,6 +50,7 @@ const CalibrationSessionPage: FC = () => {
           onChangePeriod={(active) => setPeriod(active)}
           period={period}
           onChangeFilters={(filters) => setFilters(filters)}
+          onSearch={(value) => setSearchValue(value)}
         />
         {loading ? (
           <Spinner fullHeight />
@@ -71,7 +73,7 @@ const CalibrationSessionPage: FC = () => {
           </div>
         )}
       </div>
-      <CalibrationSessionOverview period={period} filters={filters} />
+      <CalibrationSessionOverview period={period} filters={filters} searchValue={searchValue} />
     </div>
   );
 };

@@ -23,11 +23,13 @@ export const useCalibrationStatisticsRatings = ({
   uuid,
   period,
   filters,
+  searchValue,
 }: {
   activeList: ActiveList;
   uuid?: string | undefined;
   period?: string | undefined;
   filters?: Record<string, Record<string, boolean>>;
+  searchValue?: string;
 }) => {
   const dispatch = useDispatch();
 
@@ -37,13 +39,14 @@ export const useCalibrationStatisticsRatings = ({
   useEffect(() => {
     const params = {
       'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED],
+      _search: searchValue,
       sessionUuid: uuid,
       ...(activeList !== ActiveList.LIST ? { 'review-rating_in': initialRatings } : {}),
       ...(period ? { year: period } : {}),
       ...filterToRequest(filters),
     };
     dispatch(CalibrationStatisticsRatingsAction.getCalibrationStatisticsRatings(params));
-  }, [activeList, period, filters]);
+  }, [activeList, period, filters, searchValue]);
 
   return {
     loading,
