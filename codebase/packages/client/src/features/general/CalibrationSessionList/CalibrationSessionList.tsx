@@ -136,10 +136,12 @@ const CalibrationSessionList: FC<{ filterStatus: FilterStatus; searchValue: stri
                             })}
                           </>
                         )}
-                        <div>
-                          <div className={css(groupStyles, boldStyles)}>Notes</div>
-                          <div className={css(groupStyles)}>{calibrationSession.description}</div>
-                        </div>
+                        {!!calibrationSession.description?.length && (
+                          <div>
+                            <div className={css(groupStyles, boldStyles)}>Notes</div>
+                            <div className={css(groupStyles)}>{calibrationSession.description}</div>
+                          </div>
+                        )}
                       </div>
                       <div className={css({ paddingBottom: '24px', display: ' flex', gap: '30px' })}>
                         {calibrationSession?.status !== CalibrationSessionStatusEnum.Completed && (

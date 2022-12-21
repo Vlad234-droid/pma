@@ -158,10 +158,10 @@ export interface CalibrationColleague {
     'colleague'?: ColleagueSimple;
     /**
      * 
-     * @type {boolean}
+     * @type {string}
      * @memberof CalibrationColleague
      */
-    'includedToAnotherSession'?: boolean;
+    'sessionUuid'?: string;
 }
 /**
  * 
@@ -1223,19 +1223,13 @@ export interface DecisionInfo {
      * @type {string}
      * @memberof DecisionInfo
      */
-    'category'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DecisionInfo
-     */
     'resourceName'?: string;
     /**
      * 
      * @type {string}
      * @memberof DecisionInfo
      */
-    'tenantId'?: string;
+    'category'?: string;
     /**
      * 
      * @type {string}
@@ -1247,13 +1241,19 @@ export interface DecisionInfo {
      * @type {string}
      * @memberof DecisionInfo
      */
+    'versionTag'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DecisionInfo
+     */
     'diagramResourceName'?: string;
     /**
      * 
      * @type {string}
      * @memberof DecisionInfo
      */
-    'versionTag'?: string;
+    'tenantId'?: string;
 }
 /**
  * 
@@ -1417,16 +1417,16 @@ export interface Event {
     'eventProperties'?: { [key: string]: object; };
     /**
      * 
-     * @type {string}
-     * @memberof Event
-     */
-    'eventName'?: string;
-    /**
-     * 
      * @type {Event}
      * @memberof Event
      */
     'callbackEvent'?: Event;
+    /**
+     * 
+     * @type {string}
+     * @memberof Event
+     */
+    'eventName'?: string;
     /**
      * 
      * @type {string}
@@ -3145,19 +3145,13 @@ export interface ProcessInfo {
      * @type {string}
      * @memberof ProcessInfo
      */
-    'category'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProcessInfo
-     */
     'resourceName'?: string;
     /**
      * 
      * @type {string}
      * @memberof ProcessInfo
      */
-    'tenantId'?: string;
+    'category'?: string;
     /**
      * 
      * @type {string}
@@ -3169,13 +3163,19 @@ export interface ProcessInfo {
      * @type {string}
      * @memberof ProcessInfo
      */
+    'versionTag'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProcessInfo
+     */
     'diagramResourceName'?: string;
     /**
      * 
      * @type {string}
      * @memberof ProcessInfo
      */
-    'versionTag'?: string;
+    'tenantId'?: string;
 }
 /**
  * 

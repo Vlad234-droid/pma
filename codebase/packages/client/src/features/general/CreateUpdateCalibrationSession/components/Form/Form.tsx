@@ -1,4 +1,5 @@
 import React, { FC, useState, useCallback, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ConditionOperandEnum } from '@pma/openapi';
 import * as Yup from 'yup';
@@ -38,6 +39,7 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { participants: { filters = [] } = {} } = defaultValues;
   const dispatch = useDispatch();
+  const { uuid } = useParams<{ uuid: string }>();
 
   const colleagueFilter = useSelector(getColleagueFilterSelector) || {};
   const [savedFilter, setSavedFilter] = useState<any>(defaultValues.filter || {});
@@ -75,7 +77,12 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
     const add = colleagues?.filter(({ type }) => type === 'add');
     const remove = colleagues?.filter(({ type }) => type === 'remove');
     setValue('colleaguesAdd', add, { shouldDirty: true, shouldValidate: true });
-    setValue('colleaguesRemoved', [...formValues.colleaguesRemoved, ...remove], {
+
+    // todo: temporary quick fix. Might be refactored and combined with next requirements
+    const arrayUniqueByKey = [
+      ...new Map([...formValues.colleaguesRemoved, ...remove].map((item) => [item['value'], item])).values(),
+    ];
+    setValue('colleaguesRemoved', arrayUniqueByKey, {
       shouldDirty: true,
       shouldValidate: true,
     });
@@ -115,14 +122,15 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
   const colleaguesRemoverIds = colleaguesRemover.map(({ colleague }) => colleague?.uuid);
 
   //@ts-ignore
-  const allColleagues = colleaguesFinder.map(({ colleague, includedToSession }) => {
+  const allColleagues = colleaguesFinder.map(({ colleague, sessionUuid }) => {
     return {
       ...colleague,
-      type: includedToSession
-        ? ActionType.DISABLED
-        : colleague?.uuid && colleaguesRemoverIds.includes(colleague.uuid)
-        ? ActionType.REMOVE
-        : ActionType.ADD,
+      type:
+        sessionUuid !== uuid && !!sessionUuid
+          ? ActionType.DISABLED
+          : colleague?.uuid && colleaguesRemoverIds.includes(colleague.uuid)
+          ? ActionType.REMOVE
+          : ActionType.ADD,
     };
   }) as ColleagueSimpleExtended[];
 
@@ -212,13 +220,7 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
           readonly={!canEdit}
         />
         {isVisibleFilterModal && (
-          <UnderlayModal
-            onClose={() => {
-              setFilterModal(false);
-              handleRemoveCancellation();
-            }}
-            styles={{ maxWidth: !mobileScreen ? '500px' : '100%' }}
-          >
+          <UnderlayModal onClose={() => setFilterModal(false)} styles={{ maxWidth: !mobileScreen ? '500px' : '100%' }}>
             {({ onClose }) => (
               <FilterForm
                 defaultValues={savedFilter}
@@ -235,7 +237,6 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
                   }, 300);
                 }}
                 onUpdate={(data) => {
-                  setSavedFilter(data);
                   updateFilter(data);
                 }}
               />

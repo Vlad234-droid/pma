@@ -8931,11 +8931,11 @@
               "type": "object"
             }
           },
-          "eventName": {
-            "type": "string"
-          },
           "callbackEvent": {
             "$ref": "#/components/schemas/Event"
+          },
+          "eventName": {
+            "type": "string"
           },
           "eventPriority": {
             "type": "string",
@@ -9349,22 +9349,22 @@
             "type": "integer",
             "format": "int32"
           },
-          "category": {
-            "type": "string"
-          },
           "resourceName": {
             "type": "string"
           },
-          "tenantId": {
+          "category": {
             "type": "string"
           },
           "deploymentId": {
             "type": "string"
           },
+          "versionTag": {
+            "type": "string"
+          },
           "diagramResourceName": {
             "type": "string"
           },
-          "versionTag": {
+          "tenantId": {
             "type": "string"
           }
         }
@@ -9994,22 +9994,22 @@
             "type": "integer",
             "format": "int32"
           },
-          "category": {
-            "type": "string"
-          },
           "resourceName": {
             "type": "string"
           },
-          "tenantId": {
+          "category": {
             "type": "string"
           },
           "deploymentId": {
             "type": "string"
           },
+          "versionTag": {
+            "type": "string"
+          },
           "diagramResourceName": {
             "type": "string"
           },
-          "versionTag": {
+          "tenantId": {
             "type": "string"
           }
         }
@@ -10679,8 +10679,9 @@
           "colleague": {
             "$ref": "#/components/schemas/ColleagueSimple"
           },
-          "includedToAnotherSession": {
-            "type": "boolean"
+          "sessionUuid": {
+            "type": "string",
+            "format": "uuid"
           }
         }
       },

@@ -3,10 +3,10 @@ import { filterMap } from '../../CreateUpdateCalibrationSession/utils';
 
 export const dataFromSessionResponse = (filter: Condition[], colleagueFilter: ColleagueFilterOptions) => {
   return filter
-    .filter((f) => f?.property && !['colleague-uuid'].includes(f?.property))
+    .filter((f) => f?.property && !['colleague-uuid', 'wl3-manager-depth', 'colleague-uuid-only'].includes(f?.property))
     .reduce((acc, val) => {
       if (val.property) {
-        const propertyFilter = colleagueFilter[filterMap[val.property]]
+        const propertyFilter = colleagueFilter[filterMap[val.property] || val.property]
           ?.filter((prop) => {
             const include: string = prop?.uuid ? prop.uuid : prop.code;
             if (Array.isArray(val.value) && include && val.value.includes(include)) {
@@ -24,7 +24,7 @@ export const dataFromSessionResponse = (filter: Condition[], colleagueFilter: Co
               return { ...prop, name: `${prop.firstName} ${prop.firstName}` };
             }
           });
-        acc[filterMap[val.property]] = propertyFilter;
+        acc[filterMap[val.property] || val.property] = propertyFilter;
       }
       return acc;
     }, {});

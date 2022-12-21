@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { CalibrationColleague } from '@pma/openapi';
 import { colors, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
@@ -18,6 +19,7 @@ const ColleaguesRemover: FC<{
   colleagues: CalibrationColleague[];
 }> = ({ colleaguesRemoved, onRemove, filter, colleagues }) => {
   const { t } = useTranslation();
+  const { uuid } = useParams<{ uuid: string }>();
   const colleagueFilter = useSelector(getColleagueFilterSelector) || {};
   const { css } = useStyle(['lineHeight']);
   const [isPeopleListOpen, togglePeopleList] = useState<boolean>(false);
@@ -26,8 +28,9 @@ const ColleaguesRemover: FC<{
     .join(' | ');
 
   const colleaguesRemovedUUID = colleaguesRemoved.map((colleagueRemoved) => colleagueRemoved.value);
-  const colleaguesAvailable = colleagues?.filter(({ colleague, includedToAnotherSession }) => {
-    return colleague?.uuid && !colleaguesRemovedUUID.includes(colleague.uuid) && !includedToAnotherSession;
+  const colleaguesAvailable = colleagues?.filter(({ colleague, sessionUuid }) => {
+    const isVisible = (!uuid && !sessionUuid) || (!!sessionUuid && !!uuid && sessionUuid == uuid) || !sessionUuid;
+    return colleague?.uuid && !colleaguesRemovedUUID.includes(colleague.uuid) && isVisible;
   });
 
   const handleRemove = (colleague: any) => {

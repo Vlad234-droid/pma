@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import SearchWithField from 'components/SearchWithField';
 import { IconButton } from 'components/IconButton';
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Checkbox } from 'components/Form';
 import Spinner from 'components/Spinner';
@@ -30,6 +30,7 @@ type Props = {
 
 const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = false, filters, onUpdate }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
 
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -86,7 +87,7 @@ const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = fa
                       }));
                     return (
                       <>
-                        <div className={css(titleStyle)}>{key}</div>
+                        <div className={css(titleStyle)}>{t(`group_name_${key}`, key)}</div>
                         {Field}
                         <TileWrapper boxShadow={false} customStyle={tileStyles}>
                           <label className={css(labelStyle, { display: searchValue ? 'none' : 'flex' })}>

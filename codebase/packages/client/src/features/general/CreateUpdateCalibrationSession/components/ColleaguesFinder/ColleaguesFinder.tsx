@@ -58,7 +58,7 @@ const ColleaguesFinder: FC<Props> = ({
   const disabledColleagues = filteredColleagues.filter((colleague) => colleague.type === 'disabled');
   const availableColleagues = filteredColleagues.filter((colleague) => colleague.type !== 'disabled');
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: ColleagueSimpleExtended) => {
     const { uuid, firstName, lastName, type } = e;
 
     if (multiple) {
