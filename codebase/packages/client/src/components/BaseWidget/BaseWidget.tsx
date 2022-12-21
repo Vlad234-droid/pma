@@ -103,6 +103,7 @@ const titleStyle: Rule = ({ theme }) => {
     letterSpacing: '0px',
     marginBottom: '4px',
     textAlign: 'center',
+    marginTop: '0px',
   };
 };
 
