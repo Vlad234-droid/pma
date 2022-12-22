@@ -381,7 +381,7 @@
   "my_full_team": "My full team",
   "my_direct_reports": "My direct reports",
   "pending_actions": "Pending actions",
-  "you_have_pending_actions": "You have pending actions",
+  "you_have_pending_actions": "You have {{ count }} pending actions",
   "view_profile": "View profile",
   "select_a_year": "Select a year",
   "objectives_statistics_not_found": "Objectives statistics not found",
