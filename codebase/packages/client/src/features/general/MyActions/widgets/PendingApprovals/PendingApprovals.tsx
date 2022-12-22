@@ -30,8 +30,10 @@ const PendingApprovals: FC = () => {
             <Icon graphic='roundClock' fill={theme.colors.white} iconStyles={iconStyles} />
           </div>
           <div className={css(headerStyles)}>
-            <span className={css(titleStyles)}>{t('pending_actions', 'Pending actions')}</span>
-            <span className={css(descriptionStyle)}>{t('you_have_pending_actions', 'You have pending actions')}</span>
+            <span className={css(titleStyles)}>{t('objectives_and_reviews', 'Objectives & Reviews')}</span>
+            <span className={css(descriptionStyle)}>
+              {t('you_have_pending_actions', 'You have pending actions', { count: waitingCount })}
+            </span>
           </div>
           <div className={css(countWrapperStyles)}>
             <span className={css(countStyles)}>{waitingCount}</span>

@@ -52,5 +52,5 @@ const descriptionStyle: CreateRule<{ mobileScreen }> =
     fontStyle: 'normal',
     fontWeight: 'normal',
     margin: 0,
-    ...(mobileScreen ? { ...theme.font.fixed.f18 } : { ...theme.font.fixed.f20 }),
+    ...(mobileScreen ? { ...theme.font.fixed.f14 } : { ...theme.font.fixed.f16 }),
   });
