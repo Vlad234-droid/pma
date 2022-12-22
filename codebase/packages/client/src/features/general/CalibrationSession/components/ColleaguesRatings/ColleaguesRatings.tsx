@@ -42,6 +42,7 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
       {
         state: {
           backPath: pathname,
+          activeList,
         },
       },
     );

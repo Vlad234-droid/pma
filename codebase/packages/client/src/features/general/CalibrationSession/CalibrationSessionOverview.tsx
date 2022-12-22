@@ -1,5 +1,6 @@
 import React, { FC, useRef, useState } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { useLocation } from 'react-router-dom';
 
 import ColleaguesRatings from './components/ColleaguesRatings';
 import { useTranslation } from 'components/Translation';
@@ -23,7 +24,10 @@ const CalibrationSessionOverview: FC<Props> = ({ period, filters, searchValue })
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const mediumScreen = matchMedia({ xSmall: false, small: false, medium: true }) || false;
   const { t } = useTranslation();
-  const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
+  const { state } = useLocation();
+  const { activeList: backList } = (state as any) || {};
+
+  const [activeList, setActiveList] = useState<ActiveList>(backList || ActiveList.LIST);
   const listRef = useRef<HTMLDivElement>();
 
   const { statistics, loading: statisticsLoading } = useCalibrationStatisticsRatings({
