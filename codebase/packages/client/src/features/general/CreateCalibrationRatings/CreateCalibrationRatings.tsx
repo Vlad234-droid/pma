@@ -91,7 +91,7 @@ const CreateCalibrationRatings: FC = () => {
         title={
           isDraft
             ? t('submit_calibration_ratings', 'Submit calibration ratings')
-            : t('edit_calibration_ratings', 'Edit calibration ratings')
+            : t('calibration_ratings', 'Calibration ratings')
         }
         description={t(
           'you_have_submitted_your_colleague_final_ratings',
