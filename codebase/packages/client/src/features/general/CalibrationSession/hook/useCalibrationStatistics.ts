@@ -8,11 +8,16 @@ import { TotalCount } from '@pma/openapi';
 import { useSelector } from 'react-redux';
 import useDispatch from 'hooks/useDispatch';
 import { Status } from 'config/enum';
+import { filterToRequest } from 'utils';
 
 export const useCalibrationStatistics = ({
   period,
+  filters,
+  searchValue,
 }: {
-  period?: string | undefined;
+  period?: string;
+  filters?: Record<string, Record<string, boolean>>;
+  searchValue?: string;
 }): { statistics: { [key: string]: TotalCount }; loading: boolean } => {
   const dispatch = useDispatch();
 
@@ -22,10 +27,12 @@ export const useCalibrationStatistics = ({
   useEffect(() => {
     const params = {
       'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED],
+      _search: searchValue,
       ...(period ? { year: period } : {}),
+      ...filterToRequest(filters),
     };
     dispatch(CalibrationStatisticsAction.getCalibrationStatistics(params));
-  }, [period]);
+  }, [period, filters, searchValue]);
 
   return {
     loading,

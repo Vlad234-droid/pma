@@ -16,7 +16,7 @@ import { buildData } from './utils';
 type Props = {
   filters: any;
   period: string;
-  searchValue: string;
+  searchValue?: string;
 };
 const CalibrationSessionOverview: FC<Props> = ({ period, filters, searchValue }) => {
   const { css, matchMedia } = useStyle();
@@ -33,6 +33,7 @@ const CalibrationSessionOverview: FC<Props> = ({ period, filters, searchValue })
     searchValue,
   });
   const { getCalibrationReviewsList, data } = useReviewsCalibrationList({ activeList, period, filters, searchValue });
+
   useClearCalibrationData();
 
   return (
@@ -49,7 +50,9 @@ const CalibrationSessionOverview: FC<Props> = ({ period, filters, searchValue })
           data={data}
           activeList={activeList}
           styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
-          onUpload={(rating, _start, _limit) => getCalibrationReviewsList({ rating, _start, _limit })}
+          onUpload={(rating, _start, _limit) =>
+            getCalibrationReviewsList({ rating, _start, _limit, _search: searchValue, filters })
+          }
           statistics={statistics}
         />
       ) : (

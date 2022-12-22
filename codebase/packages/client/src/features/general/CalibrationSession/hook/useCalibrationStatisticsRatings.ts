@@ -39,7 +39,7 @@ export const useCalibrationStatisticsRatings = ({
   useEffect(() => {
     const params = {
       'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED],
-      _search: searchValue,
+      _search: searchValue || undefined,
       sessionUuid: uuid,
       ...(activeList !== ActiveList.LIST ? { 'review-rating_in': initialRatings } : {}),
       ...(period ? { year: period } : {}),
