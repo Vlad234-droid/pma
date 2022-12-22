@@ -77,9 +77,7 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
                       </span>
                       {isExpandable && activeList === ActiveList.LIST && (
                         <div className={css(expandButtonStyles)}>
-                          <ExpandButton
-                            onClick={(expanded) => !data?.length && onUpload && expanded && onUpload(title)}
-                          />
+                          <ExpandButton onClick={(expanded) => onUpload && expanded && onUpload(title)} />
                         </div>
                       )}
                     </div>

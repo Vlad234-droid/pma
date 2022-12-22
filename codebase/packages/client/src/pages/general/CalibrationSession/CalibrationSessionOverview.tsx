@@ -40,7 +40,11 @@ const CalibrationSessionPage: FC = () => {
     },
   });
   //TODO: temp solution
-  const { loading, statistics } = useCalibrationStatistics({ period });
+  const { loading, statistics } = useCalibrationStatistics({
+    period,
+    filters,
+    searchValue: searchValue.length > 2 ? searchValue : undefined,
+  });
 
   return (
     <div>
@@ -73,7 +77,11 @@ const CalibrationSessionPage: FC = () => {
           </div>
         )}
       </div>
-      <CalibrationSessionOverview period={period} filters={filters} searchValue={searchValue} />
+      <CalibrationSessionOverview
+        period={period}
+        filters={filters}
+        searchValue={searchValue.length > 2 ? searchValue : undefined}
+      />
     </div>
   );
 };

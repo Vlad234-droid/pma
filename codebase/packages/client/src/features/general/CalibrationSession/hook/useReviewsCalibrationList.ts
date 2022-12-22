@@ -26,13 +26,13 @@ export const useReviewsCalibrationList = ({
   const data = useSelector(calibrationReviewsDataSelector);
 
   const getCalibrationReviewsList = useCallback(
-    ({ rating, _start, _limit }) => {
+    ({ rating, _start, _limit, _search, filters }) => {
       const isSpaced = !isNegative(rating.indexOf(' '));
       const isScroll = _start || _limit;
       const params = {
         'review-rating_in': isSpaced ? [rating.toUpperCase().replace(' ', '_')] : [rating.toUpperCase()],
         'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED],
-        _search: searchValue,
+        _search,
         ...(isScroll ? { _start, _limit } : initialFields),
         ...(uuid ? { sessionUuid: uuid } : {}),
         ...(period ? { year: period } : {}),
@@ -53,15 +53,15 @@ export const useReviewsCalibrationList = ({
             }),
           );
     },
-    [activeList, period, filters],
+    [activeList, period, searchValue],
   );
 
   useEffect(() => {
     activeList === ActiveList.TABLE &&
       initialRatings.forEach((rating) => {
-        getCalibrationReviewsList({ rating });
+        getCalibrationReviewsList({ rating, _search: searchValue, filters });
       });
-  }, [activeList, period, filters]);
+  }, [activeList, period, filters, searchValue]);
 
   return { getCalibrationReviewsList, data };
 };

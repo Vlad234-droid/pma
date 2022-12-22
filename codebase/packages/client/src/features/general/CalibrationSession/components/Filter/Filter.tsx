@@ -12,6 +12,7 @@ import Search from 'features/general/Filters/components/Search';
 import FilterForm from 'components/FilterForm';
 import UnderlayModal from 'components/UnderlayModal';
 import { filterToRequest } from 'features/general/CreateUpdateCalibrationSession/utils';
+import useDebounce from 'hooks/useDebounce';
 
 type WithDateProps = {
   withDateFilter: boolean;
@@ -48,7 +49,6 @@ const Filter: FC<Props> = ({ withDateFilter, onChangePeriod, period, onChangeFil
   };
 
   const handleSearch = (value: string) => {
-    onSearch(value);
     setSearchValue(value);
   };
 
@@ -60,9 +60,15 @@ const Filter: FC<Props> = ({ withDateFilter, onChangePeriod, period, onChangeFil
 
   const toggleFilter = () => setFilterOpen((isOpen) => !isOpen);
 
+  const search = useDebounce(onSearch);
+
   useEffect(() => {
     dispatch(ColleagueFilterAction.getColleagueFilter({}));
   }, []);
+
+  useEffect(() => {
+    search(searchValue);
+  }, [searchValue]);
 
   const updateFilter = useCallback((data) => {
     dispatch(ColleagueFilterAction.getColleagueFilter(filterToRequest(data)));
