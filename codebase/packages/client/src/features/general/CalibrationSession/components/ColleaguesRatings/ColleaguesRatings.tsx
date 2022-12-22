@@ -64,7 +64,7 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
             key={`${title}`}
             customStyle={{
               marginTop: '0px',
-              ...(activeList === ActiveList.TABLE && { border: 'none', minWidth: '350px !important' }),
+              ...(activeList === ActiveList.TABLE && { border: 'none', minWidth: '380px !important' }),
             }}
           >
             <BaseAccordion id={`colleague-review-accordion-${title}`}>
@@ -109,6 +109,7 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
                                       <ViewColleagueProfile
                                         withIcon={discussWithPP}
                                         title={'view'}
+                                        isCollapsed={activeList !== ActiveList.TABLE}
                                         colleague={item.colleague as ColleagueSimple}
                                         viewCustomStyles={{
                                           pointerEvents: isDisabled ? 'none' : 'all',

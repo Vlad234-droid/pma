@@ -18,6 +18,7 @@ export type Props = {
   properties?: { [key: string]: string };
   viewCustomStyles?: Rule | Styles;
   withIcon?: boolean;
+  isCollapsed?: boolean;
 };
 
 const ViewColleagueProfile: FC<Props> = ({
@@ -27,6 +28,7 @@ const ViewColleagueProfile: FC<Props> = ({
   properties,
   viewCustomStyles = {},
   withIcon = false,
+  isCollapsed = true,
 }) => {
   const { css, matchMedia, theme } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
@@ -55,14 +57,14 @@ const ViewColleagueProfile: FC<Props> = ({
           </span>
         </div>
       )}
-      {mobileScreen && withIcon && discuss}
+      {mobileScreen && discuss}
     </div>
   );
 
   return (
-    <TileWrapper customStyle={wrapperStyles({ mobileScreen })}>
+    <TileWrapper customStyle={wrapperStyles({ mobileScreen, isCollapsed })}>
       <div className={css(sectionStyle)}>
-        <div className={css(blockInfo)}>
+        <div className={css(blockInfo({ isCollapsed }))}>
           <div className={css({ alignSelf: 'flex-start' })}>
             <img className={css(imgStyle)} src={defaultImg} alt='photo' />
           </div>
@@ -152,8 +154,9 @@ const viewStyle: Rule = ({ theme }) => ({
   whiteSpace: 'nowrap',
 });
 
-const wrapperStyles: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
-  padding: mobileScreen ? '16px' : '24px',
+const wrapperStyles: CreateRule<{ mobileScreen: boolean; isCollapsed: boolean }> = ({ mobileScreen, isCollapsed }) => ({
+  padding: mobileScreen ? '16px' : '24px 10px',
+  ...(!isCollapsed && { minHeight: mobileScreen ? '100px' : '116px' }),
 });
 
 const sectionStyle: Rule = {
@@ -161,12 +164,13 @@ const sectionStyle: Rule = {
   justifyContent: 'space-between',
 };
 
-const blockInfo: Rule = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  //@ts-ignore
-  width: 'min(100%, 220px)',
-};
+const blockInfo: CreateRule<{ isCollapsed }> = ({ isCollapsed }) =>
+  ({
+    display: 'inline-flex',
+    alignItems: 'center',
+    //@ts-ignore
+    ...(isCollapsed && { width: 'min(100%, 220px)' }),
+  } as Styles);
 
 const imgStyle: Rule = {
   width: '48px',
