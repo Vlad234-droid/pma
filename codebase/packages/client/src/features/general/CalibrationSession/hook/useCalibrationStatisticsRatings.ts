@@ -38,9 +38,9 @@ export const useCalibrationStatisticsRatings = ({
 
   useEffect(() => {
     const params = {
-      'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED],
       _search: searchValue || undefined,
       sessionUuid: uuid,
+      ...(!uuid && { 'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED] }),
       ...(activeList !== ActiveList.LIST ? { 'review-rating_in': initialRatings } : {}),
       ...(period ? { year: period } : {}),
       ...filterToRequest(filters),
