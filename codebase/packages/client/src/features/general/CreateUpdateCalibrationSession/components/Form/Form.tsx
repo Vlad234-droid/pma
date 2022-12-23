@@ -103,6 +103,7 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
   const handleRemoveCancellation = () => {
     setSavedFilter({});
     setValue('filter', {}, { shouldDirty: true, shouldValidate: true });
+    setValue('colleaguesRemoved', [], { shouldDirty: true, shouldValidate: true });
     dispatch(ColleagueFilterAction.getColleagueFilter({}));
   };
 
@@ -220,7 +221,12 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
           readonly={!canEdit}
         />
         {isVisibleFilterModal && (
-          <UnderlayModal onClose={() => setFilterModal(false)} styles={{ maxWidth: !mobileScreen ? '500px' : '100%' }}>
+          <UnderlayModal
+            onClose={() => setFilterModal(false)}
+            styles={{ maxWidth: !mobileScreen ? '500px' : '100%' }}
+            overlayClick={false}
+            loading={true}
+          >
             {({ onClose }) => (
               <FilterForm
                 defaultValues={savedFilter}

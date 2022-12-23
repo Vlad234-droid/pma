@@ -32,10 +32,6 @@ const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = fa
   const { css } = useStyle();
   const { t } = useTranslation();
 
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  useClickOutside(ref, onCancel);
-
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(schema),
@@ -65,7 +61,7 @@ const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = fa
           <Spinner withText={false} />
         </div>
       )}
-      <div ref={ref} className={css(wrapperStyle({ isLoading: loading }))} data-test-id={FILTER_WRAPPER}>
+      <div className={css(wrapperStyle({ isLoading: loading }))} data-test-id={FILTER_WRAPPER}>
         <div className={css(flexColumnStyle)}>
           <div className={css(flexStyle)}>
             <span className={css(filterStyle)}>
