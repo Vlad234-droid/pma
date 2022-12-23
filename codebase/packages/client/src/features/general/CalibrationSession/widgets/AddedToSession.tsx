@@ -5,17 +5,17 @@ import { useTranslation } from 'components/Translation';
 
 import BaseWidget from 'components/BaseWidget';
 
-const CalibrationsCompleted: FC<{ count?: number | string }> = ({ count = '0' }) => {
+const AddedToSession: FC<{ count?: number | string; total?: number | string }> = ({ count = '0', total = '0' }) => {
   const { t } = useTranslation();
 
   return (
     <BaseWidget
-      title={t('calibrations_completed', 'Calibrations Completed')}
+      title={t('added_to_session', 'Added to Session')}
       onClick={console.log}
       hover={false}
       withButton={false}
       number={count}
-      description={t('calibrations', 'Calibrations')}
+      description={t('outOf', 'Out Of', { outOf: total })}
       customStyle={{
         fontSize: theme.font.fixed.f16.fontSize,
         lineHeight: theme.font.fixed.f16.lineHeight,
@@ -32,6 +32,6 @@ const CalibrationsCompleted: FC<{ count?: number | string }> = ({ count = '0' })
   );
 };
 
-export default CalibrationsCompleted;
+export default AddedToSession;
 
 const tileWrapperStyles: Rule = { minWidth: '350px' };

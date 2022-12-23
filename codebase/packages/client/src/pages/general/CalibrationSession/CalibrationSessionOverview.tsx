@@ -3,7 +3,7 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router';
 
 import CalibrationSessionOverview, {
-  CalibrationsCompleted,
+  AddedToSession,
   CreateCalibrationSession,
   RatingsChange,
   RatingsSubmitted,
@@ -69,10 +69,13 @@ const CalibrationSessionPage: FC = () => {
             />
             <CreateCalibrationSession />
             <RatingsSubmitted
-              count={statistics.submitted?.count?.toString() ?? '0'}
+              count={statistics?.submitted?.count?.toString() ?? '0'}
               total={statistics?.submitted?.total?.toString() ?? '0'}
             />
-            <CalibrationsCompleted count={statistics?.completed?.count?.toString() ?? '0'} />
+            <AddedToSession
+              count={statistics?.['added-to-session']?.count?.toString() ?? '0'}
+              total={statistics?.['added-to-session']?.total?.toString() ?? '0'}
+            />
             <RatingsChange count={statistics?.['rating-changed']?.count?.toString() ?? '0'} />
           </div>
         )}

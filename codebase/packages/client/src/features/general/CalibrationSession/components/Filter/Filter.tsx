@@ -7,7 +7,6 @@ import FilterIcon from 'features/general/Filters/components/FilterIcon';
 import { getCurrentYear, getYearsFromCurrentYear } from 'utils';
 import useClickOutside from 'hooks/useClickOutside';
 import { Option, Select } from 'components/Form';
-import InfoIcon from 'components/InfoIcon';
 import Search from 'features/general/Filters/components/Search';
 import FilterForm from 'components/FilterForm';
 import UnderlayModal from 'components/UnderlayModal';
@@ -91,9 +90,6 @@ const Filter: FC<Props> = ({ withDateFilter, onChangePeriod, period, onChangeFil
         )}
       </div>
       <div className={css(filtersStyle)}>
-        <div className={css(iconWrapperStyles)}>
-          <InfoIcon onClick={() => console.log('info clicked')} />
-        </div>
         <FilterIcon iconStyles={iconStyles} onClick={toggleFilter} />
         <div ref={searchEl}>
           <Search
@@ -143,8 +139,6 @@ const filtersStyle: Rule = {
   display: 'flex',
   alignItems: 'center',
 };
-
-const iconWrapperStyles: Rule = { height: '24px', display: 'flex' };
 
 const iconStyles: Rule = {
   width: '16px',
