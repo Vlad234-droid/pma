@@ -62,7 +62,7 @@ const ActionCount: FC = () => {
           <div className={css(iconStyles)}>
             <Icon graphic={'rating'} color={'black'} />
           </div>
-          <div className={css(titleStyles)}>{t('submit_calibration', 'Submit calibration')}</div>
+          <div className={css(titleStyles)}>{t('calibration_ratings_tile', 'Calibration Ratings')}</div>
           <div className={css(contentStyles)}>
             <div className={css(countStyles, { color: colors.pending })}>{waitingCount}</div>
           </div>
