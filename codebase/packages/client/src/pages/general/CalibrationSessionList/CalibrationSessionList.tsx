@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { useLocation } from 'react-router';
 
 import { CreateRule, Rule, useStyle, Styles } from '@pma/dex-wrapper';
 
@@ -12,7 +13,8 @@ import { useTranslation } from 'components/Translation';
 const CalibrationSessionPage: FC = () => {
   const { css, matchMedia } = useStyle();
   const { t } = useTranslation();
-  const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ACTIVE);
+  const { state } = useLocation();
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>((state as any)?.filterStatus || FilterStatus.ACTIVE);
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const options = getEmployeesSortingOptions(t);

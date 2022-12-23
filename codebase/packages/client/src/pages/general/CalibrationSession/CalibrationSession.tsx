@@ -26,7 +26,7 @@ const CalibrationSessionPage: FC = () => {
   const { css, matchMedia } = useStyle();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const { pathname, state } = useLocation();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const calibrationSession = useSelector(getCalibrationSessionSelector(uuid || '')) || {};
   const isStarted =
@@ -35,7 +35,7 @@ const CalibrationSessionPage: FC = () => {
   const { loaded } = useSelector(calibrationSessionsMetaSelector);
   const { setLinkTitle } = useHeaderContainer();
   const { colleagues, handleSearchColleagues, clearColleagueList } = useSearchColleaguesSimple({}, uuid);
-  const navigateTo = () => navigate(buildPath(paramsReplacer(Page.CALIBRATION_SESSION, { ':uuid': uuid || '' })));
+  const navigateTo = () => navigate(buildPath(Page.CALIBRATION_SESSION_LIST), { state });
 
   const bottomPanelRef = useRef<HTMLDivElement>();
   const searchRef = useRef<any>(null);

@@ -66,7 +66,11 @@ const CalibrationSessionList: FC<{ filterStatus: FilterStatus; searchValue: stri
   };
   const handleEdit = (uuid) =>
     uuid
-      ? navigate(buildPath(paramsReplacer(Page.CALIBRATION_SESSION, { ':uuid': uuid })))
+      ? navigate(buildPath(paramsReplacer(Page.CALIBRATION_SESSION, { ':uuid': uuid })), {
+          state: {
+            filterStatus,
+          },
+        })
       : navigate(buildPath(Page.NOT_FOUND));
 
   useEffect(() => {
