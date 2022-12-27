@@ -14,11 +14,11 @@ import { useTranslation } from 'components/Translation';
 import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
 import { role, usePermission } from 'features/general/Permission';
-import { ActiveList, RatingStatisticRatingEnum, RatingsType } from '../../types';
+import { View, Ratings, RatingsType } from '../../types';
 
 type Props = {
   data: RatingsType;
-  activeList: ActiveList;
+  activeList: View;
   statistics?: { [key: string]: TotalCount };
   styles?: Rule | Styles | {};
   onUpload?: (rating: string, _start?: number, _limit?: number) => void;
@@ -50,8 +50,7 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
   return (
     <div className={css(styles)}>
       {Object.entries(data).map(([title, data]) => {
-        if (title === RatingStatisticRatingEnum.Unsubmitted.toLowerCase() && activeList === ActiveList.TABLE)
-          return null;
+        if (title === Ratings.Unsubmitted.toLowerCase() && activeList === View.TABLE) return null;
 
         const ratingStatistics = statistics?.[title.toUpperCase()];
 
@@ -65,18 +64,18 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
             key={`${title}`}
             customStyle={{
               marginTop: '0px',
-              ...(activeList === ActiveList.TABLE && { border: 'none', minWidth: '380px !important' }),
+              ...(activeList === View.TABLE && { border: 'none', minWidth: '380px !important' }),
             }}
           >
             <BaseAccordion id={`colleague-review-accordion-${title}`}>
               {() => (
-                <Section defaultExpanded={activeList === ActiveList.TABLE}>
+                <Section defaultExpanded={activeList === View.TABLE}>
                   <div className={css(scrollContainer)}>
                     <div className={css(wrapperStyles)}>
                       <span className={css(titleStyles)}>
                         {t(title)}: {ratingStatistics?.count}
                       </span>
-                      {isExpandable && activeList === ActiveList.LIST && (
+                      {isExpandable && activeList === View.LIST && (
                         <div className={css(expandButtonStyles)}>
                           <ExpandButton onClick={(expanded) => onUpload && expanded && onUpload(title)} />
                         </div>
@@ -98,7 +97,7 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
                                 data.map((item, i) => {
                                   const isDisabled =
                                     isPerform &&
-                                    title === RatingStatisticRatingEnum.Unsubmitted.toLowerCase() &&
+                                    title === Ratings.Unsubmitted.toLowerCase() &&
                                     (item?.review?.status === ReviewStatusEnum.Draft || true);
 
                                   const discussWithPP = JSON.parse(
@@ -110,7 +109,7 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
                                       <ViewColleagueProfile
                                         withIcon={discussWithPP}
                                         title={'view'}
-                                        isCollapsed={activeList !== ActiveList.TABLE}
+                                        isCollapsed={activeList !== View.TABLE}
                                         colleague={item.colleague as ColleagueSimple}
                                         viewCustomStyles={{
                                           pointerEvents: isDisabled ? 'none' : 'all',
@@ -119,7 +118,7 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
                                         onClick={() => {
                                           handleView(item?.colleague?.uuid as string, item?.review?.uuid as string);
                                         }}
-                                        properties={activeList === ActiveList.LIST ? item?.review?.properties : {}}
+                                        properties={activeList === View.LIST ? item?.review?.properties : {}}
                                       />
                                     </div>
                                   );

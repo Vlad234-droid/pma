@@ -1,4 +1,4 @@
-import { RatingStatisticRatingEnum } from '../types';
+import { Ratings } from '../types';
 
 import { isNegative } from 'utils';
 
@@ -9,7 +9,7 @@ export const buildData = (statistics, t, field) =>
   Object.entries(statistics).reduce(
     (acc, [key, value]) => ({
       ...acc,
-      ...(key === RatingStatisticRatingEnum.Unsubmitted
+      ...(key === Ratings.Unsubmitted
         ? {}
         : {
             [t(key.toLowerCase())]: (value as any)?.[field] || '',

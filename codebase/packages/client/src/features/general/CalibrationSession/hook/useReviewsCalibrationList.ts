@@ -6,7 +6,7 @@ import useDispatch from 'hooks/useDispatch';
 import { Status } from 'config/enum';
 import { initialFields, initialRatings } from '../config';
 import { toLocalRating } from '../utils';
-import { ActiveList } from '../types';
+import { View } from '../types';
 import { isNegative, filterToRequest } from 'utils';
 
 export const useReviewsCalibrationList = ({
@@ -16,7 +16,7 @@ export const useReviewsCalibrationList = ({
   filters,
   searchValue,
 }: {
-  activeList: ActiveList;
+  activeList: View;
   uuid?: string;
   period?: string;
   filters?: Array<any>;
@@ -57,7 +57,7 @@ export const useReviewsCalibrationList = ({
   );
 
   useEffect(() => {
-    activeList === ActiveList.TABLE &&
+    activeList === View.TABLE &&
       initialRatings.forEach((rating) => {
         getCalibrationReviewsList({ rating, _search: searchValue, filters });
       });

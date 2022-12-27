@@ -10,7 +10,7 @@ import Spinner from 'components/Spinner';
 import { Line } from 'components/Line';
 import Graph from 'components/Graph';
 
-import { ActiveList } from './types';
+import { View } from './types';
 import { useCalibrationStatisticsRatings, useClearCalibrationData, useReviewsCalibrationList } from './hook';
 import { buildData } from './utils';
 
@@ -27,7 +27,7 @@ const CalibrationSessionOverview: FC<Props> = ({ period, filters, searchValue })
   const { state } = useLocation();
   const { activeList: backList } = (state as any) || {};
 
-  const [activeList, setActiveList] = useState<ActiveList>(backList || ActiveList.LIST);
+  const [activeList, setActiveList] = useState<View>(backList || View.LIST);
   const listRef = useRef<HTMLDivElement>();
 
   const { statistics, loading: statisticsLoading } = useCalibrationStatisticsRatings({
@@ -49,11 +49,11 @@ const CalibrationSessionOverview: FC<Props> = ({ period, filters, searchValue })
       <Line styles={lineStyles} />
       {statisticsLoading ? (
         <Spinner fullHeight />
-      ) : activeList !== ActiveList.GRAPH ? (
+      ) : activeList !== View.GRAPH ? (
         <ColleaguesRatings
           data={data}
           activeList={activeList}
-          styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
+          styles={activeList === View.TABLE ? tableStyles({ mobileScreen }) : {}}
           onUpload={(rating, _start, _limit) =>
             getCalibrationReviewsList({ rating, _start, _limit, _search: searchValue, filters })
           }

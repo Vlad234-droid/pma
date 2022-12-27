@@ -6,7 +6,7 @@ import { clearCalibrationReviewsData, getUserCalibrationReviews, uploadCalibrati
 type ColleagueReviewType = Array<ColleagueReview>;
 
 export type RatingsType = Record<
-  'outstanding' | 'great' | 'satisfactory' | 'below_expected' | 'unsubmitted',
+  'outstanding' | 'great' | 'satisfactory' | 'below_expected' | 'unsubmitted' | 'new_to_business',
   ColleagueReviewType
 >;
 
@@ -25,6 +25,7 @@ export const initialState: InitialStateType = {
     great: [],
     satisfactory: [],
     below_expected: [],
+    new_to_business: [],
     unsubmitted: [],
   },
   meta: { loading: false, loaded: false, error: null },

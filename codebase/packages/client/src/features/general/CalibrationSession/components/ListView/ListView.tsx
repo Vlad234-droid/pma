@@ -1,13 +1,13 @@
 import React, { forwardRef } from 'react';
 import { useStyle, CreateRule, Rule } from '@pma/dex-wrapper';
 import { useTranslation } from 'components/Translation';
-import { ActiveList } from '../../types';
+import { View } from '../../types';
 
 export const VIEW_WRAPPER = 'view-wrapper';
 
 type Props = {
-  active: ActiveList;
-  setActive: (ActiveList) => void;
+  active: View;
+  setActive: (view: View) => void;
 };
 
 const ListView = forwardRef(function ListView<P extends Props>(props: P, ref) {
@@ -19,13 +19,13 @@ const ListView = forwardRef(function ListView<P extends Props>(props: P, ref) {
 
   return (
     <div className={css(viewContainer)} onClick={clickHandler} ref={ref} data-test-id={VIEW_WRAPPER}>
-      <div id={ActiveList.GRAPH} className={css(viewStyle({ active: active === ActiveList.GRAPH }))}>
+      <div id={View.GRAPH} className={css(viewStyle({ active: active === View.GRAPH }))}>
         {t('graph', 'Graph')}
       </div>
-      <div id={ActiveList.LIST} className={css(viewStyle({ active: active === ActiveList.LIST }))}>
+      <div id={View.LIST} className={css(viewStyle({ active: active === View.LIST }))}>
         {t('list', 'List')}
       </div>
-      <div id={ActiveList.TABLE} className={css(viewStyle({ active: active === ActiveList.TABLE }))}>
+      <div id={View.TABLE} className={css(viewStyle({ active: active === View.TABLE }))}>
         {t('table', 'Table')}
       </div>
     </div>

@@ -8,7 +8,7 @@ import {
 
 import useDispatch from 'hooks/useDispatch';
 import { filterToRequest } from 'utils';
-import { ActiveList, RatingStatisticRatingEnum } from '../types';
+import { View, Ratings } from '../types';
 import { initialRatingEnums, initialRatings } from '../config';
 import { Status } from 'config/enum';
 
@@ -25,7 +25,7 @@ export const useCalibrationStatisticsRatings = ({
   filters,
   searchValue,
 }: {
-  activeList: ActiveList;
+  activeList: View;
   uuid?: string | undefined;
   period?: string | undefined;
   filters?: Record<string, Record<string, boolean>>;
@@ -41,7 +41,7 @@ export const useCalibrationStatisticsRatings = ({
       _search: searchValue || undefined,
       sessionUuid: uuid,
       ...(!uuid && { 'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED] }),
-      ...(activeList !== ActiveList.LIST ? { 'review-rating_in': initialRatings } : {}),
+      ...(activeList !== View.LIST ? { 'review-rating_in': initialRatings } : {}),
       ...(period ? { year: period } : {}),
       ...filterToRequest(filters),
     };
@@ -52,17 +52,18 @@ export const useCalibrationStatisticsRatings = ({
     loading,
     statistics: (Object.entries(statistics) ?? []).reduce(
       (acc, [key, value]) => {
-        if (initialRatingEnums.includes(key as RatingStatisticRatingEnum)) {
+        if (initialRatingEnums.includes(key as Ratings)) {
           return { ...acc, [key]: value };
         }
         return acc;
       },
       {
-        [RatingStatisticRatingEnum.Outstanding]: initialTotal,
-        [RatingStatisticRatingEnum.Great]: initialTotal,
-        [RatingStatisticRatingEnum.Satisfactory]: initialTotal,
-        [RatingStatisticRatingEnum.BelowExpected]: initialTotal,
-        [RatingStatisticRatingEnum.Unsubmitted]: initialTotal,
+        [Ratings.Outstanding]: initialTotal,
+        [Ratings.Great]: initialTotal,
+        [Ratings.Satisfactory]: initialTotal,
+        [Ratings.BelowExpected]: initialTotal,
+        [Ratings.NewToBusiness]: initialTotal,
+        [Ratings.Unsubmitted]: initialTotal,
       },
     ),
   };

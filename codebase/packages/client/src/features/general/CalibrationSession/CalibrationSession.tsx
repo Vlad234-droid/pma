@@ -17,7 +17,7 @@ import { Footer } from './components/Footer';
 import Spinner from 'components/Spinner';
 import { Line } from 'components/Line';
 import Graph from 'components/Graph';
-import { ActiveList } from './types';
+import { View } from './types';
 
 import { Page } from 'pages';
 import { useCalibrationStatisticsRatings, useClearCalibrationData, useReviewsCalibrationList } from './hook';
@@ -38,7 +38,7 @@ const CalibrationSession: FC<{ uuid: string }> = ({ uuid }) => {
 
   const { t } = useTranslation();
   const [showSuccessModal, toggleSuccessModal] = useState<boolean>(false);
-  const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
+  const [activeList, setActiveList] = useState<View>(View.LIST);
   const listRef = useRef<HTMLDivElement>();
   const bottomPanelRef = useRef<HTMLDivElement>();
 
@@ -82,12 +82,12 @@ const CalibrationSession: FC<{ uuid: string }> = ({ uuid }) => {
         <Line styles={lineStyles} />
         {statisticsLoading ? (
           <Spinner fullHeight />
-        ) : activeList !== ActiveList.GRAPH ? (
+        ) : activeList !== View.GRAPH ? (
           <ColleaguesRatings
             sessionUuid={uuid}
             data={data}
             activeList={activeList}
-            styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
+            styles={activeList === View.TABLE ? tableStyles({ mobileScreen }) : {}}
             onUpload={(rating, _start, _limit) => getCalibrationReviewsList({ rating, _start, _limit })}
             statistics={statistics}
           />
