@@ -64,6 +64,7 @@ const ViewColleagueProfile: FC<Props> = ({
   return (
     <TileWrapper customStyle={wrapperStyles({ mobileScreen, isCollapsed })}>
       <div className={css(sectionStyle)}>
+        {/*//TODO: move to component 67-80 */}
         <div className={css(blockInfo({ isCollapsed }))}>
           <div className={css({ alignSelf: 'flex-start' })}>
             <img className={css(imgStyle)} src={defaultImg} alt='photo' />
@@ -72,7 +73,9 @@ const ViewColleagueProfile: FC<Props> = ({
             <h3 className={css(namesStyle)} data-test-id={NAME}>{`${colleague?.firstName || ''} ${
               colleague?.lastName || ''
             }`}</h3>
-            <p className={css(industryStyle)}>{`${colleague?.jobName || ''} ${colleague?.businessType || ''}`}</p>
+            <p className={css(industryStyle)}>{`${colleague?.jobName || ''}${(colleague?.jobName || '') && ','} ${
+              colleague?.businessType || ''
+            }`}</p>
           </div>
         </div>
 
