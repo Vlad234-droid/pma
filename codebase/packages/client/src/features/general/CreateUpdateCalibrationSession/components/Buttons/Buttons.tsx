@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { useStyle, Button, Rule, CreateRule } from '@pma/dex-wrapper';
 import { Trans, useTranslation } from 'components/Translation';
-import { ButtonWithConfirmation } from 'features/general/Modal';
 
 export const TEST_WRAPPER_ID = 'wrapper';
 
@@ -23,17 +22,9 @@ const Buttons: FC<ButtonsProps> = ({ isValid, onSaveDraft, onSave }) => {
           <Button onPress={onSaveDraft} styles={[buttonWhiteStyle]} isDisabled={!isValid}>
             <Trans i18nKey='save_and_exit'>Save and exit</Trans>
           </Button>
-          <ButtonWithConfirmation
-            onSave={onSave}
-            buttonName={t('save_and_view_session', 'Save and view session')}
-            styles={[buttonBlueStyle]}
-            isDisabled={!isValid}
-            confirmationTitle={''}
-            confirmationDescription={t(
-              'calibration_session_confirmation_submit',
-              'Are you sure you want to submit calibration session?',
-            )}
-          />
+          <Button onPress={onSave} styles={[buttonBlueStyle]} isDisabled={!isValid}>
+            <Trans i18nKey='save_and_view_session'>Save and view session</Trans>
+          </Button>
         </div>
       </div>
     </div>
