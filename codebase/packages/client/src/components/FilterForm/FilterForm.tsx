@@ -26,9 +26,18 @@ type Props = {
   onSubmit: (data: any) => void;
   loading?: boolean;
   onUpdate?: (data: any) => void;
+  filterCount?: number;
 };
 
-const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = false, filters, onUpdate }) => {
+const FilterForm: FC<Props> = ({
+  onCancel,
+  defaultValues,
+  onSubmit,
+  loading = false,
+  filters,
+  onUpdate,
+  filterCount,
+}) => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
@@ -151,10 +160,7 @@ const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = fa
         onRightPress={handleSubmit(onSubmit)}
         isValid={isValid}
         rightIcon={false}
-        rightTextNotIcon={`Apply filter (${Object.entries(values).reduce(
-          (acc, [_, value]) => acc + Object.keys(value as object).length,
-          0,
-        )})`}
+        rightTextNotIcon={filterCount ? `Apply filter (${filterCount})` : 'Apply filter'}
         customStyles={customStyles}
       />
     </>

@@ -18,7 +18,7 @@ type Props = {
   employee: Employee;
   fullTeamView?: boolean;
   rating?: string;
-  showCalibrationRating: boolean;
+  showCalibrationRating?: boolean;
   onClick?: () => void;
 };
 

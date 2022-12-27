@@ -135,6 +135,11 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
     };
   }) as ColleagueSimpleExtended[];
 
+  const colleaguesAvailableCount = (colleaguesRemover || [])?.filter(({ colleague, sessionUuid }) => {
+    const isVisible = (!uuid && !sessionUuid) || (!!sessionUuid && !!uuid && sessionUuid == uuid) || !sessionUuid;
+    return colleague?.uuid && isVisible;
+  }).length;
+
   return (
     <form data-test-id={'CALIBRATION_SESSION_FORM_MODAL'}>
       <div className={css(formContainerStyle)}>
@@ -243,8 +248,10 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
                   }, 300);
                 }}
                 onUpdate={(data) => {
+                  setSavedFilter(data);
                   updateFilter(data);
                 }}
+                filterCount={colleaguesAvailableCount}
               />
             )}
           </UnderlayModal>
