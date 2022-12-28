@@ -46,21 +46,6 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
 
   const [isVisibleFilterModal, setFilterModal] = useState<boolean>(false);
 
-  const methods = useFormWithCloseProtection({
-    mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(createSchema(t)),
-    defaultValues,
-  });
-
-  const {
-    formState: { errors, isValid },
-    getValues,
-    setValue,
-  } = methods;
-
-  const formValues = getValues();
-  const selectedGroupLength = getSelectedGroups(colleagueFilter, formValues.filter)?.length || null;
-
   const {
     colleagues: colleaguesRemover,
     loading: colleaguesRemoverLoading,
@@ -72,6 +57,26 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
     loading: colleaguesFinderLoading,
     loaded: colleaguesFinderLoaded,
   } = useColleagueSimple({});
+
+  const colleaguesAvailableCount = (colleaguesRemover || [])?.filter(({ colleague, sessionUuid }) => {
+    const isVisible = (!uuid && !sessionUuid) || (!!sessionUuid && !!uuid && sessionUuid == uuid) || !sessionUuid;
+    return colleague?.uuid && isVisible;
+  }).length;
+
+  const methods = useFormWithCloseProtection({
+    mode: 'onChange',
+    resolver: yupResolver<Yup.AnyObjectSchema>(createSchema(t, colleaguesAvailableCount)),
+    defaultValues,
+  });
+
+  const {
+    formState: { errors, isValid },
+    getValues,
+    setValue,
+  } = methods;
+
+  const formValues = getValues();
+  const selectedGroupLength = getSelectedGroups(colleagueFilter, formValues.filter)?.length || null;
 
   const handleAddColleagues = (colleagues) => {
     const add = colleagues?.filter(({ type }) => type === 'add');
@@ -135,11 +140,6 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
     };
   }) as ColleagueSimpleExtended[];
 
-  const colleaguesAvailableCount = (colleaguesRemover || [])?.filter(({ colleague, sessionUuid }) => {
-    const isVisible = (!uuid && !sessionUuid) || (!!sessionUuid && !!uuid && sessionUuid == uuid) || !sessionUuid;
-    return colleague?.uuid && isVisible;
-  }).length;
-
   return (
     <form data-test-id={'CALIBRATION_SESSION_FORM_MODAL'}>
       <div className={css(formContainerStyle)}>
@@ -189,6 +189,7 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
             onCancel={handleRemoveCancellation}
             filter={savedFilter}
             colleagues={colleaguesRemover}
+            errormessage={get(errors, 'colleaguesRemoved.message')}
           />
         )}
         <div className={css({ padding: '30px 0' })}>

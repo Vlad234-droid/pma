@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useStyle, Button, Rule, CreateRule } from '@pma/dex-wrapper';
-import { Trans, useTranslation } from 'components/Translation';
+import { Trans } from 'components/Translation';
 
 export const TEST_WRAPPER_ID = 'wrapper';
 
@@ -13,7 +13,6 @@ type ButtonsProps = {
 const Buttons: FC<ButtonsProps> = ({ isValid, onSaveDraft, onSave }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
-  const { t } = useTranslation();
 
   return (
     <div className={css(containerStyle)} data-test-id={TEST_WRAPPER_ID}>

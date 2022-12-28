@@ -17,7 +17,8 @@ const ColleaguesRemover: FC<{
   onCancel: () => void;
   filter: any;
   colleagues: CalibrationColleague[];
-}> = ({ colleaguesRemoved, onRemove, filter, colleagues }) => {
+  errormessage?: string;
+}> = ({ colleaguesRemoved, onRemove, filter, colleagues, errormessage }) => {
   const { t } = useTranslation();
   const { uuid } = useParams<{ uuid: string }>();
   const colleagueFilter = useSelector(getColleagueFilterSelector) || {};
@@ -44,7 +45,7 @@ const ColleaguesRemover: FC<{
 
   return (
     <>
-      <div className={css(borderStyle, { marginTop: '20px' })}>
+      <div className={css(borderStyle, { marginTop: '20px', position: 'relative' })}>
         <div className={css(blockContainerStyle)}>
           <div
             className={css(
@@ -91,6 +92,7 @@ const ColleaguesRemover: FC<{
             </div>
           )}
         </div>
+        {errormessage && <span className={css(errorMessageStyle)}>{errormessage}</span>}
       </div>
       {colleaguesRemoved?.length > 0 && (
         <div className={css({ position: 'relative' })}>
@@ -182,6 +184,14 @@ const optionActionStyle: Rule = ({ theme }) => ({
   marginLeft: 'auto',
   fontWeight: 'bold',
   color: theme.colors.tescoBlue,
+});
+const errorMessageStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f14,
+  letterSpacing: '0px',
+  position: 'absolute',
+  left: 0,
+  top: '100%',
+  color: theme.colors.error,
 });
 
 export default ColleaguesRemover;
