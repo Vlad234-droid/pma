@@ -32,7 +32,10 @@ export const useReviewsCalibrationList = ({
       const params = {
         _search,
         'review-rating_in': isSpaced ? [rating.toUpperCase().replace(' ', '_')] : [rating.toUpperCase()],
-        ...(!uuid && { 'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED] }),
+        ...(!uuid && {
+          'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED],
+          'timeline-point-status_in': [Status.STARTED, Status.FINISHING, Status.COMPLETED],
+        }),
         ...(isScroll ? { _start, _limit } : initialFields),
         ...(uuid ? { sessionUuid: uuid } : {}),
         ...(period ? { year: period } : {}),
