@@ -50,6 +50,11 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
   return (
     <div className={css(styles)}>
       {Object.entries(data).map(([title, data]) => {
+        //@ts-ignore
+        const sortedColleague = data?.sort((a, b) =>
+          a?.colleague?.firstName?.localeCompare(b?.colleague?.firstName as string, 'es', { sensitivity: 'base' }),
+        );
+
         if (title === Ratings.Unsubmitted.toLowerCase() && activeList === View.TABLE) return null;
 
         const ratingStatistics = statistics?.[title.toUpperCase()];
@@ -93,8 +98,8 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
                         render={() => (
                           <>
                             <div key={title} className={css({ marginBottom: '24px', width: '100%' })}>
-                              {!!data?.length &&
-                                data.map((item, i) => {
+                              {!!sortedColleague?.length &&
+                                sortedColleague.map((item, i) => {
                                   const isDisabled =
                                     isPerform &&
                                     title === Ratings.Unsubmitted.toLowerCase() &&
