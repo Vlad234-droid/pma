@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
@@ -11,14 +11,13 @@ import {
   EditCalibrationSession,
   StartCalibrationSession,
 } from 'features/general/CalibrationSession/widgets';
-import { ColleaguesSimpleFinder } from 'components/ColleaguesSimpleFinder';
+import { ColleaguesFinder } from 'features/general/ColleaguesFinder';
 
 import { Page } from '../types';
 import { useHeaderContainer } from 'contexts/headerContext';
 import { useTranslation } from 'components/Translation';
-import useSearchColleaguesSimple from 'features/general/CalibrationSession/hook/useSearchColleaguesSimple';
 import { buildPath } from 'features/general/Routes';
-import { paramsReplacer } from 'utils';
+
 import { Backward } from 'components/Backward';
 
 const CalibrationSessionPage: FC = () => {
@@ -26,7 +25,7 @@ const CalibrationSessionPage: FC = () => {
   const { css, matchMedia } = useStyle();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { pathname, state } = useLocation();
+  const { state } = useLocation();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const calibrationSession = useSelector(getCalibrationSessionSelector(uuid || '')) || {};
   const isStarted =
@@ -34,34 +33,15 @@ const CalibrationSessionPage: FC = () => {
     calibrationSession?.status === CalibrationSessionStatusEnum.Updated;
   const { loaded } = useSelector(calibrationSessionsMetaSelector);
   const { setLinkTitle } = useHeaderContainer();
-  const { colleagues, handleSearchColleagues, clearColleagueList } = useSearchColleaguesSimple({}, uuid);
   const navigateTo = () => navigate(buildPath(Page.CALIBRATION_SESSION_LIST), { state });
 
   const bottomPanelRef = useRef<HTMLDivElement>();
-  const searchRef = useRef<any>(null);
-  const [focused, setFocused] = useState(false);
-  const onFocus = () => setFocused(true);
-  const onBlur = () => {
-    setFocused(false);
-    clearColleagueList();
-  };
-
-  const handleView = (uuid: string) => {
-    navigate(buildPath(paramsReplacer(`${Page.USER_REVIEWS}`, { ':uuid': uuid })), {
-      state: {
-        backPath: `${pathname}`,
-      },
-    });
-  };
 
   useEffect(() => {
     setLinkTitle({
       [Page.CALIBRATION_SESSION]: `${t('calibration', 'Calibration')}: ${calibrationSession.title || ''}`,
     });
   }, [loaded]);
-  useEffect(() => {
-    searchRef.current.value = '';
-  }, [focused]);
 
   return (
     <div>
@@ -71,32 +51,7 @@ const CalibrationSessionPage: FC = () => {
           <div className={css(headStyle)}>
             <div />
             <div className={css(filtersStyle)}>
-              <ColleaguesSimpleFinder
-                domRef={searchRef}
-                onSelect={handleView}
-                selected={[]}
-                value={''}
-                customStyles={{ marginTop: '0px', width: '100%' }}
-                inputStyles={{
-                  ...(focused ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),
-                  ...(focused ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),
-                  ...(focused ? { width: '500px' } : { width: '38px' }),
-                  //@ts-ignore
-                  ...(!focused && { borderRadius: '50%', padding: '0px' }),
-                  height: '38px',
-                  border: '2px solid rgb(0, 83, 159)',
-                  cursor: 'pointer',
-                }}
-                placeholder={focused ? 'search' : ''}
-                customIcon={true}
-                iconCustomStyles={{ right: '10px' }}
-                colleagues={colleagues}
-                handleSearchColleagues={handleSearchColleagues}
-                clearColleagueList={clearColleagueList}
-                onBlur={onBlur}
-                onFocus={onFocus}
-                multiple={false}
-              />
+              <ColleaguesFinder />
             </div>
           </div>
           <div className={css(widgetContainerStyles({ mobileScreen }))}>
