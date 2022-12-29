@@ -33,7 +33,24 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
   const { loading } = useSelector(calibrationReviewsMetaSelector);
   const { pathname } = useLocation();
 
-  const handleView = (userUuid: string, uuid: string) =>
+  const handleView = (userUuid: string, uuid: string, rating: string) => {
+    if (sessionUuid && !uuid && rating === Ratings.Unsubmitted.toLowerCase()) {
+      navigate(
+        buildPath(
+          paramsReplacer(Page.CREATE_CALIBRATION_SESSION_RATING, {
+            ':userUuid': userUuid,
+            ':sessionUuid': sessionUuid,
+          }),
+        ),
+        {
+          state: {
+            backPath: pathname,
+            activeList,
+          },
+        },
+      );
+      return;
+    }
     navigate(
       buildPathWithParams(
         buildPath(paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':userUuid': userUuid, ':uuid': uuid })),
@@ -46,6 +63,7 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
         },
       },
     );
+  };
 
   return (
     <div className={css(styles)}>
@@ -121,7 +139,11 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
                                           opacity: isDisabled ? '0.4' : '1',
                                         }}
                                         onClick={() => {
-                                          handleView(item?.colleague?.uuid as string, item?.review?.uuid as string);
+                                          handleView(
+                                            item?.colleague?.uuid as string,
+                                            item?.review?.uuid as string,
+                                            title,
+                                          );
                                         }}
                                         properties={activeList === View.LIST ? item?.review?.properties : {}}
                                       />

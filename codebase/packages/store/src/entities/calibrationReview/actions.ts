@@ -14,6 +14,13 @@ export const saveCalibrationReview = createAsyncAction(
   'calibration/review/SAVE_CANCEL',
 )<any, any, Error>();
 
+export const saveCalibrationSessionReview = createAsyncAction(
+  'calibration-session/review/SAVE_REQUEST',
+  'calibration-session/review/SAVE_SUCCESS',
+  'calibration-session/review/SAVE_FAILURE',
+  'calibration-session/review/SAVE_CANCEL',
+)<any, any, Error>();
+
 export const updateCalibrationReview = createAsyncAction(
   'calibration/review/UPDATE_REQUEST',
   'calibration/review/UPDATE_SUCCESS',
@@ -27,5 +34,6 @@ export const Actions = {
   getCalibrationReview: getCalibrationReview.request,
   saveCalibrationReview: saveCalibrationReview.request,
   updateCalibrationReview: updateCalibrationReview.request,
+  saveCalibrationSessionReview: saveCalibrationSessionReview.request,
   clearCalibrationReview,
 };

@@ -55,6 +55,9 @@ export const getCalibrationFilter = (params: RequestQuery) => {
   });
 };
 
+export const createCalibrationSessionReview = ({ sessionUuid, colleagueUuid, cycleUuid }, data) =>
+  httpClient.post(`${domain}/sessions/${sessionUuid}/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/reviews`, data);
+
 export const getCalibrationColleagues = (params: RequestQuery) => {
   return httpClient.get(`${domain}/sessions/colleagues`, {
     params,

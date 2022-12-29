@@ -56,6 +56,8 @@ export const defaultValues = {
   longTerm: 'Yes',
 };
 
+export const STANDARD_CALIBRATION_FORM_CODE = 'forms/standard_calibration.form';
+
 export const buildData = (data: any, colleagueUuid) => {
   const { status, ...properties } = data;
   return {

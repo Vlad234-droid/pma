@@ -14,7 +14,7 @@ import RatingForm from './components/RatingForm';
 import User from 'components/User';
 import { SuccessMark } from 'components/Icon';
 import { Mode, Status } from 'config/types';
-import { buildData } from './utils';
+import { buildData, STANDARD_CALIBRATION_FORM_CODE } from './utils';
 import { useCalibrationReview, useColleague, usePermissions } from './hooks';
 import { Profile } from 'config/entities/User';
 import { paramsReplacer } from 'utils';
@@ -24,8 +24,6 @@ export enum Statuses {
   PENDING = 'PENDING',
   SUCCESS = 'SUCCESS',
 }
-
-const STANDARD_CALIBRATION_FORM_CODE = 'forms/standard_calibration.form';
 
 const CreateCalibrationRatings: FC = () => {
   const { t } = useTranslation();
@@ -47,9 +45,12 @@ const CreateCalibrationRatings: FC = () => {
 
   const { loading, loaded, updated, calibrationReview } = useCalibrationReview();
   const { loading: colleagueLoading } = useColleague();
-  const { isNew, isDraft, readOnly, sessionMode, editablePPSession } = usePermissions();
+  const { isNew, isDraft, readOnly, sessionMode, editablePPSession, sessionModeCreate } = usePermissions();
 
-  const handleSave = (data: any) => {
+  const handleSave = (values: any) => {
+    const data = {
+      ...values,
+    };
     setCurrentStatus(data.status);
     setSuccessTitle(() => t('submit_calibration_ratings', 'Submit calibration ratings'));
     dispatch(CalibrationReviewAction.saveCalibrationReview(buildData(data, colleagueUuid)));
@@ -111,17 +112,17 @@ const CreateCalibrationRatings: FC = () => {
     );
   }
 
-  if (!isNew && loaded && !calibrationReview?.properties)
+  if (!isNew && loaded && !calibrationReview?.properties) {
     navigate(
-      buildPath(paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':uuid': 'new', ':userUuid': colleagueUuid })),
       {
-        replace: true,
-        state: {
-          backPath,
-          activeList,
-        },
+        pathname: buildPath(
+          paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':uuid': 'new', ':userUuid': colleagueUuid }),
+        ),
+        search: sessionMode ? new URLSearchParams({ sessionMode }).toString() : '',
       },
+      { replace: true, state: { backPath, activeList } },
     );
+  }
 
   return (
     <WrapperModal
@@ -157,7 +158,7 @@ const CreateCalibrationRatings: FC = () => {
           onCancel={handleBack}
           components={components}
           defaultValues={!isNew ? calibrationReview?.properties : {}}
-          mode={isDraft ? Mode.CREATE : Mode.UPDATE}
+          mode={isDraft && !sessionModeCreate ? Mode.CREATE : Mode.UPDATE}
           readOnly={readOnly}
         />
       </div>

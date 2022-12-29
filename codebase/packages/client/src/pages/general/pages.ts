@@ -46,7 +46,7 @@ import UpdateObjectives, { CreateObjective } from './CreateUpdateObjectives';
 import { NotFound } from './NotFound';
 import PriorityNote from './Notes/PriorityNote';
 import PriorityNoteEdit from './Notes/PriorityNoteEdit';
-import CreateCalibrationRating from './CreateCalibrationRating';
+import CreateCalibrationRating, { CreateCalibrationSessionRating } from './CreateCalibrationRating';
 
 export type PageComponent = {
   Element: PageElement;
@@ -133,6 +133,12 @@ const pages: Record<Page, PageComponent> = {
     Element: CreateCalibrationRating,
     withHeader: false,
     perform: [role.LINE_MANAGER, role.PEOPLE_TEAM, role.TALENT_ADMIN],
+    tenant: [Tenant.BANK, Tenant.GENERAL],
+  },
+  [Page.CREATE_CALIBRATION_SESSION_RATING]: {
+    Element: CreateCalibrationSessionRating,
+    withHeader: false,
+    perform: [role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.NOTES]: {

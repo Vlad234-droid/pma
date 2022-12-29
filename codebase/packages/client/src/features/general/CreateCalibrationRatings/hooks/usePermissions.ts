@@ -32,23 +32,24 @@ export const usePermissions = () => {
 
   const isLNwithPP = isPerformForLN && isPerformForPP && directReport;
   const isLNwithTA = isPerformForLN && isPerformForTA && directReport;
+  const sessionModeCreate = sessionMode && isDraft;
 
   const editablePPSession =
     calibrationReview?.status === Status.APPROVED || calibrationReview?.status === Status.WAITING_FOR_COMPLETION;
 
-  const readOnly = isPerformForTA
-    ? true
-    : sessionMode
-    ? !editablePPSession
-    : isPerformForTA && isLNwithTA
-    ? !isDraft && LNDisabledStatuses
-    : isPerformForPP && isLNwithPP
-    ? !isDraft && LNDisabledStatuses
-    : isPerformForPP && !isLNwithPP && !isLNwithTA && !sessionMode
-    ? (!isDraft && LNDisabledStatuses) || calibrationReview?.status === Status.WAITING_FOR_APPROVAL
-    : isPerformForLN && !isLNwithPP && !isLNwithTA
-    ? !isDraft && LNDisabledStatuses
-    : true;
+  const checkPerformMode = () => {
+    if (isPerformForTA) return true;
+    if (sessionModeCreate) return false;
+    if (sessionMode) return !editablePPSession;
+    if (isPerformForTA && isLNwithTA) return !isDraft && LNDisabledStatuses;
+    if (isPerformForPP && isLNwithPP) return !isDraft && LNDisabledStatuses;
+    if (isPerformForPP && !isLNwithPP && !isLNwithTA && !sessionMode)
+      return (!isDraft && LNDisabledStatuses) || calibrationReview?.status === Status.WAITING_FOR_APPROVAL;
+    if (isPerformForLN && !isLNwithPP && !isLNwithTA) return !isDraft && LNDisabledStatuses;
+    return true;
+  };
 
-  return { isNew, isDraft, readOnly, sessionMode, editablePPSession };
+  const readOnly = checkPerformMode();
+
+  return { isNew, isDraft, readOnly, sessionMode, editablePPSession, sessionModeCreate };
 };

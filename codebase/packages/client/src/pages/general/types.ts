@@ -26,6 +26,7 @@ enum Page {
   KNOWLEDGE_LIBRARY_BY_ID = ':countryCode/knowledge-library/:id',
   PEOPLE_TEAM = 'people-team',
   CREATE_CALIBRATION_RATING = 'users/:userUuid/reviews/calibration/:uuid',
+  CREATE_CALIBRATION_SESSION_RATING = 'users/:userUuid/sessions/:sessionUuid/calibration/review',
   CALIBRATION_SESSION_OVERVIEW = 'calibration',
   CALIBRATION_SESSION_LIST = 'calibration/session',
   CREATE_CALIBRATION_SESSION = 'calibration/session/new',
