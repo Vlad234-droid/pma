@@ -75,7 +75,6 @@ const Filters: FC<Props> = ({
       )}
       {sortingOptions && (
         <Sorting
-          iconStyles={sortingStyles}
           isOpen={sortOpen}
           onClick={handleSortOpen}
           onSort={handleSort}
@@ -86,7 +85,6 @@ const Filters: FC<Props> = ({
       )}
       {filterOptions && (
         <Filtering
-          iconStyles={iconStyles}
           isOpen={filterOpened}
           onClick={handleFilterOpen}
           onClose={handleFilterClose}
@@ -94,13 +92,7 @@ const Filters: FC<Props> = ({
           onFilter={handleFilter}
         />
       )}
-      <Search
-        iconStyles={iconStyles}
-        focus={searchOpened}
-        onFocus={handleSearchOpen}
-        onSearch={handleSearch}
-        value={searchValue}
-      />
+      <Search focus={searchOpened} onFocus={handleSearchOpen} onSearch={handleSearch} value={searchValue} />
     </div>
   );
 };
@@ -113,18 +105,3 @@ const wrapperStyles: Rule = {
 };
 
 const iconWrapperStyles: Rule = { height: '24px', display: 'flex' };
-
-const iconStyles: Rule = {
-  width: '16px',
-  height: '16px',
-  position: 'relative',
-  top: '2px',
-  left: '2px',
-};
-const sortingStyles: Rule = {
-  width: '16px',
-  height: '16px',
-  position: 'relative',
-  top: '1px',
-  left: 0,
-};

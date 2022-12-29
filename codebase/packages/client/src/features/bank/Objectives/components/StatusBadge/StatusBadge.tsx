@@ -38,7 +38,7 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status, text, styles }) => {
   const [graphic, label, color] = getContent(theme, t, status);
   return (
     <div className={css(wrapperStyles, styles)}>
-      <Icon graphic={graphic} color={color} iconStyles={iconStyles} title={label} />
+      <Icon graphic={graphic} color={color} iconStyles={iconStyles} title={label} size={'17px'} />
       <span className={css(labelStyles({ color }))}>
         <div>{label}</div>
         {text && <div>{text}</div>}
@@ -57,8 +57,6 @@ const wrapperStyles: Rule = ({ theme }) => ({
 
 const iconStyles: Rule = {
   marginRight: '10px',
-  width: '16px',
-  height: '16px',
   display: 'block',
 };
 

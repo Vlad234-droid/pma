@@ -57,7 +57,6 @@ export const FilterOption: FC<FilterOptionProps> = ({
           customVariantRules={{
             default: iconBtnStyle({ isActive: hasActiveFilter, colors: theme.colors }),
           }}
-          iconStyles={settingsStyle}
           iconProps={{
             invertColors: hasActiveFilter,
           }}
@@ -79,7 +78,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
         <div
           data-test-id={wrapperInputId}
           className={css({
-            width: focus ? '240px' : '38px',
+            width: focus ? '240px' : '40px',
             transition: '.4s width ease',
             marginLeft: !marginLeftAuto ? '5px' : 'auto',
           })}
@@ -95,7 +94,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
             onFocus={() => {
               onFocus && onFocus(true);
             }}
-            customIcon={customIcon && <Icon graphic='search' iconStyles={searchStyle} />}
+            customIcon={customIcon && <Icon graphic='search' size={'17px'} />}
             focus={focus}
           >
             <Input
@@ -116,7 +115,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
                   : { borderRadius: '20px', paddingLeft: '25px', transitionDelay: '.3s' }),
 
                 background: theme.colors.white,
-                height: '38px',
+                height: '40px',
                 border: '2px solid rgb(0, 83, 159)',
               }}
               name={inputTestId}
@@ -137,8 +136,8 @@ const iconBtnStyle: CreateRule<{ isActive: boolean; colors: any }> = ({ colors, 
     padding: '0',
     marginLeft: medium ? '0px' : '5px',
     display: 'flex',
-    height: '38px',
-    width: '38px',
+    height: '40px',
+    width: '40px',
     justifyContent: 'center',
     alignItems: 'center',
     outline: 0,
@@ -152,18 +151,4 @@ const iconBtnStyle: CreateRule<{ isActive: boolean; colors: any }> = ({ colors, 
       alignItems: 'center',
     },
   };
-};
-
-const settingsStyle: Rule = {
-  width: '16px',
-  height: '16px',
-  position: 'relative',
-  top: '1px',
-};
-
-const searchStyle: Rule = {
-  width: '16px',
-  height: '16px',
-  position: 'relative',
-  top: '2px',
 };

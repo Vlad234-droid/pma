@@ -57,7 +57,7 @@ const ProfilePreview: FC<Props> = ({
         <div className={css(buttonWrapperStyles)}>
           {showCalibrationRating && (
             <div className={css(iconWrapperStyles)}>
-              <Icon graphic={'rating'} color={'pending'} title={title} />
+              <Icon graphic={'rating'} color={'pending'} title={'calibration'} />
             </div>
           )}
           <div className={css(iconWrapperStyles)}>
