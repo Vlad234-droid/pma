@@ -92,7 +92,7 @@ const CreateUpdateCalibrationSession: FC<Props> = ({ onClose }) => {
 
   useEffect(() => {
     if (isSaveAndExit && !calibrationSessionUpdating) {
-      onClose();
+      navigate(buildPath(Page.CALIBRATION_SESSION_LIST));
     }
   }, [isSaveAndExit, calibrationSessionUpdating]);
 
