@@ -2,7 +2,6 @@ import React, { FC, useState, useEffect, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { ColleagueFilterAction, getColleagueFilterSelector } from '@pma/store';
-
 import FilterIcon from 'features/general/Filters/components/FilterIcon';
 import { getCurrentYear, getYearsFromCurrentYear } from 'utils';
 import useClickOutside from 'hooks/useClickOutside';
@@ -90,15 +89,9 @@ const Filter: FC<Props> = ({ withDateFilter, onChangePeriod, period, onChangeFil
         )}
       </div>
       <div className={css(filtersStyle)}>
-        <FilterIcon iconStyles={iconStyles} onClick={toggleFilter} />
+        <FilterIcon onClick={toggleFilter} />
         <div ref={searchEl}>
-          <Search
-            iconStyles={iconStyles}
-            focus={searchOpened}
-            onFocus={handleSearchOpen}
-            onSearch={handleSearch}
-            value={searchValue}
-          />
+          <Search focus={searchOpened} onFocus={handleSearchOpen} onSearch={handleSearch} value={searchValue} />
         </div>
         {isFilterOpen && (
           <UnderlayModal onClose={() => setFilterOpen(false)} styles={{ maxWidth: !mobileScreen ? '500px' : '100%' }}>
@@ -138,14 +131,6 @@ const selectStyle: Rule = { minWidth: '350px' };
 const filtersStyle: Rule = {
   display: 'flex',
   alignItems: 'center',
-};
-
-const iconStyles: Rule = {
-  width: '16px',
-  height: '16px',
-  position: 'relative',
-  top: '2px',
-  left: '2px',
 };
 
 export default Filter;

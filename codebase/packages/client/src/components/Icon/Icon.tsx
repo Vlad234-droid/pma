@@ -64,7 +64,6 @@ export const Icon: FC<IconProps> = ({
         <title id={titleId} data-test-id={titleId}>
           {customTitle}
         </title>
-        {backgroundRadius && <circle cx={backgroundRadius} cy={backgroundRadius} r={backgroundRadius} fill='white' />}
         <CustomIcon invertColors={invertColors} color={color} />
       </svg>
     </div>

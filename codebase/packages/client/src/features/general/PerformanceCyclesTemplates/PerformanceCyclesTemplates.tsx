@@ -131,7 +131,6 @@ const PerformanceCyclesTemplates: FC = () => {
             customVariantRules={{
               default: iconBtnStyle({ isActive: !!filter.extension }),
             }}
-            iconStyles={iconStyle}
             iconProps={{
               invertColors: !!filter.extension,
             }}
@@ -166,11 +165,6 @@ const PerformanceCyclesTemplates: FC = () => {
               graphic='cancel'
               customVariantRules={{
                 default: iconBtnStyle({ isActive: false }),
-              }}
-              iconStyles={{
-                ...iconStyle,
-                top: '0px',
-                left: '0px',
               }}
               iconProps={{
                 invertColors: false,
@@ -275,14 +269,6 @@ const PerformanceCyclesTemplates: FC = () => {
       )}
     </div>
   );
-};
-
-const iconStyle: Rule = {
-  width: '16px',
-  height: '16px',
-  position: 'relative',
-  top: '2px',
-  left: '2px',
 };
 
 const iconBtnStyle: CreateRule<{ isActive: boolean }> =

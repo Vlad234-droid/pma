@@ -14,7 +14,7 @@ export const filterMap = {
 
 export const filterMapRevers = Object.fromEntries(Object.entries(filterMap).map((a) => a.reverse()));
 
-export const filterToRequest = (filter) =>
+export const filterToRequest = (filter: Record<string, Record<string, boolean>>) =>
   Object.entries(filter).reduce((acc, [key, val]) => {
     if (typeof val === 'object') {
       const keys = Object.entries(val || {})
