@@ -44,7 +44,7 @@ describe('<Filters />', () => {
       fireEvent.click(getByTestId('settings')); // open sort
 
       // check search is closed
-      expect(getByTestId('search-wrapper')).toHaveStyle('width: 38px');
+      expect(getByTestId('search-wrapper')).toHaveStyle('width: 40px');
       // check sort is open
       expect(getByTestId('sorting-modal')).toHaveStyle('transform: scaleY(1)');
     });

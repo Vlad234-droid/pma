@@ -38,7 +38,7 @@ describe('Performance page', () => {
     const wrapperInputStyle = window.getComputedStyle(getByTestId(WRAPPER_INPUT_ID));
     const input = getByTestId(`input-${INPUT_TEST_ID}`);
 
-    expect(wrapperInputStyle.width).toBe('38px');
+    expect(wrapperInputStyle.width).toBe('40px');
 
     fireEvent.focus(input);
 
