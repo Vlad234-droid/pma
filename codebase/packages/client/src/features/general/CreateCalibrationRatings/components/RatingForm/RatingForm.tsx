@@ -6,7 +6,7 @@ import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import DynamicForm from 'components/DynamicForm';
 import useOverallRating from 'hooks/useOverallRating';
-import { Mode } from 'config/types';
+import { Mode, Status } from 'config/types';
 
 import { createYupSchema, createYupSchemaForDraft } from 'utils/yup';
 
@@ -69,8 +69,8 @@ const RatingForm: FC<Props> = ({ onSubmit, onCancel, components, defaultValues, 
     return Object.values(values).filter((val) => !!val).length;
   }, [JSON.stringify(values)]);
 
-  const handleSave = (data: any) => onSubmit({ ...data, status: 'WAITING_FOR_APPROVAL' });
-  const handleSaveDraft = (data: any) => onSubmit({ ...data, status: 'DRAFT' });
+  const handleSave = (data: any) => onSubmit({ ...data, status: Status.WAITING_FOR_APPROVAL });
+  const handleSaveDraft = (data: any) => onSubmit({ ...data, status: Status.DRAFT });
 
   return (
     <div>

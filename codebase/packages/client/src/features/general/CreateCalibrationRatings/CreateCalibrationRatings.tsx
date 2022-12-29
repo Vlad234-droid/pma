@@ -31,6 +31,7 @@ const CreateCalibrationRatings: FC = () => {
   const { t } = useTranslation();
   const { css, theme } = useStyle();
   const [currentStatus, setCurrentStatus] = useState('');
+  const [successTitle, setSuccessTitle] = useState('');
   const { userUuid: colleagueUuid } = useParams<{ uuid: string; userUuid: string }>() as {
     userUuid: string;
   };
@@ -50,6 +51,7 @@ const CreateCalibrationRatings: FC = () => {
 
   const handleSave = (data: any) => {
     setCurrentStatus(data.status);
+    setSuccessTitle(() => t('submit_calibration_ratings', 'Submit calibration ratings'));
     dispatch(CalibrationReviewAction.saveCalibrationReview(buildData(data, colleagueUuid)));
   };
 
@@ -71,6 +73,11 @@ const CreateCalibrationRatings: FC = () => {
       }
     }
     setCurrentStatus(data.status);
+    setSuccessTitle(() =>
+      isDraft && data.status === Status.WAITING_FOR_APPROVAL
+        ? t('submit_calibration_ratings', 'Submit calibration ratings')
+        : t('calibration_ratings', 'Calibration ratings'),
+    );
     dispatch(CalibrationReviewAction.updateCalibrationReview(buildData(data, colleagueUuid)));
   };
 
@@ -90,11 +97,7 @@ const CreateCalibrationRatings: FC = () => {
       <SuccessModal
         customButtonStyles={{ background: theme.colors.tescoBlue, color: theme.colors.white }}
         onClose={handleBack}
-        title={
-          isDraft
-            ? t('submit_calibration_ratings', 'Submit calibration ratings')
-            : t('calibration_ratings', 'Calibration ratings')
-        }
+        title={successTitle}
         description={t(
           'you_have_submitted_your_colleague_final_ratings',
           'You have submitted your colleague’ final ratings.',
