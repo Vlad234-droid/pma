@@ -38,7 +38,6 @@ export const usePermissions = () => {
     calibrationReview?.status === Status.APPROVED || calibrationReview?.status === Status.WAITING_FOR_COMPLETION;
 
   const checkPerformMode = () => {
-    if (isPerformForTA) return true;
     if (sessionModeCreate) return false;
     if (sessionMode) return !editablePPSession;
     if (isPerformForTA && isLNwithTA) return !isDraft && LNDisabledStatuses;
@@ -46,6 +45,7 @@ export const usePermissions = () => {
     if (isPerformForPP && !isLNwithPP && !isLNwithTA && !sessionMode)
       return (!isDraft && LNDisabledStatuses) || calibrationReview?.status === Status.WAITING_FOR_APPROVAL;
     if (isPerformForLN && !isLNwithPP && !isLNwithTA) return !isDraft && LNDisabledStatuses;
+    if (isPerformForTA) return true;
     return true;
   };
 
