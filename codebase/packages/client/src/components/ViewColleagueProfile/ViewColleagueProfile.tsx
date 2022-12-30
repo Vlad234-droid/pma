@@ -74,7 +74,7 @@ const ViewColleagueProfile: FC<Props> = ({
               colleague?.lastName || ''
             }`}</h3>
             <p className={css(industryStyle)}>{`${colleague?.jobName || ''}${(colleague?.jobName || '') && ','} ${
-              colleague?.businessType || ''
+              colleague?.departmentName || ''
             }`}</p>
           </div>
         </div>

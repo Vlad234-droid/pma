@@ -11,7 +11,7 @@ import { Trans, useTranslation } from 'components/Translation';
 import SuccessModal from 'components/SuccessModal';
 import RatingForm from './components/RatingForm';
 import { SuccessMark } from 'components/Icon';
-import User from 'components/User';
+import Colleague from 'components/Colleague';
 
 import { useCalibrationReview, useColleague } from './hooks';
 import useDispatch from 'hooks/useDispatch';
@@ -90,7 +90,7 @@ const CreateCalibrationSessionRating = () => {
             confirmed.
           </Trans>
         </p>
-        <User user={profile as Profile} />
+        <Colleague profile={profile as Profile} />
         <RatingForm
           onSubmit={handleSave}
           onCancel={handleBack}

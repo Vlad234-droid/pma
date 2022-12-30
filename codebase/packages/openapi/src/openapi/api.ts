@@ -673,6 +673,12 @@ export interface ColleagueReportTargeting {
      * @type {string}
      * @memberof ColleagueReportTargeting
      */
+    'departmentName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ColleagueReportTargeting
+     */
     'businessType'?: string;
     /**
      * 
@@ -747,6 +753,12 @@ export interface ColleagueSimple {
      * @type {string}
      * @memberof ColleagueSimple
      */
+    'departmentName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ColleagueSimple
+     */
     'businessType'?: string;
     /**
      * 
@@ -810,6 +822,12 @@ export interface ColleagueView {
      * @memberof ColleagueView
      */
     'jobName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ColleagueView
+     */
+    'departmentName'?: string;
     /**
      * 
      * @type {string}
@@ -1235,25 +1253,25 @@ export interface DecisionInfo {
      * @type {string}
      * @memberof DecisionInfo
      */
-    'deploymentId'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DecisionInfo
-     */
     'versionTag'?: string;
     /**
      * 
      * @type {string}
      * @memberof DecisionInfo
      */
-    'diagramResourceName'?: string;
+    'deploymentId'?: string;
     /**
      * 
      * @type {string}
      * @memberof DecisionInfo
      */
     'tenantId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DecisionInfo
+     */
+    'diagramResourceName'?: string;
 }
 /**
  * 
@@ -1432,7 +1450,7 @@ export interface Event {
      * @type {string}
      * @memberof Event
      */
-    'eventPriority'?: EventEventPriorityEnum;
+    'callbackServiceURL'?: string;
     /**
      * 
      * @type {string}
@@ -1444,7 +1462,7 @@ export interface Event {
      * @type {string}
      * @memberof Event
      */
-    'callbackServiceURL'?: string;
+    'eventPriority'?: EventEventPriorityEnum;
 }
 
 /**
@@ -3157,25 +3175,25 @@ export interface ProcessInfo {
      * @type {string}
      * @memberof ProcessInfo
      */
-    'deploymentId'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProcessInfo
-     */
     'versionTag'?: string;
     /**
      * 
      * @type {string}
      * @memberof ProcessInfo
      */
-    'diagramResourceName'?: string;
+    'deploymentId'?: string;
     /**
      * 
      * @type {string}
      * @memberof ProcessInfo
      */
     'tenantId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProcessInfo
+     */
+    'diagramResourceName'?: string;
 }
 /**
  * 
@@ -6048,6 +6066,54 @@ export const CalibrationApiAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
+         * Review created
+         * @summary Create a calibration review in session
+         * @param {string} sessionUuid 
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {Review} review 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createReviewInSession: async (sessionUuid: string, colleagueUuid: string, cycleUuid: string, review: Review, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sessionUuid' is not null or undefined
+            assertParamExists('createReviewInSession', 'sessionUuid', sessionUuid)
+            // verify required parameter 'colleagueUuid' is not null or undefined
+            assertParamExists('createReviewInSession', 'colleagueUuid', colleagueUuid)
+            // verify required parameter 'cycleUuid' is not null or undefined
+            assertParamExists('createReviewInSession', 'cycleUuid', cycleUuid)
+            // verify required parameter 'review' is not null or undefined
+            assertParamExists('createReviewInSession', 'review', review)
+            const localVarPath = `/calibration/sessions/{sessionUuid}/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/reviews`
+                .replace(`{${"sessionUuid"}}`, encodeURIComponent(String(sessionUuid)))
+                .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)))
+                .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(review, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @summary Creates Calibration Session
          * @param {CalibrationSession} calibrationSession 
@@ -6784,6 +6850,20 @@ export const CalibrationApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * Review created
+         * @summary Create a calibration review in session
+         * @param {string} sessionUuid 
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {Review} review 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createReviewInSession(sessionUuid: string, colleagueUuid: string, cycleUuid: string, review: Review, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseReview>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createReviewInSession(sessionUuid, colleagueUuid, cycleUuid, review, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * 
          * @summary Creates Calibration Session
          * @param {CalibrationSession} calibrationSession 
@@ -7035,6 +7115,19 @@ export const CalibrationApiFactory = function (configuration?: Configuration, ba
             return localVarFp.createReview1(colleagueUuid, cycleUuid, review, options).then((request) => request(axios, basePath));
         },
         /**
+         * Review created
+         * @summary Create a calibration review in session
+         * @param {string} sessionUuid 
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {Review} review 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createReviewInSession(sessionUuid: string, colleagueUuid: string, cycleUuid: string, review: Review, options?: any): AxiosPromise<RestResponseReview> {
+            return localVarFp.createReviewInSession(sessionUuid, colleagueUuid, cycleUuid, review, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @summary Creates Calibration Session
          * @param {CalibrationSession} calibrationSession 
@@ -7280,6 +7373,41 @@ export interface CalibrationApiCreateReview1Request {
      * 
      * @type {Review}
      * @memberof CalibrationApiCreateReview1
+     */
+    readonly review: Review
+}
+
+/**
+ * Request parameters for createReviewInSession operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiCreateReviewInSessionRequest
+ */
+export interface CalibrationApiCreateReviewInSessionRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiCreateReviewInSession
+     */
+    readonly sessionUuid: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiCreateReviewInSession
+     */
+    readonly colleagueUuid: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiCreateReviewInSession
+     */
+    readonly cycleUuid: string
+
+    /**
+     * 
+     * @type {Review}
+     * @memberof CalibrationApiCreateReviewInSession
      */
     readonly review: Review
 }
@@ -7654,6 +7782,18 @@ export class CalibrationApi extends BaseAPI {
      */
     public createReview1(requestParameters: CalibrationApiCreateReview1Request, options?: AxiosRequestConfig) {
         return CalibrationApiFp(this.configuration).createReview1(requestParameters.colleagueUuid, requestParameters.cycleUuid, requestParameters.review, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Review created
+     * @summary Create a calibration review in session
+     * @param {CalibrationApiCreateReviewInSessionRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public createReviewInSession(requestParameters: CalibrationApiCreateReviewInSessionRequest, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).createReviewInSession(requestParameters.sessionUuid, requestParameters.colleagueUuid, requestParameters.cycleUuid, requestParameters.review, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
