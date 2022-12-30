@@ -3,13 +3,13 @@ import { CreateRule, Styles, useStyle } from '@pma/dex-wrapper';
 import { Avatar } from 'components/Avatar';
 
 export type Props = {
-  user: { fullName: string; job: string; department: string };
+  profile: { fullName: string; job: string; department: string };
 };
 
-const User: FC<Props> = ({ user = {} }) => {
+const Colleague: FC<Props> = ({ profile = {} }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
-  const { fullName, job, department } = user || {};
+  const { fullName, job, department } = profile || {};
   return (
     <div className={css(headStyle)}>
       <Avatar size={65} />
@@ -23,7 +23,7 @@ const User: FC<Props> = ({ user = {} }) => {
   );
 };
 
-export default User;
+export default Colleague;
 
 const headStyle: Styles = {
   display: 'flex',

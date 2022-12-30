@@ -11,7 +11,7 @@ import { buildPath } from 'features/general/Routes';
 import { Trans, useTranslation } from 'components/Translation';
 import SuccessModal from 'components/SuccessModal';
 import RatingForm from './components/RatingForm';
-import User from 'components/User';
+import Colleague from 'components/Colleague';
 import { SuccessMark } from 'components/Icon';
 import { Mode, Status } from 'config/types';
 import { buildData, STANDARD_CALIBRATION_FORM_CODE } from './utils';
@@ -152,7 +152,7 @@ const CreateCalibrationRatings: FC = () => {
             </p>
           </>
         )}
-        <User user={profile as Profile} />
+        <Colleague profile={profile as Profile} />
         <RatingForm
           onSubmit={isNew ? handleSave : handleUpdate}
           onCancel={handleBack}

@@ -74,7 +74,7 @@ const ViewColleagueProfile: FC<Props> = ({
               colleague?.lastName || ''
             }`}</h3>
             <p className={css(industryStyle)}>{`${colleague?.jobName || ''}${(colleague?.jobName || '') && ','} ${
-              colleague?.businessType || ''
+              colleague?.departmentName || ''
             }`}</p>
           </div>
         </div>
@@ -172,7 +172,7 @@ const blockInfo: CreateRule<{ isCollapsed }> = ({ isCollapsed }) =>
     display: 'inline-flex',
     alignItems: 'center',
     //@ts-ignore
-    ...(isCollapsed && { width: 'min(100%, 220px)' }),
+    ...(isCollapsed && { width: 'min(100%, 300px)' }),
   } as Styles);
 
 const imgStyle: Rule = {
