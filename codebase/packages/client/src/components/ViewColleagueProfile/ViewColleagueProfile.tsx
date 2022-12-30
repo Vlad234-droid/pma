@@ -172,7 +172,7 @@ const blockInfo: CreateRule<{ isCollapsed }> = ({ isCollapsed }) =>
     display: 'inline-flex',
     alignItems: 'center',
     //@ts-ignore
-    ...(isCollapsed && { width: 'min(100%, 220px)' }),
+    ...(isCollapsed && { width: 'min(100%, 300px)' }),
   } as Styles);
 
 const imgStyle: Rule = {
