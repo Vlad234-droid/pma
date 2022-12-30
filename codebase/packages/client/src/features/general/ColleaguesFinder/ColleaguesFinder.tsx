@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useStyle } from '@pma/dex-wrapper';
 import { ColleaguesSimpleFinder } from 'components/ColleaguesSimpleFinder';
 import { buildPath, buildPathWithParams } from '../Routes';
 import { paramsReplacer } from 'utils';
@@ -14,6 +15,7 @@ import {
 } from '@pma/store';
 
 const ColleaguesFinder: FC = () => {
+  const { theme } = useStyle();
   const { uuid } = useParams<{ uuid: string }>();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -82,20 +84,19 @@ const ColleaguesFinder: FC = () => {
       onSelect={setSelectedColleague}
       selected={[]}
       value={''}
-      customStyles={{ marginTop: '0px', width: '100%' }}
       inputStyles={{
         ...(focused ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),
         ...(focused ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),
-        ...(focused ? { width: '500px' } : { width: '38px' }),
+        ...(focused ? { width: '500px' } : { width: '40px' }),
         //@ts-ignore
         ...(!focused && { borderRadius: '50%', padding: '0px' }),
-        height: '38px',
+        height: '40px',
         border: '2px solid rgb(0, 83, 159)',
         cursor: 'pointer',
+        background: theme.colors.backgroundDark,
       }}
       placeholder={focused ? 'search' : ''}
       customIcon={true}
-      iconCustomStyles={{ right: '10px' }}
       colleagues={colleagues}
       handleSearchColleagues={handleSearchColleagues}
       clearColleagueList={clearColleagueList}

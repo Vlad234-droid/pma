@@ -1,7 +1,8 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import { useStyle, Rule } from '@pma/dex-wrapper';
 
 import InfoIcon from 'components/InfoIcon';
+import useClickOutside from 'hooks/useClickOutside';
 
 import Filtering from './components/Filtering';
 import Search from './components/Search';
@@ -30,6 +31,7 @@ const Filters: FC<Props> = ({
   infoIcon = true,
 }) => {
   const { css } = useStyle();
+  const searchEl = useRef(null);
   const [sortOpen, setSortOpen] = useState<boolean>(false);
   const [searchOpened, setSearchOpen] = useState<boolean>(false);
   const [filterOpened, setFilterOpen] = useState<boolean>(false);
@@ -41,6 +43,10 @@ const Filters: FC<Props> = ({
   const handleSearchOpen = () => {
     setSortOpen(false);
     setSearchOpen(true);
+  };
+
+  const handleSearchClose = () => {
+    setSearchOpen(false);
   };
 
   const handleSortOpen = () => {
@@ -65,6 +71,8 @@ const Filters: FC<Props> = ({
   const handleFilter = (filters: any) => {
     onFilter && onFilter(filters);
   };
+
+  useClickOutside(searchEl, handleSearchClose);
 
   return (
     <div className={css(wrapperStyles)} data-test-id='filters'>
@@ -92,7 +100,9 @@ const Filters: FC<Props> = ({
           onFilter={handleFilter}
         />
       )}
-      <Search focus={searchOpened} onFocus={handleSearchOpen} onSearch={handleSearch} value={searchValue} />
+      <div ref={searchEl}>
+        <Search focus={searchOpened} onFocus={handleSearchOpen} onSearch={handleSearch} value={searchValue} />
+      </div>
     </div>
   );
 };

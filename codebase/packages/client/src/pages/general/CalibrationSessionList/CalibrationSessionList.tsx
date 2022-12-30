@@ -7,19 +7,12 @@ import { default as CalibrationSessionList } from 'features/general/CalibrationS
 import { CreateCalibrationSession } from 'features/general/CalibrationSessionList/widgets';
 import { FilterStatus } from 'features/general/CalibrationSessionList/utils/types';
 import { Option, RadioGroup } from 'components/Form';
-import { Filters, getEmployeesSortingOptions, useSearch, useSorting } from 'features/general/Filters';
-import { useTranslation } from 'components/Translation';
 
 const CalibrationSessionPage: FC = () => {
   const { css, matchMedia } = useStyle();
-  const { t } = useTranslation();
   const { state } = useLocation();
   const [filterStatus, setFilterStatus] = useState<FilterStatus>((state as any)?.filterStatus || FilterStatus.ACTIVE);
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
-
-  const options = getEmployeesSortingOptions(t);
-  const [sortValue, setSortValue] = useSorting();
-  const [searchValue, setSearchValue] = useSearch();
 
   const fieldOptions: Option[] = [
     { value: FilterStatus.ACTIVE, label: 'Active' },
@@ -39,21 +32,12 @@ const CalibrationSessionPage: FC = () => {
             customStyles={selectStyle}
           />
         </div>
-        <div className={css(filtersStyle)}>
-          <Filters
-            infoIcon={false}
-            sortValue={sortValue}
-            onSort={setSortValue}
-            searchValue={searchValue}
-            onSearch={setSearchValue}
-            sortingOptions={options}
-          />
-        </div>
+        <div className={css(filtersStyle)}></div>
       </div>
       <div className={css(bodyStyle)}>
         <div className={css(leftColumnStyle)}>
           <div className={css(titleStyle)}>Calibration Sessions</div>
-          <CalibrationSessionList filterStatus={filterStatus} searchValue={searchValue} sortValue={sortValue} />
+          <CalibrationSessionList filterStatus={filterStatus} />
         </div>
         <div className={css(rightColumnStyle)}>
           <CreateCalibrationSession />

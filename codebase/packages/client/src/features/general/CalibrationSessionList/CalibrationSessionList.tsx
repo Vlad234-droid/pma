@@ -27,11 +27,8 @@ import { DateBadge } from './components/DateBadge';
 import { buildPath } from '../Routes';
 
 import { dataFromSessionResponse } from './utils';
-import { SortBy } from '../Filters';
 
-const CalibrationSessionList: FC<{ filterStatus: FilterStatus; searchValue: string; sortValue: SortBy }> = ({
-  filterStatus,
-}) => {
+const CalibrationSessionList: FC<{ filterStatus: FilterStatus }> = ({ filterStatus }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
   const { t } = useTranslation();

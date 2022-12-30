@@ -78,7 +78,7 @@ const ColleaguesSimpleFinder: FC<Props> = ({
         withIcon={withIcon}
         marginBot={false}
         iconCustomStyles={iconCustomStyles}
-        customIcon={customIcon && <Icon size={'16px'} graphic='search' iconStyles={iconStyles} />}
+        customIcon={customIcon && <Icon size={'16px'} graphic='search' />}
       >
         <SearchInput
           domRef={domRef}
@@ -110,10 +110,6 @@ const ColleaguesSimpleFinder: FC<Props> = ({
       </Item>
     </div>
   );
-};
-
-const iconStyles: Rule = {
-  marginTop: '4px',
 };
 
 export default ColleaguesSimpleFinder;
