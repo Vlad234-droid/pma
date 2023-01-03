@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { calibrationReviewsMetaSelector } from '@pma/store';
+import { calibrationReviewsMetaSelector, colleagueUUIDSelector } from '@pma/store';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { ColleagueSimple, ReviewStatusEnum, TotalCount } from '@pma/openapi';
 import { useLocation } from 'react-router-dom';
@@ -31,6 +31,8 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
   const isPerform = usePermission([role.TALENT_ADMIN]);
   const navigate = useNavigate();
   const { loading } = useSelector(calibrationReviewsMetaSelector);
+  const userUuid = useSelector(colleagueUUIDSelector);
+
   const { pathname } = useLocation();
 
   const handleView = (userUuid: string, uuid: string, rating: string) => {
@@ -118,9 +120,12 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
                             <div key={title} className={css({ marginBottom: '24px', width: '100%' })}>
                               {!!sortedColleague?.length &&
                                 sortedColleague.map((item, i) => {
+                                  const lineManagerUuid = item?.colleague?.lineManager?.uuid;
+
                                   const isDisabled =
-                                    isPerform &&
                                     title === Ratings.Unsubmitted.toLowerCase() &&
+                                    isPerform &&
+                                    lineManagerUuid !== userUuid &&
                                     (item?.review?.status === ReviewStatusEnum.Draft || true);
 
                                   const discussWithPP = JSON.parse(
