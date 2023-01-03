@@ -34,7 +34,7 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
   const { pathname } = useLocation();
 
   const handleView = (userUuid: string, uuid: string, rating: string) => {
-    if (sessionUuid && !uuid && rating === Ratings.Unsubmitted.toLowerCase()) {
+    if (sessionUuid && rating === Ratings.Unsubmitted.toLowerCase()) {
       navigate(
         buildPath(
           paramsReplacer(Page.CREATE_CALIBRATION_SESSION_RATING, {

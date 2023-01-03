@@ -13,7 +13,7 @@ import RatingForm from './components/RatingForm';
 import { SuccessMark } from 'components/Icon';
 import Colleague from 'components/Colleague';
 
-import { useCalibrationReview, useColleague } from './hooks';
+import { useCalibrationReview, useCalibrationSession, useColleague } from './hooks';
 import useDispatch from 'hooks/useDispatch';
 
 import { buildData, STANDARD_CALIBRATION_FORM_CODE } from './utils';
@@ -39,8 +39,9 @@ const CreateCalibrationSessionRating = () => {
 
   const { components } = useSelector(getFormByCode(STANDARD_CALIBRATION_FORM_CODE)) || {};
 
-  const { loading, updated } = useCalibrationReview();
+  const { loading, updated, calibrationReview } = useCalibrationReview();
   const { loading: colleagueLoading } = useColleague();
+  const { csLoading, isStarted } = useCalibrationSession();
 
   const handleBack = () =>
     navigate(backPath || paramsReplacer(buildPath(Page.CALIBRATION_SESSION), { ':uuid': sessionUuid as string }), {
@@ -51,11 +52,11 @@ const CreateCalibrationSessionRating = () => {
     const data = {
       ...values,
     };
-    data.status = Status.APPROVED;
+    data.status = isStarted ? Status.APPROVED : Status.WAITING_FOR_APPROVAL;
     dispatch(CalibrationReviewAction.saveCalibrationSessionReview({ ...buildData(data, colleagueUuid), sessionUuid }));
   };
 
-  if (!components || loading || colleagueLoading) return null;
+  if (!components || loading || colleagueLoading || csLoading) return null;
 
   if (!loading && updated) {
     return (
@@ -89,7 +90,7 @@ const CreateCalibrationSessionRating = () => {
           onSubmit={handleSave}
           onCancel={handleBack}
           components={components}
-          defaultValues={{}}
+          defaultValues={calibrationReview?.properties || {}}
           mode={Mode.UPDATE}
           readOnly={false}
         />
