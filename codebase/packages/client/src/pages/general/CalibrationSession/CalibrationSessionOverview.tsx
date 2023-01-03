@@ -17,7 +17,7 @@ import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 import { Page } from 'pages/general/types';
 import useDownloadExelFile from 'hooks/useDownloadExelFile';
-import { getCurrentYear } from 'utils';
+import { getFinancialYear } from 'utils';
 
 const REPORT_URL = 'reports/calibration-overview';
 
@@ -26,7 +26,7 @@ const CalibrationSessionPage: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const isPerform = usePermission([role.TALENT_ADMIN]);
-  const [period, setPeriod] = useState<string>(getCurrentYear().toString());
+  const [period, setPeriod] = useState<string>(getFinancialYear());
   const [filters, setFilters] = useState<Record<string, Record<string, boolean>>>({});
   const [searchValue, setSearchValue] = useState<string>('');
 
@@ -39,7 +39,7 @@ const CalibrationSessionPage: FC = () => {
       description: t('try_to_select_another_year', 'Try to select another year.'),
     },
   });
-  //TODO: temp solution
+
   const { loading, statistics } = useCalibrationStatistics({
     period,
     filters,

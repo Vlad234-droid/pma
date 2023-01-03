@@ -94,6 +94,12 @@ export const getToday = () => {
   return now;
 };
 
+export const getFinancialYear = (): string =>
+  (DateTime.local().get('month') >= 4
+    ? DateTime.local().year
+    : DateTime.local().minus({ year: 1 }).toFormat('yyyy')
+  ).toString();
+
 export const isDateFromISOBeforeNow = (date: string) => DateTime.now() <= DateTime.fromISO(date);
 
 export const isDateFromISOAfterNow = (date: string) => DateTime.now() >= DateTime.fromISO(date);
