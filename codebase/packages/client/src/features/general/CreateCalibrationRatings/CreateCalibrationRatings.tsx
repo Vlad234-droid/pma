@@ -137,20 +137,12 @@ const CreateCalibrationRatings: FC = () => {
     >
       <div className={css(ratingWrapper)}>
         {isDraft && (
-          <>
-            <div className={css({ display: 'flex', alignItems: 'center' })}>
-              <Icon graphic='information' />
-              <span className={css(helpTitleStyle)}>
-                <Trans i18nKey={'guidance_how_to_use_page'}>Guidance on how to use this page</Trans>
-              </span>
-            </div>
-            <p>
-              <Trans i18nKey={'ratings_to_change_in_calibration_until_they_confirmed'}>
-                Ratings are subject to change in calibration and should not be communicated to colleagues until they are
-                confirmed.
-              </Trans>
-            </p>
-          </>
+          <p>
+            <Trans i18nKey={'ratings_to_change_in_calibration_until_they_confirmed'}>
+              Ratings are subject to change in calibration and should not be communicated to colleagues until they are
+              confirmed.
+            </Trans>
+          </p>
         )}
         <Colleague profile={profile as Profile} />
         <RatingForm
@@ -171,12 +163,5 @@ const ratingWrapper: Rule = {
   height: '100%',
   overflow: 'auto',
 };
-
-const helpTitleStyle: Rule = ({ theme }) => ({
-  ...theme.font.fixed.f14,
-  letterSpacing: '0px',
-  color: theme.colors.tescoBlue,
-  padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
-});
 
 export default CreateCalibrationRatings;
