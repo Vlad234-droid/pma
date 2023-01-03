@@ -15,6 +15,8 @@ export const useSearch = (setSelectedFolder, setSearchParams): void => {
 
       const obj = filterNotesHandler(notesSelect, searchValue);
       setSelectedFolder(obj);
+    } else {
+      setSelectedFolder((prev) => ({ ...prev, isInSearch: false }));
     }
   }, [searchValue]);
 };
