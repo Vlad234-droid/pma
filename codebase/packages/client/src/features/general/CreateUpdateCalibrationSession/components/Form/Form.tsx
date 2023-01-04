@@ -251,7 +251,6 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
                 }}
                 onUpdate={(data) => {
                   setSavedFilter(data);
-                  // updateFilter(data);
                 }}
                 onApply={(data) => {
                   updateFilter(data);

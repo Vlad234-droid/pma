@@ -104,7 +104,7 @@ const Filter: FC<Props> = ({ withDateFilter, onChangePeriod, period, onChangeFil
                 }}
                 filters={colleagueFilter as { [key: string]: Array<{ [key: string]: string }> }}
                 onSubmit={handleChangeFilterValues}
-                onUpdate={updateFilter}
+                onApply={updateFilter}
               />
             )}
           </UnderlayModal>
