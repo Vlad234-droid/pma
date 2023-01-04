@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { ColleagueFilterAction, getColleagueFilterSelector } from '@pma/store';
 import FilterIcon from 'features/general/Filters/components/FilterIcon';
-import { getCurrentYear, getYearsFromCurrentYear } from 'utils';
+import { getCurrentYear, getYearsFromCurrentYear, filtersOrder } from 'utils';
 import useClickOutside from 'hooks/useClickOutside';
 import { Option, Select } from 'components/Form';
 import Search from 'features/general/Filters/components/Search';
@@ -19,17 +19,6 @@ type WithDateProps = {
   onChangeFilters: (value: Record<string, Record<string, boolean>>) => void;
   onSearch: (search: string) => void;
 };
-
-const filtersOrder = [
-  'countries',
-  'legal-entities',
-  'functions',
-  'business-groups',
-  'functions',
-  'departments',
-  'line-managers',
-  'work-levels',
-];
 
 type Props = WithDateProps;
 

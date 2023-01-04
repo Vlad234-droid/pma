@@ -25,6 +25,7 @@ import { CalibrationSessionUiType, ColleagueSimpleExtended, ActionType } from '.
 import { createSchema } from '../../config';
 import { filterToRequest, prepareColleaguesForUI, getSelectedGroups } from '../../utils';
 import useColleagueSimple from '../../hooks/useColleagueSimple';
+import { filtersOrder } from 'utils';
 
 type Props = {
   defaultValues: CalibrationSessionUiType;
@@ -32,16 +33,6 @@ type Props = {
   onSubmit: (data: CalibrationSessionUiType) => void;
   onSaveAndExit: (data: CalibrationSessionUiType) => void;
 };
-
-const filtersOrder = [
-  'countries',
-  'legal-entities',
-  'functions',
-  'business-groups',
-  'departments',
-  'line-managers',
-  'work-levels',
-];
 
 const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) => {
   const { css, matchMedia } = useStyle();

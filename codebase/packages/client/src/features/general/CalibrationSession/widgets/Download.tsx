@@ -5,7 +5,7 @@ import { getCalibrationSessionsSelector } from '@pma/store';
 import useDownloadExelFile from 'hooks/useDownloadExelFile';
 import { Widget } from 'features/general/CalibrationSession/widgets';
 import { useTranslation } from 'components/Translation';
-import { getYearFromISO } from 'utils';
+import { getFinancialYear } from 'utils';
 
 const REPORT_URL = 'reports/calibration-session';
 
@@ -19,7 +19,7 @@ const Download: FC<{ uuid: string }> = ({ uuid }) => {
   const downloadReport = useDownloadExelFile({
     resource: {
       url: REPORT_URL,
-      params: { year: getYearFromISO(startTime as string), 'calibration-session-uuid': uuid },
+      params: { year: getFinancialYear().toString(), 'calibration-session-uuid': uuid },
     },
     fileName: 'Report',
     ext: 'xlsx',
