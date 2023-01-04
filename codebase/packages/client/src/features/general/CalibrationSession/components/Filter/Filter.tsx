@@ -20,6 +20,17 @@ type WithDateProps = {
   onSearch: (search: string) => void;
 };
 
+const filtersOrder = [
+  'countries',
+  'legal-entities',
+  'functions',
+  'business-groups',
+  'functions',
+  'departments',
+  'line-managers',
+  'work-levels',
+];
+
 type Props = WithDateProps;
 
 const Filter: FC<Props> = ({ withDateFilter, onChangePeriod, period, onChangeFilters, onSearch }) => {
@@ -102,7 +113,13 @@ const Filter: FC<Props> = ({ withDateFilter, onChangePeriod, period, onChangeFil
                   updateFilter({});
                   handleChangeFilterValues({});
                 }}
-                filters={colleagueFilter as { [key: string]: Array<{ [key: string]: string }> }}
+                filters={
+                  Object.fromEntries(
+                    Object.entries(colleagueFilter).sort(
+                      ([a], [b]) => filtersOrder.indexOf(a) - filtersOrder.indexOf(b),
+                    ),
+                  ) as { [key: string]: Array<{ [key: string]: string }> }
+                }
                 onSubmit={handleChangeFilterValues}
                 onApply={updateFilter}
               />

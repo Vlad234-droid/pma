@@ -33,6 +33,16 @@ type Props = {
   onSaveAndExit: (data: CalibrationSessionUiType) => void;
 };
 
+const filtersOrder = [
+  'countries',
+  'legal-entities',
+  'functions',
+  'business-groups',
+  'departments',
+  'line-managers',
+  'work-levels',
+];
+
 const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) => {
   const { css, matchMedia } = useStyle();
   const { t } = useTranslation();
@@ -240,7 +250,13 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
                   handleRemoveCancellation();
                   onClose();
                 }}
-                filters={colleagueFilter as { [key: string]: Array<{ [key: string]: string }> }}
+                filters={
+                  Object.fromEntries(
+                    Object.entries(colleagueFilter).sort(
+                      ([a], [b]) => filtersOrder.indexOf(a) - filtersOrder.indexOf(b),
+                    ),
+                  ) as { [key: string]: Array<{ [key: string]: string }> }
+                }
                 onSubmit={(data) => {
                   onClose();
                   setTimeout(() => {
