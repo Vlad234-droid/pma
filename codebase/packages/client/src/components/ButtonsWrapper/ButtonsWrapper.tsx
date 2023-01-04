@@ -10,6 +10,7 @@ type ButtonsProps = {
   isValid?: boolean;
   isLeftDisabled?: boolean;
   onLeftPress?: () => void;
+  onMiddlePress?: () => void;
   onRightPress?: () => void;
   rightIcon?: boolean;
   leftText?: string;

@@ -5,7 +5,7 @@ import { ConditionOperandEnum } from '@pma/openapi';
 import * as Yup from 'yup';
 import get from 'lodash.get';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Rule, useStyle } from '@pma/dex-wrapper';
+import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 import { ColleagueFilterAction, getColleagueFilterSelector } from '@pma/store';
 
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
@@ -246,10 +246,14 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
                   setTimeout(() => {
                     setSavedFilter(data);
                     handleFilter(data);
+                    updateFilter(data);
                   }, 300);
                 }}
                 onUpdate={(data) => {
                   setSavedFilter(data);
+                  // updateFilter(data);
+                }}
+                onApply={(data) => {
                   updateFilter(data);
                 }}
                 filterCount={colleaguesAvailableCount}
@@ -294,6 +298,26 @@ const labelTextStyle: Rule = ({ theme }) => ({
   lineHeight: theme.font.fluid.f16.lineHeight,
   fontWeight: theme.font.weight.bold,
   letterSpacing: '0px',
+});
+
+const buttonCancelStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f16,
+  fontWeight: theme.font.weight.bold,
+  width: '33%',
+  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+  background: theme.colors.white,
+  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
+  color: `${theme.colors.tescoBlue}`,
+});
+
+const buttonApplyStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f16,
+  fontWeight: theme.font.weight.bold,
+  width: '33%',
+  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+  background: `${theme.colors.tescoBlue}`,
+  color: `${theme.colors.white}`,
+  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
 });
 
 export default Form;
