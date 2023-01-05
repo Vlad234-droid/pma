@@ -23,7 +23,7 @@ const ConditionalOutsideClick: FC<{ forwardedRef: RefObject<any>; onClose: () =>
   onClose,
   forwardedRef,
 }) => {
-  useClickOutside(forwardedRef, onClose);
+  useClickOutside(forwardedRef, onClose, 'mousedown');
   return null;
 };
 
@@ -61,7 +61,7 @@ const UnderlayModal: FC<Props> = ({
 
   return (
     <>
-      {overlayClick && <ConditionalOutsideClick onClose={onClose} forwardedRef={ref} />}
+      {overlayClick && <ConditionalOutsideClick onClose={handleClose} forwardedRef={ref} />}
       <div className={css(slideInModalRule)}>
         <div
           data-test-id={UNDERLAY_WRAPPER}
