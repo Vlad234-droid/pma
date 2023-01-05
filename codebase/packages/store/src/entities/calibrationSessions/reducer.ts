@@ -56,6 +56,7 @@ export default createReducer(initialState)
   .handleAction(getCalibrationSessions.request, (state) => {
     return {
       ...state,
+      createdUuid: null,
       meta: { ...state.meta, loading: true, error: null, loaded: false },
     };
   })
@@ -63,6 +64,7 @@ export default createReducer(initialState)
     return {
       ...state,
       ...payload,
+      createdUuid: null,
       meta: { ...state.meta, loading: false, loaded: true },
     };
   })
@@ -70,6 +72,7 @@ export default createReducer(initialState)
     return {
       ...state,
       ...payload,
+      createdUuid: null,
       meta: { ...state.meta, loading: false, loaded: true, error: payload },
     };
   })
@@ -77,6 +80,7 @@ export default createReducer(initialState)
   .handleAction(createCalibrationSession.request, (state) => {
     return {
       ...state,
+      createdUuid: null,
       meta: { ...state.meta, updating: true, error: null, updated: false },
     };
   })
@@ -91,6 +95,7 @@ export default createReducer(initialState)
     return {
       ...state,
       ...payload,
+      createdUuid: null,
       meta: { ...state.meta, updating: false, updated: true, error: payload },
     };
   })
@@ -98,18 +103,21 @@ export default createReducer(initialState)
   .handleAction(updateCalibrationSession.request, (state) => {
     return {
       ...state,
+      createdUuid: null,
       meta: { ...state.meta, error: null, loaded: false, updating: true, updated: false },
     };
   })
   .handleAction(updateCalibrationSession.success, (state, { payload }) => ({
     ...state,
     data: state.data.map((cs) => (cs.uuid === payload.data.uuid ? payload.data : cs)),
+    createdUuid: payload?.data?.uuid || null,
     meta: { ...state.meta, updating: false, updated: true },
   }))
   .handleAction(updateCalibrationSession.failure, (state, { payload }) => {
     return {
       ...state,
       ...payload,
+      createdUuid: null,
       meta: { ...state.meta, updating: false, updated: true, error: payload },
     };
   })
@@ -117,18 +125,21 @@ export default createReducer(initialState)
   .handleAction(startCalibrationSession.request, (state) => {
     return {
       ...state,
+      createdUuid: null,
       meta: { ...state.meta, error: null, loaded: false, updating: true, updated: false },
     };
   })
   .handleAction(startCalibrationSession.success, (state, { payload }) => ({
     ...state,
     data: state.data.map((cs) => (cs.uuid === payload.data.uuid ? payload.data : cs)),
+    createdUuid: null,
     meta: { ...state.meta, updating: false, updated: true },
   }))
   .handleAction(startCalibrationSession.failure, (state, { payload }) => {
     return {
       ...state,
       ...payload,
+      createdUuid: null,
       meta: { ...state.meta, updating: false, updated: true, error: payload },
     };
   })
@@ -136,18 +147,21 @@ export default createReducer(initialState)
   .handleAction(closeCalibrationSession.request, (state) => {
     return {
       ...state,
+      createdUuid: null,
       meta: { ...state.meta, error: null, loaded: false, updating: true, updated: false },
     };
   })
   .handleAction(closeCalibrationSession.success, (state, { payload }) => ({
     ...state,
     data: state.data.map((cs) => (cs.uuid === payload.data.uuid ? payload.data : cs)),
+    createdUuid: null,
     meta: { ...state.meta, updating: false, updated: true },
   }))
   .handleAction(closeCalibrationSession.failure, (state, { payload }) => {
     return {
       ...state,
       ...payload,
+      createdUuid: null,
       meta: { ...state.meta, updating: false, updated: true, error: payload },
     };
   })
@@ -155,6 +169,7 @@ export default createReducer(initialState)
   .handleAction(deleteCalibrationSession.request, (state) => {
     return {
       ...state,
+      createdUuid: null,
       meta: { ...state.meta, loading: true, error: null, loaded: false },
     };
   })
@@ -162,6 +177,7 @@ export default createReducer(initialState)
     return {
       ...state,
       data: state.data.filter((cs) => cs.uuid !== payload.data?.uuid),
+      createdUuid: null,
       meta: { ...state.meta, loading: false, loaded: true },
     };
   })
@@ -169,6 +185,7 @@ export default createReducer(initialState)
     return {
       ...state,
       ...payload,
+      createdUuid: null,
       meta: { ...state.meta, loading: false, loaded: true, error: payload },
     };
   })
@@ -176,6 +193,7 @@ export default createReducer(initialState)
   .handleAction(cancelCalibrationSession.request, (state) => {
     return {
       ...state,
+      createdUuid: null,
       meta: { ...state.meta, loading: true, error: null, loaded: false },
     };
   })
@@ -183,6 +201,7 @@ export default createReducer(initialState)
     return {
       ...state,
       data: state.data.filter((cs) => cs.uuid !== payload.data?.uuid),
+      createdUuid: null,
       meta: { ...state.meta, loading: false, loaded: true },
     };
   })
@@ -190,12 +209,14 @@ export default createReducer(initialState)
     return {
       ...state,
       ...payload,
+      createdUuid: null,
       meta: { ...state.meta, loading: false, loaded: true, error: payload },
     };
   })
 
   .handleAction(updateCalibrationSessionMeta, (state, { payload }) => ({
     ...state,
+    createdUuid: null,
     meta: { ...state.meta, ...payload },
   }))
 
