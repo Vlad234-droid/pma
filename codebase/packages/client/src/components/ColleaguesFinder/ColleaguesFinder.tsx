@@ -61,7 +61,7 @@ const ColleaguesFinder: FC<Props> = ({
 
   const handleSearch = useCallback(
     debounce((e) => handleSearchColleagues(e.target.value, searchOption), 300),
-    [],
+    [searchOption],
   );
 
   return (
