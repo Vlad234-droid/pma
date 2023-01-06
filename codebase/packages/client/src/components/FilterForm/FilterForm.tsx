@@ -89,7 +89,7 @@ const FilterForm: FC<Props> = ({
                       properties.map((item) => ({
                         ...item,
                         //@ts-ignore
-                        hidden: !item.name.toLowerCase().includes(searchValue.toLowerCase()),
+                        hidden: !getName(item).toLowerCase().includes(searchValue.toLowerCase()),
                       }));
                     return (
                       <>

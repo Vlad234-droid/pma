@@ -70,7 +70,7 @@ const ColleaguesRemover: FC<{
               graphic={isPeopleListOpen ? 'arrowUp' : 'arrowDown'}
             />
           </div>
-          {isPeopleListOpen && colleaguesAvailable.length > 0 && (
+          {isPeopleListOpen && (!!colleaguesAvailable.length || !!colleaguesInOtherSession.length) && (
             <div className={css(optionsWrapperStyles)}>
               {colleaguesAvailable?.map((item, idx) => (
                 <div
