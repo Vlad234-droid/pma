@@ -158,7 +158,7 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
         <Field
           name={'startTime'}
           Wrapper={FormItem}
-          label={`**${t('day_and_time', 'Day and Time')}**`}
+          label={`**${t('day', 'Day')}**`}
           Element={Datepicker}
           placeholder={'DD/MM/YY'}
           value={formValues.startTime}

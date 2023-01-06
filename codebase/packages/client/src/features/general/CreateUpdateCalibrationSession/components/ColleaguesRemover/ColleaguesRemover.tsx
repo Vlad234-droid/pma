@@ -33,6 +33,10 @@ const ColleaguesRemover: FC<{
     const isVisible = (!uuid && !sessionUuid) || (!!sessionUuid && !!uuid && sessionUuid == uuid) || !sessionUuid;
     return colleague?.uuid && !colleaguesRemovedUUID.includes(colleague.uuid) && isVisible;
   });
+  const colleaguesInOtherSession = colleagues?.filter(({ colleague, sessionUuid }) => {
+    const invisible = !!sessionUuid && sessionUuid !== uuid;
+    return colleague?.uuid && !colleaguesRemovedUUID.includes(colleague.uuid) && invisible;
+  });
 
   const handleRemove = (colleague: any) => {
     const { uuid, firstName, lastName } = colleague.colleague;
@@ -89,6 +93,21 @@ const ColleaguesRemover: FC<{
                   />
                 </div>
               ))}
+              {!!colleaguesInOtherSession.length && (
+                <>
+                  <div className={css(optionDataLinerStyle)}>These colleagues are included into another sessions:</div>
+                  {colleaguesInOtherSession?.map((item, idx) => (
+                    <div data-test-id={`option-${idx}`} key={idx} className={css(optionStyle, optionDisabledStyle)}>
+                      <ColleagueProfile
+                        firstName={item?.colleague?.firstName}
+                        lastName={item?.colleague?.lastName}
+                        job={item?.colleague?.jobName}
+                        department={''}
+                      />
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
           )}
         </div>
@@ -193,5 +212,22 @@ const errorMessageStyle: Rule = ({ theme }) => ({
   top: '100%',
   color: theme.colors.error,
 });
+
+const optionDataLinerStyle: Rule = ({ theme }) => ({
+  display: 'block',
+  width: '100%',
+  fontSize: theme.font.fixed.f14.fontSize,
+  lineHeight: theme.font.fixed.f14.lineHeight,
+  letterSpacing: '0px',
+  padding: '10px 30px 10px 16px',
+  background: theme.colors.backgroundDark,
+  // @ts-ignore
+  borderTop: `1px solid ${theme.colors.lightGray}`,
+  // @ts-ignore
+  borderBottom: `1px solid ${theme.colors.lightGray}`,
+});
+const optionDisabledStyle: Rule = {
+  opacity: 0.6,
+};
 
 export default ColleaguesRemover;
