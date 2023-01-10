@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { IconButton, Rule, Styles, useStyle, CreateRule } from '@pma/dex-wrapper';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -54,15 +54,6 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
       },
     });
   };
-
-  useEffect(() => {
-    navigate(pathname, {
-      state: {
-        isMenuOpen: false,
-        isAlertOpen: false,
-      },
-    });
-  }, []);
 
   return (
     <div className={css(wrapperStyles, styles)} data-test-id={TEST_ID}>

@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
-import { Icon, Rule, useStyle } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import { CalibrationReviewAction, getColleagueSelector, getFormByCode } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 
@@ -37,7 +37,7 @@ const CreateCalibrationRatings: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { backPath, activeList } = (state as any) || {};
+  const { backPath, activeList, prevBackPath } = (state as any) || {};
 
   const { profile } = useSelector(getColleagueSelector) || {};
 
@@ -82,10 +82,11 @@ const CreateCalibrationRatings: FC = () => {
     dispatch(CalibrationReviewAction.updateCalibrationReview(buildData(data, colleagueUuid)));
   };
 
-  const handleBack = () =>
-    navigate(backPath || paramsReplacer(buildPath(Page.USER_REVIEWS), { ':uuid': colleagueUuid as string }), {
-      state: { activeList },
+  const handleBack = () => {
+    navigate(backPath || buildPath(paramsReplacer(Page.USER_REVIEWS, { ':uuid': colleagueUuid as string })), {
+      state: { activeList, backPath: prevBackPath },
     });
+  };
 
   if (!components || loading || colleagueLoading) return null;
 
@@ -120,7 +121,7 @@ const CreateCalibrationRatings: FC = () => {
         ),
         search: sessionMode ? new URLSearchParams({ sessionMode }).toString() : '',
       },
-      { replace: true, state: { backPath, activeList } },
+      { replace: true, state: { backPath, prevBackPath, activeList } },
     );
   }
 

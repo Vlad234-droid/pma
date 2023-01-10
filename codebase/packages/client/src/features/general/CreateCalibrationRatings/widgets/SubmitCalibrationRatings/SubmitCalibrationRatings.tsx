@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
   CalibrationReviewAction,
@@ -21,10 +21,13 @@ type Props = {
   userUuid: string;
 };
 
-const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
+const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { pathname, state } = useLocation();
+  const { backPath } = (state as any) || {};
+
   const calibrationReview = useSelector(calibrationReviewDataSelector(userUuid)) || {};
   const { endTime, startTime, status: TLPStatus } = useSelector(getCalibrationPointSelector(userUuid, 'CURRENT'));
   const isAnniversaryColleague = useSelector(isAnniversaryTimelineType(userUuid, 'CURRENT'));
@@ -70,10 +73,12 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
       customStyle={{ cursor: 'pointer' }}
       background={isViewing ? 'white' : 'tescoBlue'}
       onClick={() =>
-        navigate(buildPath(paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':userUuid': userUuid, ':uuid': uuid })))
+        navigate(buildPath(paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':userUuid': userUuid, ':uuid': uuid })), {
+          state: { backPath: pathname, prevBackPath: backPath },
+        })
       }
     />
   );
-};
+});
 
 export default SubmitCalibrationRatings;
