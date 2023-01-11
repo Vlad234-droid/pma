@@ -37,10 +37,10 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
   const { pathname, state } = useLocation();
   const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
-  const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid, currentCycle));
+  const tlPoint = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid, currentCycle));
   const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, currentCycle));
 
-  const { summaryStatus, startTime, endTime, lastUpdatedTime } = review || {};
+  const { summaryStatus, startTime, endTime, lastUpdatedTime, statistics } = tlPoint || {};
 
   const [graphic, iconColor, background, shadow, hasDescription, content, buttonText] = useMemo(
     () =>
@@ -56,7 +56,7 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
     [summaryStatus, startTime, lastUpdatedTime],
   );
 
-  if (!review || (!isUserView && review.status === Status.DRAFT)) {
+  if (!tlPoint || (!isUserView && statistics?.DRAFT)) {
     return null;
   }
 
