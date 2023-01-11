@@ -44,8 +44,10 @@ const AccessCalibration: FC = () => {
       onClick={() => navigate(buildPath(Page.CALIBRATION_SESSION_OVERVIEW))}
       data={
         <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' })}>
-          {/*//@ts-ignore*/}
-          {isStartedPoint && <Icon graphic={'attention'} iconStyles={{ marginBottom: '0px !important' }} />}
+          {isStartedPoint && (
+            //@ts-ignore
+            <Icon graphic={'attention'} iconStyles={{ marginBottom: '0px !important' }} backgroundRadius={12} />
+          )}
           {t('view_and_set_up_calibration', 'View and set up Calibration')}
         </div>
       }
