@@ -56,6 +56,10 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
     [summaryStatus, startTime, lastUpdatedTime],
   );
 
+  if (!review || (!isUserView && review.status === Status.DRAFT)) {
+    return null;
+  }
+
   const disabled = isUserView
     ? summaryStatus === Status.NOT_STARTED
     : summaryStatus === Status.NOT_STARTED || summaryStatus === Status.DRAFT;

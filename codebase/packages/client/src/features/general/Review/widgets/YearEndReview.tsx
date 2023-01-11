@@ -28,7 +28,7 @@ const YearEndReview: FC<Props> = ({ colleagueUuid }) => {
 
   const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid));
 
-  if (!review) {
+  if (!review || (!isUserView && review.status === Status.DRAFT)) {
     return null;
   }
 
