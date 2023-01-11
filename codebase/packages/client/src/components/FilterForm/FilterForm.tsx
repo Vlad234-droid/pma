@@ -1,6 +1,7 @@
 import React, { FC, Fragment, useEffect } from 'react';
 import * as Yup from 'yup';
-import { Rule, useStyle, CreateRule, Button } from '@pma/dex-wrapper';
+import { UseFormHandleSubmit } from 'react-hook-form';
+import { Rule, useStyle, CreateRule } from '@pma/dex-wrapper';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import SearchWithField from 'components/SearchWithField';
@@ -8,6 +9,7 @@ import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Checkbox } from 'components/Form';
 import Spinner from 'components/Spinner';
+import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import { getName } from './utils';
 
@@ -16,6 +18,13 @@ import { schema } from './config';
 
 export const FILTER_WRAPPER = 'filter-wrapper';
 
+type ChildrenProps = {
+  onCancel: () => void;
+  onSubmit: () => void;
+  handleSubmit: UseFormHandleSubmit<any>;
+  isValid: boolean;
+};
+
 type Props = {
   onCancel: () => void;
   defaultValues: any;
@@ -23,23 +32,11 @@ type Props = {
   onSubmit: (data: any) => void;
   loading?: boolean;
   onUpdate?: (data: any) => void;
-  onApply?: (data: any) => void;
-  filterCount?: number;
-  customButtons?: JSX.Element;
+  children?: (T: ChildrenProps) => JSX.Element;
 };
 
-const FilterForm: FC<Props> = ({
-  onCancel,
-  defaultValues,
-  onSubmit,
-  loading = false,
-  filters,
-  onUpdate,
-  onApply,
-  filterCount,
-  customButtons,
-}) => {
-  const { css, theme } = useStyle();
+const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = false, filters, onUpdate, children }) => {
+  const { css } = useStyle();
   const { t } = useTranslation();
 
   const methods = useFormWithCloseProtection({
@@ -58,9 +55,9 @@ const FilterForm: FC<Props> = ({
   const values = getValues();
 
   useEffect(() => {
-    const subscription = watch((data) => onUpdate && onUpdate(data));
+    const subscription = onUpdate ? watch((data) => onUpdate(data)) : undefined;
     return () => {
-      subscription.unsubscribe();
+      subscription && subscription.unsubscribe();
     };
   }, [watch]);
 
@@ -155,39 +152,19 @@ const FilterForm: FC<Props> = ({
           ))}
         </div>
       </div>
-      {/*<ButtonsWrapper*/}
-      {/*  leftText='clear_filter'*/}
-      {/*  onLeftPress={onCancel}*/}
-      {/*  onRightPress={handleSubmit(onSubmit)}*/}
-      {/*  customButtons={customButtons}*/}
-      {/*  isValid={isValid}*/}
-      {/*  rightIcon={false}*/}
-      {/*  rightTextNotIcon={filterCount ? `Apply filter (${filterCount})` : 'Apply filter'}*/}
-      {/*  customStyles={customStyles}*/}
-      {/*/>*/}
-      <div className={css(blockStyle, customStyles)}>
-        <div className={css(wrapperButtonStyle)}>
-          <div className={css(buttonsWrapper({ customButtons }))}>
-            <Button isDisabled={false} styles={[theme.font.fixed.f16, buttonCancelStyle]} onPress={onCancel}>
-              Clear filter
-            </Button>
-            <Button
-              //@ts-ignore
-              onPress={handleSubmit(onApply)}
-              styles={[submitButtonStyle({ isValid: true })]}
-            >
-              {filterCount ? `Apply filter (${filterCount})` : 'Apply filter'}
-            </Button>
-            <Button
-              //@ts-ignore
-              onPress={handleSubmit(onSubmit)}
-              styles={[submitButtonStyle({ isValid })]}
-            >
-              Apply & close
-            </Button>
-          </div>
-        </div>
-      </div>
+      {children ? (
+        children({ onCancel, onSubmit: handleSubmit(onSubmit), handleSubmit, isValid })
+      ) : (
+        <ButtonsWrapper
+          leftText='clear_filter'
+          onLeftPress={onCancel}
+          onRightPress={handleSubmit(onSubmit)}
+          isValid={isValid}
+          rightIcon={false}
+          rightTextNotIcon={'Apply filter'}
+          customStyles={customStyles}
+        />
+      )}
     </>
   );
 };
@@ -298,57 +275,5 @@ const flexStyle: Rule = {
   justifyContent: 'space-between',
   alignItems: 'center',
 };
-const iconStyle: Rule = {
-  width: '18px',
-  height: '18px',
-  marginTop: '5px',
-};
-
-const blockStyle: Rule = {
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  width: '100%',
-};
-
-const buttonsWrapper: CreateRule<{ customButtons: JSX.Element | undefined }> = ({ customButtons }) => ({
-  padding: '30px 15px 30px 15px',
-  display: 'flex',
-  justifyContent: customButtons ? 'space-between' : 'center',
-});
-
-const wrapperButtonStyle: Rule = ({ theme }) => ({
-  position: 'relative',
-  bottom: theme.spacing.s0,
-  left: theme.spacing.s0,
-  right: theme.spacing.s0,
-  // @ts-ignore
-  borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
-});
-
-const buttonCancelStyle: Rule = ({ theme }) => ({
-  fontWeight: theme.font.weight.bold,
-  width: '33%',
-  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-  background: theme.colors.white,
-  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
-  color: `${theme.colors.tescoBlue}`,
-});
-
-const submitButtonStyle: CreateRule<{ isValid: any }> =
-  ({ isValid }) =>
-  ({ theme }) => ({
-    height: '40px',
-    ...theme.font.fixed.f16,
-    fontWeight: theme.font.weight.bold,
-    width: '33%',
-    margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-    background: `${theme.colors.tescoBlue}`,
-    color: `${theme.colors.white}`,
-    padding: '0px 20px',
-    borderRadius: `${theme.spacing.s20}`,
-    opacity: isValid ? '1' : '0.4',
-    pointerEvents: isValid ? 'all' : 'none',
-  });
 
 export default FilterForm;
