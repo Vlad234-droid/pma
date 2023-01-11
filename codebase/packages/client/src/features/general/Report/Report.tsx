@@ -17,11 +17,10 @@ import TableWidget from './widgets/TableWidget';
 
 import { Page } from 'pages';
 import useQueryString from 'hooks/useQueryString';
-import { getReportData } from './hooks';
+import { useReportData } from './hooks';
 import { isSingular, paramsReplacer } from 'utils';
 import { convertToLink, IsReportTiles, View } from './config';
 import { ReportPage as ReportPageType, ReportType, TitlesReport } from 'config/enum';
-import { getCurrentYearWithStartDate } from './utils';
 
 export const REPORT_WRAPPER = 'REPORT_WRAPPER';
 
@@ -35,21 +34,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
   const anniversary = useSelector(getReportByType('anniversaryReviews'));
   const anniversaryReport = anniversary?.find(({ type }) => type === ReportType.EYR) || {};
 
-  getReportData(query, year);
-
-  const getYear = useMemo(
-    () => ({
-      year:
-        !year && !query?.year
-          ? getCurrentYearWithStartDate()
-          : query?.year && year
-          ? year
-          : !query.year
-          ? year
-          : query.year,
-    }),
-    [query.year, year],
-  );
+  useReportData(query, year);
 
   const isDisplayTile = useCallback(
     (name) => {
@@ -92,7 +77,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                         }),
                       ),
                       {
-                        ...getYear,
+                        year,
                       },
                     ),
                     filters,
@@ -136,7 +121,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                         }),
                       ),
                       {
-                        ...getYear,
+                        year,
                       },
                     ),
                     filters,
@@ -183,7 +168,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                         }),
                       ),
                       {
-                        ...getYear,
+                        year,
                       },
                     ),
                     filters,
@@ -210,7 +195,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                       }),
                     ),
                     {
-                      ...getYear,
+                      year,
                     },
                   ),
                   filters,
@@ -251,7 +236,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                         }),
                       ),
                       {
-                        ...getYear,
+                        year,
                       },
                     ),
                     filters,
@@ -278,7 +263,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                       }),
                     ),
                     {
-                      ...getYear,
+                      year,
                     },
                   ),
                   filters,
@@ -309,7 +294,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                           }),
                         ),
                         {
-                          ...getYear,
+                          year,
                         },
                       ),
                       filters,
@@ -355,7 +340,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                         }),
                       ),
                       {
-                        ...getYear,
+                        year,
                       },
                     ),
                     filters,
@@ -397,7 +382,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                         }),
                       ),
                       {
-                        ...getYear,
+                        year,
                       },
                     ),
                     filters,
@@ -441,7 +426,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                         }),
                       ),
                       {
-                        ...getYear,
+                        year,
                       },
                     ),
                     filters,

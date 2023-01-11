@@ -52,10 +52,10 @@ const getReviewsTitles = (type): List => {
       titles: { 'not-submitted': [], submitted: [], approved: [] },
     },
     [ReportPage.REPORT_MYR_BREAKDOWN]: {
-      titles: { 'Below expected': [], Great: [], Outstanding: [], Satisfactory: [] },
+      titles: { 'New to business': [], 'Below expected': [], Great: [], Outstanding: [], Satisfactory: [] },
     },
     [ReportPage.REPORT_EYR_BREAKDOWN]: {
-      titles: { 'Below expected': [], Great: [], Outstanding: [], Satisfactory: [] },
+      titles: { 'New to business': [], 'Below expected': [], Great: [], Outstanding: [], Satisfactory: [] },
     },
     [ReportPage.REPORT_WORK_LEVEL]: {
       titles: { approved: [] },
@@ -83,6 +83,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
   const { css } = useStyle();
   const { loading: reportLoading } = useSelector(getReportMetaSelector);
   const list: List = useSelector(getListStatistics);
+
   const { loading } = useSelector(getStatisticsMetaSelector);
   const navigate = useNavigate();
   const dispatch = useDispatch();

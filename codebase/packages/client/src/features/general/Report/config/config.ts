@@ -1,7 +1,5 @@
 import { TFunction } from 'components/Translation';
 import { Rating, ReportPage, StatisticsTitlesReportKeys, TitlesReport } from 'config/enum';
-import { getCurrentYear, getPrevYear } from 'utils/date';
-import { getCurrentYearWithStartDate, isStartPeriod } from '../utils';
 
 export enum View {
   CHART = 'chart',
@@ -26,12 +24,6 @@ export enum IsReportTiles {
   ANNIVERSARY_REVIEWS = 'Anniversary Reviews',
   WL4AND5 = 'WL4 & 5 Objectives approved',
 }
-export const getFieldOptions = () => [
-  {
-    value: isStartPeriod() ? getPrevYear(1) : getPrevYear(2),
-    label: isStartPeriod() ? `${getPrevYear(1)}-${getCurrentYear()}` : `${getPrevYear(2)}-${getPrevYear(1)}`,
-  },
-];
 
 export const convertToLink = (str) => str.split('_').slice(1).join('-').toLowerCase();
 
@@ -101,9 +93,6 @@ export const prepareData = (selectedCheckboxes, isCheckAll, t) => {
     },
   ].filter((item) => Object.keys(item).length);
 };
-
-export const getCurrentValue = (query, year) =>
-  query.year ? year || query.year || getCurrentYearWithStartDate() : year || getCurrentYearWithStartDate();
 
 export const getDefaultData = (type, t) => {
   const report = {

@@ -19,10 +19,10 @@ import { useTileStatistics } from 'features/general/ColleaguesReviews/hooks/useT
 import useQueryString from 'hooks/useQueryString';
 import { useHeaderContainer } from 'contexts/headerContext';
 
-import { getCurrentYearWithStartDate } from 'features/general/Report/utils';
 import { convertToReportEnum } from 'features/general/ColleaguesReviews/utils';
 import { Page } from 'pages';
 import { ReportType } from 'config/enum';
+import { getFinancialYear } from 'utils';
 
 const getConfigReviewsKeys = (type): { key: string; configType: ReportType } => {
   const page = {
@@ -156,7 +156,7 @@ const ReportStatistics = () => {
               {
                 pathname: buildPath(Page.REPORT),
                 //@ts-ignore
-                search: new URLSearchParams({ year: query.year || getCurrentYearWithStartDate() }).toString(),
+                search: new URLSearchParams({ year: query.year || getFinancialYear() }).toString(),
               },
               { state: { filters: savedFilter } },
             );

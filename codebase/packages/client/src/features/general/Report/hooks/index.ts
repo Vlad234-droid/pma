@@ -1,1 +1,1 @@
-export { getReportData } from './getReportData';
+export { useReportData } from './useReportData';

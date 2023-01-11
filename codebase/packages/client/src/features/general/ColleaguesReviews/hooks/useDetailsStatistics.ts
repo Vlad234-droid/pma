@@ -147,6 +147,15 @@ export const useDetailsStatistics = (type, query) => {
             'overall-rating': 'Satisfactory',
           }),
         );
+        dispatch(
+          StatisticsAction.getOverallRatingsStatistics({
+            ...initialFields,
+            ...defaultSort,
+            year,
+            'review-type': ReportType.EYR,
+            'overall-rating': 'New to business',
+          }),
+        );
         break;
       }
       case ReportPage.REPORT_MYR_BREAKDOWN: {
@@ -157,6 +166,15 @@ export const useDetailsStatistics = (type, query) => {
             year,
             'review-type': ReportType.MYR,
             'overall-rating': 'Below expected',
+          }),
+        );
+        dispatch(
+          StatisticsAction.getOverallRatingsStatistics({
+            ...initialFields,
+            ...defaultSort,
+            year,
+            'review-type': ReportType.MYR,
+            'overall-rating': 'New to business',
           }),
         );
         dispatch(

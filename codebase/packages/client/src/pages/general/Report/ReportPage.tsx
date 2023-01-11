@@ -1,7 +1,7 @@
 import React, { FC, useState, useMemo } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { totalColleaguesSelector } from '@pma/store';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -16,31 +16,25 @@ import UnderlayModal from 'components/UnderlayModal';
 import { IconButton } from 'components/IconButton';
 import FilterForm, { defaultFilters } from 'components/FilterForm';
 import ViewItems from 'components/ViewItems';
-import { Select } from 'components/Form';
+import { Option, Select } from 'components/Form';
 
-import { getCurrentValue, getFieldOptions } from 'features/general/Report/config';
-import { getCurrentYear, getNextYear, getPrevYear } from 'utils/date';
+import { getFinancialYear, getYearsFromCurrentYear } from 'utils/date';
 import { useTenant } from 'features/general/Permission';
-import useQueryString from 'hooks/useQueryString';
-import { getLocalNow } from 'utils';
+
 import { Page } from 'pages';
 
 export enum ModalStatus {
   EDIT = 'EDIT',
 }
 
-const startMonth = 3;
-export const isStartPeriod = () => getLocalNow().month >= startMonth;
-export const getCurrentYearWithStartDate = () => (isStartPeriod() ? getCurrentYear() : getPrevYear(1));
-
 const ReportPage: FC = () => {
-  const query = useQueryString() as Record<string, string | number>;
   const { t } = useTranslation();
   const tenant = useTenant();
   const { state } = useLocation();
   const { filters } = (state as any) || {};
   const navigate = useNavigate();
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const year = searchParams.get('year') || getFinancialYear();
   const { css, matchMedia } = useStyle();
   const small = matchMedia({ xSmall: true, small: true }) || false;
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
@@ -49,7 +43,6 @@ const ReportPage: FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
   const [isVisibleFilterModal, setFilterModal] = useState<boolean>(false);
-  const [year, setYear] = useState<string>('');
   const [tiles, setTiles] = useState<Array<string>>([] || null);
   const [savedFilter, setSavedFilter] = useState<any>(filters || null);
 
@@ -57,7 +50,7 @@ const ReportPage: FC = () => {
 
   const changeYearHandler = (value) => {
     if (!value) return;
-    setYear(value);
+    setSearchParams({ year: value });
   };
 
   const Report = useMemo(
@@ -76,6 +69,11 @@ const ReportPage: FC = () => {
       }, [])
     );
   }, [savedFilter]);
+
+  const fieldOptions: Option[] = getYearsFromCurrentYear(getFinancialYear()).map(({ value }) => ({
+    value,
+    label: `${value} - ${Number(value) + 1}`,
+  }));
 
   return (
     <div className={css({ margin: '22px 42px 110px 40px' })}>
@@ -100,21 +98,13 @@ const ReportPage: FC = () => {
             </h2>
 
             <Select
-              options={[
-                {
-                  value: getCurrentYearWithStartDate(),
-                  label: isStartPeriod()
-                    ? `${getCurrentYear()}-${getNextYear(1)}`
-                    : `${getPrevYear(1)}-${getCurrentYear()}`,
-                },
-                ...getFieldOptions(),
-              ]}
+              options={fieldOptions}
               name={'year_options'}
               placeholder={t('choose_an_area', 'Choose an area')}
               onChange={({ target: { value } }) => {
                 changeYearHandler(value);
               }}
-              value={getCurrentValue(query, year)}
+              value={year}
             />
           </form>
           <ColleaguesCount

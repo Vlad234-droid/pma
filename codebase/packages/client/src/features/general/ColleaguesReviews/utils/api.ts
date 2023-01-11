@@ -1,14 +1,13 @@
 import { BASE_URL_API } from 'config/constants';
 import { Variant } from 'features/general/Toast';
-import { formatDateStringFromISO } from 'utils/date';
+import { formatDateStringFromISO, getFinancialYear } from 'utils/date';
 import { Status } from 'config/enum';
-import { getCurrentYearWithStartDate } from 'features/general/Report/utils';
 
 const getData = (url) =>
   fetch(
     url +
       new URLSearchParams({
-        year: getCurrentYearWithStartDate().toString(),
+        year: getFinancialYear(),
         status: Status.APPROVED.toLocaleLowerCase(),
       }),
   );

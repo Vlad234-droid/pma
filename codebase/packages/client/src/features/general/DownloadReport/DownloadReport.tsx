@@ -7,12 +7,12 @@ import { useNavigate } from 'react-router';
 import { CanPerform, role } from 'features/general/Permission';
 import { WrapperModal } from 'features/general/Modal';
 import { buildPath } from 'features/general/Routes';
-import { Checkbox, Item, Select } from 'components/Form';
+import { Checkbox, Item, Option, Select } from 'components/Form';
 import { Trans, useTranslation } from 'components/Translation';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 
 import { downloadReportStatistics } from './utils';
-import { getCurrentYear, getYearsFromCurrentYear } from 'utils/date';
+import { getFinancialYear, getYearsFromCurrentYear } from 'utils/date';
 import success from 'images/success.jpg';
 import { checkboxes, getRequestParams, reportByYearSchema } from './config';
 
@@ -43,16 +43,22 @@ const DownloadReport: FC = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const onSubmit = (data) => {
+    const { year, topics } = data;
     downloadReportStatistics({
-      year: values?.year,
+      year,
       topics: getRequestParams(
         //@ts-ignore
-        Object.entries(data.topics).reduce((acc, [keys, value]) => [...(value ? [keys] : []), ...acc], []),
+        Object.entries(topics).reduce((acc, [keys, value]) => [...(value ? [keys] : []), ...acc], []),
       ),
     }).then(() => setShowSuccessModal(true));
   };
 
   const handleClose = () => navigate(buildPath(Page.REPORT));
+
+  const fieldOptions: Option[] = getYearsFromCurrentYear(getFinancialYear()).map(({ value }) => ({
+    value,
+    label: `${value} - ${Number(value) + 1}`,
+  }));
 
   return (
     <WrapperModal onClose={handleClose} title={t('download_and_extract', 'Download and Extract')}>
@@ -115,13 +121,9 @@ const DownloadReport: FC = () => {
 
               <Item withIcon={false} label={t('select_a_year', 'Select a year')}>
                 <Select
-                  options={getYearsFromCurrentYear(getCurrentYear(), 3).map(({ value }) => ({
-                    value,
-                    label: value,
-                  }))}
+                  options={fieldOptions}
                   name={'year'}
                   placeholder={t('please_select', 'Please select')}
-                  //@ts-ignore
                   onChange={({ target: { value } }) => {
                     setValue('year', value, { shouldValidate: true });
                   }}

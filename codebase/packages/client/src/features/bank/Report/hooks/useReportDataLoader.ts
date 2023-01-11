@@ -1,14 +1,13 @@
 import { useEffect } from 'react';
 import { ReportActions, ReviewType } from '@pma/store';
 import { useDispatch } from 'react-redux';
-import { getCurrentYear } from 'utils/date';
 
 export const useReportDataLoader = (fields: Record<string, string | number> = {}, year: string) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     const payload = {
-      year: !year ? fields?.year || getCurrentYear() : year,
+      year,
     };
     dispatch(
       ReportActions.getReviewReport({

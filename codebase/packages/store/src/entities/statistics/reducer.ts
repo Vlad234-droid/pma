@@ -13,13 +13,14 @@ export const initialState = {
   approved: [],
   submitted: [],
   'not-submitted': [],
+  'new-to-business': [],
   requested: [],
   given: [],
-  'new-to-business': [],
   'Below expected': [],
   Outstanding: [],
   Great: [],
   Satisfactory: [],
+  'New to business': [],
   meta: { loading: false, loaded: false, error: null },
 };
 
