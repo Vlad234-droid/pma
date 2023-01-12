@@ -26,13 +26,13 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
   const { pathname, state } = useLocation();
   const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
 
-  const review = useSelector(getTimelineByCodeSelector(ReviewType.MYR, colleagueUuid));
+  const tlPoint = useSelector(getTimelineByCodeSelector(ReviewType.MYR, colleagueUuid));
 
-  if (!review || (!isUserView && review.status === Status.DRAFT)) {
+  const { summaryStatus, startTime, lastUpdatedTime, statistics } = tlPoint || {};
+
+  if (!tlPoint || (!isUserView && statistics?.DRAFT)) {
     return null;
   }
-
-  const { summaryStatus, startTime, lastUpdatedTime, statistics } = review;
 
   const status = Object.keys(statistics || { STARTED: 1 })[0];
 

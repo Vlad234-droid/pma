@@ -26,13 +26,13 @@ const YearEndReview: FC<Props> = ({ colleagueUuid }) => {
   const { pathname, state } = useLocation();
   const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
 
-  const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid));
+  const tlPoint = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid));
 
-  if (!review || (!isUserView && review.status === Status.DRAFT)) {
+  const { summaryStatus, startTime, lastUpdatedTime, statistics } = tlPoint || {};
+
+  if (!tlPoint || (!isUserView && statistics?.DRAFT)) {
     return null;
   }
-
-  const { summaryStatus, startTime, lastUpdatedTime } = review;
 
   const [graphic, iconColor, background, shadow, hasDescription, content, buttonText] = useMemo(
     () =>
