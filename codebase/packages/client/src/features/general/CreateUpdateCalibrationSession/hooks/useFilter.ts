@@ -15,14 +15,16 @@ const useFilter = (uuid?: string) => {
   const { filters = [] } = participants;
 
   const query = filters
-    .filter((f) => f?.property && !['colleague-uuid'].includes(f?.property))
+    .filter((f) => f?.property && !['colleague-uuid', 'wl3-manager-depth', 'colleague-uuid-only'].includes(f?.property))
     .reduce((acc, val) => {
       acc[`${val.property}${Operand[val?.operand || Operand.NOT_EXIST]}`] = val.value;
       return acc;
     }, {}) as Record<string, string>;
 
   const defaultFilters = filterFromSessionResponse(
-    filters.filter((f) => f?.property && !['colleague-uuid'].includes(f?.property)),
+    filters.filter(
+      (f) => f?.property && !['colleague-uuid', 'wl3-manager-depth', 'colleague-uuid-only'].includes(f?.property),
+    ),
   );
 
   useEffect(() => {
