@@ -1,6 +1,6 @@
 import { Condition, ConditionOperandEnum, ColleagueFilterOptions, CalibrationColleague } from '@pma/openapi';
 import { Operand } from 'config/enum';
-import { CalibrationSessionUiType } from '../types';
+import { ActionType, CalibrationSessionUiType } from '../types';
 
 export const filterMap = {
   'department-uuid': 'departments',
@@ -82,7 +82,11 @@ export const prepareColleaguesForUI = (
 
   return calibrationColleague
     .filter((c) => c.colleague && c.colleague.uuid && colleaguesAddIds.includes(c.colleague.uuid))
-    .map(({ colleague }) => ({ value: colleague?.uuid, label: `${colleague?.firstName} ${colleague?.lastName}` }));
+    .map(({ colleague }) => ({
+      value: colleague?.uuid,
+      label: `${colleague?.firstName} ${colleague?.lastName}`,
+      type: operand === ConditionOperandEnum.In ? ActionType.ADD : ActionType.REMOVE,
+    }));
 };
 
 export const getSelectedGroups = (colleagueFilter: ColleagueFilterOptions, filter): string[] => {
