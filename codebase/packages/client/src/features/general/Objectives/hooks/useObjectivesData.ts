@@ -41,7 +41,7 @@ const useObjectivesData = (uuid: string, currentCycle?: string) => {
 
   useEffect(() => {
     dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid: uuid, cycleUuid: currentCycle || 'CURRENT' } }));
-    dispatch(SchemaActions.getSchema({ colleagueUuid: uuid }));
+    dispatch(SchemaActions.getSchema({ colleagueUuid: uuid, cycleUuid: currentCycle || 'CURRENT' }));
   }, [uuid, currentCycle]);
 
   return { objectives, meta: { loaded: schemaLoaded && reviewLoaded, loading: schemaLoading || reviewLoading } };

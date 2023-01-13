@@ -51,7 +51,7 @@ const MyObjectives: FC = () => {
   }, [timelinesLoaded, timelinesExist]);
 
   useEffect(() => {
-    dispatch(SchemaActions.getSchema({ colleagueUuid }));
+    dispatch(SchemaActions.getSchema({ colleagueUuid, cycleUuid: currentCycle }));
 
     // return () => {
     //   dispatch(SchemaActions.clearSchemaData());

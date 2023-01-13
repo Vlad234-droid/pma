@@ -1,12 +1,7 @@
-import React, { FC, HTMLProps, memo } from 'react';
+import React, { FC, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Rule, useStyle } from '@pma/dex-wrapper';
-
-import { IconButton } from 'components/IconButton';
-import { useTranslation } from 'components/Translation';
-import { ReviewType, Status } from 'config/enum';
-import { REVIEW_MODIFICATION_MODE, reviewModificationMode } from '../../utils';
 import { useSelector } from 'react-redux';
+import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 import {
   colleagueCurrentCycleSelector,
   colleagueUUIDSelector,
@@ -16,15 +11,18 @@ import {
   getTimelineByCodeSelector,
   isReviewsNumbersInStatus,
 } from '@pma/store';
+
+import { IconButton } from 'components/IconButton';
+import { useTranslation } from 'components/Translation';
+import { ReviewType, Status } from 'config/enum';
 import { USER } from 'config/constants';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
+import { REVIEW_MODIFICATION_MODE, reviewModificationMode } from '../../utils';
 
-export type CreateModalProps = {
+export type Props = {
   withIcon?: boolean;
 };
-
-type Props = HTMLProps<HTMLInputElement> & CreateModalProps;
 
 const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
   const { t } = useTranslation();
@@ -52,7 +50,7 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
     countReviews < markup.max &&
     modificationMode !== REVIEW_MODIFICATION_MODE.NONE;
 
-  const handleBtnClick = () => navigate(buildPath(Page.CREATE_OBJECTIVES));
+  const handleCreate = () => navigate(buildPath(Page.CREATE_OBJECTIVES));
 
   if (!isAvailable) return null;
 
@@ -61,7 +59,7 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
       {withIcon ? (
         <IconButton
           customVariantRules={{ default: iconBtnStyle }}
-          onPress={handleBtnClick}
+          onPress={handleCreate}
           graphic='add'
           iconProps={{ invertColors: true }}
           iconStyles={iconStyle}
@@ -69,7 +67,7 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
           {t('create_objectives', 'Create objective')}
         </IconButton>
       ) : (
-        <Button styles={[buttonStyle]} onPress={handleBtnClick}>
+        <Button styles={[buttonStyle]} onPress={handleCreate}>
           {t('create_objectives', 'Create objective')}
         </Button>
       )}

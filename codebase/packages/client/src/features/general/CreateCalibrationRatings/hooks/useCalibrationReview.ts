@@ -28,7 +28,7 @@ export const useCalibrationReview = () => {
       //TODO: replace CURRENT to cycle uuid in future
       cycle && dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid, cycleUuid: 'CURRENT' }));
     }
-    dispatch(SchemaActions.getSchema({ colleagueUuid }));
+    dispatch(SchemaActions.getSchema({ colleagueUuid, cycleUuid: 'CURRENT' }));
 
     return () => {
       dispatch(CalibrationReviewAction.clearCalibrationReview());

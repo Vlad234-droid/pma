@@ -11,7 +11,7 @@ function usePDPSchema() {
 
   const getSchema = useCallback(() => {
     if (!components?.length) {
-      dispatch(SchemaActions.getSchema({ colleagueUuid }));
+      dispatch(SchemaActions.getSchema({ colleagueUuid, cycleUuid: 'CURRENT' }));
     }
   }, [components]);
 

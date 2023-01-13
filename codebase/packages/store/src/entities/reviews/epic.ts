@@ -31,7 +31,7 @@ export const getReviewsEpic: Epic = (action$, _, { api }) =>
           if (!success) {
             return getReviews.failure(new Error(errors[0].message));
           }
-          return getReviews.success({ data });
+          return getReviews.success(data);
         }),
         catchError(({ errors }) => of(getReviews.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(getReviews.cancel)))),

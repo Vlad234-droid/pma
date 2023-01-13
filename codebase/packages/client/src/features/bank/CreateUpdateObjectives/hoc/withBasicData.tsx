@@ -50,7 +50,7 @@ export function withBasicData<P extends Props>(
     const { loading: timelineLoading } = useSelector(timelinesMetaSelector);
 
     useEffect(() => {
-      dispatch(SchemaActions.getSchema({ colleagueUuid }));
+      dispatch(SchemaActions.getSchema({ colleagueUuid, cycleUuid: currentCycle }));
     }, []);
 
     useEffect(() => {
