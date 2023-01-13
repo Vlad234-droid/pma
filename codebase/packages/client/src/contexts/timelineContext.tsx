@@ -1,6 +1,6 @@
 import React, { createContext, FC, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { colleagueUUIDSelector, userTimelineSelector } from '@pma/store';
+import { colleagueCurrentCycleSelector, colleagueUUIDSelector, userTimelineSelector } from '@pma/store';
 import { ReviewType, Status } from 'config/enum';
 import { Timeline } from '../config/types';
 
@@ -23,7 +23,8 @@ const TimelineContext = createContext<TimelineData>(defaultData);
 
 export const TimelineProvider: FC = ({ children }) => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const userTimelines: Timeline[] = useSelector(userTimelineSelector(colleagueUuid, 'CURRENT'));
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
+  const userTimelines: Timeline[] = useSelector(userTimelineSelector(colleagueUuid, currentCycle));
   const timelines = userTimelines.map(({ lastUpdatedTime, statistics, ...rest }) => ({
     ...rest,
   }));

@@ -8,6 +8,8 @@ import { ReviewType, Status } from 'config/enum';
 import { REVIEW_MODIFICATION_MODE, reviewModificationMode } from '../../utils';
 import { useSelector } from 'react-redux';
 import {
+  colleagueCurrentCycleSelector,
+  colleagueUUIDSelector,
   countByTypeReviews,
   filterReviewsByTypeSelector,
   getReviewSchema,
@@ -28,6 +30,8 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const navigate = useNavigate();
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
 
   const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const { markup = { max: 0, min: 0 } } = schema;
@@ -36,7 +40,7 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
     isReviewsNumbersInStatus(ReviewType.OBJECTIVE)(Status.APPROVED, markup.min),
   );
   const originObjectives = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE));
-  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current));
+  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current, currentCycle));
   const countReviews = useSelector(countByTypeReviews(ReviewType.OBJECTIVE)) || 0;
   const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const modificationMode = reviewModificationMode(countReviews, objectiveSchema);

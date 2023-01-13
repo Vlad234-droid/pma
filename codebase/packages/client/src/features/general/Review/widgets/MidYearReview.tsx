@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { getTimelineByCodeSelector, uuidCompareSelector } from '@pma/store';
+import { colleagueCurrentCycleSelector, getTimelineByCodeSelector, uuidCompareSelector } from '@pma/store';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
 
@@ -25,8 +25,9 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
   const navigate = useNavigate();
   const { pathname, state } = useLocation();
   const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
 
-  const tlPoint = useSelector(getTimelineByCodeSelector(ReviewType.MYR, colleagueUuid));
+  const tlPoint = useSelector(getTimelineByCodeSelector(ReviewType.MYR, colleagueUuid, currentCycle));
 
   const { summaryStatus, startTime, lastUpdatedTime, statistics } = tlPoint || {};
 
@@ -34,7 +35,7 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
     return null;
   }
 
-  const status = Object.keys(statistics || { STARTED: 1 })[0];
+  const status = Object.keys(statistics || { NOT_STARTED: 1 })[0];
 
   const [graphic, iconColor, background, shadow, hasDescription, content, buttonText] = useMemo(
     () =>
