@@ -30,7 +30,7 @@ const Info360Modal: FC<Props> = ({ onClose }) => {
           </Trans>
         </p>
         <p className={css(descriptionStyle)}>
-          <Trans i18nKey='everyday_feedback_lets_you_share'>
+          <Trans i18nKey='everyday_feedback_lets_you_share' ns={tenant}>
             Everyday feedback lets you share your feedback with your colleagues across any work level and function in
             real time. This type of feedback lets a colleague know what they&apos;re doing great at, the opportunities
             they have to be even better and how to make improvements continuously, meaning they can take the feedback
