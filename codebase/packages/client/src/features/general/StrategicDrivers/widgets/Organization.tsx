@@ -5,8 +5,9 @@ import { useStyle, Rule, Button, Styles, colors } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Icon, Graphics } from 'components/Icon';
 import useDispatch from 'hooks/useDispatch';
-import { OrgObjectiveActions, orgObjectivesSelector } from '@pma/store';
+import { OrgObjectiveActions, orgObjectivesSelector, colleagueCycleSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
+import { CycleType } from 'config/enum';
 
 export type Props = {
   onClick: () => void;
@@ -21,6 +22,7 @@ const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+  const { cycleType } = useSelector(colleagueCycleSelector);
   const orgObjectives = useSelector(orgObjectivesSelector) || [];
   const hasObjectives = !!orgObjectives.length;
 
@@ -35,10 +37,12 @@ const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
   const [graphic, description, actionTitle] = getContent();
 
   useEffect(() => {
-    dispatch(OrgObjectiveActions.getOrgObjectives({}));
-  }, []);
+    if (cycleType && cycleType !== CycleType.FISCAL) {
+      dispatch(OrgObjectiveActions.getOrgObjectives({}));
+    }
+  }, [cycleType]);
 
-  if (!hasObjectives) return null;
+  if (cycleType === CycleType.FISCAL || !hasObjectives) return null;
 
   return (
     <TileWrapper customStyle={{ ...customStyle }}>

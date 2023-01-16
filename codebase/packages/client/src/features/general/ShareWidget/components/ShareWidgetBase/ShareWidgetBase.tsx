@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, colors, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import {
+  colleagueCycleSelector,
   currentUserSelector,
   getAllSharedObjectives,
   getReviewSchema,
@@ -18,7 +19,7 @@ import { ConfirmModal } from 'components/ConfirmModal';
 import { WrapperModal } from 'features/general/Modal';
 import { ShareObjectivesModal } from '../ShareObjectivesModal';
 import SuccessModal from 'components/SuccessModal';
-import { ReviewType, Status } from 'config/enum';
+import { CycleType, ReviewType, Status } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 import { usePermission, role, useTenant } from 'features/general/Permission';
 
@@ -83,6 +84,7 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
   // TODO: add selectors
   const { info } = useSelector(currentUserSelector);
   const isShared = useSelector(isSharedSelector);
+  const { cycleType } = useSelector(colleagueCycleSelector);
   const { loading: sharingLoading } = useSelector(sharingObjectivesMetaSelector);
   const hasApprovedObjective = useSelector(hasStatusInReviews(ReviewType.OBJECTIVE, Status.APPROVED));
   const hasApprovedPriorities = useSelector(hasStatusInReviews(ReviewType.QUARTER, Status.APPROVED));
@@ -149,7 +151,8 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
     sharedObjectivesCount && setObjectives(transformReviewsToObjectives(sharedObjectives, formElements, tenant));
   }, [sharedObjectivesCount, formElementsCount, type]);
 
-  const isDisplayed = title === 'N/A' || (!stopShare && !hasApproved && !sharing && !isManager);
+  const isDisplayed =
+    title === 'N/A' || cycleType === CycleType.FISCAL || (!stopShare && !hasApproved && !sharing && !isManager);
 
   if (isDisplayed) {
     return null;

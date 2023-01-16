@@ -35,7 +35,9 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
     return null;
   }
 
-  const status = Object.keys(statistics || { NOT_STARTED: 1 })[0];
+  const status = Object.keys(
+    statistics || summaryStatus === Status.NOT_STARTED ? { NOT_STARTED: 1 } : { STARTED: 1 },
+  )[0];
 
   const [graphic, iconColor, background, shadow, hasDescription, content, buttonText] = useMemo(
     () =>
