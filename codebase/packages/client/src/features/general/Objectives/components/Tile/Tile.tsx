@@ -136,7 +136,7 @@ const descriptionStyles: CreateRule<Pick<Props, 'withSpacing'>> =
   });
 
 const explanationDescriptionStyles: Rule = ({ theme }) => ({
-  padding: '10px 0',
+  paddingTop: '2px',
   fontSize: theme.font.fixed.f16.fontSize,
   lineHeight: theme.font.fixed.f16.lineHeight,
   letterSpacing: '0px',
@@ -156,7 +156,6 @@ const inputsStyles: Rule = ({ theme }) => {
 };
 
 const listStyles = {
-  padding: '0 17px',
   margin: 0,
 } as Styles;
 

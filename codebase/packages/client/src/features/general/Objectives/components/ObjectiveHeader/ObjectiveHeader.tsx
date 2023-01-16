@@ -35,12 +35,14 @@ const subTitleStyles: Rule = ({ theme }) => ({
   letterSpacing: '0px',
   fontWeight: theme.font.weight.bold,
   paddingTop: 0,
+  paddingBottom: '2px',
 });
 
 const descriptionStyles: Rule = ({ theme }) => ({
   fontSize: theme.font.fixed.f16.fontSize,
   lineHeight: theme.font.fixed.f16.lineHeight,
   letterSpacing: '0px',
-  paddingBottom: 0,
   margin: 0,
+  paddingBottom: 0,
+  whiteSpace: 'pre-wrap',
 });
