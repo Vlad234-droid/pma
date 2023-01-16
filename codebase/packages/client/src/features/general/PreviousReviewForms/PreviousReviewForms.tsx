@@ -39,7 +39,7 @@ const PreviousReviewForms = () => {
   useEffect(() => {
     if (uuid) {
       dispatch(ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: uuid, cycleUuid: 'CURRENT' } }));
-      dispatch(SchemaActions.getSchema({ colleagueUuid: uuid }));
+      dispatch(SchemaActions.getSchema({ colleagueUuid: uuid, cycleUuid: 'CURRENT' }));
     }
   }, [uuid]);
 

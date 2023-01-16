@@ -32,7 +32,7 @@ export default createReducer(initialState)
   .handleAction(getReviews.success, (state, { payload }) => {
     return {
       ...state,
-      ...payload,
+      data: payload,
       meta: { ...state.meta, loading: false, loaded: true },
     };
   })

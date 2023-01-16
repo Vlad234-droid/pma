@@ -8,7 +8,7 @@ import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages/general/types';
 import { ReviewType } from 'config/enum';
 
-const CreateObjective: FC = React.memo(() => {
+const CreateObjective: FC = () => {
   const tenant = useTenant();
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -23,11 +23,11 @@ const CreateObjective: FC = React.memo(() => {
   );
 
   const handleClose = () => navigate((state as any)?.backPath || buildPath(Page.REVIEWS));
-  const onSuccessClose = () => navigate(buildPath(Page.REVIEWS_VIEW));
+  const handleSuccessClose = () => navigate(buildPath(Page.REVIEWS_VIEW));
 
   return (
-    <CreateUpdateObjectives onClose={handleClose} onSuccessClose={onSuccessClose} editNumber={nextNumber} create />
+    <CreateUpdateObjectives onClose={handleClose} onSuccessClose={handleSuccessClose} editNumber={nextNumber} create />
   );
-});
+};
 
 export default CreateObjective;

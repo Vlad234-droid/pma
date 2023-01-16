@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import useDispatch from 'hooks/useDispatch';
 import {
+  colleagueCurrentCycleSelector,
   colleagueUUIDSelector,
   FormType,
   getReviewsByTypeSelector,
@@ -34,8 +35,9 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const { loaded: schemaLoaded, loading: schemaLoading } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded, loading: reviewLoading, saving, saved } = useSelector(reviewsMetaSelector);
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
 
-  const pathParams = { colleagueUuid, code: 'OBJECTIVE', cycleUuid: 'CURRENT' };
+  const pathParams = { colleagueUuid, code: 'OBJECTIVE', cycleUuid: currentCycle };
   const isApproved = useSelector(isReviewsNumberInStatuses(ReviewType.OBJECTIVE)([Status.APPROVED], currentNumber));
   const isDeclined = useSelector(isReviewsNumberInStatuses(ReviewType.OBJECTIVE)([Status.DECLINED], currentNumber));
 
@@ -145,7 +147,7 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
 
   useEffect(() => {
     dispatch(ReviewsActions.getReviews({ pathParams }));
-    dispatch(SchemaActions.getSchema({ colleagueUuid }));
+    dispatch(SchemaActions.getSchema({ colleagueUuid, cycleUuid: currentCycle }));
 
     return () => {
       dispatch(ReviewsActions.updateReviewMeta({ saved: false }));

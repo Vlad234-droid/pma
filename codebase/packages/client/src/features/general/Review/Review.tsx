@@ -110,7 +110,7 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
 
   useEffect(() => {
     if (reviewLoaded) {
-      dispatch(SchemaActions.getSchema({ colleagueUuid }));
+      dispatch(SchemaActions.getSchema({ colleagueUuid, cycleUuid: currentCycle || 'CURRENT' }));
     }
   }, [reviewLoaded]);
 

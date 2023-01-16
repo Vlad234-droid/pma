@@ -1,7 +1,7 @@
 // @ts-ignore
 import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
-import { forkJoin, from, of } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
 import { catchError, filter, map, switchMap } from 'rxjs/operators';
 import { getColleagueByUuid } from './actions';
 
@@ -13,7 +13,7 @@ export const getColleagueByUuidEpic: Epic = (action$, _, { api }) =>
         colleague: api.getColleagueByUuid(payload),
         cycles: api.getPerformanceCyclesByStatuses({
           colleagueUuid: payload.colleagueUuid,
-          allowedStatuses: ['STARTED', 'FINISHED', 'FINISHING', 'COMPLETED'],
+          allowedStatuses: [/*'OPENED_STARTING',*/ 'STARTED', 'FINISHED', 'FINISHING', 'COMPLETED'],
         }),
       }).pipe(
         //@ts-ignore

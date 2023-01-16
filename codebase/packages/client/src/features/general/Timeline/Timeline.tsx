@@ -16,8 +16,9 @@ import StepIndicator from 'components/StepIndicator/StepIndicator';
 import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 import useDispatch from 'hooks/useDispatch';
-import { Select } from 'components/Form';
+import { Option, Select } from 'components/Form';
 import { formatDateStringFromISO } from 'utils';
+import { Status } from 'config/enum';
 
 const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const [value, setValue] = useState<string | undefined>();
@@ -31,7 +32,7 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const { descriptions, startDates, summaryStatuses, types, currentStep } =
     useSelector(getTimelineSelector(colleagueUuid, currentCycle)) || {};
 
-  const options = useMemo(() => {
+  const options: Option[] = useMemo(() => {
     return cycles.map(({ endTime, startTime, uuid }) => ({
       value: uuid,
       label: `${formatDateStringFromISO(startTime, 'yyyy')} - ${formatDateStringFromISO(endTime, 'yyyy')}`,
@@ -46,7 +47,8 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
     if (currentCycle !== 'CURRENT') {
       setValue(currentCycle);
     } else {
-      setValue(options[0]?.value);
+      const startedCycles = cycles.find(({ status }) => status === Status.STARTED);
+      setValue(options.find(({ value }) => value === startedCycles.uuid)?.value as string);
     }
   }, [options]);
 

@@ -12,7 +12,7 @@ export type GetReviewsParams = {
 
 export const getReviews = (params: GetReviewsParams) => {
   const {
-    pathParams: { colleagueUuid = '', code, cycleUuid = 'CURRENT' },
+    pathParams: { colleagueUuid = '', code, cycleUuid },
     searchParams,
   } = params;
   const uri = code

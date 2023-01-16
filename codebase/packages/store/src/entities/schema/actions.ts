@@ -5,7 +5,12 @@ export const getSchema = createAsyncAction(
   'schema/FETCH_SUCCESS',
   'schema/FETCH_FAILURE',
   'schema/CANCEL',
-)<{ colleagueUuid: string; includeForms?: boolean }, { current: any; colleagueSchema?: any }, Error, undefined>();
+)<
+  { colleagueUuid: string; cycleUuid: string; includeForms?: boolean },
+  { current: any; colleagueSchema?: any },
+  Error,
+  undefined
+>();
 
 export const getColleagueSchema = createAsyncAction(
   'schema/colleague/FETCH_REQUEST',
