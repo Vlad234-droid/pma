@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router-dom';
 
 import CalibrationSessionOverview, {
   AddedToSession,
@@ -25,8 +26,11 @@ const CalibrationSessionPage: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { state, pathname } = useLocation();
+  const { period: backPeriod } = (state as any) || {};
   const isPerform = usePermission([role.TALENT_ADMIN]);
-  const [period, setPeriod] = useState<string>(getFinancialYear());
+
+  const [period, setPeriod] = useState<string>(backPeriod || getFinancialYear());
   const [filters, setFilters] = useState<Record<string, Record<string, boolean>>>({});
   const [searchValue, setSearchValue] = useState<string>('');
 
@@ -51,7 +55,10 @@ const CalibrationSessionPage: FC = () => {
       <div>
         <Filter
           withDateFilter
-          onChangePeriod={(active) => setPeriod(active)}
+          onChangePeriod={(active) => {
+            backPeriod && navigate(pathname, { replace: true });
+            setPeriod(active);
+          }}
           period={period}
           onChangeFilters={(filters) => setFilters(filters)}
           onSearch={(value) => setSearchValue(value)}

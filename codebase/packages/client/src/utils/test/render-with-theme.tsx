@@ -30,6 +30,7 @@ export const renderWithTheme = <TProps extends {} = {}>(
           },
           profileAttributes: [],
         },
+        metadata: { currentCycle: 'CURRENT' },
       },
       meta: {
         loaded: true,

@@ -17,6 +17,7 @@ import { role, usePermission } from 'features/general/Permission';
 import { View, Ratings, RatingsType } from '../../types';
 
 type Props = {
+  period?: string;
   data: RatingsType;
   activeList: View;
   statistics?: { [key: string]: TotalCount };
@@ -25,7 +26,15 @@ type Props = {
   sessionUuid?: string;
 };
 
-const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload, statistics, sessionUuid = '' }) => {
+const ColleaguesRatings: FC<Props> = ({
+  period,
+  data,
+  activeList,
+  styles = {},
+  onUpload,
+  statistics,
+  sessionUuid = '',
+}) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const isPerform = usePermission([role.TALENT_ADMIN]);
@@ -48,6 +57,7 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
           state: {
             backPath: pathname,
             activeList,
+            period,
           },
         },
       );
@@ -62,6 +72,7 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
         state: {
           backPath: pathname,
           activeList,
+          period,
         },
       },
     );

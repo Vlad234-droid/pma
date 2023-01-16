@@ -51,6 +51,7 @@ const CalibrationSessionOverview: FC<Props> = ({ period, filters, searchValue })
         <Spinner fullHeight />
       ) : activeList !== View.GRAPH ? (
         <ColleaguesRatings
+          period={period}
           data={data}
           activeList={activeList}
           styles={activeList === View.TABLE ? tableStyles({ mobileScreen }) : {}}

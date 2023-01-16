@@ -37,7 +37,7 @@ const CreateCalibrationRatings: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { backPath, activeList, prevBackPath } = (state as any) || {};
+  const { backPath, activeList, prevBackPath, period } = (state as any) || {};
 
   const { profile } = useSelector(getColleagueSelector) || {};
 
@@ -84,7 +84,7 @@ const CreateCalibrationRatings: FC = () => {
 
   const handleBack = () => {
     navigate(backPath || buildPath(paramsReplacer(Page.USER_REVIEWS, { ':uuid': colleagueUuid as string })), {
-      state: { activeList, backPath: prevBackPath },
+      state: { activeList, backPath: prevBackPath, period },
     });
   };
 
@@ -121,7 +121,7 @@ const CreateCalibrationRatings: FC = () => {
         ),
         search: sessionMode ? new URLSearchParams({ sessionMode }).toString() : '',
       },
-      { replace: true, state: { backPath, prevBackPath, activeList } },
+      { replace: true, state: { backPath, prevBackPath, activeList, period } },
     );
   }
 
