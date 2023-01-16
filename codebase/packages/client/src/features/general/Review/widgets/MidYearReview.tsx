@@ -29,21 +29,19 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
 
   const tlPoint = useSelector(getTimelineByCodeSelector(ReviewType.MYR, colleagueUuid, currentCycle));
 
-  const { summaryStatus, startTime, lastUpdatedTime, statistics } = tlPoint || {};
+  const { summaryStatus, startTime, lastUpdatedTime, statistics = {} } = tlPoint || {};
 
-  if (!tlPoint || (!isUserView && statistics?.DRAFT)) {
+  if (!tlPoint) {
     return null;
   }
 
-  const status = Object.keys(
-    statistics || summaryStatus === Status.NOT_STARTED ? { NOT_STARTED: 1 } : { STARTED: 1 },
-  )[0];
+  const status = (Object.keys(statistics)[0] || summaryStatus) as Status;
 
   const [graphic, iconColor, background, shadow, hasDescription, content, buttonText] = useMemo(
     () =>
       getContent(
         {
-          status: status,
+          status,
           startTime,
           lastUpdatedTime,
         },
@@ -54,8 +52,8 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
   );
 
   const disabled = isUserView
-    ? summaryStatus === Status.NOT_STARTED
-    : summaryStatus === Status.NOT_STARTED || summaryStatus === Status.DRAFT;
+    ? status === Status.NOT_STARTED
+    : [Status.NOT_STARTED, Status.DRAFT, Status.OVERDUE].includes(status);
 
   return (
     <div data-test-id='personal' className={css(basicTileStyle)}>
@@ -66,7 +64,7 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
               buildPath(
                 paramsReplacer(isUserView ? Page.REVIEWS : Page.USER_TL_REVIEW, {
                   ':type': ReviewType.MYR.toLowerCase(),
-                  ...(!isUserView && { ':uuid': colleagueUuid }),
+                  ...(!isUserView ? { ':uuid': colleagueUuid } : null),
                 }),
               ),
             {

@@ -40,13 +40,15 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
   const tlPoint = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid, currentCycle));
   const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, currentCycle));
 
-  const { summaryStatus, startTime, endTime, lastUpdatedTime, statistics } = tlPoint || {};
+  const { summaryStatus, startTime, endTime, lastUpdatedTime, statistics = {} } = tlPoint || {};
+
+  const status = (Object.keys(statistics)[0] || summaryStatus) as Status;
 
   const [graphic, iconColor, background, shadow, hasDescription, content, buttonText] = useMemo(
     () =>
       getContent(
         {
-          status: summaryStatus,
+          status,
           startTime,
           lastUpdatedTime,
         },
@@ -56,13 +58,13 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
     [summaryStatus, startTime, lastUpdatedTime],
   );
 
-  if (!tlPoint || (!isUserView && statistics?.DRAFT)) {
+  if (!tlPoint) {
     return null;
   }
 
   const disabled = isUserView
-    ? summaryStatus === Status.NOT_STARTED
-    : summaryStatus === Status.NOT_STARTED || summaryStatus === Status.DRAFT;
+    ? status === Status.NOT_STARTED
+    : [Status.NOT_STARTED, Status.DRAFT, Status.OVERDUE].includes(status);
 
   return (
     <div data-test-id='feedback' className={css(basicTileStyle)}>

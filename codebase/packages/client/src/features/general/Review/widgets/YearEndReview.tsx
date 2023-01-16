@@ -29,9 +29,11 @@ const YearEndReview: FC<Props> = ({ colleagueUuid }) => {
 
   const tlPoint = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid, currentCycle));
 
-  const { summaryStatus, startTime, lastUpdatedTime, statistics } = tlPoint || {};
+  const { summaryStatus, startTime, lastUpdatedTime, statistics = {} } = tlPoint || {};
 
-  if (!tlPoint || (!isUserView && statistics?.DRAFT)) {
+  const status = (Object.keys(statistics)[0] || summaryStatus) as Status;
+
+  if (!tlPoint) {
     return null;
   }
 
@@ -39,7 +41,7 @@ const YearEndReview: FC<Props> = ({ colleagueUuid }) => {
     () =>
       getContent(
         {
-          status: summaryStatus,
+          status,
           startTime,
           lastUpdatedTime,
         },
@@ -49,8 +51,8 @@ const YearEndReview: FC<Props> = ({ colleagueUuid }) => {
     [summaryStatus, startTime, lastUpdatedTime],
   );
   const disabled = isUserView
-    ? summaryStatus === Status.NOT_STARTED
-    : summaryStatus === Status.NOT_STARTED || summaryStatus === Status.DRAFT;
+    ? status === Status.NOT_STARTED
+    : [Status.NOT_STARTED, Status.DRAFT, Status.OVERDUE].includes(status);
 
   return (
     <div data-test-id='feedback' className={css(basicTileStyle)}>
@@ -61,7 +63,7 @@ const YearEndReview: FC<Props> = ({ colleagueUuid }) => {
               buildPath(
                 paramsReplacer(isUserView ? Page.REVIEWS : Page.USER_TL_REVIEW, {
                   ':type': ReviewType.EYR.toLocaleLowerCase(),
-                  ...(!isUserView && { ':uuid': colleagueUuid }),
+                  ...(!isUserView ? { ':uuid': colleagueUuid } : null),
                 }),
               ),
             {
