@@ -53,7 +53,7 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
 
   const disabled = isUserView
     ? status === Status.NOT_STARTED
-    : [Status.NOT_STARTED, Status.DRAFT, Status.OVERDUE].includes(status);
+    : [Status.NOT_STARTED, Status.STARTED, Status.DRAFT, Status.OVERDUE].includes(status);
 
   return (
     <div data-test-id='personal' className={css(basicTileStyle)}>
