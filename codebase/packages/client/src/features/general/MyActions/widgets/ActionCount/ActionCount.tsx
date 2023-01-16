@@ -53,7 +53,9 @@ const ActionCount: FC = () => {
           <div className={css(titleStyles)}>{t('objectives_and_reviews', 'Objectives & Reviews')}</div>
           <div className={css(contentStyles)}>
             <div className={css(blockStyles)}>
-              <div className={css(countStyles, { color: colors.pending })}>{waitingCount}</div>
+              <div className={css(countStyles, { color: waitingCount > 0 ? colors.pending : 'inherit' })}>
+                {waitingCount}
+              </div>
               <div className={css(subtitleStyles)}>{t('your_pending_actions', 'Your pending actions')}</div>
             </div>
             <div className={css(blockStyles)}>

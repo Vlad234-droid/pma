@@ -95,6 +95,7 @@ const actionBlock: Rule = {
 const filtersWrapperStyles: Rule = {
   display: 'flex',
   justifyContent: 'space-between',
+  marginBottom: '24px',
 };
 
 const filtersStyles: Rule = {
