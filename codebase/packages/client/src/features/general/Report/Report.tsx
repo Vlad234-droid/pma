@@ -16,7 +16,6 @@ import ChartWidget from './widgets/ChartWidget';
 import TableWidget from './widgets/TableWidget';
 
 import { Page } from 'pages';
-import useQueryString from 'hooks/useQueryString';
 import { useReportData } from './hooks';
 import { isSingular, paramsReplacer } from 'utils';
 import { convertToLink, IsReportTiles, View } from './config';
@@ -24,8 +23,13 @@ import { ReportPage as ReportPageType, ReportType, TitlesReport } from 'config/e
 
 export const REPORT_WRAPPER = 'REPORT_WRAPPER';
 
-const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ year, tiles, savedFilter }) => {
-  const query = useQueryString() as Record<string, string | number>;
+type Props = {
+  year: string;
+  tiles: Array<string>;
+  savedFilters: Record<string, Record<string, boolean>>;
+};
+
+const Report: FC<Props> = ({ year, tiles, savedFilters }) => {
   const { t } = useTranslation();
   const { css, matchMedia } = useStyle();
   const small = matchMedia({ xSmall: true, small: true }) || false;
@@ -34,7 +38,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
   const anniversary = useSelector(getReportByType('anniversaryReviews'));
   const anniversaryReport = anniversary?.find(({ type }) => type === ReportType.EYR) || {};
 
-  useReportData(query, year);
+  useReportData(savedFilters, year);
 
   const isDisplayTile = useCallback(
     (name) => {
@@ -44,7 +48,10 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
     [tiles],
   );
 
-  const filters = useMemo(() => (savedFilter ? { state: { filters: savedFilter } } : { state: null }), [savedFilter]);
+  const filters = useMemo(
+    () => (savedFilters ? { state: { filters: savedFilters } } : { state: null }),
+    [savedFilters],
+  );
 
   if (!loaded) return <Spinner />;
 

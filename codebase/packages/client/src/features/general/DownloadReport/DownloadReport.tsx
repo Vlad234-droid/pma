@@ -3,6 +3,7 @@ import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router-dom';
 
 import { CanPerform, role } from 'features/general/Permission';
 import { WrapperModal } from 'features/general/Modal';
@@ -11,19 +12,24 @@ import { Checkbox, Item, Option, Select } from 'components/Form';
 import { Trans, useTranslation } from 'components/Translation';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 
-import { downloadReportStatistics } from './utils';
-import { getFinancialYear, getYearsFromCurrentYear } from 'utils/date';
+import { formatDateStringFromISO, getFinancialYear, getYearsFromCurrentYear } from 'utils/date';
 import success from 'images/success.jpg';
-import { checkboxes, getRequestParams, reportByYearSchema } from './config';
+import { checkboxes, getTopics, reportByYearSchema } from './config';
 
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import { ReportPage } from 'config/enum';
 import { Page } from 'pages';
+import { filterToRequest } from 'utils';
+import useDownloadExelFile from 'hooks/useDownloadExelFile';
+
+const REPORT_URL = 'reports/statistics-report/formats/excel';
 
 export const DOWNLOAD_WRAPPER = 'modal-wrapper';
 
 const DownloadReport: FC = () => {
   const { css, matchMedia } = useStyle();
+  const { state } = useLocation();
+  const { filters } = (state as any) || {};
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -31,6 +37,7 @@ const DownloadReport: FC = () => {
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(reportByYearSchema),
   });
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const {
     formState: { isValid },
     getValues,
@@ -40,16 +47,25 @@ const DownloadReport: FC = () => {
 
   const values = getValues();
 
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const downloadReport = useDownloadExelFile({
+    resource: { url: REPORT_URL },
+    fileName: `Statistics Report (${formatDateStringFromISO(new Date().toISOString(), 'dd LLL yyyy HH:mm:ms')})`,
+    ext: 'xlsx',
+    errorMassage: {
+      title: t('statistics_not_found', 'Statistics not found'),
+      description: t('try_to_select_another_year', 'Try to select another year.'),
+    },
+  });
 
   const onSubmit = (data) => {
     const { year, topics } = data;
-    downloadReportStatistics({
+    downloadReport({
       year,
-      topics: getRequestParams(
+      topics_in: getTopics(
         //@ts-ignore
         Object.entries(topics).reduce((acc, [keys, value]) => [...(value ? [keys] : []), ...acc], []),
       ),
+      ...filterToRequest(filters),
     }).then(() => setShowSuccessModal(true));
   };
 

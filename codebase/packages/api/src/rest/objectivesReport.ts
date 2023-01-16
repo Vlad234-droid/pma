@@ -57,3 +57,7 @@ export const getColleaguesLeadershipReviews = <T extends string>(params: { year:
 export const getReportsTotalColleagues = <T extends string>(params: { year: T }) => {
   return httpClient.get(`${domain}/colleagues/total`, { params });
 };
+
+export const getReportingFilters = (params) => {
+  return httpClient.get(`${domain}/filters`, { params });
+};

@@ -1,5 +1,5 @@
 import { Condition, ColleagueFilterOptions } from '@pma/openapi';
-import { filterMap } from '../../CreateUpdateCalibrationSession/utils';
+import { filterMap } from 'utils';
 
 export const dataFromSessionResponse = (filter: Condition[], colleagueFilter: ColleagueFilterOptions) => {
   return filter

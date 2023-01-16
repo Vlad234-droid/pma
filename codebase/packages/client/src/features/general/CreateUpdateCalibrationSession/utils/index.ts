@@ -1,33 +1,6 @@
 import { Condition, ConditionOperandEnum, ColleagueFilterOptions, CalibrationColleague } from '@pma/openapi';
-import { Operand } from 'config/enum';
 import { ActionType, CalibrationSessionUiType } from '../types';
-
-export const filterMap = {
-  'department-uuid': 'departments',
-  'legal-entity-uuid': 'legal-entities',
-  'line-manager-uuid': 'line-managers',
-  'function-uuid': 'functions',
-  'business-group-uuid': 'business-groups',
-  'country-code': 'countries',
-  'work-level': 'work-levels',
-};
-
-export const filterMapRevers = Object.fromEntries(Object.entries(filterMap).map((a) => a.reverse()));
-
-export const filterToRequest = (filter: Record<string, Record<string, boolean>>) =>
-  Object.entries(filter).reduce((acc, [key, val]) => {
-    if (typeof val === 'object') {
-      const keys = Object.entries(val || {})
-        .filter(([, value]) => !!value)
-        .map(([key]) => key);
-      if (keys.length) {
-        return { ...acc, [`${filterMapRevers[key] || key}${Operand.IN}`]: keys };
-      }
-      return acc;
-    } else {
-      return { ...acc, [`${filterMapRevers[key] || key}${Operand.IN}`]: val };
-    }
-  }, {});
+import { filterMap, filterToRequest } from 'utils';
 
 export const filterFromSessionResponse = (filter: Condition[]) =>
   filter.reduce((acc, val) => {

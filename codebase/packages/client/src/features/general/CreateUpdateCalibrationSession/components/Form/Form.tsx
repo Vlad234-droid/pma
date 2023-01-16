@@ -23,9 +23,9 @@ import { ColleaguesRemover } from '../ColleaguesRemover';
 import { ColleaguesFinder } from '../ColleaguesFinder';
 import { CalibrationSessionUiType, ColleagueSimpleExtended, ActionType } from '../../types';
 import { createSchema } from '../../config';
-import { filterToRequest, prepareColleaguesForUI, getSelectedGroups } from '../../utils';
+import { prepareColleaguesForUI, getSelectedGroups } from '../../utils';
 import useColleagueSimple from '../../hooks/useColleagueSimple';
-import { filtersOrder } from 'utils';
+import { filtersOrder, filterToRequest } from 'utils';
 
 type Props = {
   defaultValues: CalibrationSessionUiType;

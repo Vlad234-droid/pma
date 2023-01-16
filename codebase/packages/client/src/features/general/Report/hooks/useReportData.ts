@@ -1,13 +1,15 @@
 import { useEffect } from 'react';
 import { ReportActions, ReviewType } from '@pma/store';
 import { useDispatch } from 'react-redux';
+import { filterToRequest } from 'utils';
 
-export const useReportData = (fields: Record<string, string | number> = {}, year: string) => {
+export const useReportData = (filters: Record<string, Record<string, boolean>> = {}, year: string) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     const payload = {
       year,
+      ...filterToRequest(filters),
     };
     dispatch(
       ReportActions.getReviewReport({
@@ -21,5 +23,5 @@ export const useReportData = (fields: Record<string, string | number> = {}, year
     dispatch(ReportActions.getAnniversaryReviewsReport(payload));
     dispatch(ReportActions.getLeadershipReviewsReport(payload));
     dispatch(ReportActions.getReportsTotalColleagues(payload));
-  }, [year]);
+  }, [year, JSON.stringify(filters)]);
 };

@@ -1,7 +1,7 @@
 import { createReducer } from 'typesafe-actions';
 import { ColleagueFilterOptions } from '@pma/openapi';
 
-import { getColleagueFilter, clearColleagueFilter } from './actions';
+import { getColleagueFilter, clearColleagueFilter, getReportingFilters } from './actions';
 
 export type InitialStateType = {
   data: ColleagueFilterOptions;
@@ -25,6 +25,18 @@ export default createReducer(initialState)
     };
   })
   .handleAction(getColleagueFilter.success, (state, { payload }) => {
+    return {
+      ...payload,
+      meta: { ...state.meta, loading: false, loaded: true },
+    };
+  })
+  .handleAction(getReportingFilters.request, (state) => {
+    return {
+      ...state,
+      meta: { ...state.meta, loading: true, error: null, loaded: false },
+    };
+  })
+  .handleAction(getReportingFilters.success, (state, { payload }) => {
     return {
       ...payload,
       meta: { ...state.meta, loading: false, loaded: true },

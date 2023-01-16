@@ -7,7 +7,7 @@ const useDownloadExelFile = ({
   ext = 'xlsx',
   errorMassage,
 }: {
-  resource: { url: string; params: any };
+  resource: { url: string; params?: any };
   fileName: string;
   ext?: string;
   errorMassage: {
@@ -25,7 +25,7 @@ const useDownloadExelFile = ({
     });
   };
 
-  return () => downloadFile(resource, success, failure);
+  return (params = {}) => downloadFile({ ...resource, params: resource.params || params }, success, failure);
 };
 
 export default useDownloadExelFile;

@@ -3,13 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { ColleagueFilterAction, getColleagueFilterSelector } from '@pma/store';
 import FilterIcon from 'features/general/Filters/components/FilterIcon';
-import { getCurrentYear, getYearsFromCurrentYear, filtersOrder } from 'utils';
+import { getCurrentYear, getYearsFromCurrentYear, filtersOrder, filterToRequest } from 'utils';
 import useClickOutside from 'hooks/useClickOutside';
 import { Option, Select } from 'components/Form';
 import Search from 'features/general/Filters/components/Search';
 import FilterForm from 'components/FilterForm';
 import UnderlayModal from 'components/UnderlayModal';
-import { filterToRequest } from 'features/general/CreateUpdateCalibrationSession/utils';
 import useDebounce from 'hooks/useDebounce';
 
 type WithDateProps = {

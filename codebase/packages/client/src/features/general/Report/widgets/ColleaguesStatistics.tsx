@@ -13,7 +13,11 @@ import { getReportTitles, getTitle, checkBusinessType, checkTableChart } from '.
 import { ReportPage, ReportType, TitlesReport } from 'config/enum';
 import { isSingular } from 'utils';
 
-export const ColleaguesStatistics: FC<{ type: ReportPage }> = ({ type }) => {
+type Props = {
+  type: ReportPage;
+};
+
+export const ColleaguesStatistics: FC<Props> = ({ type }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const anniversary = useSelector(getReportByType('anniversaryReviews'));

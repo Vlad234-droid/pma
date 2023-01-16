@@ -137,8 +137,18 @@ export const getDefaultData = (type, t) => {
         count: 0,
         title: t(Rating.OUTSTANDING, 'Outstanding'),
       },
+      {
+        percentage: 0,
+        count: 0,
+        title: t(Rating.NTB, 'New to business'),
+      },
     ],
     [ReportPage.REPORT_EYR_BREAKDOWN]: [
+      {
+        percentage: 0,
+        count: 0,
+        title: t(Rating.NTB, 'New to business'),
+      },
       {
         percentage: 0,
         count: 0,
