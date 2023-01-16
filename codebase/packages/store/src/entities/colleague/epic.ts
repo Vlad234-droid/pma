@@ -13,7 +13,7 @@ export const getColleagueByUuidEpic: Epic = (action$, _, { api }) =>
         colleague: api.getColleagueByUuid(payload),
         cycles: api.getPerformanceCyclesByStatuses({
           colleagueUuid: payload.colleagueUuid,
-          allowedStatuses: ['OPENED_STARTING', 'STARTED', 'FINISHED', 'FINISHING', 'COMPLETED'],
+          allowedStatuses: [/*'OPENED_STARTING',*/ 'STARTED', 'FINISHED', 'FINISHING', 'COMPLETED'],
         }),
       }).pipe(
         //@ts-ignore
