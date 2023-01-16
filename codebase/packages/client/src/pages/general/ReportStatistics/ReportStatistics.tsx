@@ -101,7 +101,7 @@ const defineHeaderTitle = (type, t) => {
       [tilePage]: t('eyr_breakdown', 'Breakdown of Year-end review'),
     },
     [ReportPage.REPORT_MYR_BREAKDOWN]: {
-      [tilePage]: t('myr_breakdown', 'Breakdown of Mid-year review'),
+      [tilePage]: t('myr_breakdown', 'Breakdown of approved Mid-year review'),
     },
     [ReportPage.REPORT_ANNIVERSARY_REVIEWS]: {
       [tilePage]: t('anniversary_reviews', 'Anniversary Reviews completed per quarterTileRport'),

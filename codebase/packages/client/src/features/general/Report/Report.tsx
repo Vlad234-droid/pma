@@ -210,7 +210,10 @@ const Report: FC<Props> = ({ year, tiles, savedFilters }) => {
               }
             >
               {({ data }) => (
-                <InfoTable mainTitle={t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of Mid-year review')} data={data} />
+                <InfoTable
+                  mainTitle={t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of approved Mid-year review')}
+                  data={data}
+                />
               )}
             </TableWidget>
           </div>
@@ -278,7 +281,10 @@ const Report: FC<Props> = ({ year, tiles, savedFilters }) => {
               }
             >
               {({ data }) => (
-                <InfoTable mainTitle={t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of End-year review')} data={data} />
+                <InfoTable
+                  mainTitle={t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of approved End-year review')}
+                  data={data}
+                />
               )}
             </TableWidget>
           </div>
