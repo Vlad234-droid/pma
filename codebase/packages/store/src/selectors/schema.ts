@@ -80,7 +80,7 @@ export const getColleaguesSchemas = (colleagueUuid) =>
         } = data[key];
         timelinePoints?.forEach((timelinePoint) => {
           if (timelinePoint?.properties?.pm_timeline_point_code && timelinePoint?.form?.id) {
-            const form = data[key]?.forms.find((form) => form.id === timelinePoint.form.id);
+            const form = data[key]?.forms?.find((form) => form.id === timelinePoint.form.id);
             if (form) {
               reviews[timelinePoint?.properties?.pm_timeline_point_code] = {
                 ...data[key],
