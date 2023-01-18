@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { colors, fontWeight, Rule, useStyle } from '@pma/dex-wrapper';
+import { colors, CreateRule, fontWeight, Rule, useStyle } from '@pma/dex-wrapper';
 import { colleagueUUIDSelector, getAllEmployees, ManagersActions } from '@pma/store';
 
 import { Status } from 'config/enum';
@@ -64,7 +64,7 @@ const ActionCount: FC = () => {
           </div>
           <div className={css(titleStyles)}>{t('calibration_ratings_tile', 'Calibration Ratings')}</div>
           <div className={css(contentStyles)}>
-            <div className={css(countStyles, { color: colors.pending })}>{waitingCount}</div>
+            <div className={css(countStyles({ shouldColorText: waitingCount > 0 }))}>{waitingCount}</div>
           </div>
           <div>{t('colleagues_pending_submission', 'Colleagues ratings are pending submission')}</div>
         </div>
@@ -112,9 +112,12 @@ const subtitleStyles: Rule = ({ theme }) => ({
   color: colors.base,
 });
 
-const countStyles: Rule = ({ theme }) => ({
-  fontSize: `${theme.font.fixed.f28.fontSize}`,
-  lineHeight: `${theme.font.fixed.f28.lineHeight}`,
-  letterSpacing: '0px',
-  fontWeight: fontWeight.bold,
-});
+const countStyles: CreateRule<{ shouldColorText?: boolean }> =
+  ({ shouldColorText }) =>
+  ({ theme }) => ({
+    fontSize: `${theme.font.fixed.f28.fontSize}`,
+    lineHeight: `${theme.font.fixed.f28.lineHeight}`,
+    letterSpacing: '0px',
+    fontWeight: fontWeight.bold,
+    color: shouldColorText ? colors.pending : colors.base,
+  });

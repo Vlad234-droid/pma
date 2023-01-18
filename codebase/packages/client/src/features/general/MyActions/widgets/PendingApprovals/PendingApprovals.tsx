@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getEmployeesWithReviewStatuses } from '@pma/store';
-import { useStyle, colors, Rule, fontWeight } from '@pma/dex-wrapper';
+import { useStyle, colors, Rule, fontWeight, CreateRule } from '@pma/dex-wrapper';
 
 import { useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
@@ -36,7 +36,7 @@ const PendingApprovals: FC = () => {
             </span>
           </div>
           <div className={css(countWrapperStyles)}>
-            <span className={css(countStyles)}>{waitingCount}</span>
+            <span className={css(countStyles({ shouldColorText: waitingCount > 0 }))}>{waitingCount}</span>
           </div>
         </div>
       </TileWrapper>
@@ -91,15 +91,17 @@ const countWrapperStyles: Rule = {
   alignItems: 'center',
 };
 
-const countStyles: Rule = ({ theme }) => ({
-  background: colors.white,
-  borderRadius: '50px',
-  padding: '8px',
-  color: colors.pending,
-  minWidth: '80px',
-  textAlign: 'center',
-  fontSize: `${theme.font.fixed.f20.fontSize}`,
-  lineHeight: `${theme.font.fixed.f20.lineHeight}`,
-  letterSpacing: '0px',
-  fontWeight: fontWeight.medium,
-});
+const countStyles: CreateRule<{ shouldColorText?: boolean }> =
+  ({ shouldColorText }) =>
+  ({ theme }) => ({
+    background: colors.white,
+    borderRadius: '50px',
+    padding: '8px',
+    color: shouldColorText ? colors.pending : colors.base,
+    minWidth: '80px',
+    textAlign: 'center',
+    fontSize: `${theme.font.fixed.f20.fontSize}`,
+    lineHeight: `${theme.font.fixed.f20.lineHeight}`,
+    letterSpacing: '0px',
+    fontWeight: fontWeight.medium,
+  });
