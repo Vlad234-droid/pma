@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { colors, fontWeight, Rule, useStyle } from '@pma/dex-wrapper';
+import { colors, CreateRule, fontWeight, Rule, useStyle } from '@pma/dex-wrapper';
 import { colleagueUUIDSelector, getEmployeesWithReviewStatuses, ManagersActions } from '@pma/store';
 
 import { Status } from 'config/enum';
@@ -53,13 +53,11 @@ const ActionCount: FC = () => {
           <div className={css(titleStyles)}>{t('objectives_and_reviews', 'Objectives & Reviews')}</div>
           <div className={css(contentStyles)}>
             <div className={css(blockStyles)}>
-              <div className={css(countStyles, { color: waitingCount > 0 ? colors.pending : 'inherit' })}>
-                {waitingCount}
-              </div>
+              <div className={css(countStyles({ shouldColorText: waitingCount > 0 }))}>{waitingCount}</div>
               <div className={css(subtitleStyles)}>{t('your_pending_actions', 'Your pending actions')}</div>
             </div>
             <div className={css(blockStyles)}>
-              <div className={css(countStyles, { color: colors.base })}>{draftCount}</div>
+              <div className={css(countStyles({ shouldColorText: draftCount > 0 }))}>{draftCount}</div>
               <div className={css(subtitleStyles)}>
                 {t('your_colleagues_pending_actions', 'Your colleagues pending actions')}
               </div>
@@ -110,9 +108,12 @@ const subtitleStyles: Rule = ({ theme }) => ({
   color: colors.base,
 });
 
-const countStyles: Rule = ({ theme }) => ({
-  fontSize: `${theme.font.fixed.f28.fontSize}`,
-  lineHeight: `${theme.font.fixed.f28.lineHeight}`,
-  letterSpacing: '0px',
-  fontWeight: fontWeight.bold,
-});
+const countStyles: CreateRule<{ shouldColorText?: boolean }> =
+  ({ shouldColorText }) =>
+  ({ theme }) => ({
+    fontSize: `${theme.font.fixed.f28.fontSize}`,
+    lineHeight: `${theme.font.fixed.f28.lineHeight}`,
+    letterSpacing: '0px',
+    fontWeight: fontWeight.bold,
+    color: shouldColorText ? colors.pending : colors.base,
+  });
