@@ -25,7 +25,12 @@ import { initialState as knowledgeLibraryState } from '../entities/knowledgeLibr
 import { initialState as statisticsState } from '../entities/statistics/reducer';
 import { initialState as calibrationSessionsState } from '../entities/calibrationSessions/reducer';
 import { initialState as calibrationReviewState } from '../entities/calibrationReview/reducer';
+import { initialState as colleagueFilterState } from '../entities/colleagueFilter/reducer';
+import { initialState as colleagueSimpleState } from '../entities/colleagueSimple/reducer';
 import { initialState as completedReviewsState } from '../entities/completedReviews/reducer';
+import { initialState as calibrationReviewsState } from '../entities/calibrationReviews/reducer';
+import { initialState as calibrationStatisticsState } from '../entities/calibrationStatistics/reducer';
+import { initialState as calibrationStatisticsRatingsState } from '../entities/calibrationStatisticsRatings/reducer';
 import { State as TimelineState } from 'entities/timeline/types';
 
 //@ts-ignore
@@ -56,7 +61,12 @@ export const initialState = {
   statistics: statisticsState,
   calibrationSessions: calibrationSessionsState,
   calibrationReview: calibrationReviewState,
+  calibrationReviews: calibrationReviewsState,
+  colleagueFilter: colleagueFilterState,
+  colleagueSimple: colleagueSimpleState,
   completedReviews: completedReviewsState,
+  calibrationStatistics: calibrationStatisticsState,
+  calibrationStatisticsRatings: calibrationStatisticsRatingsState,
 };
 
 type InitialStateType = Omit<typeof initialState, 'timeline'>;

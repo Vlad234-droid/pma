@@ -26,7 +26,14 @@ export const IconButton: FC<IconButtonProps> = memo(
   ({ graphic, iconStyles, iconProps, customVariantRules = {}, isDisabled, children, iconPosition, ...props }) => {
     const getContent = () => {
       const content = [
-        <Icon data-test-id={graphic} key='icon' graphic={graphic} iconStyles={iconStyles} {...iconProps} />,
+        <Icon
+          data-test-id={graphic}
+          key='icon'
+          graphic={graphic}
+          iconStyles={iconStyles}
+          {...iconProps}
+          size={'17px'}
+        />,
         children,
       ];
       if (iconPosition === Position.RIGHT) return [content[1], content[0]];

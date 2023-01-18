@@ -1,7 +1,7 @@
 import authContext from 'contexts/authContext';
 import { getTescoBankContent } from 'features/bank/ShareWidget';
 import React, { FC, useContext } from 'react';
-import { Tenant } from 'utils';
+import { Tenant } from 'features/general/Permission';
 import { getTescoContent } from '../../utils';
 import ShareWidgetBase, { ShareWidgetBaseProps } from '../ShareWidgetBase';
 

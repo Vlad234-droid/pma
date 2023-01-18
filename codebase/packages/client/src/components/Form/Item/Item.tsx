@@ -67,7 +67,7 @@ export const Item: FC<ItemProps> = ({
           {errormessage && !hasFocus && <span className={css(errorMessageStyle)}>{errormessage}</span>}
         </div>
         {withIcon && (
-          <span
+          <div
             //TODO: remove this when Accessibility will be integrated
             className={css(IconStyle, { display: 'none' })}
             onClick={() => {
@@ -76,10 +76,10 @@ export const Item: FC<ItemProps> = ({
             }}
           >
             {recordingState ? <Icon graphic='roundStop' /> : <Icon graphic='microphone' fill={colors.dustyGray} />}
-          </span>
+          </div>
         )}
         {customIcon && (
-          <span
+          <div
             className={css(IconStyle, iconCustomStyles)}
             onClick={() => {
               setInputFocus();
@@ -87,7 +87,7 @@ export const Item: FC<ItemProps> = ({
             }}
           >
             {customIcon}
-          </span>
+          </div>
         )}
       </div>
     </div>
@@ -116,6 +116,8 @@ const labelWrapperStyle: Rule = {
 };
 const childrenWrapper: Rule = {
   position: 'relative',
+  //width: '40px',
+
   ':focus-within svg path': {
     fill: colors.tescoBlue,
   },
@@ -131,8 +133,13 @@ const errorMessageStyle: Rule = ({ theme }) => ({
 });
 
 const IconStyle: Rule = {
+  width: '40px',
+  height: '40px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
   position: 'absolute',
-  top: '10px',
-  right: '12px',
+  top: 0,
+  right: 0,
   cursor: 'pointer',
 };

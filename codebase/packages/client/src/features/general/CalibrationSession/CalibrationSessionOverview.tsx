@@ -1,167 +1,73 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { FC, useRef, useState } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { useLocation } from 'react-router-dom';
 
-import { Page } from 'pages';
+import ColleaguesRatings from './components/ColleaguesRatings';
 import { useTranslation } from 'components/Translation';
 import { ListView } from './components/ListView';
-import { Line } from 'components/Line';
-import { RatingsSubmitted, CalibrationsCompleted, RatingsChange, Widget } from './widgets';
-import { Filter } from './components/Filter';
-import ColleaguesReviews from './components/ColleaguesReviews';
-import Graph from 'components/Graph';
-import { Rating } from 'config/enum';
-
 import { TileWrapper } from 'components/Tile';
-import { ActiveList } from './utils/types';
-import { buildPath } from '../Routes';
+import Spinner from 'components/Spinner';
+import { Line } from 'components/Line';
+import Graph from 'components/Graph';
 
-const CalibrationSessionOverview = () => {
+import { View } from './types';
+import { useCalibrationStatisticsRatings, useClearCalibrationData, useReviewsCalibrationList } from './hook';
+import { buildData } from './utils';
+
+type Props = {
+  filters: any;
+  period: string;
+  searchValue?: string;
+};
+const CalibrationSessionOverview: FC<Props> = ({ period, filters, searchValue }) => {
   const { css, matchMedia } = useStyle();
-  const navigate = useNavigate();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const mediumScreen = matchMedia({ xSmall: false, small: false, medium: true }) || false;
-
-  const handleCalibrationSessionList = () => {
-    navigate(buildPath(Page.CALIBRATION_SESSION_LIST));
-  };
-  const handleCreateCalibrationSession = () => {
-    navigate(buildPath(Page.CREATE_CALIBRATION_SESSION));
-  };
-
   const { t } = useTranslation();
-  const [period, setPeriod] = useState<string>('2021 - 2022');
-  const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
+  const { state } = useLocation();
+  const { activeList: backList } = (state as any) || {};
+
+  const [activeList, setActiveList] = useState<View>(backList || View.LIST);
   const listRef = useRef<HTMLDivElement>();
 
-  const data = {
-    Outstanding: [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        type: 'Outstanding',
-        value: 'how',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        type: 'Outstanding',
-        value: 'how',
-      },
-    ],
-    Great: [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        type: 'Outstanding',
-        value: 'how',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        type: 'Outstanding',
-        value: 'how',
-      },
-    ],
-    Satisfactory: [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        type: 'Outstanding',
-        value: 'how',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        type: 'Outstanding',
-        value: 'how',
-      },
-    ],
-    'Below expected': [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        type: 'Outstanding',
-        value: 'how',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        type: 'Outstanding',
-        value: 'how',
-      },
-    ],
-  };
+  const { statistics, loading: statisticsLoading } = useCalibrationStatisticsRatings({
+    activeList,
+    period,
+    filters,
+    searchValue,
+  });
+  const { getCalibrationReviewsList, data } = useReviewsCalibrationList({ activeList, period, filters, searchValue });
+
+  useClearCalibrationData();
 
   return (
     <div>
-      <div>
-        <Filter withDateFilter setPeriod={(active) => setPeriod(active)} />
-        <div className={css(widgetContainerStyles)}>
-          <Widget title={t('download_report', 'Download report')} graphics={'download'} onClick={console.log} />
-          <Widget
-            title={t('calibration_sessions', 'Calibration sessions')}
-            graphics={'chart'}
-            onClick={handleCalibrationSessionList}
-          />
-          <Widget
-            title={t('create_calibration_session', 'Create calibration session')}
-            graphics={'add'}
-            onClick={handleCreateCalibrationSession}
-          />
-          <RatingsSubmitted />
-          <CalibrationsCompleted />
-          <RatingsChange />
-        </div>
-      </div>
       <div className={css(listHeaderContainer({ width: listRef?.current?.clientWidth, mediumScreen, mobileScreen }))}>
-        <p>{t('ratings_period', 'Ratings', { period })}</p>
+        <p>{t('ratings_period', 'Ratings', { period: `${period} - ${Number(period) + 1}` })}</p>
         <ListView active={activeList} setActive={(active) => setActiveList(active)} ref={listRef} />
       </div>
       <Line styles={lineStyles} />
-      {activeList !== ActiveList.GRAPH ? (
-        <ColleaguesReviews
+      {statisticsLoading ? (
+        <Spinner fullHeight />
+      ) : activeList !== View.GRAPH ? (
+        <ColleaguesRatings
+          period={period}
           data={data}
           activeList={activeList}
-          key={activeList}
-          styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
+          styles={activeList === View.TABLE ? tableStyles({ mobileScreen }) : {}}
+          onUpload={(rating, _start, _limit) =>
+            getCalibrationReviewsList({ rating, _start, _limit, _search: searchValue, filters })
+          }
+          statistics={statistics}
         />
       ) : (
-        <TileWrapper customStyle={tileStyles}>
+        <TileWrapper customStyle={tileStyles({ mobileScreen })}>
           <Graph
-            title={t('calibration_submission', 'Calibration submission', { year: '2021' })}
+            title={t('calibration_submission', 'Calibration submission', { year: `${period} - ${Number(period) + 1}` })}
+            properties={buildData(statistics, t, 'count')}
             currentData={{
-              title: '2022',
-              ratings: {
-                [Rating.OUTSTANDING]: 30,
-                [Rating.GREAT]: 20,
-                [Rating.SATISFACTORY]: 50,
-                [Rating.BELOW_EXPECTED]: 70,
-              },
+              title: period,
+              ratings: buildData(statistics, t, 'percentage'),
             }}
           />
         </TileWrapper>
@@ -170,20 +76,14 @@ const CalibrationSessionOverview = () => {
   );
 };
 
-const widgetContainerStyles: Rule = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-  gap: '8px',
-  marginBottom: '56px',
-};
 const lineStyles: Rule = {
   marginTop: '16px',
   marginBottom: '8px',
 };
-const tileStyles: Rule = {
-  padding: '24px',
+const tileStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  padding: mobileScreen ? '24px 24px 24px 0px' : '24px',
   marginTop: '24px',
-};
+});
 const tableStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) =>
   ({
     display: 'flex',

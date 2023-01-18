@@ -11,15 +11,6 @@ import {
 
 import { Status } from '../../config/types';
 
-const initialObjectivesData = [
-  { number: 1, title: '' },
-  { number: 2, title: '' },
-  { number: 3, title: '' },
-  { number: 4, title: '' },
-  { number: 5, title: '' },
-  { number: 6, title: '' },
-];
-
 export const initialState = {
   objectives: [],
   auditLogs: [],
@@ -63,12 +54,12 @@ export default createReducer(initialState)
   }))
   .handleAction(getOrgObjectives.success, (state, { payload }) => ({
     ...state,
-    objectives: payload.length ? payload : initialObjectivesData,
+    objectives: payload,
     meta: { ...state.meta, loading: false, loaded: true },
   }))
   .handleAction(getOrgObjectives.failure, (state, { payload }) => ({
     ...state,
-    objectives: initialObjectivesData,
+    objectives: [],
     meta: { ...state.meta, error: payload, loading: false, loaded: true },
   }))
   .handleAction(getOrgAuditLogs.request, (state) => ({

@@ -12,7 +12,6 @@ import {
   timelineStartedSelector,
   userCurrentCycleTypeSelector,
   colleagueCurrentCycleSelector,
-  currentUserSelector,
 } from '@pma/store';
 
 import useDispatch from 'hooks/useDispatch';
@@ -51,10 +50,12 @@ const MyObjectives: FC = () => {
 
   useEffect(() => {
     if (colleagueUuid) {
-      dispatch(SchemaActions.getSchema({ colleagueUuid }));
+      dispatch(SchemaActions.getSchema({ colleagueUuid, cycleUuid: currentCycle }));
+    }
+    if (colleagueUuid && currentCycle) {
       dispatch(TimelineActions.getTimeline({ colleagueUuid, cycleUuid: currentCycle }));
     }
-  }, [colleagueUuid]);
+  }, [colleagueUuid, currentCycle]);
 
   useEffect(() => {
     if (timelinesLoaded && !timelinesExist) {

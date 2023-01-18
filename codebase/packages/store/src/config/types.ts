@@ -144,6 +144,7 @@ export enum ReviewType {
   MYR = 'MYR',
   EYR = 'EYR',
   FEEDBACK = 'FEEDBACK',
+  CALIBRATION = 'CALIBRATION',
 }
 
 export enum Statuses {

@@ -20,7 +20,7 @@ const getContent = (theme: Theme, t: TFunction, status: Status): [Graphics, stri
     case Status.WAITING_FOR_APPROVAL:
       return ['roundClock', t('waiting_for_agreed', 'Waiting agreement'), 'pending'];
     case Status.WAITING_FOR_COMPLETION:
-      return ['roundClock', t('waiting_for_completion', 'Waiting for completion'), 'pending'];
+      return ['roundClock', t('waiting_for_completion', 'Awaiting manager action'), 'pending'];
     case Status.DECLINED:
       return ['roundAlert', t('request_to_amend', 'Request to amend'), 'base'];
     case Status.OVERDUE:
@@ -38,7 +38,7 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status, text, styles }) => {
   const [graphic, label, color] = getContent(theme, t, status);
   return (
     <div className={css(wrapperStyles, styles)}>
-      <Icon graphic={graphic} color={color} iconStyles={iconStyles} title={label} />
+      <Icon graphic={graphic} color={color} iconStyles={iconStyles} title={label} size={'17px'} />
       <span className={css(labelStyles({ color }))}>
         <div>{label}</div>
         {text && <div>{text}</div>}
@@ -57,8 +57,6 @@ const wrapperStyles: Rule = ({ theme }) => ({
 
 const iconStyles: Rule = {
   marginRight: '10px',
-  width: '16px',
-  height: '16px',
   display: 'block',
 };
 

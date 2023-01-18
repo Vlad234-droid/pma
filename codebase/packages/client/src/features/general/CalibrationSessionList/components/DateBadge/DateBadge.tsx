@@ -10,7 +10,7 @@ const DateBadge: FC<{ time: string }> = ({ time }) => {
 
   return (
     <div className={css(wrapperStyles)}>
-      <Icon graphic={'calender'} color={'tescoBlue'} iconStyles={iconStyles} title={'calender'} />
+      <Icon graphic={'calenderFilled'} color={'tescoBlue'} iconStyles={iconStyles} title={'calender'} size={'17px'} />
       <span className={css(labelStyles)}>
         <div>{t('full_date', { date: new Date(time || '') })}</div>
       </span>
@@ -28,9 +28,6 @@ const wrapperStyles: Rule = ({ theme }) => ({
 
 const iconStyles: Rule = {
   marginRight: '10px',
-  width: '16px',
-  height: '16px',
-  display: 'block',
 };
 
 const labelStyles: Rule = ({ theme }) => ({

@@ -3,32 +3,38 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Panel, Section } from 'components/Accordion';
-import { Rating, Status } from 'config/enum';
+import { Status } from 'config/enum';
 import { Employee } from 'config/types';
 
 import TimeLines from '../Timelines';
 import ProfilePreview from '../ProfilePreview';
+import { isDateFromISOAfterNow, isDateFromISOBeforeNow } from 'utils';
 
 type Props = {
   uuid: string;
   status: Status;
   employee: Employee;
   fullTeamView?: boolean;
-  rating?: Rating;
   onClick?: () => void;
   customWrapperStyle?: React.CSSProperties | {};
 };
 
-const TeamMateProfile: FC<Props> = ({
-  uuid,
-  status,
-  employee,
-  fullTeamView = false,
-  rating,
-  onClick,
-  customWrapperStyle,
-}) => {
+const TeamMateProfile: FC<Props> = ({ uuid, status, employee, fullTeamView = false, onClick, customWrapperStyle }) => {
   const { css } = useStyle();
+  const hasCalibrationRating = !!employee.reviews.find(
+    ({ type, status }) => type === 'CALIBRATION' && status !== Status.DRAFT,
+  );
+
+  const calibrationPoint = employee.timeline.find(({ code }) => code === 'CALIBRATION');
+  const { status: TLPStatus, startTime, endTime } = calibrationPoint || {};
+
+  const isStartedCalibration =
+    !!TLPStatus &&
+    !!startTime &&
+    !!endTime &&
+    ![Status.NOT_STARTED, Status.COMPLETED].includes(TLPStatus) &&
+    isDateFromISOAfterNow(startTime) &&
+    isDateFromISOBeforeNow(endTime);
 
   return (
     <div data-test-id='team-mate-profile'>
@@ -42,7 +48,7 @@ const TeamMateProfile: FC<Props> = ({
                     status={status}
                     employee={employee}
                     fullTeamView={fullTeamView}
-                    rating={rating}
+                    showCalibrationRating={isStartedCalibration && !hasCalibrationRating}
                     onClick={onClick}
                   />
                   <Panel>

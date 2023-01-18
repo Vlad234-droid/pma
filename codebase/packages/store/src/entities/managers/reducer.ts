@@ -1,28 +1,75 @@
 import { createReducer } from 'typesafe-actions';
-import { getManagerReviews } from './actions';
+import { getManagerReviews, getManagerCalibrations } from './actions';
 
 export const initialState = {
-  data: {},
-  meta: { loading: false, loaded: false, error: null },
+  reviews: {
+    data: {},
+    meta: { loading: false, loaded: false, error: null },
+  },
+  calibrations: {
+    data: {},
+    meta: { loading: false, loaded: false, error: null },
+  },
 };
 
-const request = (state) => ({ ...state, meta: { ...state.meta, loading: true, loaded: false } });
-
-const success = (state, { payload }) => ({
+const managerReviewsRequest = (state) => ({
   ...state,
-  data: {
-    ...state.data,
-    ...payload,
+  reviews: {
+    data: { ...state.reviews.data },
+    meta: { ...state.meta, loading: true, loaded: false },
   },
-  meta: { ...state.meta, loading: false, loaded: true },
 });
 
-const failure = (state, { payload }) => ({
+const managerReviewsSuccess = (state, { payload }) => ({
   ...state,
-  meta: { ...state.meta, loading: false, loaded: false, error: payload },
+  reviews: {
+    data: {
+      ...state.reviews.data,
+      ...payload,
+    },
+    meta: { ...state.meta, loading: false, loaded: true },
+  },
+});
+
+const managerReviewsFailure = (state, { payload }) => ({
+  ...state,
+  reviews: {
+    data: { ...state.reviews.data },
+    meta: { ...state.meta, loading: false, loaded: false, error: payload },
+  },
+});
+
+const managerCalibrationsRequest = (state) => ({
+  ...state,
+  calibrations: {
+    data: { ...state.calibrations.data },
+    meta: { ...state.meta, loading: true, loaded: false },
+  },
+});
+
+const managerCalibrationsSuccess = (state, { payload }) => ({
+  ...state,
+  calibrations: {
+    data: {
+      ...state.calibrations.data,
+      ...payload,
+    },
+    meta: { ...state.meta, loading: false, loaded: true },
+  },
+});
+
+const managerCalibrationsFailure = (state, { payload }) => ({
+  ...state,
+  calibrations: {
+    data: { ...state.calibrations.data },
+    meta: { ...state.meta, loading: false, loaded: false, error: payload },
+  },
 });
 
 export default createReducer(initialState)
-  .handleAction(getManagerReviews.request, request)
-  .handleAction(getManagerReviews.success, success)
-  .handleAction(getManagerReviews.failure, failure);
+  .handleAction(getManagerReviews.request, managerReviewsRequest)
+  .handleAction(getManagerReviews.success, managerReviewsSuccess)
+  .handleAction(getManagerReviews.failure, managerReviewsFailure)
+  .handleAction(getManagerCalibrations.request, managerCalibrationsRequest)
+  .handleAction(getManagerCalibrations.success, managerCalibrationsSuccess)
+  .handleAction(getManagerCalibrations.failure, managerCalibrationsFailure);

@@ -75,7 +75,7 @@ const MyReview: FC<ReviewFormType> = ({ reviewType, onClose }) => {
 
   useEffect(() => {
     dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: currentCycle } }));
-    dispatch(SchemaActions.getSchema({ colleagueUuid }));
+    dispatch(SchemaActions.getSchema({ colleagueUuid, cycleUuid: currentCycle }));
   }, [currentCycle]);
 
   const handleSaveDraft = (data) => {

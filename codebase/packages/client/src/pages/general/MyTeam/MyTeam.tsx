@@ -2,7 +2,12 @@ import React, { FC, useState, useMemo } from 'react';
 import { Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
 
 import { View, ViewFilters, default as MyTeam } from 'features/general/MyTeam';
-import { ActionCountWidget, PendingApprovalsWidget, OutstandingActionsWidget } from 'features/general/MyActions';
+import {
+  ActionCountWidget,
+  CalibrationCount,
+  PendingApprovalsWidget,
+  OutstandingActionsWidget,
+} from 'features/general/MyActions';
 import ViewNavigation from 'features/general/ViewNavigation';
 import { Filters, getEmployeesSortingOptions, useSearch, useSorting } from 'features/general/Filters';
 import { CanPerform, role, useTenant } from 'features/general/Permission';
@@ -64,10 +69,11 @@ const MyTeamPage: FC = () => {
         </div>
         <div className={css(actionsStyles)}>
           {showActions && (
-            <>
+            <div className={css(actionBlock)}>
               <ActionCountWidget />
+              <CalibrationCount />
               <TeamReporting />
-            </>
+            </div>
           )}
         </div>
       </div>
@@ -78,6 +84,12 @@ const MyTeamPage: FC = () => {
 const emptyBlock: Rule = {
   display: 'flex',
   flexDirection: 'row',
+};
+
+const actionBlock: Rule = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px',
 };
 
 const filtersWrapperStyles: Rule = {

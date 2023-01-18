@@ -1,132 +1,158 @@
-import React, { FC, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { FC, useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
-import { Icon, Rule, useStyle } from '@pma/dex-wrapper';
-import {
-  colleagueUUIDSelector,
-  getFormByCode,
-  SchemaActions,
-  CalibrationReviewAction,
-  calibrationReviewMetaSelector,
-  calibrationReviewDataSelector,
-  getColleagueSelector,
-  getColleagueMetaSelector,
-  ColleagueActions,
-} from '@pma/store';
+import { Rule, useStyle } from '@pma/dex-wrapper';
+import { CalibrationReviewAction, getColleagueSelector, getFormByCode } from '@pma/store';
+import useDispatch from 'hooks/useDispatch';
 
 import WrapperModal from 'features/general/Modal/components/WrapperModal';
-import { useTranslation } from 'components/Translation';
-import AvatarName from 'components/AvatarName';
-import { SuccessMark } from 'components/Icon';
-import useDispatch from 'hooks/useDispatch';
-import RatingForm from './components/RatingForm';
-import SuccessModal from 'components/SuccessModal';
-import User from 'config/entities/User';
 import { buildPath } from 'features/general/Routes';
-import { Page } from 'pages';
+import { Trans, useTranslation } from 'components/Translation';
+import SuccessModal from 'components/SuccessModal';
+import RatingForm from './components/RatingForm';
+import Colleague from 'components/Colleague';
+import { SuccessMark } from 'components/Icon';
+import { Mode, Status } from 'config/types';
+import { buildData, STANDARD_CALIBRATION_FORM_CODE } from './utils';
+import { useCalibrationReview, useColleague, usePermissions } from './hooks';
+import { Profile } from 'config/entities/User';
 import { paramsReplacer } from 'utils';
+import { Page } from 'pages';
 
 export enum Statuses {
   PENDING = 'PENDING',
   SUCCESS = 'SUCCESS',
 }
-export enum Modes {
-  EDIT = 'EDIT',
-  SUBMIT = 'SUBMIT',
-}
-
-const STANDARD_CALIBRATION_FORM_CODE = 'forms/standard_calibration.form';
 
 const CreateCalibrationRatings: FC = () => {
-  const { uuid, userUuid: colleagueUuid } = useParams<{ uuid: string; userUuid: string }>() as {
-    uuid: string;
-    userUuid: string;
-  };
-  const { profile } = useSelector(getColleagueSelector) || {};
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { components } = useSelector(getFormByCode(STANDARD_CALIBRATION_FORM_CODE)) || {};
-  const { loading, loaded, updated } = useSelector(calibrationReviewMetaSelector);
-  const calibrationReview = useSelector(calibrationReviewDataSelector(colleagueUuid)) || {};
   const { t } = useTranslation();
   const { css, theme } = useStyle();
+  const [currentStatus, setCurrentStatus] = useState('');
+  const [successTitle, setSuccessTitle] = useState('');
+  const { userUuid: colleagueUuid } = useParams<{ uuid: string; userUuid: string }>() as {
+    userUuid: string;
+  };
 
-  const { loaded: colleagueLoaded } = useSelector(getColleagueMetaSelector);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  const { backPath, activeList, prevBackPath, period } = (state as any) || {};
 
-  useEffect(() => {
-    dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid }));
-  }, [colleagueUuid, colleagueLoaded]);
+  const { profile } = useSelector(getColleagueSelector) || {};
 
-  const isNew = uuid === 'new';
+  const { components } = useSelector(getFormByCode(STANDARD_CALIBRATION_FORM_CODE)) || {};
 
-  useEffect(() => {
-    if (!isNew) {
-      dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid, cycleUuid: 'CURRENT' }));
+  const { loading, loaded, updated, calibrationReview } = useCalibrationReview();
+  const { loading: colleagueLoading } = useColleague();
+  const { isNew, isDraft, readOnly, sessionMode, editablePPSession, sessionModeCreate } = usePermissions();
+
+  const handleSave = (values: any) => {
+    const data = {
+      ...values,
+    };
+    setCurrentStatus(data.status);
+    setSuccessTitle(() => t('submit_calibration_ratings', 'Submit calibration ratings'));
+    dispatch(CalibrationReviewAction.saveCalibrationReview(buildData(data, colleagueUuid)));
+  };
+
+  const handleUpdate = (values) => {
+    const data = {
+      ...values,
+    };
+
+    if (sessionMode && editablePPSession) {
+      const status = calibrationReview?.status;
+      if (status === Status.WAITING_FOR_COMPLETION) {
+        data.status = Status.WAITING_FOR_COMPLETION;
+      } else {
+        const isFormChanged = !Object.entries(calibrationReview?.properties)?.every(
+          ([key, value]) => data?.[key] === value,
+        );
+
+        data.status = status === Status.APPROVED && isFormChanged ? Status.WAITING_FOR_COMPLETION : Status.APPROVED;
+      }
     }
-    dispatch(SchemaActions.getSchema({ colleagueUuid }));
-  }, []);
-
-  if (!components) return null;
+    setCurrentStatus(data.status);
+    setSuccessTitle(() =>
+      isDraft && data.status === Status.WAITING_FOR_APPROVAL
+        ? t('submit_calibration_ratings', 'Submit calibration ratings')
+        : t('calibration_ratings', 'Calibration ratings'),
+    );
+    dispatch(CalibrationReviewAction.updateCalibrationReview(buildData(data, colleagueUuid)));
+  };
 
   const handleBack = () => {
-    navigate(paramsReplacer(buildPath(Page.USER_REVIEWS), { ':uuid': colleagueUuid as string }));
+    navigate(backPath || buildPath(paramsReplacer(Page.USER_REVIEWS, { ':uuid': colleagueUuid as string })), {
+      state: { activeList, backPath: prevBackPath, period },
+    });
   };
 
-  const buildData = (properties) => ({
-    data: {
-      number: 1,
-      properties,
-      lastUpdatedTime: new Date(),
-      colleagueUuid,
-      status: 'DRAFT',
-    },
-    colleagueUuid,
-    cycleUuid: 'CURRENT',
-  });
+  if (!components || loading || colleagueLoading) return null;
 
-  const handleSave = (properties) => {
-    dispatch(CalibrationReviewAction.saveCalibrationReview(buildData(properties)));
-  };
-
-  const handleUpdate = (properties) => {
-    dispatch(CalibrationReviewAction.updateCalibrationReview(buildData(properties)));
-  };
-
-  if (loading) return null;
-
-  if (!loading && updated)
+  if (!loading && updated) {
+    if (currentStatus === Status.DRAFT) {
+      handleBack();
+      return null;
+    }
     return (
       <SuccessModal
         customButtonStyles={{ background: theme.colors.tescoBlue, color: theme.colors.white }}
         onClose={handleBack}
-        title={t('calibration_ratings')}
-        description={t('you_have_submitted_your_colleague_final_ratings')}
-        additionalText={t('any_changes_agreed_in_calibration_will_be_saved_here')}
+        title={successTitle}
+        description={t(
+          'you_have_submitted_your_colleague_final_ratings',
+          'You have submitted your colleague’ final ratings.',
+        )}
+        additionalText={t(
+          'any_changes_agreed_in_calibration_will_be_saved_here',
+          'Any changes agreed in calibration will be saved here.',
+        )}
         mark={<SuccessMark />}
       />
     );
+  }
 
   if (!isNew && loaded && !calibrationReview?.properties) {
-    navigate(buildPath(paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':uuid': 'new' })), { replace: true });
+    navigate(
+      {
+        pathname: buildPath(
+          paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':uuid': 'new', ':userUuid': colleagueUuid }),
+        ),
+        search: sessionMode ? new URLSearchParams({ sessionMode }).toString() : '',
+      },
+      { replace: true, state: { backPath, prevBackPath, activeList, period } },
+    );
   }
 
   return (
-    <WrapperModal onClose={handleBack} title={isNew ? t('submit_calibration_ratings') : t('edit_calibration_ratings')}>
+    <WrapperModal
+      onClose={handleBack}
+      title={
+        isDraft
+          ? t('submit_calibration_ratings')
+          : readOnly
+          ? t('calibration_ratings', 'Calibration ratings')
+          : t('edit_calibration_ratings')
+      }
+    >
       <div className={css(ratingWrapper)}>
-        <div className={css({ display: 'flex', alignItems: 'center' })}>
-          <Icon graphic='information' />
-          <span className={css(helpTitleStyle)}>Guidence on how to use this page</span>
-        </div>
-        <p>
-          Ratings are subject to change in calibration and should not be communicated to colleagues until they are
-          confirmed.
-        </p>
-        <AvatarName user={profile as User} />
+        {isDraft && (
+          <p>
+            <Trans i18nKey={'ratings_to_change_in_calibration_until_they_confirmed'}>
+              Ratings are subject to change in calibration and should not be communicated to colleagues until they are
+              confirmed.
+            </Trans>
+          </p>
+        )}
+        <Colleague profile={profile as Profile} />
         <RatingForm
           onSubmit={isNew ? handleSave : handleUpdate}
           onCancel={handleBack}
           components={components}
           defaultValues={!isNew ? calibrationReview?.properties : {}}
+          mode={isDraft && !sessionModeCreate ? Mode.CREATE : Mode.UPDATE}
+          readOnly={readOnly}
         />
       </div>
     </WrapperModal>
@@ -138,12 +164,5 @@ const ratingWrapper: Rule = {
   height: '100%',
   overflow: 'auto',
 };
-
-const helpTitleStyle: Rule = ({ theme }) => ({
-  ...theme.font.fixed.f14,
-  letterSpacing: '0px',
-  color: theme.colors.tescoBlue,
-  padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
-});
 
 export default CreateCalibrationRatings;

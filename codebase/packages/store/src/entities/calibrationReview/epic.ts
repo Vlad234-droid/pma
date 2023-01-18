@@ -4,7 +4,12 @@ import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 
-import { saveCalibrationReview, getCalibrationReview, updateCalibrationReview } from './actions';
+import {
+  saveCalibrationReview,
+  getCalibrationReview,
+  updateCalibrationReview,
+  saveCalibrationSessionReview,
+} from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 export const getCalibrationReviewEpic: Epic = (action$, _, { api }) =>
@@ -57,6 +62,33 @@ export const saveCalibrationReviewEpic: Epic = (action$, _, { api }) =>
     }),
   );
 
+export const saveCalibrationSessionReviewEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(saveCalibrationSessionReview.request)),
+    switchMap(({ payload }) => {
+      const { data, ...rest } = payload;
+      const { colleagueUuid } = rest;
+      //@ts-ignore
+      return from(api.createCalibrationSessionReview(rest, data)).pipe(
+        //@ts-ignore
+        map(({ success, data, errors }) => {
+          if (!success) {
+            return saveCalibrationSessionReview.failure(new Error(errors?.[0].message || undefined));
+          }
+          return saveCalibrationSessionReview.success({ [colleagueUuid]: data });
+        }),
+        catchError((e) => {
+          const errors = e?.data?.errors;
+          return concatWithErrorToast(
+            of(saveCalibrationSessionReview.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: errors?.[0].message }),
+          );
+        }),
+        takeUntil(action$.pipe(filter(isActionOf(saveCalibrationSessionReview.cancel)))),
+      );
+    }),
+  );
+
 export const updateCalibrationReviewEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(updateCalibrationReview.request)),
@@ -84,4 +116,9 @@ export const updateCalibrationReviewEpic: Epic = (action$, _, { api }) =>
     }),
   );
 
-export default combineEpics(getCalibrationReviewEpic, saveCalibrationReviewEpic, updateCalibrationReviewEpic);
+export default combineEpics(
+  getCalibrationReviewEpic,
+  saveCalibrationReviewEpic,
+  updateCalibrationReviewEpic,
+  saveCalibrationSessionReviewEpic,
+);

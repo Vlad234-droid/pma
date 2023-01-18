@@ -1,6 +1,11 @@
 import React, { FC } from 'react';
 import { Rule } from '@pma/dex-wrapper';
-import { getTimelineByReviewTypeSelector, timelineTypesAvailabilitySelector } from '@pma/store';
+import {
+  colleagueCurrentCycleSelector,
+  colleagueUUIDSelector,
+  getTimelineByReviewTypeSelector,
+  timelineTypesAvailabilitySelector,
+} from '@pma/store';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -16,9 +21,13 @@ const ObjectiveWidget: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, USER.current));
-  const timelineMYR = useSelector(getTimelineByReviewTypeSelector(ReviewType.MYR, USER.current));
-  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(USER.current));
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
+  const timelineObjective = useSelector(
+    getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, USER.current, currentCycle),
+  );
+  const timelineMYR = useSelector(getTimelineByReviewTypeSelector(ReviewType.MYR, USER.current, currentCycle));
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(USER.current, currentCycle));
 
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
   if (!canShowObjectives || !timelineObjective) return null;

@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { getTimelineByCodeSelector, uuidCompareSelector } from '@pma/store';
+import { colleagueCurrentCycleSelector, getTimelineByCodeSelector, uuidCompareSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
@@ -25,20 +25,23 @@ const YearEndReview: FC<Props> = ({ colleagueUuid }) => {
   const navigate = useNavigate();
   const { pathname, state } = useLocation();
   const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
 
-  const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid));
+  const tlPoint = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid, currentCycle));
 
-  if (!review) {
+  const { summaryStatus, startTime, lastUpdatedTime, statistics = {} } = tlPoint || {};
+
+  const status = (Object.keys(statistics)[0] || summaryStatus) as Status;
+
+  if (!tlPoint) {
     return null;
   }
-
-  const { summaryStatus, startTime, lastUpdatedTime } = review;
 
   const [graphic, iconColor, background, shadow, hasDescription, content, buttonText] = useMemo(
     () =>
       getContent(
         {
-          status: summaryStatus,
+          status,
           startTime,
           lastUpdatedTime,
         },
@@ -48,8 +51,8 @@ const YearEndReview: FC<Props> = ({ colleagueUuid }) => {
     [summaryStatus, startTime, lastUpdatedTime],
   );
   const disabled = isUserView
-    ? summaryStatus === Status.NOT_STARTED
-    : summaryStatus === Status.NOT_STARTED || summaryStatus === Status.DRAFT;
+    ? status === Status.NOT_STARTED
+    : [Status.NOT_STARTED, Status.STARTED, Status.DRAFT, Status.OVERDUE].includes(status);
 
   return (
     <div data-test-id='feedback' className={css(basicTileStyle)}>
@@ -60,7 +63,7 @@ const YearEndReview: FC<Props> = ({ colleagueUuid }) => {
               buildPath(
                 paramsReplacer(isUserView ? Page.REVIEWS : Page.USER_TL_REVIEW, {
                   ':type': ReviewType.EYR.toLocaleLowerCase(),
-                  ...(!isUserView && { ':uuid': colleagueUuid }),
+                  ...(!isUserView ? { ':uuid': colleagueUuid } : null),
                 }),
               ),
             {

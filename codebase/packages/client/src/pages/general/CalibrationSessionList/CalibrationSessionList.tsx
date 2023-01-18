@@ -1,16 +1,17 @@
 import React, { FC, useState } from 'react';
+import { useLocation } from 'react-router';
 
-import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Rule, useStyle, Styles } from '@pma/dex-wrapper';
 
 import { default as CalibrationSessionList } from 'features/general/CalibrationSessionList';
 import { CreateCalibrationSession } from 'features/general/CalibrationSessionList/widgets';
 import { FilterStatus } from 'features/general/CalibrationSessionList/utils/types';
 import { Option, RadioGroup } from 'components/Form';
-import { Filters, SortBy } from 'features/general/Filters';
 
 const CalibrationSessionPage: FC = () => {
   const { css, matchMedia } = useStyle();
-  const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ACTIVE);
+  const { state } = useLocation();
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>((state as any)?.filterStatus || FilterStatus.ACTIVE);
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const fieldOptions: Option[] = [
@@ -21,7 +22,7 @@ const CalibrationSessionPage: FC = () => {
   return (
     <div>
       <div className={css(headStyle({ mobileScreen }))}>
-        <div>
+        <div className={css(radioGroupStyle)}>
           <RadioGroup
             options={fieldOptions}
             name={'targetStatus'}
@@ -31,15 +32,7 @@ const CalibrationSessionPage: FC = () => {
             customStyles={selectStyle}
           />
         </div>
-        <div className={css(filtersStyle)}>
-          <Filters
-            sortValue={SortBy.AZ}
-            onSort={console.log}
-            searchValue={''}
-            onSearch={console.log}
-            sortingOptions={[]}
-          />
-        </div>
+        <div className={css(filtersStyle)}></div>
       </div>
       <div className={css(bodyStyle)}>
         <div className={css(leftColumnStyle)}>
@@ -91,5 +84,12 @@ const titleStyle: Rule = ({ theme }) => ({
   lineHeight: theme.font.fixed.f18.lineHeight,
   letterSpacing: '0px',
 });
+
+const radioGroupStyle: Rule = {
+  '& > label': {
+    paddingRight: '32px',
+    alignItems: 'center',
+  },
+} as Styles;
 
 export default CalibrationSessionPage;

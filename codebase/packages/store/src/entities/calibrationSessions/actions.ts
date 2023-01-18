@@ -30,14 +30,35 @@ export const createCalibrationSession = createAsyncAction(
   'calibrationSession/CREATE_SUCCESS',
   'calibrationSession/CREATE_FAILURE',
   'calibrationSession/CREATE_CANCEL',
-)<CalibrationSession, RestResponseCalibrationSession, Error>();
+)<Omit<CalibrationSession, 'participants'>, RestResponseCalibrationSession, Error>();
 
 export const updateCalibrationSession = createAsyncAction(
   'calibrationSession/UPDATE_REQUEST',
   'calibrationSession/UPDATE_SUCCESS',
   'calibrationSession/UPDATE_FAILURE',
   'calibrationSession/UPDATE_CANCEL',
-)<CalibrationSession, RestResponseCalibrationSession, Error>();
+)<Omit<CalibrationSession, 'participants'>, RestResponseCalibrationSession, Error>();
+
+export const startCalibrationSession = createAsyncAction(
+  'calibrationSession/START_REQUEST',
+  'calibrationSession/START_SUCCESS',
+  'calibrationSession/START_FAILURE',
+  'calibrationSession/START_CANCEL',
+)<Omit<CalibrationSession, 'participants'>, RestResponseCalibrationSession, Error>();
+
+export const closeCalibrationSession = createAsyncAction(
+  'calibrationSession/CLOSE_REQUEST',
+  'calibrationSession/CLOSE_SUCCESS',
+  'calibrationSession/CLOSE_FAILURE',
+  'calibrationSession/CLOSE_CANCEL',
+)<Omit<CalibrationSession, 'participants'>, RestResponseCalibrationSession, Error>();
+
+export const cancelCalibrationSession = createAsyncAction(
+  'calibrationSession/CANCEL_REQUEST',
+  'calibrationSession/CANCEL_SUCCESS',
+  'calibrationSession/CANCEL_FAILURE',
+  'calibrationSession/CANCEL_CANCEL',
+)<Omit<CalibrationSession, 'participants'>, RestResponseCalibrationSession, Error>();
 
 export const deleteCalibrationSession = createAsyncAction(
   'calibrationSession/DELETE_REQUEST',
@@ -59,6 +80,9 @@ export const Actions = {
   createCalibrationSession: createCalibrationSession.request,
   updateCalibrationSession: updateCalibrationSession.request,
   deleteCalibrationSession: deleteCalibrationSession.request,
+  startCalibrationSession: startCalibrationSession.request,
+  closeCalibrationSession: closeCalibrationSession.request,
+  cancelCalibrationSession: cancelCalibrationSession.request,
   updateCalibrationSessionMeta,
   clearCalibrationSessionData,
 };

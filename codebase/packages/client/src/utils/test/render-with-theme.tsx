@@ -30,6 +30,16 @@ export const renderWithTheme = <TProps extends {} = {}>(
           },
           profileAttributes: [],
         },
+        metadata: {
+          currentCycle: 'CURRENT',
+          colleagueCycle: {
+            endTime: '2024-03-31T23:59:59.000Z',
+            startTime: '2023-01-01T00:00:00.000Z',
+            uuid: 'f766ed5d-e159-4012-892f-27928d055c0b',
+            status: 'STARTED',
+            cycleType: 'HIRING',
+          },
+        },
       },
       meta: {
         loaded: true,

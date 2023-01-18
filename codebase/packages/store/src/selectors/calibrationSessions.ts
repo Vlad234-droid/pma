@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { CalibrationSession } from '@pma/openapi';
 
 import { InitialStateType } from '../entities/calibrationSessions/reducer';
 
@@ -13,7 +14,20 @@ export const calibrationSessionsMetaSelector = createSelector(
   (calibrationSessions) => calibrationSessions.meta,
 );
 
+export const getCreatedCalibrationSessionsUuidSelector = createSelector(
+  calibrationSessionsSelector,
+  (calibrationSessions) => calibrationSessions.createdUuid,
+);
+
 export const getCalibrationSessionsSelector = createSelector(
   calibrationSessionsSelector,
   (calibrationSessions) => calibrationSessions.data,
 );
+
+type Return = (state: RootState) => CalibrationSession | undefined;
+export const getCalibrationSessionSelector = (uuid: string): Return => {
+  //@ts-ignore
+  return createSelector(getCalibrationSessionsSelector, (calibrationSessions) => {
+    return calibrationSessions.find((cs) => cs.uuid === uuid);
+  });
+};

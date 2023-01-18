@@ -35,6 +35,8 @@ const TITLES: Record<string, [string, string]> = {
   [ReviewType.OBJECTIVE]: ['objectives', 'Objectives'],
   [ReviewType.MYR]: ['mid_year_review', 'Mid-year review'],
   [ReviewType.EYR]: ['year_end_review', 'Year-end review'],
+  // TODO: Add correct titles
+  [ReviewType.CALIBRATION]: ['TODO: Change title', 'TODO: Change title'],
 };
 
 const statusMap: Record<Status.WAITING_FOR_APPROVAL | Status.WAITING_FOR_COMPLETION, (approve: boolean) => Status> = {
@@ -90,8 +92,8 @@ const Buttons: FC<Props> = ({ code, cycleUuid, onUpdate, isDisabled, status, rev
     <div className={css(containerStyle)}>
       <div className={css(wrapperStyle)}>
         {Status.WAITING_FOR_APPROVAL === status
-          ? `${t('approve_or_decline', { ns: tenant })} ${t(...TITLES[code])}`
-          : `${t('complete_or_request_amend')} ${t(...TITLES[code])}`}
+          ? `${t('approve_or_decline', { ns: tenant })} ${TITLES?.[code] ? t(...TITLES[code]) : code}`
+          : `${t('complete_or_request_amend')} ${TITLES?.[code] ? t(...TITLES[code]) : code}`}
       </div>
       <div>
         <div className={css({ display: 'inline-block' })}>

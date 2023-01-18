@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useStyle } from '@pma/dex-wrapper';
 
-import { useTenant } from 'features/general/Permission';
+import { Tenant, useTenant } from 'features/general/Permission';
 import { Employee } from 'config/types';
 import { ReviewType } from 'config/enum';
 import { Item, Select } from 'components/Form';
@@ -9,7 +9,6 @@ import { Item, Select } from 'components/Form';
 import { useTranslation } from 'components/Translation';
 import ConfirmModal from './ConfirmModal';
 import { getDeclineReasonOptions } from '../../utils';
-import { Tenant } from 'utils';
 
 type Props = {
   onSave: (hasReason?: boolean, reason?: string) => void;
@@ -39,6 +38,7 @@ const DeclineModal: FC<Props> = ({ onSave, onClose, review, code }) => {
       onClose={onClose}
       employee={review}
       reason={reason}
+      submitBtnTitle={t('decline_objectives', tenant === Tenant.GENERAL ? 'Decline' : 'Request amend', { ns: tenant })}
     >
       <div className={css({ padding: '16px 0' })}>
         {isObjective ? (

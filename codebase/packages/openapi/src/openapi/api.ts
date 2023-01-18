@@ -147,6 +147,25 @@ export interface BusinessGroup {
 /**
  * 
  * @export
+ * @interface CalibrationColleague
+ */
+export interface CalibrationColleague {
+    /**
+     * 
+     * @type {ColleagueSimple}
+     * @memberof CalibrationColleague
+     */
+    'colleague'?: ColleagueSimple;
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationColleague
+     */
+    'sessionUuid'?: string;
+}
+/**
+ * 
+ * @export
  * @interface CalibrationSession
  */
 export interface CalibrationSession {
@@ -200,16 +219,10 @@ export interface CalibrationSession {
     'ownerUuid'?: string;
     /**
      * 
-     * @type {Set<Review>}
+     * @type {RequestQuery}
      * @memberof CalibrationSession
      */
-    'reviews'?: Set<Review>;
-    /**
-     * 
-     * @type {ColleagueFilter}
-     * @memberof CalibrationSession
-     */
-    'participants'?: ColleagueFilter;
+    'participants'?: RequestQuery;
 }
 
 /**
@@ -386,35 +399,6 @@ export enum ColleagueChangeEventPayloadSubcategoriesEnum {
 /**
  * 
  * @export
- * @interface ColleagueCriterion
- */
-export interface ColleagueCriterion {
-    /**
-     * 
-     * @type {string}
-     * @memberof ColleagueCriterion
-     */
-    'colleagueUuid'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ColleagueCriterion
-     */
-    'status'?: ColleagueCriterionStatusEnum;
-}
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum ColleagueCriterionStatusEnum {
-    Added = 'ADDED',
-    Removed = 'REMOVED'
-}
-
-/**
- * 
- * @export
  * @interface ColleagueEntity
  */
 export interface ColleagueEntity {
@@ -550,6 +534,18 @@ export interface ColleagueEntity {
      * @memberof ColleagueEntity
      */
     'colleagueType'?: ColleagueEntityColleagueTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof ColleagueEntity
+     */
+    'lastUpdatedTime'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ColleagueEntity
+     */
+    'md5sum'?: string;
 }
 
 /**
@@ -565,21 +561,51 @@ export enum ColleagueEntityColleagueTypeEnum {
 /**
  * 
  * @export
- * @interface ColleagueFilter
+ * @interface ColleagueFilterOptions
  */
-export interface ColleagueFilter {
+export interface ColleagueFilterOptions {
     /**
      * 
-     * @type {Set<object>}
-     * @memberof ColleagueFilter
+     * @type {Set<Function>}
+     * @memberof ColleagueFilterOptions
      */
-    'groupsCriteria'?: Set<object>;
+    'functions'?: Set<Function>;
     /**
      * 
-     * @type {Set<ColleagueCriterion>}
-     * @memberof ColleagueFilter
+     * @type {Set<Department>}
+     * @memberof ColleagueFilterOptions
      */
-    'colleaguesCriteria'?: Set<ColleagueCriterion>;
+    'departments'?: Set<Department>;
+    /**
+     * 
+     * @type {Set<Country>}
+     * @memberof ColleagueFilterOptions
+     */
+    'countries'?: Set<Country>;
+    /**
+     * 
+     * @type {Set<LegalEntity>}
+     * @memberof ColleagueFilterOptions
+     */
+    'legal-entities'?: Set<LegalEntity>;
+    /**
+     * 
+     * @type {Set<BusinessGroup>}
+     * @memberof ColleagueFilterOptions
+     */
+    'business-groups'?: Set<BusinessGroup>;
+    /**
+     * 
+     * @type {Set<ColleagueSimple>}
+     * @memberof ColleagueFilterOptions
+     */
+    'line-managers'?: Set<ColleagueSimple>;
+    /**
+     * 
+     * @type {Set<WorkLevel>}
+     * @memberof ColleagueFilterOptions
+     */
+    'work-levels'?: Set<WorkLevel>;
 }
 /**
  * 
@@ -647,6 +673,12 @@ export interface ColleagueReportTargeting {
      * @type {string}
      * @memberof ColleagueReportTargeting
      */
+    'departmentName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ColleagueReportTargeting
+     */
     'businessType'?: string;
     /**
      * 
@@ -660,6 +692,25 @@ export interface ColleagueReportTargeting {
      * @memberof ColleagueReportTargeting
      */
     'tags'?: { [key: string]: string; };
+}
+/**
+ * 
+ * @export
+ * @interface ColleagueReview
+ */
+export interface ColleagueReview {
+    /**
+     * 
+     * @type {ColleagueSimple}
+     * @memberof ColleagueReview
+     */
+    'colleague'?: ColleagueSimple;
+    /**
+     * 
+     * @type {Review}
+     * @memberof ColleagueReview
+     */
+    'review'?: Review;
 }
 /**
  * 
@@ -697,6 +748,12 @@ export interface ColleagueSimple {
      * @memberof ColleagueSimple
      */
     'jobName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ColleagueSimple
+     */
+    'departmentName'?: string;
     /**
      * 
      * @type {string}
@@ -765,6 +822,12 @@ export interface ColleagueView {
      * @memberof ColleagueView
      */
     'jobName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ColleagueView
+     */
+    'departmentName'?: string;
     /**
      * 
      * @type {string}
@@ -1190,25 +1253,25 @@ export interface DecisionInfo {
      * @type {string}
      * @memberof DecisionInfo
      */
-    'deploymentId'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DecisionInfo
-     */
-    'diagramResourceName'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DecisionInfo
-     */
     'versionTag'?: string;
     /**
      * 
      * @type {string}
      * @memberof DecisionInfo
      */
+    'deploymentId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DecisionInfo
+     */
     'tenantId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DecisionInfo
+     */
+    'diagramResourceName'?: string;
 }
 /**
  * 
@@ -1366,24 +1429,6 @@ export interface Event {
     'eventId'?: string;
     /**
      * 
-     * @type {string}
-     * @memberof Event
-     */
-    'eventPriority'?: EventEventPriorityEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof Event
-     */
-    'eventCreationDate'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Event
-     */
-    'callbackServiceURL'?: string;
-    /**
-     * 
      * @type {{ [key: string]: object; }}
      * @memberof Event
      */
@@ -1400,6 +1445,24 @@ export interface Event {
      * @memberof Event
      */
     'eventName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Event
+     */
+    'callbackServiceURL'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Event
+     */
+    'eventCreationDate'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Event
+     */
+    'eventPriority'?: EventEventPriorityEnum;
 }
 
 /**
@@ -2458,6 +2521,81 @@ export interface PDPResponse {
 /**
  * 
  * @export
+ * @interface PMColleagueCycle
+ */
+export interface PMColleagueCycle {
+    /**
+     * 
+     * @type {string}
+     * @memberof PMColleagueCycle
+     */
+    'uuid'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PMColleagueCycle
+     */
+    'colleagueUuid'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PMColleagueCycle
+     */
+    'cycleUuid'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PMColleagueCycle
+     */
+    'status'?: PMColleagueCycleStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof PMColleagueCycle
+     */
+    'creationTime'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PMColleagueCycle
+     */
+    'startTime'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PMColleagueCycle
+     */
+    'endTime'?: string;
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof PMColleagueCycle
+     */
+    'properties'?: { [key: string]: string; };
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum PMColleagueCycleStatusEnum {
+    Active = 'ACTIVE',
+    Inactive = 'INACTIVE',
+    Completed = 'COMPLETED',
+    Draft = 'DRAFT',
+    Failed = 'FAILED',
+    Registered = 'REGISTERED',
+    Started = 'STARTED',
+    Suspended = 'SUSPENDED',
+    Terminated = 'TERMINATED',
+    Scheduled = 'SCHEDULED',
+    Finishing = 'FINISHING',
+    Finished = 'FINISHED'
+}
+
+/**
+ * 
+ * @export
  * @interface PMCycle
  */
 export interface PMCycle {
@@ -3037,25 +3175,25 @@ export interface ProcessInfo {
      * @type {string}
      * @memberof ProcessInfo
      */
-    'deploymentId'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProcessInfo
-     */
-    'diagramResourceName'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProcessInfo
-     */
     'versionTag'?: string;
     /**
      * 
      * @type {string}
      * @memberof ProcessInfo
      */
+    'deploymentId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProcessInfo
+     */
     'tenantId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProcessInfo
+     */
+    'diagramResourceName'?: string;
 }
 /**
  * 
@@ -3221,6 +3359,31 @@ export interface RestResponseCalibrationSession {
      * 
      * @type {Array<ApiError>}
      * @memberof RestResponseCalibrationSession
+     */
+    'errors'?: Array<ApiError>;
+}
+/**
+ * 
+ * @export
+ * @interface RestResponseColleagueFilterOptions
+ */
+export interface RestResponseColleagueFilterOptions {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RestResponseColleagueFilterOptions
+     */
+    'success'?: boolean;
+    /**
+     * 
+     * @type {ColleagueFilterOptions}
+     * @memberof RestResponseColleagueFilterOptions
+     */
+    'data'?: ColleagueFilterOptions;
+    /**
+     * 
+     * @type {Array<ApiError>}
+     * @memberof RestResponseColleagueFilterOptions
      */
     'errors'?: Array<ApiError>;
 }
@@ -3577,6 +3740,31 @@ export interface RestResponseListAuditOrgObjectiveReport {
 /**
  * 
  * @export
+ * @interface RestResponseListCalibrationColleague
+ */
+export interface RestResponseListCalibrationColleague {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RestResponseListCalibrationColleague
+     */
+    'success'?: boolean;
+    /**
+     * 
+     * @type {Array<CalibrationColleague>}
+     * @memberof RestResponseListCalibrationColleague
+     */
+    'data'?: Array<CalibrationColleague>;
+    /**
+     * 
+     * @type {Array<ApiError>}
+     * @memberof RestResponseListCalibrationColleague
+     */
+    'errors'?: Array<ApiError>;
+}
+/**
+ * 
+ * @export
  * @interface RestResponseListCalibrationSession
  */
 export interface RestResponseListCalibrationSession {
@@ -3671,6 +3859,56 @@ export interface RestResponseListColleagueReportTargeting {
      * 
      * @type {Array<ApiError>}
      * @memberof RestResponseListColleagueReportTargeting
+     */
+    'errors'?: Array<ApiError>;
+}
+/**
+ * 
+ * @export
+ * @interface RestResponseListColleagueReview
+ */
+export interface RestResponseListColleagueReview {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RestResponseListColleagueReview
+     */
+    'success'?: boolean;
+    /**
+     * 
+     * @type {Array<ColleagueReview>}
+     * @memberof RestResponseListColleagueReview
+     */
+    'data'?: Array<ColleagueReview>;
+    /**
+     * 
+     * @type {Array<ApiError>}
+     * @memberof RestResponseListColleagueReview
+     */
+    'errors'?: Array<ApiError>;
+}
+/**
+ * 
+ * @export
+ * @interface RestResponseListColleagueSimple
+ */
+export interface RestResponseListColleagueSimple {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RestResponseListColleagueSimple
+     */
+    'success'?: boolean;
+    /**
+     * 
+     * @type {Array<ColleagueSimple>}
+     * @memberof RestResponseListColleagueSimple
+     */
+    'data'?: Array<ColleagueSimple>;
+    /**
+     * 
+     * @type {Array<ApiError>}
+     * @memberof RestResponseListColleagueSimple
      */
     'errors'?: Array<ApiError>;
 }
@@ -4102,6 +4340,31 @@ export interface RestResponseListPDPGoal {
 /**
  * 
  * @export
+ * @interface RestResponseListPMColleagueCycle
+ */
+export interface RestResponseListPMColleagueCycle {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RestResponseListPMColleagueCycle
+     */
+    'success'?: boolean;
+    /**
+     * 
+     * @type {Array<PMColleagueCycle>}
+     * @memberof RestResponseListPMColleagueCycle
+     */
+    'data'?: Array<PMColleagueCycle>;
+    /**
+     * 
+     * @type {Array<ApiError>}
+     * @memberof RestResponseListPMColleagueCycle
+     */
+    'errors'?: Array<ApiError>;
+}
+/**
+ * 
+ * @export
  * @interface RestResponseListPMCycle
  */
 export interface RestResponseListPMCycle {
@@ -4346,6 +4609,56 @@ export interface RestResponseMapStringString {
      * 
      * @type {Array<ApiError>}
      * @memberof RestResponseMapStringString
+     */
+    'errors'?: Array<ApiError>;
+}
+/**
+ * 
+ * @export
+ * @interface RestResponseMapStringTotalCount
+ */
+export interface RestResponseMapStringTotalCount {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RestResponseMapStringTotalCount
+     */
+    'success'?: boolean;
+    /**
+     * 
+     * @type {{ [key: string]: TotalCount; }}
+     * @memberof RestResponseMapStringTotalCount
+     */
+    'data'?: { [key: string]: TotalCount; };
+    /**
+     * 
+     * @type {Array<ApiError>}
+     * @memberof RestResponseMapStringTotalCount
+     */
+    'errors'?: Array<ApiError>;
+}
+/**
+ * 
+ * @export
+ * @interface RestResponseMapUUIDBoolean
+ */
+export interface RestResponseMapUUIDBoolean {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RestResponseMapUUIDBoolean
+     */
+    'success'?: boolean;
+    /**
+     * 
+     * @type {{ [key: string]: boolean; }}
+     * @memberof RestResponseMapUUIDBoolean
+     */
+    'data'?: { [key: string]: boolean; };
+    /**
+     * 
+     * @type {Array<ApiError>}
+     * @memberof RestResponseMapUUIDBoolean
      */
     'errors'?: Array<ApiError>;
 }
@@ -5333,6 +5646,31 @@ export interface Tip {
 /**
  * 
  * @export
+ * @interface TotalCount
+ */
+export interface TotalCount {
+    /**
+     * 
+     * @type {number}
+     * @memberof TotalCount
+     */
+    'count'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TotalCount
+     */
+    'percentage'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TotalCount
+     */
+    'total'?: number;
+}
+/**
+ * 
+ * @export
  * @interface UpdateReviewsStatusRequest
  */
 export interface UpdateReviewsStatusRequest {
@@ -5600,6 +5938,7 @@ export enum WorkRelationshipTypeEnum {
     * @enum {string}
     */
 export enum WorkRelationshipWorkLevelEnum {
+    Colleague = 'COLLEAGUE',
     Wl1 = 'WL1',
     Wl2 = 'WL2',
     Wl3 = 'WL3',
@@ -5614,6 +5953,166 @@ export enum WorkRelationshipWorkLevelEnum {
  */
 export const CalibrationApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @summary Cancels a Calibration Session
+         * @param {string} sessionUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cancelSessions: async (sessionUuid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sessionUuid' is not null or undefined
+            assertParamExists('cancelSessions', 'sessionUuid', sessionUuid)
+            const localVarPath = `/calibration/sessions/{sessionUuid}/cancel`
+                .replace(`{${"sessionUuid"}}`, encodeURIComponent(String(sessionUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Start Calibration Session
+         * @param {string} sessionUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        closeSession: async (sessionUuid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sessionUuid' is not null or undefined
+            assertParamExists('closeSession', 'sessionUuid', sessionUuid)
+            const localVarPath = `/calibration/sessions/{sessionUuid}/close`
+                .replace(`{${"sessionUuid"}}`, encodeURIComponent(String(sessionUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Review created
+         * @summary Create a calibration review
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {Review} review 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createReview1: async (colleagueUuid: string, cycleUuid: string, review: Review, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'colleagueUuid' is not null or undefined
+            assertParamExists('createReview1', 'colleagueUuid', colleagueUuid)
+            // verify required parameter 'cycleUuid' is not null or undefined
+            assertParamExists('createReview1', 'cycleUuid', cycleUuid)
+            // verify required parameter 'review' is not null or undefined
+            assertParamExists('createReview1', 'review', review)
+            const localVarPath = `/calibration/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/reviews`
+                .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)))
+                .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(review, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Review created
+         * @summary Create a calibration review in session
+         * @param {string} sessionUuid 
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {Review} review 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createReviewInSession: async (sessionUuid: string, colleagueUuid: string, cycleUuid: string, review: Review, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sessionUuid' is not null or undefined
+            assertParamExists('createReviewInSession', 'sessionUuid', sessionUuid)
+            // verify required parameter 'colleagueUuid' is not null or undefined
+            assertParamExists('createReviewInSession', 'colleagueUuid', colleagueUuid)
+            // verify required parameter 'cycleUuid' is not null or undefined
+            assertParamExists('createReviewInSession', 'cycleUuid', cycleUuid)
+            // verify required parameter 'review' is not null or undefined
+            assertParamExists('createReviewInSession', 'review', review)
+            const localVarPath = `/calibration/sessions/{sessionUuid}/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/reviews`
+                .replace(`{${"sessionUuid"}}`, encodeURIComponent(String(sessionUuid)))
+                .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)))
+                .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(review, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @summary Creates Calibration Session
@@ -5644,6 +6143,44 @@ export const CalibrationApiAxiosParamCreator = function (configuration?: Configu
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(calibrationSession, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete existing review
+         * @summary Delete existing calibration review
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteReview1: async (colleagueUuid: string, cycleUuid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'colleagueUuid' is not null or undefined
+            assertParamExists('deleteReview1', 'colleagueUuid', colleagueUuid)
+            // verify required parameter 'cycleUuid' is not null or undefined
+            assertParamExists('deleteReview1', 'cycleUuid', cycleUuid)
+            const localVarPath = `/calibration/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/reviews`
+                .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)))
+                .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5686,6 +6223,226 @@ export const CalibrationApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @summary Returns calibration statistics accessible for the user
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCalibrationStatistics: async (requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getCalibrationStatistics', 'requestQuery', requestQuery)
+            const localVarPath = `/calibration/statistics`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get filters by permissions and selected filters
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getColleagueFilterOptions: async (requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getColleagueFilterOptions', 'requestQuery', requestQuery)
+            const localVarPath = `/calibration/sessions/filters`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get colleagues for calibration by filter params
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getColleagues: async (requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getColleagues', 'requestQuery', requestQuery)
+            const localVarPath = `/calibration/sessions/colleagues`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Returns calibration rating statistics accessible for the user
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRatingStatistics: async (requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getRatingStatistics', 'requestQuery', requestQuery)
+            const localVarPath = `/calibration/statistics/ratings`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Returns accessible Calibration Reviews for the user
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getReview1: async (colleagueUuid: string, cycleUuid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'colleagueUuid' is not null or undefined
+            assertParamExists('getReview1', 'colleagueUuid', colleagueUuid)
+            // verify required parameter 'cycleUuid' is not null or undefined
+            assertParamExists('getReview1', 'cycleUuid', cycleUuid)
+            const localVarPath = `/calibration/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/reviews`
+                .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)))
+                .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get a calibration review by its identifier
+         * @param {string} uuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getReviewByUuid1: async (uuid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'uuid' is not null or undefined
+            assertParamExists('getReviewByUuid1', 'uuid', uuid)
+            const localVarPath = `/calibration/reviews/{uuid}`
+                .replace(`{${"uuid"}}`, encodeURIComponent(String(uuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Returns accessible Calibration Reviews for the user
          * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
@@ -5695,6 +6452,88 @@ export const CalibrationApiAxiosParamCreator = function (configuration?: Configu
             // verify required parameter 'requestQuery' is not null or undefined
             assertParamExists('getReviews1', 'requestQuery', requestQuery)
             const localVarPath = `/calibration/reviews`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Returns calibration rating statistics by calibration session
+         * @param {string} sessionUuid 
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSessionRatingStatistics: async (sessionUuid: string, requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sessionUuid' is not null or undefined
+            assertParamExists('getSessionRatingStatistics', 'sessionUuid', sessionUuid)
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getSessionRatingStatistics', 'requestQuery', requestQuery)
+            const localVarPath = `/calibration/sessions/{sessionUuid}/statistics/ratings`
+                .replace(`{${"sessionUuid"}}`, encodeURIComponent(String(sessionUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Gets reviews by Calibration Sessions
+         * @param {string} sessionUuid 
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSessionReviews: async (sessionUuid: string, requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sessionUuid' is not null or undefined
+            assertParamExists('getSessionReviews', 'sessionUuid', sessionUuid)
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getSessionReviews', 'requestQuery', requestQuery)
+            const localVarPath = `/calibration/sessions/{sessionUuid}/reviews`
+                .replace(`{${"sessionUuid"}}`, encodeURIComponent(String(sessionUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5760,6 +6599,173 @@ export const CalibrationApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @summary Gets colleagues by Calibration Sessions
+         * @param {string} sessionUuid 
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSuggestions1: async (sessionUuid: string, requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sessionUuid' is not null or undefined
+            assertParamExists('getSuggestions1', 'sessionUuid', sessionUuid)
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getSuggestions1', 'requestQuery', requestQuery)
+            const localVarPath = `/calibration/sessions/{sessionUuid}/colleagues`
+                .replace(`{${"sessionUuid"}}`, encodeURIComponent(String(sessionUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Start Calibration Session
+         * @param {string} sessionUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startSession: async (sessionUuid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sessionUuid' is not null or undefined
+            assertParamExists('startSession', 'sessionUuid', sessionUuid)
+            const localVarPath = `/calibration/sessions/{sessionUuid}/start`
+                .replace(`{${"sessionUuid"}}`, encodeURIComponent(String(sessionUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update existing review
+         * @summary Update existing calibration review
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {Review} review 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateReview1: async (colleagueUuid: string, cycleUuid: string, review: Review, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'colleagueUuid' is not null or undefined
+            assertParamExists('updateReview1', 'colleagueUuid', colleagueUuid)
+            // verify required parameter 'cycleUuid' is not null or undefined
+            assertParamExists('updateReview1', 'cycleUuid', cycleUuid)
+            // verify required parameter 'review' is not null or undefined
+            assertParamExists('updateReview1', 'review', review)
+            const localVarPath = `/calibration/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/reviews`
+                .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)))
+                .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(review, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update status of existing calibration reviews
+         * @summary Update status of existing calibration reviews
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {'DRAFT' | 'WAITING_FOR_APPROVAL' | 'APPROVED' | 'DECLINED' | 'WAITING_FOR_COMPLETION' | 'REQUESTED_TO_AMEND' | 'COMPLETED'} status 
+         * @param {UpdateReviewsStatusRequest} updateReviewsStatusRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateReviewsStatus1: async (colleagueUuid: string, cycleUuid: string, status: 'DRAFT' | 'WAITING_FOR_APPROVAL' | 'APPROVED' | 'DECLINED' | 'WAITING_FOR_COMPLETION' | 'REQUESTED_TO_AMEND' | 'COMPLETED', updateReviewsStatusRequest: UpdateReviewsStatusRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'colleagueUuid' is not null or undefined
+            assertParamExists('updateReviewsStatus1', 'colleagueUuid', colleagueUuid)
+            // verify required parameter 'cycleUuid' is not null or undefined
+            assertParamExists('updateReviewsStatus1', 'cycleUuid', cycleUuid)
+            // verify required parameter 'status' is not null or undefined
+            assertParamExists('updateReviewsStatus1', 'status', status)
+            // verify required parameter 'updateReviewsStatusRequest' is not null or undefined
+            assertParamExists('updateReviewsStatus1', 'updateReviewsStatusRequest', updateReviewsStatusRequest)
+            const localVarPath = `/calibration/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/statuses/{status}/reviews`
+                .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)))
+                .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)))
+                .replace(`{${"status"}}`, encodeURIComponent(String(status)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateReviewsStatusRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Updates Calibration Sessions for the user
          * @param {string} sessionUuid 
          * @param {CalibrationSession} calibrationSession 
@@ -5810,6 +6816,55 @@ export const CalibrationApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Cancels a Calibration Session
+         * @param {string} sessionUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async cancelSessions(sessionUuid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseVoid>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.cancelSessions(sessionUuid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Start Calibration Session
+         * @param {string} sessionUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async closeSession(sessionUuid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseCalibrationSession>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.closeSession(sessionUuid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Review created
+         * @summary Create a calibration review
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {Review} review 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createReview1(colleagueUuid: string, cycleUuid: string, review: Review, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseReview>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createReview1(colleagueUuid, cycleUuid, review, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Review created
+         * @summary Create a calibration review in session
+         * @param {string} sessionUuid 
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {Review} review 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createReviewInSession(sessionUuid: string, colleagueUuid: string, cycleUuid: string, review: Review, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseReview>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createReviewInSession(sessionUuid, colleagueUuid, cycleUuid, review, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Creates Calibration Session
          * @param {CalibrationSession} calibrationSession 
          * @param {*} [options] Override http request option.
@@ -5817,6 +6872,18 @@ export const CalibrationApiFp = function(configuration?: Configuration) {
          */
         async createSession(calibrationSession: CalibrationSession, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseCalibrationSession>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createSession(calibrationSession, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Delete existing review
+         * @summary Delete existing calibration review
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteReview1(colleagueUuid: string, cycleUuid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseVoid>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteReview1(colleagueUuid, cycleUuid, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -5832,13 +6899,104 @@ export const CalibrationApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Returns calibration statistics accessible for the user
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCalibrationStatistics(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseMapStringTotalCount>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCalibrationStatistics(requestQuery, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get filters by permissions and selected filters
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getColleagueFilterOptions(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseColleagueFilterOptions>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getColleagueFilterOptions(requestQuery, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get colleagues for calibration by filter params
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getColleagues(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListCalibrationColleague>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getColleagues(requestQuery, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Returns calibration rating statistics accessible for the user
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getRatingStatistics(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseMapStringTotalCount>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getRatingStatistics(requestQuery, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Returns accessible Calibration Reviews for the user
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getReview1(colleagueUuid: string, cycleUuid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseReview>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getReview1(colleagueUuid, cycleUuid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get a calibration review by its identifier
+         * @param {string} uuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getReviewByUuid1(uuid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseReview>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getReviewByUuid1(uuid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Returns accessible Calibration Reviews for the user
          * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getReviews1(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListReview>> {
+        async getReviews1(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListColleagueReview>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getReviews1(requestQuery, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Returns calibration rating statistics by calibration session
+         * @param {string} sessionUuid 
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSessionRatingStatistics(sessionUuid: string, requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseMapStringTotalCount>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSessionRatingStatistics(sessionUuid, requestQuery, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Gets reviews by Calibration Sessions
+         * @param {string} sessionUuid 
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSessionReviews(sessionUuid: string, requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListColleagueReview>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSessionReviews(sessionUuid, requestQuery, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -5850,6 +7008,56 @@ export const CalibrationApiFp = function(configuration?: Configuration) {
          */
         async getSessions(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListCalibrationSession>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSessions(requestQuery, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Gets colleagues by Calibration Sessions
+         * @param {string} sessionUuid 
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSuggestions1(sessionUuid: string, requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListColleagueSimple>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSuggestions1(sessionUuid, requestQuery, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Start Calibration Session
+         * @param {string} sessionUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async startSession(sessionUuid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseCalibrationSession>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.startSession(sessionUuid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Update existing review
+         * @summary Update existing calibration review
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {Review} review 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateReview1(colleagueUuid: string, cycleUuid: string, review: Review, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseReview>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateReview1(colleagueUuid, cycleUuid, review, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Update status of existing calibration reviews
+         * @summary Update status of existing calibration reviews
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {'DRAFT' | 'WAITING_FOR_APPROVAL' | 'APPROVED' | 'DECLINED' | 'WAITING_FOR_COMPLETION' | 'REQUESTED_TO_AMEND' | 'COMPLETED'} status 
+         * @param {UpdateReviewsStatusRequest} updateReviewsStatusRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateReviewsStatus1(colleagueUuid: string, cycleUuid: string, status: 'DRAFT' | 'WAITING_FOR_APPROVAL' | 'APPROVED' | 'DECLINED' | 'WAITING_FOR_COMPLETION' | 'REQUESTED_TO_AMEND' | 'COMPLETED', updateReviewsStatusRequest: UpdateReviewsStatusRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponsePMReviewStatus>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateReviewsStatus1(colleagueUuid, cycleUuid, status, updateReviewsStatusRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -5876,6 +7084,51 @@ export const CalibrationApiFactory = function (configuration?: Configuration, ba
     return {
         /**
          * 
+         * @summary Cancels a Calibration Session
+         * @param {string} sessionUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cancelSessions(sessionUuid: string, options?: any): AxiosPromise<RestResponseVoid> {
+            return localVarFp.cancelSessions(sessionUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Start Calibration Session
+         * @param {string} sessionUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        closeSession(sessionUuid: string, options?: any): AxiosPromise<RestResponseCalibrationSession> {
+            return localVarFp.closeSession(sessionUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Review created
+         * @summary Create a calibration review
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {Review} review 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createReview1(colleagueUuid: string, cycleUuid: string, review: Review, options?: any): AxiosPromise<RestResponseReview> {
+            return localVarFp.createReview1(colleagueUuid, cycleUuid, review, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Review created
+         * @summary Create a calibration review in session
+         * @param {string} sessionUuid 
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {Review} review 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createReviewInSession(sessionUuid: string, colleagueUuid: string, cycleUuid: string, review: Review, options?: any): AxiosPromise<RestResponseReview> {
+            return localVarFp.createReviewInSession(sessionUuid, colleagueUuid, cycleUuid, review, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Creates Calibration Session
          * @param {CalibrationSession} calibrationSession 
          * @param {*} [options] Override http request option.
@@ -5883,6 +7136,17 @@ export const CalibrationApiFactory = function (configuration?: Configuration, ba
          */
         createSession(calibrationSession: CalibrationSession, options?: any): AxiosPromise<RestResponseCalibrationSession> {
             return localVarFp.createSession(calibrationSession, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete existing review
+         * @summary Delete existing calibration review
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteReview1(colleagueUuid: string, cycleUuid: string, options?: any): AxiosPromise<RestResponseVoid> {
+            return localVarFp.deleteReview1(colleagueUuid, cycleUuid, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5896,13 +7160,96 @@ export const CalibrationApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
+         * @summary Returns calibration statistics accessible for the user
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCalibrationStatistics(requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseMapStringTotalCount> {
+            return localVarFp.getCalibrationStatistics(requestQuery, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get filters by permissions and selected filters
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getColleagueFilterOptions(requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseColleagueFilterOptions> {
+            return localVarFp.getColleagueFilterOptions(requestQuery, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get colleagues for calibration by filter params
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getColleagues(requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseListCalibrationColleague> {
+            return localVarFp.getColleagues(requestQuery, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Returns calibration rating statistics accessible for the user
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRatingStatistics(requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseMapStringTotalCount> {
+            return localVarFp.getRatingStatistics(requestQuery, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Returns accessible Calibration Reviews for the user
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getReview1(colleagueUuid: string, cycleUuid: string, options?: any): AxiosPromise<RestResponseReview> {
+            return localVarFp.getReview1(colleagueUuid, cycleUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a calibration review by its identifier
+         * @param {string} uuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getReviewByUuid1(uuid: string, options?: any): AxiosPromise<RestResponseReview> {
+            return localVarFp.getReviewByUuid1(uuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Returns accessible Calibration Reviews for the user
          * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getReviews1(requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseListReview> {
+        getReviews1(requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseListColleagueReview> {
             return localVarFp.getReviews1(requestQuery, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Returns calibration rating statistics by calibration session
+         * @param {string} sessionUuid 
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSessionRatingStatistics(sessionUuid: string, requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseMapStringTotalCount> {
+            return localVarFp.getSessionRatingStatistics(sessionUuid, requestQuery, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Gets reviews by Calibration Sessions
+         * @param {string} sessionUuid 
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSessionReviews(sessionUuid: string, requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseListColleagueReview> {
+            return localVarFp.getSessionReviews(sessionUuid, requestQuery, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5913,6 +7260,52 @@ export const CalibrationApiFactory = function (configuration?: Configuration, ba
          */
         getSessions(requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseListCalibrationSession> {
             return localVarFp.getSessions(requestQuery, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Gets colleagues by Calibration Sessions
+         * @param {string} sessionUuid 
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSuggestions1(sessionUuid: string, requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseListColleagueSimple> {
+            return localVarFp.getSuggestions1(sessionUuid, requestQuery, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Start Calibration Session
+         * @param {string} sessionUuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startSession(sessionUuid: string, options?: any): AxiosPromise<RestResponseCalibrationSession> {
+            return localVarFp.startSession(sessionUuid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update existing review
+         * @summary Update existing calibration review
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {Review} review 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateReview1(colleagueUuid: string, cycleUuid: string, review: Review, options?: any): AxiosPromise<RestResponseReview> {
+            return localVarFp.updateReview1(colleagueUuid, cycleUuid, review, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update status of existing calibration reviews
+         * @summary Update status of existing calibration reviews
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {'DRAFT' | 'WAITING_FOR_APPROVAL' | 'APPROVED' | 'DECLINED' | 'WAITING_FOR_COMPLETION' | 'REQUESTED_TO_AMEND' | 'COMPLETED'} status 
+         * @param {UpdateReviewsStatusRequest} updateReviewsStatusRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateReviewsStatus1(colleagueUuid: string, cycleUuid: string, status: 'DRAFT' | 'WAITING_FOR_APPROVAL' | 'APPROVED' | 'DECLINED' | 'WAITING_FOR_COMPLETION' | 'REQUESTED_TO_AMEND' | 'COMPLETED', updateReviewsStatusRequest: UpdateReviewsStatusRequest, options?: any): AxiosPromise<RestResponsePMReviewStatus> {
+            return localVarFp.updateReviewsStatus1(colleagueUuid, cycleUuid, status, updateReviewsStatusRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5929,6 +7322,97 @@ export const CalibrationApiFactory = function (configuration?: Configuration, ba
 };
 
 /**
+ * Request parameters for cancelSessions operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiCancelSessionsRequest
+ */
+export interface CalibrationApiCancelSessionsRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiCancelSessions
+     */
+    readonly sessionUuid: string
+}
+
+/**
+ * Request parameters for closeSession operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiCloseSessionRequest
+ */
+export interface CalibrationApiCloseSessionRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiCloseSession
+     */
+    readonly sessionUuid: string
+}
+
+/**
+ * Request parameters for createReview1 operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiCreateReview1Request
+ */
+export interface CalibrationApiCreateReview1Request {
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiCreateReview1
+     */
+    readonly colleagueUuid: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiCreateReview1
+     */
+    readonly cycleUuid: string
+
+    /**
+     * 
+     * @type {Review}
+     * @memberof CalibrationApiCreateReview1
+     */
+    readonly review: Review
+}
+
+/**
+ * Request parameters for createReviewInSession operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiCreateReviewInSessionRequest
+ */
+export interface CalibrationApiCreateReviewInSessionRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiCreateReviewInSession
+     */
+    readonly sessionUuid: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiCreateReviewInSession
+     */
+    readonly colleagueUuid: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiCreateReviewInSession
+     */
+    readonly cycleUuid: string
+
+    /**
+     * 
+     * @type {Review}
+     * @memberof CalibrationApiCreateReviewInSession
+     */
+    readonly review: Review
+}
+
+/**
  * Request parameters for createSession operation in CalibrationApi.
  * @export
  * @interface CalibrationApiCreateSessionRequest
@@ -5940,6 +7424,27 @@ export interface CalibrationApiCreateSessionRequest {
      * @memberof CalibrationApiCreateSession
      */
     readonly calibrationSession: CalibrationSession
+}
+
+/**
+ * Request parameters for deleteReview1 operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiDeleteReview1Request
+ */
+export interface CalibrationApiDeleteReview1Request {
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiDeleteReview1
+     */
+    readonly colleagueUuid: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiDeleteReview1
+     */
+    readonly cycleUuid: string
 }
 
 /**
@@ -5957,6 +7462,97 @@ export interface CalibrationApiDeleteSessionRequest {
 }
 
 /**
+ * Request parameters for getCalibrationStatistics operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiGetCalibrationStatisticsRequest
+ */
+export interface CalibrationApiGetCalibrationStatisticsRequest {
+    /**
+     * 
+     * @type {RequestQuery}
+     * @memberof CalibrationApiGetCalibrationStatistics
+     */
+    readonly requestQuery: RequestQuery
+}
+
+/**
+ * Request parameters for getColleagueFilterOptions operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiGetColleagueFilterOptionsRequest
+ */
+export interface CalibrationApiGetColleagueFilterOptionsRequest {
+    /**
+     * 
+     * @type {RequestQuery}
+     * @memberof CalibrationApiGetColleagueFilterOptions
+     */
+    readonly requestQuery: RequestQuery
+}
+
+/**
+ * Request parameters for getColleagues operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiGetColleaguesRequest
+ */
+export interface CalibrationApiGetColleaguesRequest {
+    /**
+     * 
+     * @type {RequestQuery}
+     * @memberof CalibrationApiGetColleagues
+     */
+    readonly requestQuery: RequestQuery
+}
+
+/**
+ * Request parameters for getRatingStatistics operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiGetRatingStatisticsRequest
+ */
+export interface CalibrationApiGetRatingStatisticsRequest {
+    /**
+     * 
+     * @type {RequestQuery}
+     * @memberof CalibrationApiGetRatingStatistics
+     */
+    readonly requestQuery: RequestQuery
+}
+
+/**
+ * Request parameters for getReview1 operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiGetReview1Request
+ */
+export interface CalibrationApiGetReview1Request {
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiGetReview1
+     */
+    readonly colleagueUuid: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiGetReview1
+     */
+    readonly cycleUuid: string
+}
+
+/**
+ * Request parameters for getReviewByUuid1 operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiGetReviewByUuid1Request
+ */
+export interface CalibrationApiGetReviewByUuid1Request {
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiGetReviewByUuid1
+     */
+    readonly uuid: string
+}
+
+/**
  * Request parameters for getReviews1 operation in CalibrationApi.
  * @export
  * @interface CalibrationApiGetReviews1Request
@@ -5966,6 +7562,48 @@ export interface CalibrationApiGetReviews1Request {
      * 
      * @type {RequestQuery}
      * @memberof CalibrationApiGetReviews1
+     */
+    readonly requestQuery: RequestQuery
+}
+
+/**
+ * Request parameters for getSessionRatingStatistics operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiGetSessionRatingStatisticsRequest
+ */
+export interface CalibrationApiGetSessionRatingStatisticsRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiGetSessionRatingStatistics
+     */
+    readonly sessionUuid: string
+
+    /**
+     * 
+     * @type {RequestQuery}
+     * @memberof CalibrationApiGetSessionRatingStatistics
+     */
+    readonly requestQuery: RequestQuery
+}
+
+/**
+ * Request parameters for getSessionReviews operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiGetSessionReviewsRequest
+ */
+export interface CalibrationApiGetSessionReviewsRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiGetSessionReviews
+     */
+    readonly sessionUuid: string
+
+    /**
+     * 
+     * @type {RequestQuery}
+     * @memberof CalibrationApiGetSessionReviews
      */
     readonly requestQuery: RequestQuery
 }
@@ -5982,6 +7620,104 @@ export interface CalibrationApiGetSessionsRequest {
      * @memberof CalibrationApiGetSessions
      */
     readonly requestQuery: RequestQuery
+}
+
+/**
+ * Request parameters for getSuggestions1 operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiGetSuggestions1Request
+ */
+export interface CalibrationApiGetSuggestions1Request {
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiGetSuggestions1
+     */
+    readonly sessionUuid: string
+
+    /**
+     * 
+     * @type {RequestQuery}
+     * @memberof CalibrationApiGetSuggestions1
+     */
+    readonly requestQuery: RequestQuery
+}
+
+/**
+ * Request parameters for startSession operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiStartSessionRequest
+ */
+export interface CalibrationApiStartSessionRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiStartSession
+     */
+    readonly sessionUuid: string
+}
+
+/**
+ * Request parameters for updateReview1 operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiUpdateReview1Request
+ */
+export interface CalibrationApiUpdateReview1Request {
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiUpdateReview1
+     */
+    readonly colleagueUuid: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiUpdateReview1
+     */
+    readonly cycleUuid: string
+
+    /**
+     * 
+     * @type {Review}
+     * @memberof CalibrationApiUpdateReview1
+     */
+    readonly review: Review
+}
+
+/**
+ * Request parameters for updateReviewsStatus1 operation in CalibrationApi.
+ * @export
+ * @interface CalibrationApiUpdateReviewsStatus1Request
+ */
+export interface CalibrationApiUpdateReviewsStatus1Request {
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiUpdateReviewsStatus1
+     */
+    readonly colleagueUuid: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof CalibrationApiUpdateReviewsStatus1
+     */
+    readonly cycleUuid: string
+
+    /**
+     * 
+     * @type {'DRAFT' | 'WAITING_FOR_APPROVAL' | 'APPROVED' | 'DECLINED' | 'WAITING_FOR_COMPLETION' | 'REQUESTED_TO_AMEND' | 'COMPLETED'}
+     * @memberof CalibrationApiUpdateReviewsStatus1
+     */
+    readonly status: 'DRAFT' | 'WAITING_FOR_APPROVAL' | 'APPROVED' | 'DECLINED' | 'WAITING_FOR_COMPLETION' | 'REQUESTED_TO_AMEND' | 'COMPLETED'
+
+    /**
+     * 
+     * @type {UpdateReviewsStatusRequest}
+     * @memberof CalibrationApiUpdateReviewsStatus1
+     */
+    readonly updateReviewsStatusRequest: UpdateReviewsStatusRequest
 }
 
 /**
@@ -6014,6 +7750,54 @@ export interface CalibrationApiUpdateSessionRequest {
 export class CalibrationApi extends BaseAPI {
     /**
      * 
+     * @summary Cancels a Calibration Session
+     * @param {CalibrationApiCancelSessionsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public cancelSessions(requestParameters: CalibrationApiCancelSessionsRequest, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).cancelSessions(requestParameters.sessionUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Start Calibration Session
+     * @param {CalibrationApiCloseSessionRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public closeSession(requestParameters: CalibrationApiCloseSessionRequest, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).closeSession(requestParameters.sessionUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Review created
+     * @summary Create a calibration review
+     * @param {CalibrationApiCreateReview1Request} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public createReview1(requestParameters: CalibrationApiCreateReview1Request, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).createReview1(requestParameters.colleagueUuid, requestParameters.cycleUuid, requestParameters.review, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Review created
+     * @summary Create a calibration review in session
+     * @param {CalibrationApiCreateReviewInSessionRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public createReviewInSession(requestParameters: CalibrationApiCreateReviewInSessionRequest, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).createReviewInSession(requestParameters.sessionUuid, requestParameters.colleagueUuid, requestParameters.cycleUuid, requestParameters.review, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Creates Calibration Session
      * @param {CalibrationApiCreateSessionRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -6022,6 +7806,18 @@ export class CalibrationApi extends BaseAPI {
      */
     public createSession(requestParameters: CalibrationApiCreateSessionRequest, options?: AxiosRequestConfig) {
         return CalibrationApiFp(this.configuration).createSession(requestParameters.calibrationSession, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Delete existing review
+     * @summary Delete existing calibration review
+     * @param {CalibrationApiDeleteReview1Request} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public deleteReview1(requestParameters: CalibrationApiDeleteReview1Request, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).deleteReview1(requestParameters.colleagueUuid, requestParameters.cycleUuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6038,6 +7834,78 @@ export class CalibrationApi extends BaseAPI {
 
     /**
      * 
+     * @summary Returns calibration statistics accessible for the user
+     * @param {CalibrationApiGetCalibrationStatisticsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public getCalibrationStatistics(requestParameters: CalibrationApiGetCalibrationStatisticsRequest, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).getCalibrationStatistics(requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get filters by permissions and selected filters
+     * @param {CalibrationApiGetColleagueFilterOptionsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public getColleagueFilterOptions(requestParameters: CalibrationApiGetColleagueFilterOptionsRequest, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).getColleagueFilterOptions(requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get colleagues for calibration by filter params
+     * @param {CalibrationApiGetColleaguesRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public getColleagues(requestParameters: CalibrationApiGetColleaguesRequest, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).getColleagues(requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Returns calibration rating statistics accessible for the user
+     * @param {CalibrationApiGetRatingStatisticsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public getRatingStatistics(requestParameters: CalibrationApiGetRatingStatisticsRequest, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).getRatingStatistics(requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Returns accessible Calibration Reviews for the user
+     * @param {CalibrationApiGetReview1Request} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public getReview1(requestParameters: CalibrationApiGetReview1Request, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).getReview1(requestParameters.colleagueUuid, requestParameters.cycleUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a calibration review by its identifier
+     * @param {CalibrationApiGetReviewByUuid1Request} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public getReviewByUuid1(requestParameters: CalibrationApiGetReviewByUuid1Request, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).getReviewByUuid1(requestParameters.uuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Returns accessible Calibration Reviews for the user
      * @param {CalibrationApiGetReviews1Request} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -6050,6 +7918,30 @@ export class CalibrationApi extends BaseAPI {
 
     /**
      * 
+     * @summary Returns calibration rating statistics by calibration session
+     * @param {CalibrationApiGetSessionRatingStatisticsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public getSessionRatingStatistics(requestParameters: CalibrationApiGetSessionRatingStatisticsRequest, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).getSessionRatingStatistics(requestParameters.sessionUuid, requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Gets reviews by Calibration Sessions
+     * @param {CalibrationApiGetSessionReviewsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public getSessionReviews(requestParameters: CalibrationApiGetSessionReviewsRequest, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).getSessionReviews(requestParameters.sessionUuid, requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Returns user\'s Calibration Sessions
      * @param {CalibrationApiGetSessionsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -6058,6 +7950,54 @@ export class CalibrationApi extends BaseAPI {
      */
     public getSessions(requestParameters: CalibrationApiGetSessionsRequest, options?: AxiosRequestConfig) {
         return CalibrationApiFp(this.configuration).getSessions(requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Gets colleagues by Calibration Sessions
+     * @param {CalibrationApiGetSuggestions1Request} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public getSuggestions1(requestParameters: CalibrationApiGetSuggestions1Request, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).getSuggestions1(requestParameters.sessionUuid, requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Start Calibration Session
+     * @param {CalibrationApiStartSessionRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public startSession(requestParameters: CalibrationApiStartSessionRequest, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).startSession(requestParameters.sessionUuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Update existing review
+     * @summary Update existing calibration review
+     * @param {CalibrationApiUpdateReview1Request} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public updateReview1(requestParameters: CalibrationApiUpdateReview1Request, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).updateReview1(requestParameters.colleagueUuid, requestParameters.cycleUuid, requestParameters.review, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Update status of existing calibration reviews
+     * @summary Update status of existing calibration reviews
+     * @param {CalibrationApiUpdateReviewsStatus1Request} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CalibrationApi
+     */
+    public updateReviewsStatus1(requestParameters: CalibrationApiUpdateReviewsStatus1Request, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).updateReviewsStatus1(requestParameters.colleagueUuid, requestParameters.cycleUuid, requestParameters.status, requestParameters.updateReviewsStatusRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -11713,407 +13653,6 @@ export class NotesApi extends BaseAPI {
 
 
 /**
- * ObjectiveSharingApi - axios parameter creator
- * @export
- */
-export const ObjectiveSharingApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @summary Get all shared objectives by their manager
-         * @param {string} colleagueUuid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getSharedObjectivesForColleague: async (colleagueUuid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'colleagueUuid' is not null or undefined
-            assertParamExists('getSharedObjectivesForColleague', 'colleagueUuid', colleagueUuid)
-            const localVarPath = `/colleagues/{colleagueUuid}/review-types/objective/sharing`
-                .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary Check if colleague objectives is shared
-         * @param {string} cycleUuid 
-         * @param {string} colleagueUuid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        isColleagueShareObjectives: async (cycleUuid: string, colleagueUuid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'cycleUuid' is not null or undefined
-            assertParamExists('isColleagueShareObjectives', 'cycleUuid', cycleUuid)
-            // verify required parameter 'colleagueUuid' is not null or undefined
-            assertParamExists('isColleagueShareObjectives', 'colleagueUuid', colleagueUuid)
-            const localVarPath = `/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/review-types/objective/sharing`
-                .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)))
-                .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary Share colleague objectives
-         * @param {string} cycleUuid 
-         * @param {string} colleagueUuid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        shareObjectives: async (cycleUuid: string, colleagueUuid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'cycleUuid' is not null or undefined
-            assertParamExists('shareObjectives', 'cycleUuid', cycleUuid)
-            // verify required parameter 'colleagueUuid' is not null or undefined
-            assertParamExists('shareObjectives', 'colleagueUuid', colleagueUuid)
-            const localVarPath = `/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/review-types/objective/sharing`
-                .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)))
-                .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary Stop sharing colleague objectives
-         * @param {string} cycleUuid 
-         * @param {string} colleagueUuid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        stopSharingObjectives: async (cycleUuid: string, colleagueUuid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'cycleUuid' is not null or undefined
-            assertParamExists('stopSharingObjectives', 'cycleUuid', cycleUuid)
-            // verify required parameter 'colleagueUuid' is not null or undefined
-            assertParamExists('stopSharingObjectives', 'colleagueUuid', colleagueUuid)
-            const localVarPath = `/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/review-types/objective/sharing`
-                .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)))
-                .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * ObjectiveSharingApi - functional programming interface
- * @export
- */
-export const ObjectiveSharingApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = ObjectiveSharingApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @summary Get all shared objectives by their manager
-         * @param {string} colleagueUuid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getSharedObjectivesForColleague(colleagueUuid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListReview>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getSharedObjectivesForColleague(colleagueUuid, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @summary Check if colleague objectives is shared
-         * @param {string} cycleUuid 
-         * @param {string} colleagueUuid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async isColleagueShareObjectives(cycleUuid: string, colleagueUuid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseBoolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.isColleagueShareObjectives(cycleUuid, colleagueUuid, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @summary Share colleague objectives
-         * @param {string} cycleUuid 
-         * @param {string} colleagueUuid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async shareObjectives(cycleUuid: string, colleagueUuid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseVoid>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.shareObjectives(cycleUuid, colleagueUuid, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @summary Stop sharing colleague objectives
-         * @param {string} cycleUuid 
-         * @param {string} colleagueUuid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async stopSharingObjectives(cycleUuid: string, colleagueUuid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseVoid>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.stopSharingObjectives(cycleUuid, colleagueUuid, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-    }
-};
-
-/**
- * ObjectiveSharingApi - factory interface
- * @export
- */
-export const ObjectiveSharingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = ObjectiveSharingApiFp(configuration)
-    return {
-        /**
-         * 
-         * @summary Get all shared objectives by their manager
-         * @param {string} colleagueUuid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getSharedObjectivesForColleague(colleagueUuid: string, options?: any): AxiosPromise<RestResponseListReview> {
-            return localVarFp.getSharedObjectivesForColleague(colleagueUuid, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary Check if colleague objectives is shared
-         * @param {string} cycleUuid 
-         * @param {string} colleagueUuid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        isColleagueShareObjectives(cycleUuid: string, colleagueUuid: string, options?: any): AxiosPromise<RestResponseBoolean> {
-            return localVarFp.isColleagueShareObjectives(cycleUuid, colleagueUuid, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary Share colleague objectives
-         * @param {string} cycleUuid 
-         * @param {string} colleagueUuid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        shareObjectives(cycleUuid: string, colleagueUuid: string, options?: any): AxiosPromise<RestResponseVoid> {
-            return localVarFp.shareObjectives(cycleUuid, colleagueUuid, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary Stop sharing colleague objectives
-         * @param {string} cycleUuid 
-         * @param {string} colleagueUuid 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        stopSharingObjectives(cycleUuid: string, colleagueUuid: string, options?: any): AxiosPromise<RestResponseVoid> {
-            return localVarFp.stopSharingObjectives(cycleUuid, colleagueUuid, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * Request parameters for getSharedObjectivesForColleague operation in ObjectiveSharingApi.
- * @export
- * @interface ObjectiveSharingApiGetSharedObjectivesForColleagueRequest
- */
-export interface ObjectiveSharingApiGetSharedObjectivesForColleagueRequest {
-    /**
-     * 
-     * @type {string}
-     * @memberof ObjectiveSharingApiGetSharedObjectivesForColleague
-     */
-    readonly colleagueUuid: string
-}
-
-/**
- * Request parameters for isColleagueShareObjectives operation in ObjectiveSharingApi.
- * @export
- * @interface ObjectiveSharingApiIsColleagueShareObjectivesRequest
- */
-export interface ObjectiveSharingApiIsColleagueShareObjectivesRequest {
-    /**
-     * 
-     * @type {string}
-     * @memberof ObjectiveSharingApiIsColleagueShareObjectives
-     */
-    readonly cycleUuid: string
-
-    /**
-     * 
-     * @type {string}
-     * @memberof ObjectiveSharingApiIsColleagueShareObjectives
-     */
-    readonly colleagueUuid: string
-}
-
-/**
- * Request parameters for shareObjectives operation in ObjectiveSharingApi.
- * @export
- * @interface ObjectiveSharingApiShareObjectivesRequest
- */
-export interface ObjectiveSharingApiShareObjectivesRequest {
-    /**
-     * 
-     * @type {string}
-     * @memberof ObjectiveSharingApiShareObjectives
-     */
-    readonly cycleUuid: string
-
-    /**
-     * 
-     * @type {string}
-     * @memberof ObjectiveSharingApiShareObjectives
-     */
-    readonly colleagueUuid: string
-}
-
-/**
- * Request parameters for stopSharingObjectives operation in ObjectiveSharingApi.
- * @export
- * @interface ObjectiveSharingApiStopSharingObjectivesRequest
- */
-export interface ObjectiveSharingApiStopSharingObjectivesRequest {
-    /**
-     * 
-     * @type {string}
-     * @memberof ObjectiveSharingApiStopSharingObjectives
-     */
-    readonly cycleUuid: string
-
-    /**
-     * 
-     * @type {string}
-     * @memberof ObjectiveSharingApiStopSharingObjectives
-     */
-    readonly colleagueUuid: string
-}
-
-/**
- * ObjectiveSharingApi - object-oriented interface
- * @export
- * @class ObjectiveSharingApi
- * @extends {BaseAPI}
- */
-export class ObjectiveSharingApi extends BaseAPI {
-    /**
-     * 
-     * @summary Get all shared objectives by their manager
-     * @param {ObjectiveSharingApiGetSharedObjectivesForColleagueRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ObjectiveSharingApi
-     */
-    public getSharedObjectivesForColleague(requestParameters: ObjectiveSharingApiGetSharedObjectivesForColleagueRequest, options?: AxiosRequestConfig) {
-        return ObjectiveSharingApiFp(this.configuration).getSharedObjectivesForColleague(requestParameters.colleagueUuid, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Check if colleague objectives is shared
-     * @param {ObjectiveSharingApiIsColleagueShareObjectivesRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ObjectiveSharingApi
-     */
-    public isColleagueShareObjectives(requestParameters: ObjectiveSharingApiIsColleagueShareObjectivesRequest, options?: AxiosRequestConfig) {
-        return ObjectiveSharingApiFp(this.configuration).isColleagueShareObjectives(requestParameters.cycleUuid, requestParameters.colleagueUuid, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Share colleague objectives
-     * @param {ObjectiveSharingApiShareObjectivesRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ObjectiveSharingApi
-     */
-    public shareObjectives(requestParameters: ObjectiveSharingApiShareObjectivesRequest, options?: AxiosRequestConfig) {
-        return ObjectiveSharingApiFp(this.configuration).shareObjectives(requestParameters.cycleUuid, requestParameters.colleagueUuid, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Stop sharing colleague objectives
-     * @param {ObjectiveSharingApiStopSharingObjectivesRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ObjectiveSharingApi
-     */
-    public stopSharingObjectives(requestParameters: ObjectiveSharingApiStopSharingObjectivesRequest, options?: AxiosRequestConfig) {
-        return ObjectiveSharingApiFp(this.configuration).stopSharingObjectives(requestParameters.cycleUuid, requestParameters.colleagueUuid, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-/**
  * OrgMappingApi - axios parameter creator
  * @export
  */
@@ -14105,16 +15644,19 @@ export const PerformanceCycleApiAxiosParamCreator = function (configuration?: Co
          * @param {string} cycleUuid 
          * @param {string} path 
          * @param {string} fileName 
+         * @param {'ADDED' | 'OVERWRITE'} mergeMode 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deployTemplateByPathAndNameForCycle: async (cycleUuid: string, path: string, fileName: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deployTemplateByPathAndNameForCycle: async (cycleUuid: string, path: string, fileName: string, mergeMode: 'ADDED' | 'OVERWRITE', options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'cycleUuid' is not null or undefined
             assertParamExists('deployTemplateByPathAndNameForCycle', 'cycleUuid', cycleUuid)
             // verify required parameter 'path' is not null or undefined
             assertParamExists('deployTemplateByPathAndNameForCycle', 'path', path)
             // verify required parameter 'fileName' is not null or undefined
             assertParamExists('deployTemplateByPathAndNameForCycle', 'fileName', fileName)
+            // verify required parameter 'mergeMode' is not null or undefined
+            assertParamExists('deployTemplateByPathAndNameForCycle', 'mergeMode', mergeMode)
             const localVarPath = `/pm-cycles/{cycleUuid}/files/deploy`
                 .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -14136,6 +15678,10 @@ export const PerformanceCycleApiAxiosParamCreator = function (configuration?: Co
                 localVarQueryParameter['file-name'] = fileName;
             }
 
+            if (mergeMode !== undefined) {
+                localVarQueryParameter['merge-mode'] = mergeMode;
+            }
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -14152,14 +15698,17 @@ export const PerformanceCycleApiAxiosParamCreator = function (configuration?: Co
          * @summary Deploy file resource by uuid for existing performance cycle
          * @param {string} cycleUuid 
          * @param {string} fileUuid 
+         * @param {'ADDED' | 'OVERWRITE'} mergeMode 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deployTemplateByUuidForCycle: async (cycleUuid: string, fileUuid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deployTemplateByUuidForCycle: async (cycleUuid: string, fileUuid: string, mergeMode: 'ADDED' | 'OVERWRITE', options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'cycleUuid' is not null or undefined
             assertParamExists('deployTemplateByUuidForCycle', 'cycleUuid', cycleUuid)
             // verify required parameter 'fileUuid' is not null or undefined
             assertParamExists('deployTemplateByUuidForCycle', 'fileUuid', fileUuid)
+            // verify required parameter 'mergeMode' is not null or undefined
+            assertParamExists('deployTemplateByUuidForCycle', 'mergeMode', mergeMode)
             const localVarPath = `/pm-cycles/{cycleUuid}/files/{fileUuid}/deploy`
                 .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)))
                 .replace(`{${"fileUuid"}}`, encodeURIComponent(String(fileUuid)));
@@ -14173,6 +15722,10 @@ export const PerformanceCycleApiAxiosParamCreator = function (configuration?: Co
             const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (mergeMode !== undefined) {
+                localVarQueryParameter['merge-mode'] = mergeMode;
+            }
 
 
     
@@ -14268,6 +15821,51 @@ export const PerformanceCycleApiAxiosParamCreator = function (configuration?: Co
         },
         /**
          * 
+         * @summary Get colleague cycles for colleague and cycle
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getColleagueCycles: async (colleagueUuid: string, cycleUuid: string, requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'colleagueUuid' is not null or undefined
+            assertParamExists('getColleagueCycles', 'colleagueUuid', colleagueUuid)
+            // verify required parameter 'cycleUuid' is not null or undefined
+            assertParamExists('getColleagueCycles', 'cycleUuid', cycleUuid)
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getColleagueCycles', 'requestQuery', requestQuery)
+            const localVarPath = `/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/colleague-cycles`
+                .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)))
+                .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get full metadata for colleague
          * @param {string} colleagueUuid 
          * @param {boolean} [includeForms] 
@@ -14279,6 +15877,49 @@ export const PerformanceCycleApiAxiosParamCreator = function (configuration?: Co
             assertParamExists('getMetadataByColleague', 'colleagueUuid', colleagueUuid)
             const localVarPath = `/colleagues/{colleagueUuid}/metadata`
                 .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (includeForms !== undefined) {
+                localVarQueryParameter['includeForms'] = includeForms;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get full metadata for colleague and cycle
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {boolean} [includeForms] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMetadataByColleagueAndCycle: async (colleagueUuid: string, cycleUuid: string, includeForms?: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'colleagueUuid' is not null or undefined
+            assertParamExists('getMetadataByColleagueAndCycle', 'colleagueUuid', colleagueUuid)
+            // verify required parameter 'cycleUuid' is not null or undefined
+            assertParamExists('getMetadataByColleagueAndCycle', 'cycleUuid', cycleUuid)
+            const localVarPath = `/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/metadata`
+                .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)))
+                .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -14763,11 +16404,12 @@ export const PerformanceCycleApiFp = function(configuration?: Configuration) {
          * @param {string} cycleUuid 
          * @param {string} path 
          * @param {string} fileName 
+         * @param {'ADDED' | 'OVERWRITE'} mergeMode 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deployTemplateByPathAndNameForCycle(cycleUuid: string, path: string, fileName: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseVoid>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deployTemplateByPathAndNameForCycle(cycleUuid, path, fileName, options);
+        async deployTemplateByPathAndNameForCycle(cycleUuid: string, path: string, fileName: string, mergeMode: 'ADDED' | 'OVERWRITE', options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseVoid>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deployTemplateByPathAndNameForCycle(cycleUuid, path, fileName, mergeMode, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -14775,11 +16417,12 @@ export const PerformanceCycleApiFp = function(configuration?: Configuration) {
          * @summary Deploy file resource by uuid for existing performance cycle
          * @param {string} cycleUuid 
          * @param {string} fileUuid 
+         * @param {'ADDED' | 'OVERWRITE'} mergeMode 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deployTemplateByUuidForCycle(cycleUuid: string, fileUuid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseVoid>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deployTemplateByUuidForCycle(cycleUuid, fileUuid, options);
+        async deployTemplateByUuidForCycle(cycleUuid: string, fileUuid: string, mergeMode: 'ADDED' | 'OVERWRITE', options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseVoid>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deployTemplateByUuidForCycle(cycleUuid, fileUuid, mergeMode, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -14808,6 +16451,19 @@ export const PerformanceCycleApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get colleague cycles for colleague and cycle
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getColleagueCycles(colleagueUuid: string, cycleUuid: string, requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListPMColleagueCycle>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getColleagueCycles(colleagueUuid, cycleUuid, requestQuery, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get full metadata for colleague
          * @param {string} colleagueUuid 
          * @param {boolean} [includeForms] 
@@ -14816,6 +16472,19 @@ export const PerformanceCycleApiFp = function(configuration?: Configuration) {
          */
         async getMetadataByColleague(colleagueUuid: string, includeForms?: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseCompositePMCycleMetadataResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getMetadataByColleague(colleagueUuid, includeForms, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get full metadata for colleague and cycle
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {boolean} [includeForms] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMetadataByColleagueAndCycle(colleagueUuid: string, cycleUuid: string, includeForms?: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseCompositePMCycleMetadataResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMetadataByColleagueAndCycle(colleagueUuid, cycleUuid, includeForms, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -14982,22 +16651,24 @@ export const PerformanceCycleApiFactory = function (configuration?: Configuratio
          * @param {string} cycleUuid 
          * @param {string} path 
          * @param {string} fileName 
+         * @param {'ADDED' | 'OVERWRITE'} mergeMode 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deployTemplateByPathAndNameForCycle(cycleUuid: string, path: string, fileName: string, options?: any): AxiosPromise<RestResponseVoid> {
-            return localVarFp.deployTemplateByPathAndNameForCycle(cycleUuid, path, fileName, options).then((request) => request(axios, basePath));
+        deployTemplateByPathAndNameForCycle(cycleUuid: string, path: string, fileName: string, mergeMode: 'ADDED' | 'OVERWRITE', options?: any): AxiosPromise<RestResponseVoid> {
+            return localVarFp.deployTemplateByPathAndNameForCycle(cycleUuid, path, fileName, mergeMode, options).then((request) => request(axios, basePath));
         },
         /**
          * File deployed
          * @summary Deploy file resource by uuid for existing performance cycle
          * @param {string} cycleUuid 
          * @param {string} fileUuid 
+         * @param {'ADDED' | 'OVERWRITE'} mergeMode 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deployTemplateByUuidForCycle(cycleUuid: string, fileUuid: string, options?: any): AxiosPromise<RestResponseVoid> {
-            return localVarFp.deployTemplateByUuidForCycle(cycleUuid, fileUuid, options).then((request) => request(axios, basePath));
+        deployTemplateByUuidForCycle(cycleUuid: string, fileUuid: string, mergeMode: 'ADDED' | 'OVERWRITE', options?: any): AxiosPromise<RestResponseVoid> {
+            return localVarFp.deployTemplateByUuidForCycle(cycleUuid, fileUuid, mergeMode, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -15023,6 +16694,18 @@ export const PerformanceCycleApiFactory = function (configuration?: Configuratio
         },
         /**
          * 
+         * @summary Get colleague cycles for colleague and cycle
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getColleagueCycles(colleagueUuid: string, cycleUuid: string, requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseListPMColleagueCycle> {
+            return localVarFp.getColleagueCycles(colleagueUuid, cycleUuid, requestQuery, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get full metadata for colleague
          * @param {string} colleagueUuid 
          * @param {boolean} [includeForms] 
@@ -15031,6 +16714,18 @@ export const PerformanceCycleApiFactory = function (configuration?: Configuratio
          */
         getMetadataByColleague(colleagueUuid: string, includeForms?: boolean, options?: any): AxiosPromise<RestResponseCompositePMCycleMetadataResponse> {
             return localVarFp.getMetadataByColleague(colleagueUuid, includeForms, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get full metadata for colleague and cycle
+         * @param {string} colleagueUuid 
+         * @param {string} cycleUuid 
+         * @param {boolean} [includeForms] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMetadataByColleagueAndCycle(colleagueUuid: string, cycleUuid: string, includeForms?: boolean, options?: any): AxiosPromise<RestResponseCompositePMCycleMetadataResponse> {
+            return localVarFp.getMetadataByColleagueAndCycle(colleagueUuid, cycleUuid, includeForms, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -15206,6 +16901,13 @@ export interface PerformanceCycleApiDeployTemplateByPathAndNameForCycleRequest {
      * @memberof PerformanceCycleApiDeployTemplateByPathAndNameForCycle
      */
     readonly fileName: string
+
+    /**
+     * 
+     * @type {'ADDED' | 'OVERWRITE'}
+     * @memberof PerformanceCycleApiDeployTemplateByPathAndNameForCycle
+     */
+    readonly mergeMode: 'ADDED' | 'OVERWRITE'
 }
 
 /**
@@ -15227,6 +16929,13 @@ export interface PerformanceCycleApiDeployTemplateByUuidForCycleRequest {
      * @memberof PerformanceCycleApiDeployTemplateByUuidForCycle
      */
     readonly fileUuid: string
+
+    /**
+     * 
+     * @type {'ADDED' | 'OVERWRITE'}
+     * @memberof PerformanceCycleApiDeployTemplateByUuidForCycle
+     */
+    readonly mergeMode: 'ADDED' | 'OVERWRITE'
 }
 
 /**
@@ -15272,6 +16981,34 @@ export interface PerformanceCycleApiGetAllRequest {
 }
 
 /**
+ * Request parameters for getColleagueCycles operation in PerformanceCycleApi.
+ * @export
+ * @interface PerformanceCycleApiGetColleagueCyclesRequest
+ */
+export interface PerformanceCycleApiGetColleagueCyclesRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof PerformanceCycleApiGetColleagueCycles
+     */
+    readonly colleagueUuid: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof PerformanceCycleApiGetColleagueCycles
+     */
+    readonly cycleUuid: string
+
+    /**
+     * 
+     * @type {RequestQuery}
+     * @memberof PerformanceCycleApiGetColleagueCycles
+     */
+    readonly requestQuery: RequestQuery
+}
+
+/**
  * Request parameters for getMetadataByColleague operation in PerformanceCycleApi.
  * @export
  * @interface PerformanceCycleApiGetMetadataByColleagueRequest
@@ -15288,6 +17025,34 @@ export interface PerformanceCycleApiGetMetadataByColleagueRequest {
      * 
      * @type {boolean}
      * @memberof PerformanceCycleApiGetMetadataByColleague
+     */
+    readonly includeForms?: boolean
+}
+
+/**
+ * Request parameters for getMetadataByColleagueAndCycle operation in PerformanceCycleApi.
+ * @export
+ * @interface PerformanceCycleApiGetMetadataByColleagueAndCycleRequest
+ */
+export interface PerformanceCycleApiGetMetadataByColleagueAndCycleRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof PerformanceCycleApiGetMetadataByColleagueAndCycle
+     */
+    readonly colleagueUuid: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof PerformanceCycleApiGetMetadataByColleagueAndCycle
+     */
+    readonly cycleUuid: string
+
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PerformanceCycleApiGetMetadataByColleagueAndCycle
      */
     readonly includeForms?: boolean
 }
@@ -15528,7 +17293,7 @@ export class PerformanceCycleApi extends BaseAPI {
      * @memberof PerformanceCycleApi
      */
     public deployTemplateByPathAndNameForCycle(requestParameters: PerformanceCycleApiDeployTemplateByPathAndNameForCycleRequest, options?: AxiosRequestConfig) {
-        return PerformanceCycleApiFp(this.configuration).deployTemplateByPathAndNameForCycle(requestParameters.cycleUuid, requestParameters.path, requestParameters.fileName, options).then((request) => request(this.axios, this.basePath));
+        return PerformanceCycleApiFp(this.configuration).deployTemplateByPathAndNameForCycle(requestParameters.cycleUuid, requestParameters.path, requestParameters.fileName, requestParameters.mergeMode, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -15540,7 +17305,7 @@ export class PerformanceCycleApi extends BaseAPI {
      * @memberof PerformanceCycleApi
      */
     public deployTemplateByUuidForCycle(requestParameters: PerformanceCycleApiDeployTemplateByUuidForCycleRequest, options?: AxiosRequestConfig) {
-        return PerformanceCycleApiFp(this.configuration).deployTemplateByUuidForCycle(requestParameters.cycleUuid, requestParameters.fileUuid, options).then((request) => request(this.axios, this.basePath));
+        return PerformanceCycleApiFp(this.configuration).deployTemplateByUuidForCycle(requestParameters.cycleUuid, requestParameters.fileUuid, requestParameters.mergeMode, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -15569,6 +17334,18 @@ export class PerformanceCycleApi extends BaseAPI {
 
     /**
      * 
+     * @summary Get colleague cycles for colleague and cycle
+     * @param {PerformanceCycleApiGetColleagueCyclesRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PerformanceCycleApi
+     */
+    public getColleagueCycles(requestParameters: PerformanceCycleApiGetColleagueCyclesRequest, options?: AxiosRequestConfig) {
+        return PerformanceCycleApiFp(this.configuration).getColleagueCycles(requestParameters.colleagueUuid, requestParameters.cycleUuid, requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Get full metadata for colleague
      * @param {PerformanceCycleApiGetMetadataByColleagueRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -15577,6 +17354,18 @@ export class PerformanceCycleApi extends BaseAPI {
      */
     public getMetadataByColleague(requestParameters: PerformanceCycleApiGetMetadataByColleagueRequest, options?: AxiosRequestConfig) {
         return PerformanceCycleApiFp(this.configuration).getMetadataByColleague(requestParameters.colleagueUuid, requestParameters.includeForms, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get full metadata for colleague and cycle
+     * @param {PerformanceCycleApiGetMetadataByColleagueAndCycleRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PerformanceCycleApi
+     */
+    public getMetadataByColleagueAndCycle(requestParameters: PerformanceCycleApiGetMetadataByColleagueAndCycleRequest, options?: AxiosRequestConfig) {
+        return PerformanceCycleApiFp(this.configuration).getMetadataByColleagueAndCycle(requestParameters.colleagueUuid, requestParameters.cycleUuid, requestParameters.includeForms, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -17147,6 +18936,127 @@ export class RatingApi extends BaseAPI {
 
 
 /**
+ * RecoveryApi - axios parameter creator
+ * @export
+ */
+export const RecoveryApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Update existing colleagues
+         * @summary Update existing colleagues
+         * @param {Array<string>} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateExistingColleague: async (requestBody: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('updateExistingColleague', 'requestBody', requestBody)
+            const localVarPath = `/recovery/colleagues`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * RecoveryApi - functional programming interface
+ * @export
+ */
+export const RecoveryApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = RecoveryApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Update existing colleagues
+         * @summary Update existing colleagues
+         * @param {Array<string>} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateExistingColleague(requestBody: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseMapUUIDBoolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateExistingColleague(requestBody, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * RecoveryApi - factory interface
+ * @export
+ */
+export const RecoveryApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = RecoveryApiFp(configuration)
+    return {
+        /**
+         * Update existing colleagues
+         * @summary Update existing colleagues
+         * @param {Array<string>} requestBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateExistingColleague(requestBody: Array<string>, options?: any): AxiosPromise<RestResponseMapUUIDBoolean> {
+            return localVarFp.updateExistingColleague(requestBody, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for updateExistingColleague operation in RecoveryApi.
+ * @export
+ * @interface RecoveryApiUpdateExistingColleagueRequest
+ */
+export interface RecoveryApiUpdateExistingColleagueRequest {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof RecoveryApiUpdateExistingColleague
+     */
+    readonly requestBody: Array<string>
+}
+
+/**
+ * RecoveryApi - object-oriented interface
+ * @export
+ * @class RecoveryApi
+ * @extends {BaseAPI}
+ */
+export class RecoveryApi extends BaseAPI {
+    /**
+     * Update existing colleagues
+     * @summary Update existing colleagues
+     * @param {RecoveryApiUpdateExistingColleagueRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RecoveryApi
+     */
+    public updateExistingColleague(requestParameters: RecoveryApiUpdateExistingColleagueRequest, options?: AxiosRequestConfig) {
+        return RecoveryApiFp(this.configuration).updateExistingColleague(requestParameters.requestBody, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * ReportApi - axios parameter creator
  * @export
  */
@@ -17200,6 +19110,80 @@ export const ReportApiAxiosParamCreator = function (configuration?: Configuratio
             // verify required parameter 'requestQuery' is not null or undefined
             assertParamExists('getAnniversaryReviewsStatisticsReport', 'requestQuery', requestQuery)
             const localVarPath = `/reports/statistics-anniversary-reviews`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get calibration overview report
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCalibrationOverviewReport: async (requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getCalibrationOverviewReport', 'requestQuery', requestQuery)
+            const localVarPath = `/reports/calibration-overview`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get calibration session report
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCalibrationSessionReport: async (requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getCalibrationSessionReport', 'requestQuery', requestQuery)
+            const localVarPath = `/reports/calibration-session`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -17744,6 +19728,43 @@ export const ReportApiAxiosParamCreator = function (configuration?: Configuratio
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Get Feedback Statistics Report Data with filters
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTotalColleagueCount: async (requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getTotalColleagueCount', 'requestQuery', requestQuery)
+            const localVarPath = `/reports/colleagues/total`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -17774,6 +19795,28 @@ export const ReportApiFp = function(configuration?: Configuration) {
          */
         async getAnniversaryReviewsStatisticsReport(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListReportStatistics>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAnniversaryReviewsStatisticsReport(requestQuery, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get calibration overview report
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCalibrationOverviewReport(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCalibrationOverviewReport(requestQuery, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get calibration session report
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCalibrationSessionReport(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCalibrationSessionReport(requestQuery, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -17930,6 +19973,17 @@ export const ReportApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getStatisticsReportFile(requestQuery, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Get Feedback Statistics Report Data with filters
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getTotalColleagueCount(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseInteger>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTotalColleagueCount(requestQuery, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -17959,6 +20013,26 @@ export const ReportApiFactory = function (configuration?: Configuration, basePat
          */
         getAnniversaryReviewsStatisticsReport(requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseListReportStatistics> {
             return localVarFp.getAnniversaryReviewsStatisticsReport(requestQuery, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get calibration overview report
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCalibrationOverviewReport(requestQuery: RequestQuery, options?: any): AxiosPromise<any> {
+            return localVarFp.getCalibrationOverviewReport(requestQuery, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get calibration session report
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCalibrationSessionReport(requestQuery: RequestQuery, options?: any): AxiosPromise<any> {
+            return localVarFp.getCalibrationSessionReport(requestQuery, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -18100,6 +20174,16 @@ export const ReportApiFactory = function (configuration?: Configuration, basePat
         getStatisticsReportFile(requestQuery: RequestQuery, options?: any): AxiosPromise<any> {
             return localVarFp.getStatisticsReportFile(requestQuery, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Get Feedback Statistics Report Data with filters
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTotalColleagueCount(requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseInteger> {
+            return localVarFp.getTotalColleagueCount(requestQuery, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -18127,6 +20211,34 @@ export interface ReportApiGetAnniversaryReviewsStatisticsReportRequest {
      * 
      * @type {RequestQuery}
      * @memberof ReportApiGetAnniversaryReviewsStatisticsReport
+     */
+    readonly requestQuery: RequestQuery
+}
+
+/**
+ * Request parameters for getCalibrationOverviewReport operation in ReportApi.
+ * @export
+ * @interface ReportApiGetCalibrationOverviewReportRequest
+ */
+export interface ReportApiGetCalibrationOverviewReportRequest {
+    /**
+     * 
+     * @type {RequestQuery}
+     * @memberof ReportApiGetCalibrationOverviewReport
+     */
+    readonly requestQuery: RequestQuery
+}
+
+/**
+ * Request parameters for getCalibrationSessionReport operation in ReportApi.
+ * @export
+ * @interface ReportApiGetCalibrationSessionReportRequest
+ */
+export interface ReportApiGetCalibrationSessionReportRequest {
+    /**
+     * 
+     * @type {RequestQuery}
+     * @memberof ReportApiGetCalibrationSessionReport
      */
     readonly requestQuery: RequestQuery
 }
@@ -18328,6 +20440,20 @@ export interface ReportApiGetStatisticsReportFileRequest {
 }
 
 /**
+ * Request parameters for getTotalColleagueCount operation in ReportApi.
+ * @export
+ * @interface ReportApiGetTotalColleagueCountRequest
+ */
+export interface ReportApiGetTotalColleagueCountRequest {
+    /**
+     * 
+     * @type {RequestQuery}
+     * @memberof ReportApiGetTotalColleagueCount
+     */
+    readonly requestQuery: RequestQuery
+}
+
+/**
  * ReportApi - object-oriented interface
  * @export
  * @class ReportApi
@@ -18356,6 +20482,30 @@ export class ReportApi extends BaseAPI {
      */
     public getAnniversaryReviewsStatisticsReport(requestParameters: ReportApiGetAnniversaryReviewsStatisticsReportRequest, options?: AxiosRequestConfig) {
         return ReportApiFp(this.configuration).getAnniversaryReviewsStatisticsReport(requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get calibration overview report
+     * @param {ReportApiGetCalibrationOverviewReportRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ReportApi
+     */
+    public getCalibrationOverviewReport(requestParameters: ReportApiGetCalibrationOverviewReportRequest, options?: AxiosRequestConfig) {
+        return ReportApiFp(this.configuration).getCalibrationOverviewReport(requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get calibration session report
+     * @param {ReportApiGetCalibrationSessionReportRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ReportApi
+     */
+    public getCalibrationSessionReport(requestParameters: ReportApiGetCalibrationSessionReportRequest, options?: AxiosRequestConfig) {
+        return ReportApiFp(this.configuration).getCalibrationSessionReport(requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -18524,6 +20674,18 @@ export class ReportApi extends BaseAPI {
      */
     public getStatisticsReportFile(requestParameters: ReportApiGetStatisticsReportFileRequest, options?: AxiosRequestConfig) {
         return ReportApiFp(this.configuration).getStatisticsReportFile(requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get Feedback Statistics Report Data with filters
+     * @param {ReportApiGetTotalColleagueCountRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ReportApi
+     */
+    public getTotalColleagueCount(requestParameters: ReportApiGetTotalColleagueCountRequest, options?: AxiosRequestConfig) {
+        return ReportApiFp(this.configuration).getTotalColleagueCount(requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -18840,12 +21002,15 @@ export const ReviewApiAxiosParamCreator = function (configuration?: Configuratio
          * 
          * @summary Get a list of full team reviews by managerUuid
          * @param {string} managerUuid 
+         * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFullTeamView: async (managerUuid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getFullTeamView: async (managerUuid: string, requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'managerUuid' is not null or undefined
             assertParamExists('getFullTeamView', 'managerUuid', managerUuid)
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getFullTeamView', 'requestQuery', requestQuery)
             const localVarPath = `/managers/{managerUuid}/reviews/full-team`
                 .replace(`{${"managerUuid"}}`, encodeURIComponent(String(managerUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -18858,6 +21023,10 @@ export const ReviewApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
+            }
 
 
     
@@ -18997,15 +21166,18 @@ export const ReviewApiAxiosParamCreator = function (configuration?: Configuratio
          * @summary Get a list of reviews by its cycleUuid, colleagueUuid
          * @param {string} colleagueUuid 
          * @param {string} cycleUuid 
+         * @param {RequestQuery} requestQuery 
          * @param {boolean} [includeFiles] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getReviewsByColleague: async (colleagueUuid: string, cycleUuid: string, includeFiles?: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getReviewsByColleague: async (colleagueUuid: string, cycleUuid: string, requestQuery: RequestQuery, includeFiles?: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'colleagueUuid' is not null or undefined
             assertParamExists('getReviewsByColleague', 'colleagueUuid', colleagueUuid)
             // verify required parameter 'cycleUuid' is not null or undefined
             assertParamExists('getReviewsByColleague', 'cycleUuid', cycleUuid)
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getReviewsByColleague', 'requestQuery', requestQuery)
             const localVarPath = `/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/reviews`
                 .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)))
                 .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)));
@@ -19022,6 +21194,10 @@ export const ReviewApiAxiosParamCreator = function (configuration?: Configuratio
 
             if (includeFiles !== undefined) {
                 localVarQueryParameter['includeFiles'] = includeFiles;
+            }
+
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
             }
 
 
@@ -19111,12 +21287,15 @@ export const ReviewApiAxiosParamCreator = function (configuration?: Configuratio
          * 
          * @summary Get a list of colleagues reviews by managerUuid
          * @param {string} managerUuid 
+         * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTeamView: async (managerUuid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getTeamView: async (managerUuid: string, requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'managerUuid' is not null or undefined
             assertParamExists('getTeamView', 'managerUuid', managerUuid)
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getTeamView', 'requestQuery', requestQuery)
             const localVarPath = `/managers/{managerUuid}/reviews`
                 .replace(`{${"managerUuid"}}`, encodeURIComponent(String(managerUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -19129,6 +21308,10 @@ export const ReviewApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
+            }
 
 
     
@@ -19146,14 +21329,17 @@ export const ReviewApiAxiosParamCreator = function (configuration?: Configuratio
          * @summary Get cycle timeline for colleague
          * @param {string} colleagueUuid 
          * @param {string} cycleUuid 
+         * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTimelineByColleague: async (colleagueUuid: string, cycleUuid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getTimelineByColleague: async (colleagueUuid: string, cycleUuid: string, requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'colleagueUuid' is not null or undefined
             assertParamExists('getTimelineByColleague', 'colleagueUuid', colleagueUuid)
             // verify required parameter 'cycleUuid' is not null or undefined
             assertParamExists('getTimelineByColleague', 'cycleUuid', cycleUuid)
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getTimelineByColleague', 'requestQuery', requestQuery)
             const localVarPath = `/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/timeline`
                 .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)))
                 .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)));
@@ -19167,6 +21353,10 @@ export const ReviewApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
+            }
 
 
     
@@ -19496,11 +21686,12 @@ export const ReviewApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get a list of full team reviews by managerUuid
          * @param {string} managerUuid 
+         * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getFullTeamView(managerUuid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListColleagueView>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getFullTeamView(managerUuid, options);
+        async getFullTeamView(managerUuid: string, requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListColleagueView>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getFullTeamView(managerUuid, requestQuery, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -19546,12 +21737,13 @@ export const ReviewApiFp = function(configuration?: Configuration) {
          * @summary Get a list of reviews by its cycleUuid, colleagueUuid
          * @param {string} colleagueUuid 
          * @param {string} cycleUuid 
+         * @param {RequestQuery} requestQuery 
          * @param {boolean} [includeFiles] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getReviewsByColleague(colleagueUuid: string, cycleUuid: string, includeFiles?: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListReview>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getReviewsByColleague(colleagueUuid, cycleUuid, includeFiles, options);
+        async getReviewsByColleague(colleagueUuid: string, cycleUuid: string, requestQuery: RequestQuery, includeFiles?: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListReview>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getReviewsByColleague(colleagueUuid, cycleUuid, requestQuery, includeFiles, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -19581,11 +21773,12 @@ export const ReviewApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get a list of colleagues reviews by managerUuid
          * @param {string} managerUuid 
+         * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTeamView(managerUuid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListColleagueView>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getTeamView(managerUuid, options);
+        async getTeamView(managerUuid: string, requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListColleagueView>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTeamView(managerUuid, requestQuery, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -19593,11 +21786,12 @@ export const ReviewApiFp = function(configuration?: Configuration) {
          * @summary Get cycle timeline for colleague
          * @param {string} colleagueUuid 
          * @param {string} cycleUuid 
+         * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTimelineByColleague(colleagueUuid: string, cycleUuid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListTimelinePoint>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getTimelineByColleague(colleagueUuid, cycleUuid, options);
+        async getTimelineByColleague(colleagueUuid: string, cycleUuid: string, requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListTimelinePoint>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTimelineByColleague(colleagueUuid, cycleUuid, requestQuery, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -19755,11 +21949,12 @@ export const ReviewApiFactory = function (configuration?: Configuration, basePat
          * 
          * @summary Get a list of full team reviews by managerUuid
          * @param {string} managerUuid 
+         * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFullTeamView(managerUuid: string, options?: any): AxiosPromise<RestResponseListColleagueView> {
-            return localVarFp.getFullTeamView(managerUuid, options).then((request) => request(axios, basePath));
+        getFullTeamView(managerUuid: string, requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseListColleagueView> {
+            return localVarFp.getFullTeamView(managerUuid, requestQuery, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -19801,12 +21996,13 @@ export const ReviewApiFactory = function (configuration?: Configuration, basePat
          * @summary Get a list of reviews by its cycleUuid, colleagueUuid
          * @param {string} colleagueUuid 
          * @param {string} cycleUuid 
+         * @param {RequestQuery} requestQuery 
          * @param {boolean} [includeFiles] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getReviewsByColleague(colleagueUuid: string, cycleUuid: string, includeFiles?: boolean, options?: any): AxiosPromise<RestResponseListReview> {
-            return localVarFp.getReviewsByColleague(colleagueUuid, cycleUuid, includeFiles, options).then((request) => request(axios, basePath));
+        getReviewsByColleague(colleagueUuid: string, cycleUuid: string, requestQuery: RequestQuery, includeFiles?: boolean, options?: any): AxiosPromise<RestResponseListReview> {
+            return localVarFp.getReviewsByColleague(colleagueUuid, cycleUuid, requestQuery, includeFiles, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -19833,22 +22029,24 @@ export const ReviewApiFactory = function (configuration?: Configuration, basePat
          * 
          * @summary Get a list of colleagues reviews by managerUuid
          * @param {string} managerUuid 
+         * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTeamView(managerUuid: string, options?: any): AxiosPromise<RestResponseListColleagueView> {
-            return localVarFp.getTeamView(managerUuid, options).then((request) => request(axios, basePath));
+        getTeamView(managerUuid: string, requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseListColleagueView> {
+            return localVarFp.getTeamView(managerUuid, requestQuery, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Get cycle timeline for colleague
          * @param {string} colleagueUuid 
          * @param {string} cycleUuid 
+         * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTimelineByColleague(colleagueUuid: string, cycleUuid: string, options?: any): AxiosPromise<RestResponseListTimelinePoint> {
-            return localVarFp.getTimelineByColleague(colleagueUuid, cycleUuid, options).then((request) => request(axios, basePath));
+        getTimelineByColleague(colleagueUuid: string, cycleUuid: string, requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseListTimelinePoint> {
+            return localVarFp.getTimelineByColleague(colleagueUuid, cycleUuid, requestQuery, options).then((request) => request(axios, basePath));
         },
         /**
          * Update existing review
@@ -20102,6 +22300,13 @@ export interface ReviewApiGetFullTeamViewRequest {
      * @memberof ReviewApiGetFullTeamView
      */
     readonly managerUuid: string
+
+    /**
+     * 
+     * @type {RequestQuery}
+     * @memberof ReviewApiGetFullTeamView
+     */
+    readonly requestQuery: RequestQuery
 }
 
 /**
@@ -20203,6 +22408,13 @@ export interface ReviewApiGetReviewsByColleagueRequest {
 
     /**
      * 
+     * @type {RequestQuery}
+     * @memberof ReviewApiGetReviewsByColleague
+     */
+    readonly requestQuery: RequestQuery
+
+    /**
+     * 
      * @type {boolean}
      * @memberof ReviewApiGetReviewsByColleague
      */
@@ -20256,6 +22468,13 @@ export interface ReviewApiGetTeamViewRequest {
      * @memberof ReviewApiGetTeamView
      */
     readonly managerUuid: string
+
+    /**
+     * 
+     * @type {RequestQuery}
+     * @memberof ReviewApiGetTeamView
+     */
+    readonly requestQuery: RequestQuery
 }
 
 /**
@@ -20277,6 +22496,13 @@ export interface ReviewApiGetTimelineByColleagueRequest {
      * @memberof ReviewApiGetTimelineByColleague
      */
     readonly cycleUuid: string
+
+    /**
+     * 
+     * @type {RequestQuery}
+     * @memberof ReviewApiGetTimelineByColleague
+     */
+    readonly requestQuery: RequestQuery
 }
 
 /**
@@ -20540,7 +22766,7 @@ export class ReviewApi extends BaseAPI {
      * @memberof ReviewApi
      */
     public getFullTeamView(requestParameters: ReviewApiGetFullTeamViewRequest, options?: AxiosRequestConfig) {
-        return ReviewApiFp(this.configuration).getFullTeamView(requestParameters.managerUuid, options).then((request) => request(this.axios, this.basePath));
+        return ReviewApiFp(this.configuration).getFullTeamView(requestParameters.managerUuid, requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -20588,7 +22814,7 @@ export class ReviewApi extends BaseAPI {
      * @memberof ReviewApi
      */
     public getReviewsByColleague(requestParameters: ReviewApiGetReviewsByColleagueRequest, options?: AxiosRequestConfig) {
-        return ReviewApiFp(this.configuration).getReviewsByColleague(requestParameters.colleagueUuid, requestParameters.cycleUuid, requestParameters.includeFiles, options).then((request) => request(this.axios, this.basePath));
+        return ReviewApiFp(this.configuration).getReviewsByColleague(requestParameters.colleagueUuid, requestParameters.cycleUuid, requestParameters.requestQuery, requestParameters.includeFiles, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -20624,7 +22850,7 @@ export class ReviewApi extends BaseAPI {
      * @memberof ReviewApi
      */
     public getTeamView(requestParameters: ReviewApiGetTeamViewRequest, options?: AxiosRequestConfig) {
-        return ReviewApiFp(this.configuration).getTeamView(requestParameters.managerUuid, options).then((request) => request(this.axios, this.basePath));
+        return ReviewApiFp(this.configuration).getTeamView(requestParameters.managerUuid, requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -20636,7 +22862,7 @@ export class ReviewApi extends BaseAPI {
      * @memberof ReviewApi
      */
     public getTimelineByColleague(requestParameters: ReviewApiGetTimelineByColleagueRequest, options?: AxiosRequestConfig) {
-        return ReviewApiFp(this.configuration).getTimelineByColleague(requestParameters.colleagueUuid, requestParameters.cycleUuid, options).then((request) => request(this.axios, this.basePath));
+        return ReviewApiFp(this.configuration).getTimelineByColleague(requestParameters.colleagueUuid, requestParameters.cycleUuid, requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -20685,6 +22911,459 @@ export class ReviewApi extends BaseAPI {
      */
     public updateReviewsStatus(requestParameters: ReviewApiUpdateReviewsStatusRequest, options?: AxiosRequestConfig) {
         return ReviewApiFp(this.configuration).updateReviewsStatus(requestParameters.colleagueUuid, requestParameters.cycleUuid, requestParameters.code, requestParameters.status, requestParameters.updateReviewsStatusRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * ReviewSharingApi - axios parameter creator
+ * @export
+ */
+export const ReviewSharingApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get all shared reviews by their manager
+         * @param {string} colleagueUuid 
+         * @param {string} code 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSharedReviewsForColleague: async (colleagueUuid: string, code: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'colleagueUuid' is not null or undefined
+            assertParamExists('getSharedReviewsForColleague', 'colleagueUuid', colleagueUuid)
+            // verify required parameter 'code' is not null or undefined
+            assertParamExists('getSharedReviewsForColleague', 'code', code)
+            const localVarPath = `/colleagues/{colleagueUuid}/review-codes/{code}/sharing`
+                .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)))
+                .replace(`{${"code"}}`, encodeURIComponent(String(code)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Check if colleague reviews is shared
+         * @param {string} cycleUuid 
+         * @param {string} colleagueUuid 
+         * @param {string} code 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        isColleagueShareReviews: async (cycleUuid: string, colleagueUuid: string, code: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'cycleUuid' is not null or undefined
+            assertParamExists('isColleagueShareReviews', 'cycleUuid', cycleUuid)
+            // verify required parameter 'colleagueUuid' is not null or undefined
+            assertParamExists('isColleagueShareReviews', 'colleagueUuid', colleagueUuid)
+            // verify required parameter 'code' is not null or undefined
+            assertParamExists('isColleagueShareReviews', 'code', code)
+            const localVarPath = `/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/review-codes/{code}/sharing`
+                .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)))
+                .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)))
+                .replace(`{${"code"}}`, encodeURIComponent(String(code)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Share colleague reviews
+         * @param {string} cycleUuid 
+         * @param {string} colleagueUuid 
+         * @param {string} code 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        shareReviews: async (cycleUuid: string, colleagueUuid: string, code: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'cycleUuid' is not null or undefined
+            assertParamExists('shareReviews', 'cycleUuid', cycleUuid)
+            // verify required parameter 'colleagueUuid' is not null or undefined
+            assertParamExists('shareReviews', 'colleagueUuid', colleagueUuid)
+            // verify required parameter 'code' is not null or undefined
+            assertParamExists('shareReviews', 'code', code)
+            const localVarPath = `/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/review-codes/{code}/sharing`
+                .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)))
+                .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)))
+                .replace(`{${"code"}}`, encodeURIComponent(String(code)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Stop sharing colleague reviews
+         * @param {string} cycleUuid 
+         * @param {string} colleagueUuid 
+         * @param {string} code 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        stopSharingReviews: async (cycleUuid: string, colleagueUuid: string, code: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'cycleUuid' is not null or undefined
+            assertParamExists('stopSharingReviews', 'cycleUuid', cycleUuid)
+            // verify required parameter 'colleagueUuid' is not null or undefined
+            assertParamExists('stopSharingReviews', 'colleagueUuid', colleagueUuid)
+            // verify required parameter 'code' is not null or undefined
+            assertParamExists('stopSharingReviews', 'code', code)
+            const localVarPath = `/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/review-codes/{code}/sharing`
+                .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)))
+                .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)))
+                .replace(`{${"code"}}`, encodeURIComponent(String(code)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ReviewSharingApi - functional programming interface
+ * @export
+ */
+export const ReviewSharingApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ReviewSharingApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Get all shared reviews by their manager
+         * @param {string} colleagueUuid 
+         * @param {string} code 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSharedReviewsForColleague(colleagueUuid: string, code: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListReview>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSharedReviewsForColleague(colleagueUuid, code, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Check if colleague reviews is shared
+         * @param {string} cycleUuid 
+         * @param {string} colleagueUuid 
+         * @param {string} code 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async isColleagueShareReviews(cycleUuid: string, colleagueUuid: string, code: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseBoolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.isColleagueShareReviews(cycleUuid, colleagueUuid, code, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Share colleague reviews
+         * @param {string} cycleUuid 
+         * @param {string} colleagueUuid 
+         * @param {string} code 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async shareReviews(cycleUuid: string, colleagueUuid: string, code: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseVoid>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.shareReviews(cycleUuid, colleagueUuid, code, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Stop sharing colleague reviews
+         * @param {string} cycleUuid 
+         * @param {string} colleagueUuid 
+         * @param {string} code 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async stopSharingReviews(cycleUuid: string, colleagueUuid: string, code: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseVoid>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.stopSharingReviews(cycleUuid, colleagueUuid, code, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * ReviewSharingApi - factory interface
+ * @export
+ */
+export const ReviewSharingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ReviewSharingApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Get all shared reviews by their manager
+         * @param {string} colleagueUuid 
+         * @param {string} code 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSharedReviewsForColleague(colleagueUuid: string, code: string, options?: any): AxiosPromise<RestResponseListReview> {
+            return localVarFp.getSharedReviewsForColleague(colleagueUuid, code, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Check if colleague reviews is shared
+         * @param {string} cycleUuid 
+         * @param {string} colleagueUuid 
+         * @param {string} code 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        isColleagueShareReviews(cycleUuid: string, colleagueUuid: string, code: string, options?: any): AxiosPromise<RestResponseBoolean> {
+            return localVarFp.isColleagueShareReviews(cycleUuid, colleagueUuid, code, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Share colleague reviews
+         * @param {string} cycleUuid 
+         * @param {string} colleagueUuid 
+         * @param {string} code 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        shareReviews(cycleUuid: string, colleagueUuid: string, code: string, options?: any): AxiosPromise<RestResponseVoid> {
+            return localVarFp.shareReviews(cycleUuid, colleagueUuid, code, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Stop sharing colleague reviews
+         * @param {string} cycleUuid 
+         * @param {string} colleagueUuid 
+         * @param {string} code 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        stopSharingReviews(cycleUuid: string, colleagueUuid: string, code: string, options?: any): AxiosPromise<RestResponseVoid> {
+            return localVarFp.stopSharingReviews(cycleUuid, colleagueUuid, code, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for getSharedReviewsForColleague operation in ReviewSharingApi.
+ * @export
+ * @interface ReviewSharingApiGetSharedReviewsForColleagueRequest
+ */
+export interface ReviewSharingApiGetSharedReviewsForColleagueRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof ReviewSharingApiGetSharedReviewsForColleague
+     */
+    readonly colleagueUuid: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof ReviewSharingApiGetSharedReviewsForColleague
+     */
+    readonly code: string
+}
+
+/**
+ * Request parameters for isColleagueShareReviews operation in ReviewSharingApi.
+ * @export
+ * @interface ReviewSharingApiIsColleagueShareReviewsRequest
+ */
+export interface ReviewSharingApiIsColleagueShareReviewsRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof ReviewSharingApiIsColleagueShareReviews
+     */
+    readonly cycleUuid: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof ReviewSharingApiIsColleagueShareReviews
+     */
+    readonly colleagueUuid: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof ReviewSharingApiIsColleagueShareReviews
+     */
+    readonly code: string
+}
+
+/**
+ * Request parameters for shareReviews operation in ReviewSharingApi.
+ * @export
+ * @interface ReviewSharingApiShareReviewsRequest
+ */
+export interface ReviewSharingApiShareReviewsRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof ReviewSharingApiShareReviews
+     */
+    readonly cycleUuid: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof ReviewSharingApiShareReviews
+     */
+    readonly colleagueUuid: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof ReviewSharingApiShareReviews
+     */
+    readonly code: string
+}
+
+/**
+ * Request parameters for stopSharingReviews operation in ReviewSharingApi.
+ * @export
+ * @interface ReviewSharingApiStopSharingReviewsRequest
+ */
+export interface ReviewSharingApiStopSharingReviewsRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof ReviewSharingApiStopSharingReviews
+     */
+    readonly cycleUuid: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof ReviewSharingApiStopSharingReviews
+     */
+    readonly colleagueUuid: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof ReviewSharingApiStopSharingReviews
+     */
+    readonly code: string
+}
+
+/**
+ * ReviewSharingApi - object-oriented interface
+ * @export
+ * @class ReviewSharingApi
+ * @extends {BaseAPI}
+ */
+export class ReviewSharingApi extends BaseAPI {
+    /**
+     * 
+     * @summary Get all shared reviews by their manager
+     * @param {ReviewSharingApiGetSharedReviewsForColleagueRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ReviewSharingApi
+     */
+    public getSharedReviewsForColleague(requestParameters: ReviewSharingApiGetSharedReviewsForColleagueRequest, options?: AxiosRequestConfig) {
+        return ReviewSharingApiFp(this.configuration).getSharedReviewsForColleague(requestParameters.colleagueUuid, requestParameters.code, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Check if colleague reviews is shared
+     * @param {ReviewSharingApiIsColleagueShareReviewsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ReviewSharingApi
+     */
+    public isColleagueShareReviews(requestParameters: ReviewSharingApiIsColleagueShareReviewsRequest, options?: AxiosRequestConfig) {
+        return ReviewSharingApiFp(this.configuration).isColleagueShareReviews(requestParameters.cycleUuid, requestParameters.colleagueUuid, requestParameters.code, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Share colleague reviews
+     * @param {ReviewSharingApiShareReviewsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ReviewSharingApi
+     */
+    public shareReviews(requestParameters: ReviewSharingApiShareReviewsRequest, options?: AxiosRequestConfig) {
+        return ReviewSharingApiFp(this.configuration).shareReviews(requestParameters.cycleUuid, requestParameters.colleagueUuid, requestParameters.code, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Stop sharing colleague reviews
+     * @param {ReviewSharingApiStopSharingReviewsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ReviewSharingApi
+     */
+    public stopSharingReviews(requestParameters: ReviewSharingApiStopSharingReviewsRequest, options?: AxiosRequestConfig) {
+        return ReviewSharingApiFp(this.configuration).stopSharingReviews(requestParameters.cycleUuid, requestParameters.colleagueUuid, requestParameters.code, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef, CSSProperties, FC, useState, useEffect } from 'react';
+import React, { ReactNode, useRef, FC, useState, useEffect } from 'react';
 import { useStyle, Rule } from '@pma/dex-wrapper';
 
 import useEventListener from 'hooks/useEventListener';
@@ -57,7 +57,8 @@ const Panel: FC = ({ children, ...props }) => {
   useEventListener('resize', updateHeight);
 
   useEffect(() => {
-    updateHeight();
+    // Wait until all components are rendered to set correct height
+    setTimeout(updateHeight, 100);
   });
 
   return (

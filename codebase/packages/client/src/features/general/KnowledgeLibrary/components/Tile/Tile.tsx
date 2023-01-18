@@ -20,7 +20,6 @@ const Tile: FC<Props> = ({ ...rest }) => {
           height: '100%',
         }}
         hover={!!rest?.link}
-        disabled={!rest?.link}
         {...rest}
       />
     </div>

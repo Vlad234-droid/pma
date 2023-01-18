@@ -1,9 +1,4 @@
-import { getCurrentYear, getLocalNow, getPrevYear } from 'utils';
 import { ReportPage, TitlesReport } from 'config/enum';
-
-const startMonth = 3;
-export const isStartPeriod = () => getLocalNow().month >= startMonth;
-export const getCurrentYearWithStartDate = () => (isStartPeriod() ? getCurrentYear() : getPrevYear(1));
 
 export const getReportTitles = (t, type) => {
   const report = {
@@ -48,8 +43,8 @@ export const getReportTitles = (t, type) => {
 
 export const getTitle = (t, type) => {
   const titles = {
-    [ReportPage.REPORT_MYR_BREAKDOWN]: t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of Mid-year review'),
-    [ReportPage.REPORT_EYR_BREAKDOWN]: t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of End-year review'),
+    [ReportPage.REPORT_MYR_BREAKDOWN]: t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of approved Mid-year review'),
+    [ReportPage.REPORT_EYR_BREAKDOWN]: t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of approved End-year review'),
     [ReportPage.REPORT_ANNIVERSARY_REVIEWS]: t(
       TitlesReport.ANNIVERSARY_REVIEWS,
       'Anniversary Reviews completed per quarter',

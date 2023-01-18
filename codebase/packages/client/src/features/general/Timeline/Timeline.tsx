@@ -4,12 +4,11 @@ import {
   colleagueCurrentCycleSelector,
   colleaguePerformanceCyclesSelector,
   getTimelineSelector,
+  ReviewsActions,
   TimelineActions,
   timelinesMetaSelector,
   UserActions,
   uuidCompareSelector,
-  ReviewsActions,
-  isAnniversaryTimelineType,
 } from '@pma/store';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper as Tile } from 'components/Tile/TileWrapper';
@@ -17,8 +16,9 @@ import StepIndicator from 'components/StepIndicator/StepIndicator';
 import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 import useDispatch from 'hooks/useDispatch';
-import { Select } from 'components/Form';
+import { Option, Select } from 'components/Form';
 import { formatDateStringFromISO } from 'utils';
+import { Status } from 'config/enum';
 
 const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const [value, setValue] = useState<string | undefined>();
@@ -29,11 +29,10 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const { loading } = useSelector(timelinesMetaSelector);
   const cycles = useSelector(colleaguePerformanceCyclesSelector);
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
-  const { descriptions, startDates, summaryStatuses, types } =
+  const { descriptions, startDates, summaryStatuses, types, currentStep } =
     useSelector(getTimelineSelector(colleagueUuid, currentCycle)) || {};
-  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, currentCycle));
 
-  const options = useMemo(() => {
+  const options: Option[] = useMemo(() => {
     return cycles.map(({ endTime, startTime, uuid }) => ({
       value: uuid,
       label: `${formatDateStringFromISO(startTime, 'yyyy')} - ${formatDateStringFromISO(endTime, 'yyyy')}`,
@@ -48,7 +47,8 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
     if (currentCycle !== 'CURRENT') {
       setValue(currentCycle);
     } else {
-      setValue(options[0]?.value);
+      const startedCycles = cycles.find(({ status }) => status === Status.STARTED);
+      setValue(options.find(({ value }) => value === startedCycles.uuid)?.value as string);
     }
   }, [options]);
 
@@ -70,7 +70,7 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
           <div className={css(wrapperStyle)}>
             <div className={css(headerStyle)}>
               <h2 className={css(titleStyle)}>{t('performance_timeline_title', 'Your Contribution timeline')}</h2>
-              {isAnniversary && isUserView && (
+              {isUserView && (
                 <div className={css(selectStyle)}>
                   <Select options={options} onChange={handleChange} name={'period'} placeholder={''} value={value} />
                 </div>
@@ -79,7 +79,13 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
             {loading ? (
               <Spinner />
             ) : (
-              <StepIndicator titles={descriptions} descriptions={startDates} statuses={summaryStatuses} types={types} />
+              <StepIndicator
+                activeStep={currentStep}
+                titles={descriptions}
+                descriptions={startDates}
+                statuses={summaryStatuses}
+                types={types}
+              />
             )}
           </div>
         </Tile>

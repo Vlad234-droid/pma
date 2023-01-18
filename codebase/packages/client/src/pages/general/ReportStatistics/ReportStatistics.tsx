@@ -1,28 +1,31 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { CreateRule, IconButton as BackButton, Rule, useStyle } from '@pma/dex-wrapper';
-import { getTotalReviewsByType, ReportPage } from '@pma/store';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Button, CreateRule, IconButton as BackButton, Rule, useStyle } from '@pma/dex-wrapper';
+import { ColleagueFilterAction, getColleagueFilterSelector, getTotalReviewsByType, ReportPage } from '@pma/store';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import UnderlayModal from 'components/UnderlayModal';
 import { useTranslation } from 'components/Translation';
 import { ColleaguesCount } from 'components/ColleaguesCount';
+import FilterForm from 'components/FilterForm';
+import ViewItems from 'components/ViewItems';
 
 import { ColleaguesStatistics } from 'features/general/Report/widgets';
-import FilterModal, { defaultValues } from 'components/FilterModal';
+import { convertToReportEnum } from 'features/general/ColleaguesReviews/utils';
 import StatisticsReviews from 'features/general/ColleaguesReviews';
 import { FilterOption } from 'features/general/Shared';
 import { buildPath } from 'features/general/Routes';
+import { useTileStatistics } from 'features/general/ColleaguesReviews/hooks/useTileStatistics';
 
 import useQueryString from 'hooks/useQueryString';
-import { useTileStatistics } from 'features/general/ColleaguesReviews/hooks/useTileStatistics';
 import { useHeaderContainer } from 'contexts/headerContext';
-import ViewItems from 'components/ViewItems';
 
-import { getCurrentYearWithStartDate } from 'features/general/Report/utils';
-import { convertToReportEnum } from 'features/general/ColleaguesReviews/utils';
+import isEmpty from 'lodash.isempty';
+import omit from 'lodash.omit';
+import useDispatch from 'hooks/useDispatch';
 import { Page } from 'pages';
 import { ReportType } from 'config/enum';
+import { filtersOrder, getFinancialYear, filterToRequest } from 'utils';
 
 const getConfigReviewsKeys = (type): { key: string; configType: ReportType } => {
   const page = {
@@ -98,7 +101,7 @@ const defineHeaderTitle = (type, t) => {
       [tilePage]: t('eyr_breakdown', 'Breakdown of Year-end review'),
     },
     [ReportPage.REPORT_MYR_BREAKDOWN]: {
-      [tilePage]: t('myr_breakdown', 'Breakdown of Mid-year review'),
+      [tilePage]: t('myr_breakdown', 'Breakdown of approved Mid-year review'),
     },
     [ReportPage.REPORT_ANNIVERSARY_REVIEWS]: {
       [tilePage]: t('anniversary_reviews', 'Anniversary Reviews completed per quarterTileRport'),
@@ -111,43 +114,61 @@ const ReportStatistics = () => {
   const { css, matchMedia } = useStyle();
   const { t } = useTranslation();
   const { pathname, state } = useLocation();
+  const dispatch = useDispatch();
   const { filters } = (state as any) || {};
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const query = useQueryString() as Record<string, string>;
+  const { year } = query;
   const navigate = useNavigate();
   const [focus, setFocus] = useState(false);
   const [searchedValue, setSearchedValue] = useState<string>('');
-  const [filterModal, setFilterModal] = useState(false);
+  const [isFilterOpen, setFilterOpen] = useState(false);
   const [isFullView, toggleFullView] = useState<boolean>(false);
-  const [savedFilter, setSavedFilter] = useState<any>(null);
+  const [filterValues, setFilterValues] = useState<any>(filters || {});
 
   const { setLinkTitle } = useHeaderContainer();
   const { type } = useTileStatistics();
 
   useEffect(() => {
-    if (!Object.entries(query).length || !query.year) navigate(buildPath(Page.REPORT));
+    if (!Object.entries(query).length || !year) navigate(buildPath(Page.REPORT));
   }, [query]);
 
-  useEffect(() => filters && setSavedFilter(() => filters), []);
+  useEffect(() => {
+    dispatch(
+      ColleagueFilterAction.getReportingFilters({
+        year,
+        ...(!isEmpty(filterValues) ? filterToRequest(filterValues) : {}),
+      }),
+    );
+  }, [filterValues]);
 
   useEffect(() => {
     setLinkTitle(defineHeaderTitle(convertToReportEnum(pathname), t));
   }, []);
 
-  const appliedFilters = useMemo(
-    () =>
-      savedFilter &&
-      //@ts-ignore
-      Object.entries(savedFilter).reduce((acc, [key, value]) => {
-        //@ts-ignore
-        if (value.some(({ checked }) => checked)) return [...acc, key];
-        return acc;
-      }, []),
+  const updateFilter = useCallback((data) => {
+    dispatch(ColleagueFilterAction.getReportingFilters({ ...filterToRequest(data), year }));
+  }, []);
 
-    [savedFilter],
-  );
+  const handleChangeFilterValues = (values: Record<string, Record<string, boolean>>) => {
+    setFilterValues(values);
+    setFilterOpen(false);
+  };
+
+  const appliedFilters: Array<string> = useMemo(() => {
+    return (
+      filterValues &&
+      //@ts-ignore
+      Object.entries(filterValues).reduce((acc, [key, value]) => {
+        //@ts-ignore
+        if (Object.values(value).some((checked) => checked)) return [...acc, key];
+        return acc;
+      }, [])
+    );
+  }, [filterValues]);
 
   const totalCount: number = useSelector(getTotalReviewsByType(getConfigReviewsKeys(type))) || 0;
+  const reportingFilters = useSelector(getColleagueFilterSelector) || {};
 
   return (
     <div className={css({ position: 'relative' })}>
@@ -159,25 +180,16 @@ const ReportStatistics = () => {
               {
                 pathname: buildPath(Page.REPORT),
                 //@ts-ignore
-                search: new URLSearchParams({ year: query.year || getCurrentYearWithStartDate() }).toString(),
+                search: new URLSearchParams({ year: year || getFinancialYear() }).toString(),
               },
-              { state: { filters: savedFilter } },
+              { state: { filters: filterValues } },
             );
           }}
           graphic='backwardLink'
         />
       </div>
-      {!!appliedFilters && !!appliedFilters?.length && (
-        <ViewItems
-          onClose={(item) =>
-            //TODO: dispatch filters without item checkboxes
-            setSavedFilter((prev) => ({
-              ...prev,
-              [item]: prev[item].map((item) => ({ ...item, checked: false })),
-            }))
-          }
-          items={appliedFilters}
-        />
+      {!isEmpty(filterValues) && (
+        <ViewItems onDelete={(item) => setFilterValues((prev) => omit({ ...prev }, item))} items={appliedFilters} />
       )}
       {type !== ReportPage.REPORT_NEW_TO_BUSINESS && (
         <ColleaguesCount
@@ -202,26 +214,51 @@ const ReportStatistics = () => {
             }}
             onChange={(e) => setSearchedValue(() => e.target.value)}
             onSettingsPress={() => {
-              setFilterModal((prev) => !prev);
+              setFilterOpen((prev) => !prev);
               setFocus(false);
             }}
             setSearchValueFilterOption={setSearchedValue}
           />
-          {filterModal && (
-            <UnderlayModal
-              onClose={() => setFilterModal(false)}
-              styles={{ maxWidth: !mobileScreen ? '500px' : '100%' }}
-            >
-              {({ onClose }) => (
-                <FilterModal
-                  defaultValues={defaultValues}
-                  onClose={onClose}
-                  savedFilter={savedFilter}
-                  onSubmit={(data) => {
-                    onClose();
-                    setTimeout(() => setSavedFilter(data), 300);
+          {isFilterOpen && (
+            <UnderlayModal onClose={() => setFilterOpen(false)} styles={{ maxWidth: !mobileScreen ? '500px' : '100%' }}>
+              {() => (
+                <FilterForm
+                  defaultValues={filterValues}
+                  onCancel={() => {
+                    updateFilter({});
+                    handleChangeFilterValues({});
                   }}
-                />
+                  onUpdate={updateFilter}
+                  filters={
+                    Object.fromEntries(
+                      Object.entries(reportingFilters).sort(
+                        ([a], [b]) => filtersOrder.indexOf(a) - filtersOrder.indexOf(b),
+                      ),
+                    ) as { [key: string]: Array<{ [key: string]: string }> }
+                  }
+                  onSubmit={handleChangeFilterValues}
+                >
+                  {({ onCancel: onChildrenCancel, onSubmit: onChildrenSubmit, isValid: isChildrenValid }) => {
+                    return (
+                      <div className={css(blockStyle, customStyles)}>
+                        <div className={css(wrapperButtonStyle)}>
+                          <div className={css(buttonsWrapper)}>
+                            <Button isDisabled={false} styles={[buttonCancelStyle]} onPress={onChildrenCancel}>
+                              Clear filter
+                            </Button>
+                            <Button
+                              //@ts-ignore
+                              onPress={onChildrenSubmit}
+                              styles={[submitButtonStyle({ isValid: isChildrenValid })]}
+                            >
+                              Apply & close
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }}
+                </FilterForm>
               )}
             </UnderlayModal>
           )}
@@ -232,6 +269,7 @@ const ReportStatistics = () => {
           {type && (
             <StatisticsReviews
               type={type}
+              filterValues={filterValues}
               isFullView={isFullView}
               toggleFullView={() => toggleFullView((prev) => !prev)}
             />
@@ -247,6 +285,60 @@ const ReportStatistics = () => {
   );
 };
 
+const buttonsWrapper: Rule = () => ({
+  padding: '30px 15px 30px 15px',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+});
+
+const buttonCancelStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f16,
+  fontWeight: theme.font.weight.bold,
+  width: '100%',
+  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+  background: theme.colors.white,
+  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
+  color: `${theme.colors.tescoBlue}`,
+});
+
+const wrapperButtonStyle: Rule = ({ theme }) => ({
+  position: 'relative',
+  bottom: theme.spacing.s0,
+  left: theme.spacing.s0,
+  right: theme.spacing.s0,
+  // @ts-ignore
+  borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
+});
+const blockStyle: Rule = {
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  width: '100%',
+};
+
+const customStyles: Rule = ({ theme }) => {
+  return {
+    background: theme.colors.white,
+    borderRadius: '0px 0px 10px 10px',
+  };
+};
+
+const submitButtonStyle: CreateRule<{ isValid: any }> =
+  ({ isValid }) =>
+  ({ theme }) => ({
+    height: '40px',
+    ...theme.font.fixed.f16,
+    fontWeight: theme.font.weight.bold,
+    width: '100%',
+    margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+    background: `${theme.colors.tescoBlue}`,
+    color: `${theme.colors.white}`,
+    padding: '0px 20px',
+    borderRadius: `${theme.spacing.s20}`,
+    opacity: isValid ? '1' : '0.4',
+    pointerEvents: isValid ? 'all' : 'none',
+  });
 const arrowLeftStyle: Rule = ({ theme }) => {
   return {
     position: 'fixed',

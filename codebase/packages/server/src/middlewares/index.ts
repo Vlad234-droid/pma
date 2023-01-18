@@ -8,3 +8,4 @@ export * from './asset-handler';
 export * from './error-handler';
 export * from './my-inbox';
 export * from './splunk-logging';
+export * from './healthCheck';

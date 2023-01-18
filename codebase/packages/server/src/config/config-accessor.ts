@@ -72,6 +72,8 @@ export type ProcessConfig = {
   splunkSourcetype: () => string;
   splunkSource: () => string;
   splunkTokenSecret: () => string;
+
+  releaseName: () => string;
 };
 
 export class ConfigAccessor {
@@ -193,6 +195,8 @@ export class ConfigAccessor {
       splunkSourcetype: () => processEnv.SPLUNK_SOURCETYPE || 'colleague_pma',
       splunkSource: () => processEnv.SPLUNK_SOURCE || 'colleague_pma_local',
       splunkTokenSecret: () => processEnv.SPLUNK_TOKEN_SECRET || 'invalid_secret',
+
+      releaseName: () => processEnv.CICD_RELEASE_RELEASENAME || 'unknown',
     };
   }
 

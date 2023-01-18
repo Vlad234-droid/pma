@@ -27,7 +27,12 @@ import menuDataReducer from '../entities/hamburgerMenu/reducer';
 import statisticsReducer from '../entities/statistics/reducer';
 import calibrationSessionsReducer from '../entities/calibrationSessions/reducer';
 import calibrationReviewReducer from '../entities/calibrationReview/reducer';
+import calibrationReviewsReducer from '../entities/calibrationReviews/reducer';
+import colleagueFilterReducer from '../entities/colleagueFilter/reducer';
+import colleagueSimpleReducer from '../entities/colleagueSimple/reducer';
 import completedReviewsReducer from '../entities/completedReviews/reducer';
+import calibrationStatisticsReducer from '../entities/calibrationStatistics/reducer';
+import calibrationStatisticsRatingsReducer from '../entities/calibrationStatisticsRatings/reducer';
 
 export const rootReducer = combineReducers({
   users: userReducer,
@@ -57,5 +62,10 @@ export const rootReducer = combineReducers({
   statistics: statisticsReducer,
   calibrationSessions: calibrationSessionsReducer,
   calibrationReview: calibrationReviewReducer,
+  calibrationReviews: calibrationReviewsReducer,
+  colleagueFilter: colleagueFilterReducer,
+  colleagueSimple: colleagueSimpleReducer,
   completedReviews: completedReviewsReducer,
+  calibrationStatistics: calibrationStatisticsReducer,
+  calibrationStatisticsRatings: calibrationStatisticsRatingsReducer,
 });

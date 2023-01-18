@@ -16,17 +16,20 @@ import ChartWidget from './widgets/ChartWidget';
 import TableWidget from './widgets/TableWidget';
 
 import { Page } from 'pages';
-import useQueryString from 'hooks/useQueryString';
-import { getReportData } from './hooks';
+import { useReportData } from './hooks';
 import { isSingular, paramsReplacer } from 'utils';
 import { convertToLink, IsReportTiles, View } from './config';
 import { ReportPage as ReportPageType, ReportType, TitlesReport } from 'config/enum';
-import { getCurrentYearWithStartDate } from './utils';
 
 export const REPORT_WRAPPER = 'REPORT_WRAPPER';
 
-const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ year, tiles, savedFilter }) => {
-  const query = useQueryString() as Record<string, string | number>;
+type Props = {
+  year: string;
+  tiles: Array<string>;
+  savedFilters: Record<string, Record<string, boolean>>;
+};
+
+const Report: FC<Props> = ({ year, tiles, savedFilters }) => {
   const { t } = useTranslation();
   const { css, matchMedia } = useStyle();
   const small = matchMedia({ xSmall: true, small: true }) || false;
@@ -35,21 +38,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
   const anniversary = useSelector(getReportByType('anniversaryReviews'));
   const anniversaryReport = anniversary?.find(({ type }) => type === ReportType.EYR) || {};
 
-  getReportData(query, year);
-
-  const getYear = useMemo(
-    () => ({
-      year:
-        !year && !query?.year
-          ? getCurrentYearWithStartDate()
-          : query?.year && year
-          ? year
-          : !query.year
-          ? year
-          : query.year,
-    }),
-    [query.year, year],
-  );
+  useReportData(savedFilters, year);
 
   const isDisplayTile = useCallback(
     (name) => {
@@ -59,7 +48,10 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
     [tiles],
   );
 
-  const filters = useMemo(() => (savedFilter ? { state: { filters: savedFilter } } : { state: null }), [savedFilter]);
+  const filters = useMemo(
+    () => (savedFilters ? { state: { filters: savedFilters } } : { state: null }),
+    [savedFilters],
+  );
 
   if (!loaded) return <Spinner />;
 
@@ -92,7 +84,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                         }),
                       ),
                       {
-                        ...getYear,
+                        year,
                       },
                     ),
                     filters,
@@ -136,7 +128,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                         }),
                       ),
                       {
-                        ...getYear,
+                        year,
                       },
                     ),
                     filters,
@@ -183,7 +175,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                         }),
                       ),
                       {
-                        ...getYear,
+                        year,
                       },
                     ),
                     filters,
@@ -210,7 +202,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                       }),
                     ),
                     {
-                      ...getYear,
+                      year,
                     },
                   ),
                   filters,
@@ -218,7 +210,10 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
               }
             >
               {({ data }) => (
-                <InfoTable mainTitle={t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of Mid-year review')} data={data} />
+                <InfoTable
+                  mainTitle={t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of approved Mid-year review')}
+                  data={data}
+                />
               )}
             </TableWidget>
           </div>
@@ -251,7 +246,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                         }),
                       ),
                       {
-                        ...getYear,
+                        year,
                       },
                     ),
                     filters,
@@ -278,7 +273,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                       }),
                     ),
                     {
-                      ...getYear,
+                      year,
                     },
                   ),
                   filters,
@@ -286,7 +281,10 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
               }
             >
               {({ data }) => (
-                <InfoTable mainTitle={t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of End-year review')} data={data} />
+                <InfoTable
+                  mainTitle={t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of approved End-year review')}
+                  data={data}
+                />
               )}
             </TableWidget>
           </div>
@@ -309,7 +307,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                           }),
                         ),
                         {
-                          ...getYear,
+                          year,
                         },
                       ),
                       filters,
@@ -355,7 +353,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                         }),
                       ),
                       {
-                        ...getYear,
+                        year,
                       },
                     ),
                     filters,
@@ -397,7 +395,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                         }),
                       ),
                       {
-                        ...getYear,
+                        year,
                       },
                     ),
                     filters,
@@ -441,7 +439,7 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                         }),
                       ),
                       {
-                        ...getYear,
+                        year,
                       },
                     ),
                     filters,

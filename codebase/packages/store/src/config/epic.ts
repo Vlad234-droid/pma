@@ -24,7 +24,12 @@ import menuEpic from '../entities/hamburgerMenu/epic';
 import statisticsEpic from '../entities/statistics/epic';
 import calibrationSessionsEpic from '../entities/calibrationSessions/epic';
 import calibrationReviewEpic from '../entities/calibrationReview/epic';
+import colleagueFilter from '../entities/colleagueFilter/epic';
+import colleagueSimple from '../entities/colleagueSimple/epic';
 import completedReviewsEpic from '../entities/completedReviews/epic';
+import calibrationUsersReviewsEpic from '../entities/calibrationReviews/epic';
+import calibrationStatisticsEpic from '../entities/calibrationStatistics/epic';
+import calibrationStatisticsRatingsEpic from '../entities/calibrationStatisticsRatings/epic';
 
 export const rootEpic = combineEpics(
   userEpic,
@@ -52,5 +57,10 @@ export const rootEpic = combineEpics(
   statisticsEpic,
   calibrationSessionsEpic,
   calibrationReviewEpic,
+  colleagueFilter,
+  colleagueSimple,
   completedReviewsEpic,
+  calibrationUsersReviewsEpic,
+  calibrationStatisticsEpic,
+  calibrationStatisticsRatingsEpic,
 );

@@ -64,8 +64,6 @@ const FilterOption: FC<FilterOptionProps> = ({ onSearch, setSearchValueFilterOpt
 const iconBtnStyleInfo: Rule = {
   padding: '0',
   marginLeft: '5px',
-  height: '38px',
-  width: '38px',
   outline: 0,
 
   cursor: 'pointer',

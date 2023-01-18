@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import useDispatch from 'hooks/useDispatch';
 import {
+  colleagueCurrentCycleSelector,
   colleagueUUIDSelector,
   FormType,
   getReviewsByTypeSelector,
@@ -17,6 +18,7 @@ import SuccessModal from 'components/SuccessModal';
 import { useTranslation } from 'components/Translation';
 import ObjectiveForm from './components/ObjectiveForm';
 import useReviewSchema from './hooks/useReviewSchema';
+import { ModalComponent } from './components/ModalComponent';
 
 export type Props = {
   onClose: () => void;
@@ -33,8 +35,9 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const { loaded: schemaLoaded, loading: schemaLoading } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded, loading: reviewLoading, saving, saved } = useSelector(reviewsMetaSelector);
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
 
-  const pathParams = { colleagueUuid, code: 'OBJECTIVE', cycleUuid: 'CURRENT' };
+  const pathParams = { colleagueUuid, code: 'OBJECTIVE', cycleUuid: currentCycle };
   const isApproved = useSelector(isReviewsNumberInStatuses(ReviewType.OBJECTIVE)([Status.APPROVED], currentNumber));
   const isDeclined = useSelector(isReviewsNumberInStatuses(ReviewType.OBJECTIVE)([Status.DECLINED], currentNumber));
 
@@ -44,6 +47,11 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
   const { components = [], display: newSchemaVersion, markup } = schema;
   const markupMin = markup?.min;
   const isSingleStep = useSingleStep || markupMin < currentNumber;
+  const title = create
+    ? t('create_objectives', 'Create objectives')
+    : isSingleStep
+    ? t('edit_objective', 'Edit objective')
+    : t('edit_objectives', 'Edit objectives');
 
   useEffect(() => {
     if (editNumber !== currentNumber) setCurrentNumber(editNumber);
@@ -139,7 +147,7 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
 
   useEffect(() => {
     dispatch(ReviewsActions.getReviews({ pathParams }));
-    dispatch(SchemaActions.getSchema({ colleagueUuid }));
+    dispatch(SchemaActions.getSchema({ colleagueUuid, cycleUuid: currentCycle }));
 
     return () => {
       dispatch(ReviewsActions.updateReviewMeta({ saved: false }));
@@ -159,21 +167,23 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
   if (!schemaLoaded || !reviewLoaded) return null;
 
   return (
-    <ObjectiveForm
-      formElements={formElements}
-      schemaComponents={components}
-      currentId={isSingleStep ? 1 : currentNumber}
-      editMode={isApproved || isDeclined}
-      multiply={!isSingleStep}
-      isLastStep={currentNumber === markupMin}
-      defaultValues={{ data: defaultValues }}
-      onSaveDraft={handleSaveDraft}
-      onSubmit={handleSubmit}
-      titles={titles}
-      onCancel={onClose}
-      onPrev={handlePrev}
-      onNext={handleNext}
-    />
+    <ModalComponent onClose={onClose} title={title}>
+      <ObjectiveForm
+        formElements={formElements}
+        schemaComponents={components}
+        currentId={isSingleStep ? 1 : currentNumber}
+        editMode={isApproved || isDeclined}
+        multiply={!isSingleStep}
+        isLastStep={currentNumber === markupMin}
+        defaultValues={{ data: defaultValues }}
+        onSaveDraft={handleSaveDraft}
+        onSubmit={handleSubmit}
+        titles={titles}
+        onCancel={onClose}
+        onPrev={handlePrev}
+        onNext={handleNext}
+      />
+    </ModalComponent>
   );
 };
 

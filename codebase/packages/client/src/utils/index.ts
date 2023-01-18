@@ -6,3 +6,4 @@ export * from './note';
 export * from './query';
 export * from './helper';
 export * from './tenant';
+export * from './filters';

@@ -42,6 +42,7 @@ export enum ReviewType {
   OBJECTIVE = 'OBJECTIVE',
   MYR = 'MYR',
   EYR = 'EYR',
+  CALIBRATION = 'CALIBRATION',
 }
 export enum ReportType {
   NTB = 'NEW_TO_BUSINESS',
@@ -142,8 +143,10 @@ export enum TargetFeedbackKeys {
 }
 
 export enum Rating {
+  NTB = 'New to business',
   BELOW_EXPECTED = 'Below expected',
   SATISFACTORY = 'Satisfactory',
+  UNSUBMITTED = 'Unsubmitted',
   GREAT = 'Great',
   OUTSTANDING = 'Outstanding',
   COLLEAGUES = 'colleagues',
@@ -206,9 +209,9 @@ export enum StatisticsTitlesReportKeys {
   OBJECTIVES_SUBMITTED = 'objectives_submitted',
   OBJECTIVES_APPROVED = 'objectives_approved',
   MID_YEAR_FORMS = 'mid_year_forms',
-  BREAKDOWN_OF_MID_YEAR_RATINGS = 'breakdown_of_mid_year_ratings',
+  BREAKDOWN_OF_MID_YEAR_RATINGS = 'myr_breakdown',
   YEAR_END_FORMS = 'year_end_forms',
-  BREAKDOWN_OF_YEAR_END_RATINGS = 'breakdown_of_year_end_ratings',
+  BREAKDOWN_OF_YEAR_END_RATINGS = 'eyr_breakdown',
   IN_THE_MOMENT_FEEDBACK = 'everyday_feedback',
   BUSINESS = 'new_to_business',
   ANNIVERSARY_REVIEWS = 'anniversary_reviews',
@@ -220,9 +223,9 @@ export enum StatisticsTitlesReport {
   OBJECTIVES_SUBMITTED = 'Objectives submitted',
   OBJECTIVES_APPROVED = 'Objectives approved',
   MID_YEAR_FORMS = 'Mid-year forms',
-  BREAKDOWN_OF_MID_YEAR_REVIEW = 'Breakdown of mid-year review',
+  BREAKDOWN_OF_MID_YEAR_REVIEW = 'Breakdown of approved mid-year review',
   YEAR_END_FORMS = 'Year-end forms',
-  BREAKDOWN_OF_YEAR_END_REVIEW = 'Breakdown of year-end review',
+  BREAKDOWN_OF_YEAR_END_REVIEW = 'Breakdown of approved year-end review',
   IN_THE_MOMENT_FEEDBACK = 'Everyday Feedback',
   NEW_TO_BUSINESS = 'New to business',
   ANNIVERSARY_REVIEWS = 'Anniversary Reviews',
@@ -259,4 +262,20 @@ export enum Tenant {
 export enum CycleType {
   HIRING = 'HIRING',
   FISCAL = 'FISCAL',
+}
+
+export enum Operand {
+  EQUALS = '_eq',
+  NOT_EQUALS = '_ne',
+  CONTAINS = '_contains',
+  NOT_CONTAINS = '_ncontains',
+  IN = '_in',
+  NOT_IN = '_nin',
+  LESS_THAN = '_lt',
+  LESS_THAN_EQUALS = '_lte',
+  GREATER_THAN = '_gt',
+  GREATER_THAN_EQUALS = '_gte',
+  LIKE = '_like',
+  NULL = '_null',
+  NOT_EXIST = '_nexist',
 }

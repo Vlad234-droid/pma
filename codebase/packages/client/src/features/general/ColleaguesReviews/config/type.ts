@@ -1,7 +1,7 @@
 import { ReviewType } from 'config/enum';
 import { Props as ColleagueInfo } from 'components/ColleagueInfo/ColleagueInfo';
 
-const _limit = 15;
+const _limit = 10;
 const _start = 0;
 
 export const initialFields: Record<'_start' | '_limit', number> = {

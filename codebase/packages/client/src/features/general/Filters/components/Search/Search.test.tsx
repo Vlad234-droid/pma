@@ -37,13 +37,13 @@ describe('<Search />', () => {
 
       const { getByTestId } = render(<Search {...newProps} />);
 
-      expect(getByTestId('search-wrapper')).toHaveStyle('width: 38px');
+      expect(getByTestId('search-wrapper')).toHaveStyle('width: 40px');
     });
 
     it('should render provided value, if focus is true', () => {
       const { getByTestId } = render(<Search {...props} />);
 
-      expect(getByTestId('input-search').value).toBe('mocked_value');
+      expect((getByTestId('input-search') as HTMLInputElement).value).toBe('mocked_value');
     });
 
     it('should not render value, if !focus', () => {
@@ -54,7 +54,7 @@ describe('<Search />', () => {
 
       const { getByTestId } = render(<Search {...newProps} />);
 
-      expect(getByTestId('input-search').value).toBe('');
+      expect((getByTestId('input-search') as HTMLInputElement).value).toBe('');
     });
   });
 

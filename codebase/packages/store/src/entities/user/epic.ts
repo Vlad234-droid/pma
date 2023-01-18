@@ -12,7 +12,7 @@ import {
   getPerformanceCycles,
   getColleagueCycles,
 } from './actions';
-import { getColleagueCyclesByPmCycleUuid } from '@pma/api/src/rest';
+import { getColleagueSchema } from '../schema/actions';
 
 const NUMBER_OF_DEFAULT_ATTRIBUTES = 18;
 
@@ -119,7 +119,7 @@ export const getPerformanceCyclesEpic: Epic = (actions$, _, { api }) =>
       from(
         api.getPerformanceCyclesByStatuses({
           colleagueUuid: colleague.colleagueUUID,
-          allowedStatuses: ['STARTED', 'FINISHED', 'FINISHING', 'COMPLETED'],
+          allowedStatuses: [/*'OPENED_STARTING',*/ 'STARTED', 'FINISHED', 'FINISHING', 'COMPLETED'],
         }),
       ).pipe(
         //@ts-ignore
@@ -140,27 +140,40 @@ export const getColleagueCyclesEpic: Epic = (actions$, _, { api }) =>
   actions$.pipe(
     filter(isActionOf(getColleagueCycles.request)),
     //@ts-ignore
-    switchMap(({ payload }) =>
-      //@ts-ignore
-      from(
-        api.getColleagueCyclesByPmCycleUuid({
-          ...payload,
-          params: {
-            'colleague-cycle-status_in': ['STARTED', 'FINISHING', 'FINISHED', 'COMPLETED'],
-          },
-        }),
+    mergeMap(({ payload }) => {
+      const colleagueUuid = payload.colleagueUuid;
+      const cycleUuid = payload.cycleUuid;
+
+      return from(
+        Promise.all([
+          api.getColleagueCyclesByPmCycleUuid({
+            colleagueUuid,
+            cycleUuid,
+            params: {
+              'colleague-cycle-status_in': ['STARTED', 'FINISHING', 'FINISHED', 'COMPLETED'],
+            },
+          }),
+          api.getColleagueMetadataByPerformanceCycle({ colleagueUuid, cycleUuid }),
+        ]),
       ).pipe(
-        //@ts-ignore
-        map(({ data }) => {
-          const { endTime, startTime, uuid, type, status } = data?.[0] || {};
-          return getColleagueCycles.success({ endTime, startTime, uuid, type, status });
+        mergeMap(([colleagueCycles, cyclesMetadata]) => {
+          const { endTime, startTime, uuid, type, status } = colleagueCycles.data?.[0] || {};
+          const {
+            metadata: {
+              cycle: { cycleType },
+            },
+          } = cyclesMetadata.data || {};
+
+          return from([
+            getColleagueCycles.success({ endTime, startTime, uuid, type, status, cycleType }),
+            getColleagueSchema.success({
+              [colleagueUuid]: { [cycleUuid]: { ...cyclesMetadata.data } },
+              colleagueUuid,
+            }),
+          ]);
         }),
-        catchError((e) => {
-          const errors = e?.data?.errors;
-          return of(getColleagueCycles.failure(errors?.[0]));
-        }),
-      ),
-    ),
+      );
+    }),
   );
 
 export default combineEpics(

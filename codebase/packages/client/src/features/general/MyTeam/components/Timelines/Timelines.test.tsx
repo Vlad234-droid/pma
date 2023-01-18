@@ -14,18 +14,21 @@ describe('<Timelines />', () => {
 
   describe('#render', () => {
     it('should render wrapper', () => {
+      // @ts-ignore
       const { getByTestId } = render(<Timelines {...props} />);
 
       expect(getByTestId('timelines')).toBeInTheDocument();
     });
 
     it('should not render timeline, if !props.timelines', () => {
+      // @ts-ignore
       const { queryByTestId } = render(<Timelines employee={{ timeline: [], reviews: [] }} />);
 
       expect(queryByTestId('timeline')).not.toBeInTheDocument();
     });
 
     it('should render timeline, if props.timelines', () => {
+      // @ts-ignore
       const { getAllByTestId } = render(<Timelines {...props} />);
 
       expect(getAllByTestId('timeline')).toHaveLength(2);
@@ -37,7 +40,7 @@ describe('<Timelines />', () => {
           timeline: [generateTimeline({ type: TimelineType.TIMELINE_POINT }), generateTimeline()],
         },
       };
-
+      // @ts-ignore
       const { getAllByTestId, getByText } = render(<Timelines {...newProps} />);
 
       expect(getAllByTestId('timeline')).toHaveLength(1);

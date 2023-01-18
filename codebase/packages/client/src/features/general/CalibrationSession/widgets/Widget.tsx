@@ -21,13 +21,14 @@ const Widget: FC<Props> = ({ graphics, title, onClick, background, isDisabled = 
       onClick={onClick}
       hover={false}
       withButton={false}
+      size={'32px'}
       customStyle={{
         fontSize: theme.font.fixed.f16.fontSize,
         lineHeight: theme.font.fixed.f16.lineHeight,
         letterSpacing: '0px',
         ...tileWrapperStyles,
         ...(background ? { background: colors[background] } : {}),
-        ...(!isDisabled ? { cursor: 'pointer' } : { opacity: 0.6 }),
+        ...(!isDisabled ? { cursor: 'pointer' } : { opacity: 0.6, pointerEvents: 'none' }),
         '& span': {
           '&:last-child': {
             fontSize: theme.font.fixed.f16.fontSize,

@@ -1,58 +1,60 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { CalibrationSessionStatusEnum } from '@pma/openapi';
 import useDispatch from 'hooks/useDispatch';
 
-import { getCalibrationSessionsSelector, CalibrationSessionsAction, calibrationSessionsMetaSelector } from '@pma/store';
+import { CalibrationSessionsAction, calibrationSessionsMetaSelector, getCalibrationSessionSelector } from '@pma/store';
 
 import { buildPath } from 'features/general/Routes';
+import ColleaguesRatings from './components/ColleaguesRatings';
+import { SuccessModal } from './components/SuccessModal';
 import { useTranslation } from 'components/Translation';
 import { ListView } from './components/ListView';
-import { Line } from 'components/Line';
-import { Footer } from './components/Footer';
-import { SuccessModal } from './components/SuccessModal';
-import ColleaguesReviews from './components/ColleaguesReviews';
-import Graph from 'components/Graph';
-import { Rating } from 'config/enum';
 import { TileWrapper } from 'components/Tile';
+import { Footer } from './components/Footer';
+import Spinner from 'components/Spinner';
+import { Line } from 'components/Line';
+import Graph from 'components/Graph';
+import { View } from './types';
 
-import { ActiveList } from './utils/types';
 import { Page } from 'pages';
+import { useCalibrationStatisticsRatings, useClearCalibrationData, useReviewsCalibrationList } from './hook';
+import { buildData } from './utils';
 
-const CalibrationSession = () => {
+const CalibrationSession: FC<{ uuid: string }> = ({ uuid }) => {
   const { css, matchMedia } = useStyle();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const mediumScreen = matchMedia({ xSmall: false, small: false, medium: true }) || false;
-  const { uuid } = useParams<{ uuid: string }>();
-  const calibrationSessions = useSelector(getCalibrationSessionsSelector) || [];
+  const calibrationSession = useSelector(getCalibrationSessionSelector(uuid || '')) || {};
   const { loading: csLoading, updating: csUpdating } = useSelector(calibrationSessionsMetaSelector);
 
-  const calibrationSession = uuid ? calibrationSessions.find((cs) => cs.uuid === uuid) || null : {};
-  const isStarted = calibrationSession?.status === CalibrationSessionStatusEnum.Started;
+  const isStarted =
+    calibrationSession?.status === CalibrationSessionStatusEnum.Started ||
+    calibrationSession?.status === CalibrationSessionStatusEnum.Updated;
 
   const { t } = useTranslation();
   const [showSuccessModal, toggleSuccessModal] = useState<boolean>(false);
-  const [period, setPeriod] = useState<string>('2021 - 2022');
-  const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
+  const [activeList, setActiveList] = useState<View>(View.LIST);
   const listRef = useRef<HTMLDivElement>();
   const bottomPanelRef = useRef<HTMLDivElement>();
 
+  const { statistics, loading: statisticsLoading } = useCalibrationStatisticsRatings({ activeList, uuid });
+
+  const { getCalibrationReviewsList, data } = useReviewsCalibrationList({ activeList, uuid });
+  useClearCalibrationData();
+
   const handleCancellation = () => {
+    if (isStarted) {
+      dispatch(CalibrationSessionsAction.cancelCalibrationSession(calibrationSession));
+    }
     navigate(buildPath(Page.CALIBRATION_SESSION_LIST));
   };
   const handleSave = () => {
-    if (calibrationSession?.status === CalibrationSessionStatusEnum.Started) {
-      dispatch(
-        CalibrationSessionsAction.updateCalibrationSession({
-          ...calibrationSession,
-          status: CalibrationSessionStatusEnum.Completed,
-        }),
-      );
+    if (isStarted) {
       toggleSuccessModal(!showSuccessModal);
     }
   };
@@ -60,89 +62,6 @@ const CalibrationSession = () => {
   useEffect(() => {
     dispatch(CalibrationSessionsAction.getCalibrationSessions({}));
   }, []);
-
-  const data = {
-    Outstanding: [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        type: 'Outstanding',
-        value: 'how',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        type: 'Outstanding',
-        value: 'how',
-      },
-    ],
-    Great: [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        type: 'Outstanding',
-        value: 'how',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        type: 'Outstanding',
-        value: 'how',
-      },
-    ],
-    Satisfactory: [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        type: 'Outstanding',
-        value: 'how',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        type: 'Outstanding',
-        value: 'how',
-      },
-    ],
-    'Below expected': [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        type: 'Outstanding',
-        value: 'how',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        type: 'Outstanding',
-        value: 'how',
-      },
-    ],
-  };
 
   if (showSuccessModal) {
     return (
@@ -154,37 +73,39 @@ const CalibrationSession = () => {
   }
 
   return (
-    <>
-      <div className={css(listHeaderContainer({ width: listRef?.current?.clientWidth, mediumScreen, mobileScreen }))}>
-        <p>{t('ratings_period', 'Ratings', { period })}</p>
-        <ListView active={activeList} setActive={(active) => setActiveList(active)} ref={listRef} />
-      </div>
-      <Line styles={lineStyles} />
-      {activeList !== ActiveList.GRAPH ? (
-        <ColleaguesReviews
-          data={data}
-          activeList={activeList}
-          key={activeList}
-          styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
-        />
-      ) : (
-        <TileWrapper customStyle={tileStyles}>
-          <Graph
-            title={t('calibration_submission', 'Calibration submission', { year: '2021' })}
-            currentData={{
-              title: '2022',
-              ratings: {
-                [Rating.OUTSTANDING]: 30,
-                [Rating.GREAT]: 20,
-                [Rating.SATISFACTORY]: 50,
-                [Rating.BELOW_EXPECTED]: 70,
-              },
-            }}
+    <div>
+      <div className={css(contentBlockStyle({ height: bottomPanelRef?.current?.clientHeight }))}>
+        <div className={css(listHeaderContainer({ width: listRef?.current?.clientWidth, mediumScreen, mobileScreen }))}>
+          <p>{t('ratings_period', 'Ratings', { period: '' })}</p>
+          <ListView active={activeList} setActive={(active) => setActiveList(active)} ref={listRef} />
+        </div>
+        <Line styles={lineStyles} />
+        {statisticsLoading ? (
+          <Spinner fullHeight />
+        ) : activeList !== View.GRAPH ? (
+          <ColleaguesRatings
+            sessionUuid={uuid}
+            data={data}
+            activeList={activeList}
+            styles={activeList === View.TABLE ? tableStyles({ mobileScreen }) : {}}
+            onUpload={(rating, _start, _limit) => getCalibrationReviewsList({ rating, _start, _limit })}
+            statistics={statistics}
           />
-        </TileWrapper>
-      )}
+        ) : (
+          <TileWrapper customStyle={tileStyles({ mobileScreen })}>
+            <Graph
+              title={''}
+              properties={buildData(statistics, t, 'count')}
+              currentData={{
+                title: '',
+                ratings: buildData(statistics, t, 'percentage'),
+              }}
+            />
+          </TileWrapper>
+        )}
+      </div>
       {isStarted && <Footer ref={bottomPanelRef} onCancel={handleCancellation} onSave={handleSave} />}
-    </>
+    </div>
   );
 };
 
@@ -192,10 +113,10 @@ const lineStyles: Rule = {
   marginTop: '16px',
   marginBottom: '8px',
 };
-const tileStyles: Rule = {
-  padding: '24px',
+const tileStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  padding: mobileScreen ? '24px 24px 24px 0px' : '24px',
   marginTop: '24px',
-};
+});
 const tableStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) =>
   ({
     display: 'flex',
@@ -222,5 +143,13 @@ const listHeaderContainer: CreateRule<{ width: undefined | number; mediumScreen:
         margin: 0,
       },
     } as Styles);
+
+const contentBlockStyle: CreateRule<{ height: number | undefined }> = ({ height }) => {
+  if (height) {
+    return { paddingBottom: `${height}px` };
+  }
+
+  return {};
+};
 
 export default CalibrationSession;

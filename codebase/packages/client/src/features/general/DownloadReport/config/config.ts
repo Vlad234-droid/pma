@@ -94,7 +94,7 @@ export const checkboxes = (t: TFunction) => [
   },
 ];
 
-export const getRequestParams = (selectedCheckboxes) =>
+export const getTopics = (selectedCheckboxes) =>
   selectedCheckboxes.reduce((acc, item) => {
     acc.push(...statisticsReport[item]);
     return acc;

@@ -1,31 +1,33 @@
-import React, { ChangeEvent, FC, RefObject, useCallback, useEffect, useState } from 'react';
+import React, { ChangeEvent, RefObject, useEffect, useState } from 'react';
 import { useStyle, Styles, Rule, CreateRule } from '@pma/dex-wrapper';
 import mergeRefs from 'react-merge-refs';
-import debounce from 'lodash.debounce';
 import { useFormContainer } from 'components/Form/context/input';
 import { Icon } from 'components/Icon';
 
-type Props = {
+interface Props<T> {
   disabled?: boolean;
   value?: string;
   name?: string;
+  optionDataLiner?: string;
   placeholder?: string;
   styles?: Styles | Rule;
   onSearch: (e: ChangeEvent<HTMLInputElement>) => void;
-  onChange: (item: object) => void;
+  onChange: (item: T) => void;
   onDelete?: (item: string) => void;
   onClear?: () => void;
-  renderOption: (item) => JSX.Element;
+  renderOption: (item: T) => JSX.Element;
   onBlur?: () => void;
+  onFocus?: () => void;
   domRef?: RefObject<any>;
   isValid?: boolean;
   id?: string;
-  options?: Array<object>;
+  options?: Array<T>;
+  disabledOptions?: Array<T>;
   selected?: Array<{ label: string; value: string }>;
   multiple?: boolean;
-};
+}
 
-const SearchInput: FC<Props> = ({
+const SearchInput = <T extends object>({
   domRef,
   placeholder = '',
   styles = {},
@@ -34,24 +36,25 @@ const SearchInput: FC<Props> = ({
   onDelete,
   onClear,
   onBlur,
+  onFocus,
   name,
+  optionDataLiner,
   value,
   isValid = true,
   selected = [],
   options = [],
+  disabledOptions = [],
   disabled = false,
   renderOption,
   multiple = false,
-}) => {
+}: Props<T>) => {
   const [currentValue, setCurrentValue] = useState(value);
   const { css } = useStyle();
   const { inputRef } = useFormContainer();
 
-  const handleSearch = useCallback(debounce(onSearch, 300), []);
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrentValue(e.target.value);
-    handleSearch(e);
+    onSearch(e);
   };
 
   useEffect(() => {
@@ -68,28 +71,40 @@ const SearchInput: FC<Props> = ({
         onChange={handleChange}
         autoComplete={'off'}
         onBlur={onBlur}
+        onFocus={onFocus}
         disabled={disabled}
         type={'text'}
         className={css(inputStyles({ isValid }), styles)}
         placeholder={placeholder}
       />
       <div className={css(relativeStyles)}>
-        {!!options.length && (
+        {(!!options.length || !!disabledOptions.length) && (
           <div className={css(optionsWrapperStyles)}>
-            {options?.map((item, idx) => (
-              <div
-                data-test-id={`option-${idx}`}
-                key={idx}
-                className={css(optionStyle)}
-                onMouseDown={(e) => e.preventDefault()}
-                onClick={() => {
-                  onChange(item);
-                  multiple && setCurrentValue('');
-                }}
-              >
-                {renderOption(item)}
-              </div>
-            ))}
+            {!!options.length &&
+              options?.map((item, idx) => (
+                <div
+                  data-test-id={`option-${idx}`}
+                  key={idx}
+                  className={css(optionStyle)}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => {
+                    onChange(item);
+                    multiple && setCurrentValue('');
+                  }}
+                >
+                  {renderOption(item)}
+                </div>
+              ))}
+            {!!disabledOptions.length && (
+              <>
+                {optionDataLiner && <div className={css(optionDataLinerStyle)}>{optionDataLiner}</div>}
+                {disabledOptions?.map((item, idx) => (
+                  <div data-test-id={`option-${idx}`} key={idx} className={css(optionStyle, optionDisabledStyle)}>
+                    {renderOption(item)}
+                  </div>
+                ))}
+              </>
+            )}
           </div>
         )}
         {multiple && !!selected?.length && (
@@ -102,7 +117,7 @@ const SearchInput: FC<Props> = ({
                   className={css({ cursor: 'pointer' })}
                   onClick={() => onDelete && onDelete(item.value)}
                 >
-                  <Icon graphic={'cancel'} />
+                  <Icon graphic={'cancel'} size={'16px'} />
                 </div>
               </div>
             ))}
@@ -128,6 +143,24 @@ const optionStyle: Rule = ({ theme }) => ({
   },
 });
 
+const optionDisabledStyle: Rule = {
+  opacity: 0.6,
+};
+
+const optionDataLinerStyle: Rule = ({ theme }) => ({
+  display: 'block',
+  width: '100%',
+  fontSize: theme.font.fixed.f14.fontSize,
+  lineHeight: theme.font.fixed.f14.lineHeight,
+  letterSpacing: '0px',
+  padding: '10px 30px 10px 16px',
+  background: theme.colors.backgroundDark,
+  // @ts-ignore
+  borderTop: `1px solid ${theme.colors.lightGray}`,
+  // @ts-ignore
+  borderBottom: `1px solid ${theme.colors.lightGray}`,
+});
+
 //@ts-ignore
 const optionsWrapperStyles: Rule = ({ theme }) => ({
   display: 'block',
@@ -139,6 +172,8 @@ const optionsWrapperStyles: Rule = ({ theme }) => ({
   borderRadius: theme.border.radius.sm,
   background: theme.colors.white,
   zIndex: theme.zIndex.i40,
+  maxHeight: '400px',
+  overflowY: 'auto',
 });
 
 const inputStyles: CreateRule<{ isValid: boolean }> =

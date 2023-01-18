@@ -3,27 +3,33 @@ import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router-dom';
 
 import { CanPerform, role } from 'features/general/Permission';
 import { WrapperModal } from 'features/general/Modal';
 import { buildPath } from 'features/general/Routes';
-import { Checkbox, Item, Select } from 'components/Form';
+import { Checkbox, Item, Option, Select } from 'components/Form';
 import { Trans, useTranslation } from 'components/Translation';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 
-import { downloadReportStatistics } from './utils';
-import { getCurrentYear, getYearsFromCurrentYear } from 'utils/date';
+import { formatDateStringFromISO, getFinancialYear, getYearsFromCurrentYear } from 'utils/date';
 import success from 'images/success.jpg';
-import { checkboxes, getRequestParams, reportByYearSchema } from './config';
+import { checkboxes, getTopics, reportByYearSchema } from './config';
 
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import { ReportPage } from 'config/enum';
 import { Page } from 'pages';
+import { filterToRequest } from 'utils';
+import useDownloadExelFile from 'hooks/useDownloadExelFile';
+
+const REPORT_URL = 'reports/statistics-report/formats/excel';
 
 export const DOWNLOAD_WRAPPER = 'modal-wrapper';
 
 const DownloadReport: FC = () => {
   const { css, matchMedia } = useStyle();
+  const { state } = useLocation();
+  const { filters } = (state as any) || {};
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -31,6 +37,7 @@ const DownloadReport: FC = () => {
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(reportByYearSchema),
   });
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const {
     formState: { isValid },
     getValues,
@@ -40,19 +47,34 @@ const DownloadReport: FC = () => {
 
   const values = getValues();
 
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const downloadReport = useDownloadExelFile({
+    resource: { url: REPORT_URL },
+    fileName: `Statistics Report (${formatDateStringFromISO(new Date().toISOString(), 'dd LLL yyyy HH:mm:ms')})`,
+    ext: 'xlsx',
+    errorMassage: {
+      title: t('statistics_not_found', 'Statistics not found'),
+      description: t('try_to_select_another_year', 'Try to select another year.'),
+    },
+  });
 
   const onSubmit = (data) => {
-    downloadReportStatistics({
-      year: values?.year,
-      topics: getRequestParams(
+    const { year, topics } = data;
+    downloadReport({
+      year,
+      topics_in: getTopics(
         //@ts-ignore
-        Object.entries(data.topics).reduce((acc, [keys, value]) => [...(value ? [keys] : []), ...acc], []),
+        Object.entries(topics).reduce((acc, [keys, value]) => [...(value ? [keys] : []), ...acc], []),
       ),
+      ...filterToRequest(filters),
     }).then(() => setShowSuccessModal(true));
   };
 
   const handleClose = () => navigate(buildPath(Page.REPORT));
+
+  const fieldOptions: Option[] = getYearsFromCurrentYear(getFinancialYear()).map(({ value }) => ({
+    value,
+    label: `${value} - ${Number(value) + 1}`,
+  }));
 
   return (
     <WrapperModal onClose={handleClose} title={t('download_and_extract', 'Download and Extract')}>
@@ -115,13 +137,9 @@ const DownloadReport: FC = () => {
 
               <Item withIcon={false} label={t('select_a_year', 'Select a year')}>
                 <Select
-                  options={getYearsFromCurrentYear(getCurrentYear(), 3).map(({ value }) => ({
-                    value,
-                    label: value,
-                  }))}
+                  options={fieldOptions}
                   name={'year'}
                   placeholder={t('please_select', 'Please select')}
-                  //@ts-ignore
                   onChange={({ target: { value } }) => {
                     setValue('year', value, { shouldValidate: true });
                   }}

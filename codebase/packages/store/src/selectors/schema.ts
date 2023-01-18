@@ -2,8 +2,8 @@ import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
 import { ReviewType } from '@pma/client/src/config/enum';
-
 import get from 'lodash.get';
+
 import { ExpressionType } from '../config/types';
 
 //@ts-ignore
@@ -35,7 +35,7 @@ export const getObjectiveSchema = createSelector(schemaSelector, (schema: any) =
   return reviewMarkup;
 });
 
-export const getAllReviewSchemas = createSelector(schemaSelector, (schema: any) => {
+export const parseSchema = (schema: any) => {
   if (!schema?.metadata?.cycle) {
     return { ...schema };
   }
@@ -62,7 +62,9 @@ export const getAllReviewSchemas = createSelector(schemaSelector, (schema: any) 
   });
 
   return reviews;
-});
+};
+
+export const getAllReviewSchemas = createSelector(schemaSelector, parseSchema);
 
 export const getColleaguesSchemas = (colleagueUuid) =>
   createSelector(
@@ -78,7 +80,7 @@ export const getColleaguesSchemas = (colleagueUuid) =>
         } = data[key];
         timelinePoints?.forEach((timelinePoint) => {
           if (timelinePoint?.properties?.pm_timeline_point_code && timelinePoint?.form?.id) {
-            const form = data[key]?.forms.find((form) => form.id === timelinePoint.form.id);
+            const form = data[key]?.forms?.find((form) => form.id === timelinePoint.form.id);
             if (form) {
               reviews[timelinePoint?.properties?.pm_timeline_point_code] = {
                 ...data[key],

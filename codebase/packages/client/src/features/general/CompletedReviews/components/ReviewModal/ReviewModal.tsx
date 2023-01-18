@@ -1,12 +1,11 @@
 import React, { FC } from 'react';
 import { CreateRule, Modal, Rule, theme, useStyle } from '@pma/dex-wrapper';
+import { Component } from '@pma/store';
+import ReviewForm from 'features/general/Review/components/ReviewForm';
 import { Icon } from 'components/Icon';
 import { useTranslation } from 'components/Translation';
 import { ReviewType, Status } from 'config/enum';
-import ReviewForm from 'features/general/Review/components/ReviewForm';
-import { Component, getAllReviewSchemas } from '@pma/store';
 import { formTagComponents } from 'utils/schema';
-import { useSelector } from 'react-redux';
 
 export type CompletedReviewsModalProps = {
   onClose: () => void;
@@ -18,17 +17,18 @@ const ReviewModal: FC<CompletedReviewsModalProps> = ({ onClose, review }) => {
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
 
-  const schemas = useSelector(getAllReviewSchemas);
-
-  const scheme = review ? schemas[review?.type] : [];
-
-  const { components = [] as Component[] } = scheme;
+  const { components = [] as Component[] } = review.schema;
 
   return (
     <Modal
       modalPosition={mobileScreen ? 'bottom' : 'middle'}
       overlayColor={'tescoBlue'}
       modalContainerRule={[containerRule({ mobileScreen })]}
+      backOptions={{
+        content: <Icon graphic='arrowLeft' invertColors={true} />,
+        onBack: onClose,
+        styles: [modalBackOptionStyle({ mobileScreen })],
+      }}
       closeOptions={{
         content: <Icon graphic='cancel' invertColors={true} />,
         onClose: onClose,
@@ -102,6 +102,19 @@ const modalCloseOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
     cursor: 'pointer',
   };
 };
+
+const modalBackOptionStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    position: 'fixed',
+    top: theme.spacing.s5,
+    height: 'auto',
+    padding: '0px',
+    left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
+    textDecoration: 'none',
+    border: 'none',
+    cursor: 'pointer',
+  });
 
 const modalTitleOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
   const { mobileScreen } = props;

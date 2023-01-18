@@ -5,7 +5,7 @@ import { useTranslation } from 'components/Translation';
 import SuccessModal from 'components/SuccessModal';
 
 import { ExclamationMark, SuccessMark } from 'components/Icon';
-import { ActionStatus, ReviewType, Status } from 'config/enum';
+import { ActionStatus, Status } from 'config/enum';
 import { useSelector } from 'react-redux';
 import { getEmployeesWithReviewStatuses, getManagersMetaSelector, reviewsMetaSelector } from '@pma/store';
 import { buildPath } from 'features/general/Routes';
@@ -14,12 +14,10 @@ import { useTenant } from 'features/general/Permission';
 import { StatusHistoryType } from '../../context/successModalContext';
 
 const ReviewSuccessModal: FC<{
-  isOpen: boolean;
   statusHistory: StatusHistoryType;
-  setOpened: (state: boolean) => void;
-}> = ({ statusHistory, setOpened, isOpen }) => {
+  onClose: () => void;
+}> = ({ statusHistory, onClose }) => {
   if (!statusHistory) return null;
-  if (!isOpen) return null;
 
   const { status, prevStatus, type } = statusHistory;
   const { t } = useTranslation();
@@ -58,10 +56,11 @@ const ReviewSuccessModal: FC<{
   };
 
   const handleClose = () => {
-    setOpened(false);
+    if (loading || saving || managerLoading) return;
     if (!colleaguesWaitingForApproval.length) {
       navigate(buildPath(Page.MY_TEAM));
     }
+    onClose();
   };
 
   return (

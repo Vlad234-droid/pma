@@ -44,7 +44,7 @@ const Objectives = () => {
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
 
-  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current));
+  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current, currentCycle));
   const status = timelineObjective?.summaryStatus;
   const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
 

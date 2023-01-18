@@ -5,6 +5,7 @@ export const getLastTimelineStatus = (employee: Employee) =>
   employee.timeline.reduce((prev, current) => {
     if (
       current.type !== TimelineType.TIMELINE_POINT &&
+      current.code !== 'CALIBRATION' &&
       ![Status.STARTED, Status.NOT_STARTED].includes(current.summaryStatus)
     ) {
       prev = current.summaryStatus;

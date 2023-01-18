@@ -1,6 +1,6 @@
-import React, { FC, MouseEvent, ReactNode, useEffect, useRef, useState, CSSProperties } from 'react';
+import React, { FC, ReactNode, useEffect, useRef, useState, CSSProperties, RefObject } from 'react';
 import { CreateRule, Rule, useStyle, Styles } from '@pma/dex-wrapper';
-import useEventListener from 'hooks/useEventListener';
+import useClickOutside from 'hooks/useClickOutside';
 
 export const UNDERLAY_WRAPPER = 'underlay-wrapper';
 
@@ -12,13 +12,29 @@ type RenderProps = {
 
 type Props = {
   onClose: () => void;
+  overlayClick?: boolean;
   children: (renderProps: RenderProps) => ReactNode;
   transitionDuration?: number;
   styles?: CSSProperties | Styles | Rule | {};
   loading?: boolean;
 };
 
-const UnderlayModal: FC<Props> = ({ onClose, transitionDuration = 300, styles = {}, children, loading = false }) => {
+const ConditionalOutsideClick: FC<{ forwardedRef: RefObject<any>; onClose: () => void }> = ({
+  onClose,
+  forwardedRef,
+}) => {
+  useClickOutside(forwardedRef, onClose, 'mousedown');
+  return null;
+};
+
+const UnderlayModal: FC<Props> = ({
+  onClose,
+  transitionDuration = 300,
+  styles = {},
+  children,
+  loading = false,
+  overlayClick = true,
+}) => {
   const [width, setWidth] = useState<Spacing>(0);
   const [duration] = useState<number>(transitionDuration);
   const { css, matchMedia } = useStyle();
@@ -43,24 +59,20 @@ const UnderlayModal: FC<Props> = ({ onClose, transitionDuration = 300, styles = 
     };
   }, []);
 
-  const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
-    const element = event?.target as HTMLElement;
-    if (ref.current && !ref.current.contains(element)) onClose();
-  };
-
-  useEventListener('mousedown', handleClickOutside);
-
   return (
-    <div className={css(slideInModalRule)}>
-      <div
-        data-test-id={UNDERLAY_WRAPPER}
-        className={css(containerRule({ isDesktop, width, duration }), { ...styles })}
-        onTransitionEnd={onTransitionEnd}
-        ref={ref}
-      >
-        {children({ onClose: handleClose })}
+    <>
+      {overlayClick && <ConditionalOutsideClick onClose={handleClose} forwardedRef={ref} />}
+      <div className={css(slideInModalRule)}>
+        <div
+          data-test-id={UNDERLAY_WRAPPER}
+          className={css(containerRule({ isDesktop, width, duration }), { ...styles })}
+          onTransitionEnd={onTransitionEnd}
+          ref={ref}
+        >
+          {children({ onClose: handleClose })}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

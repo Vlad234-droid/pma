@@ -27,6 +27,7 @@ export type Timeline = {
   uuid: string;
   statistics?: TimelineStatistics;
   lastUpdatedTime?: string;
+  properties: any;
 };
 
 export type Review = {
@@ -70,5 +71,11 @@ export type UserprofileAttributes = {
   type: string;
   value: string;
 };
+
+export enum Mode {
+  SAVE = 'save',
+  UPDATE = 'update',
+  CREATE = 'create',
+}
 
 export { ReviewType, Status, TimelineType };

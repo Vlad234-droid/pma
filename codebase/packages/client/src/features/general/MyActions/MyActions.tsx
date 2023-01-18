@@ -58,6 +58,7 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
           colleagueUuid,
           'review-status_in': reviewStatuses,
           'colleague-cycle-status_in': colleagueCycleStatuses,
+          'review-type_nin': ['CALIBRATION'],
           status,
         }),
       );
@@ -77,6 +78,7 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
         updateParams: {
           'review-status_in': reviewStatuses,
           'colleague-cycle-status_in': colleagueCycleStatuses,
+          'review-type_nin': ['CALIBRATION'],
           status,
         },
         pathParams: {
@@ -141,7 +143,13 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
               )}
             </div>
             {isOpen && statusHistory && (
-              <SuccessModal isOpen={isOpen} statusHistory={statusHistory} setOpened={setOpened} />
+              <SuccessModal
+                statusHistory={statusHistory}
+                onClose={() => {
+                  setOpened(false);
+                  dispatch(ReviewsActions.updateReviewMeta({ saved: false }));
+                }}
+              />
             )}
           </>
         );

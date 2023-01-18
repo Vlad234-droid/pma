@@ -2,6 +2,7 @@ import { Add } from './add';
 import { ArrowLeft } from './arrow-left';
 import { ArrowRight } from './arrow-right';
 import { Calender } from './calender';
+import { CalenderFilled } from './calenderFilled';
 import { Cancel } from './cancel';
 import { Check } from './check';
 import { ChatSq } from './chat-sq';
@@ -36,6 +37,7 @@ import { Full } from './full';
 import { Less } from './less';
 import { Rating } from './rating';
 import { Goal } from './goal';
+import { RoundChat } from './round-chat';
 import { View } from './view';
 import { Play } from './play';
 import { Bell } from './bell';
@@ -62,6 +64,7 @@ import { Link } from './link';
 import { FileAttached } from './fileAttached';
 import { Upload } from './upload';
 import { Chart } from './chart';
+import { Clock } from './clock';
 
 /**
  * Each icon we add needs to have viewbox set to "0 0 24 24".
@@ -71,6 +74,7 @@ import { Chart } from './chart';
 
 export type Graphics =
   | 'account'
+  | 'roundChat'
   | 'add'
   | 'alert'
   | 'archive'
@@ -79,6 +83,7 @@ export type Graphics =
   | 'arrowRight'
   | 'arrowUp'
   | 'calender'
+  | 'calenderFilled'
   | 'cancel'
   | 'chat'
   | 'check'
@@ -105,6 +110,7 @@ export type Graphics =
   | 'roundAlert'
   | 'roundCircle'
   | 'roundClock'
+  | 'clock'
   | 'roundPencil'
   | 'roundStop'
   | 'roundTick'
@@ -137,18 +143,21 @@ export type Graphics =
 export const icons: Record<Graphics, FCGraphicProps> = {
   attention: Attention,
   add: Add,
+  roundChat: RoundChat,
   arrowLeft: ArrowLeft,
   arrowRight: ArrowRight,
   chat: ChatSq,
   document: Document,
   account: Account,
   calender: Calender,
+  calenderFilled: CalenderFilled,
   cancel: Cancel,
   check: Check,
   microphone: Microphone,
   roundStop: RoundStop,
   roundCircle: RoundCircle,
   roundClock: RoundClock,
+  clock: Clock,
   roundPencil: RoundPencil,
   roundTick: RoundTick,
   roundAlert: RoundAlert,

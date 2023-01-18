@@ -9,7 +9,6 @@ import { ReviewsSection, CompletedReviewsSection, ReviewFilesSection } from 'fea
 import { Tenant, useTenant } from 'features/general/Permission';
 import { ShareWidget } from 'features/general/ShareWidget';
 import { buildPath } from 'features/general/Routes';
-import { SubmitCalibrationRatingsWidget } from 'features/general/CreateCalibrationRatings';
 import { Page } from 'pages/general/types';
 import { useHeaderContainer } from 'contexts/headerContext';
 import { ReviewType } from 'config/enum';

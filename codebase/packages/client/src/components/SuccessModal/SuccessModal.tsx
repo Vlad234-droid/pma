@@ -65,7 +65,7 @@ const SuccessModal: FC<Props> = ({
                 <Trans i18nKey='done'>Done</Trans>!
               </div>
               <div className={css(descriptionStyle)}>{description}</div>
-              {additionalText && <div className={css(descriptionStyle, { marginTop: '30px' })}>{additionalText}</div>}
+              {additionalText && <div className={css(descriptionStyle)}>{additionalText}</div>}
               {customElement && <div>{customElement}</div>}
             </div>
           </div>

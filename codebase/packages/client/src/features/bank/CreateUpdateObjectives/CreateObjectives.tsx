@@ -22,9 +22,7 @@ const CreateUpdatePriorities: FC<Props> = memo(({ onClose, onSuccessClose, editN
 
   const title =
     useSingleStep && editNumber
-      ? t('edit_priorities', `Edit Priorities ${code}`, {
-          code,
-        })
+      ? t('edit_priority', `Edit Priority`)
       : t('create_priorities', `Create Priorities ${code}`, {
           code,
         });

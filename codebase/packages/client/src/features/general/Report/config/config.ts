@@ -1,7 +1,5 @@
 import { TFunction } from 'components/Translation';
 import { Rating, ReportPage, StatisticsTitlesReportKeys, TitlesReport } from 'config/enum';
-import { getCurrentYear, getPrevYear } from 'utils/date';
-import { getCurrentYearWithStartDate, isStartPeriod } from '../utils';
 
 export enum View {
   CHART = 'chart',
@@ -18,20 +16,14 @@ export enum IsReportTiles {
   OBJECTIVES_SUBMITTED = 'Objectives submitted',
   OBJECTIVES_APPROVED = 'Objectives approved',
   MID_YEAR_FORMS = 'Mid-year forms',
-  BREAKDOWN_MID_YEAR_REVIEW = 'Breakdown of mid-year review',
+  BREAKDOWN_MID_YEAR_REVIEW = 'Breakdown of approved mid-year review',
   YEAR_END_FORMS = 'Year-end forms',
-  BREAKDOWN_YEAR_END_REVIEW = 'Breakdown of year-end review',
+  BREAKDOWN_YEAR_END_REVIEW = 'Breakdown of approved year-end review',
   MOMENT_FEEDBACK = 'Everyday Feedback',
   NEW_TO_BUSINESS = 'New to business',
   ANNIVERSARY_REVIEWS = 'Anniversary Reviews',
   WL4AND5 = 'WL4 & 5 Objectives approved',
 }
-export const getFieldOptions = () => [
-  {
-    value: isStartPeriod() ? getPrevYear(1) : getPrevYear(2),
-    label: isStartPeriod() ? `${getPrevYear(1)}-${getCurrentYear()}` : `${getPrevYear(2)}-${getPrevYear(1)}`,
-  },
-];
 
 export const convertToLink = (str) => str.split('_').slice(1).join('-').toLowerCase();
 
@@ -102,9 +94,6 @@ export const prepareData = (selectedCheckboxes, isCheckAll, t) => {
   ].filter((item) => Object.keys(item).length);
 };
 
-export const getCurrentValue = (query, year) =>
-  query.year ? year || query.year || getCurrentYearWithStartDate() : year || getCurrentYearWithStartDate();
-
 export const getDefaultData = (type, t) => {
   const report = {
     [ReportPage.REPORT_SUBMITTED_OBJECTIVES]: [{ percentage: 0 }],
@@ -148,8 +137,18 @@ export const getDefaultData = (type, t) => {
         count: 0,
         title: t(Rating.OUTSTANDING, 'Outstanding'),
       },
+      {
+        percentage: 0,
+        count: 0,
+        title: t(Rating.NTB, 'New to business'),
+      },
     ],
     [ReportPage.REPORT_EYR_BREAKDOWN]: [
+      {
+        percentage: 0,
+        count: 0,
+        title: t(Rating.NTB, 'New to business'),
+      },
       {
         percentage: 0,
         count: 0,

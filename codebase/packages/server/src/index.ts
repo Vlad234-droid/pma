@@ -29,6 +29,7 @@ import {
   swaggerProxyMiddleware,
   camundaProxyMiddleware,
   loggingMiddleware,
+  healthCheckMiddleware,
 } from './middlewares';
 
 import { initialize as initializeLogger, getHttpLoggerMiddleware } from '@pma-common/logger';
@@ -124,7 +125,7 @@ if (!API_SERVER_URL) {
   config.camundaServerUrl() && router.use('/camunda', camundaProxyMiddleware(config));
   config.swaggerServerUrl() && router.use(swaggerProxyMiddleware(config));
 
-  router.use('/_status', (_, res) => res.sendStatus(200));
+  router.use(healthCheckMiddleware(config));
 
   const myInboxMiddleware = await myInboxConfig(config);
   myInboxMiddleware && router.use(myInboxMiddleware);

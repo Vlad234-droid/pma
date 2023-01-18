@@ -14,6 +14,13 @@ enum Role {
 
 export { Role, Status };
 
+export interface Profile {
+  department: string;
+  fullName: string;
+  job: string;
+  managerName: string;
+}
+
 export default interface User {
   id: number;
   job: string;

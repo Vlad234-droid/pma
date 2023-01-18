@@ -8,7 +8,9 @@ export const ARROW_RIGHT = 'arrow-right';
 
 type ButtonsProps = {
   isValid?: boolean;
+  isLeftDisabled?: boolean;
   onLeftPress?: () => void;
+  onMiddlePress?: () => void;
   onRightPress?: () => void;
   rightIcon?: boolean;
   leftText?: string;
@@ -21,6 +23,7 @@ type ButtonsProps = {
 
 const ButtonsWrapper: FC<ButtonsProps> = ({
   isValid,
+  isLeftDisabled = false,
   onLeftPress,
   onRightPress,
   rightIcon = true,
@@ -32,6 +35,7 @@ const ButtonsWrapper: FC<ButtonsProps> = ({
   customStyles = {},
 }) => {
   const { css, theme } = useStyle();
+
   return (
     <div className={css(blockStyle, customStyles)}>
       <div className={css(wrapperStyle)}>
@@ -42,6 +46,7 @@ const ButtonsWrapper: FC<ButtonsProps> = ({
             <>
               {!single && (
                 <Button
+                  isDisabled={isLeftDisabled}
                   styles={[theme.font.fixed.f16, buttonCancelStyle]}
                   onPress={onLeftPress}
                   data-test-id={LEFT_SIDE_BUTTON}

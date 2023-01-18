@@ -123,7 +123,7 @@ const underlayRule: CreateRule<{
     height: '100%',
     top: 0,
     left: 0,
-    zIndex: zIndex.i50,
+    zIndex: zIndex.i40,
     alignItems: isBottomPosition ? 'flex-end' : 'center',
     justifyContent: 'center',
     background: overlayColor ? colors[overlayColor] : colors.link50,

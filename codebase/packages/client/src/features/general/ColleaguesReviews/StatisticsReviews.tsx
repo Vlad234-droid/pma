@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 
 import { Page } from 'pages';
 import { buildPath } from 'features/general/Routes';
-import { useToast } from 'features/general/Toast';
+
 import Spinner from 'components/Spinner';
 import InfinityScrollLoad from 'components/InfinityScrollLoad';
 import ViewColleagueProfile from 'components/ViewColleagueProfile';
@@ -18,14 +18,14 @@ import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'componen
 
 import useDispatch from 'hooks/useDispatch';
 import useQueryString from 'hooks/useQueryString';
+import useDownloadExelFile from 'hooks/useDownloadExelFile';
 import { useChartStatistics } from './hooks/useChartStatistics';
 import { useDetailsStatistics, useTotalReviews } from './hooks';
-import { isSingular, paramsReplacer } from 'utils';
+import { isSingular, paramsReplacer, filterToRequest, formatDateStringFromISO, getFinancialYear } from 'utils';
 import { defaultSort, List } from './config';
-import { ReportPage, ReportType } from 'config/enum';
-import { downloadCsvFile } from './utils';
+import { ReportPage, ReportType, Status } from 'config/enum';
 
-const switchTitltes = (titleToSwitch, t: TFunction) => {
+const switchTitles = (titleToSwitch, t: TFunction) => {
   const titles = {
     'not-submitted': t('total_reviews_not_submitted', 'Total reviews not submitted'),
     approved: t('total_reviews_submitted_&_approved_by_manager', 'Total reviews submitted & approved by manager'),
@@ -52,10 +52,10 @@ const getReviewsTitles = (type): List => {
       titles: { 'not-submitted': [], submitted: [], approved: [] },
     },
     [ReportPage.REPORT_MYR_BREAKDOWN]: {
-      titles: { 'Below expected': [], Great: [], Outstanding: [], Satisfactory: [] },
+      titles: { 'New to business': [], 'Below expected': [], Great: [], Outstanding: [], Satisfactory: [] },
     },
     [ReportPage.REPORT_EYR_BREAKDOWN]: {
-      titles: { 'Below expected': [], Great: [], Outstanding: [], Satisfactory: [] },
+      titles: { 'New to business': [], 'Below expected': [], Great: [], Outstanding: [], Satisfactory: [] },
     },
     [ReportPage.REPORT_WORK_LEVEL]: {
       titles: { approved: [] },
@@ -73,25 +73,50 @@ const getReviewsTitles = (type): List => {
   return page[type];
 };
 
-const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFullView: boolean }> = ({
-  type,
-  toggleFullView,
-  isFullView,
-}) => {
+const REPORT_URL = 'reports/linked-objective-report/formats/excel';
+
+type Props = {
+  type: ReportPage;
+  toggleFullView: () => void;
+  isFullView: boolean;
+  filterValues: Record<string, Record<string, boolean>>;
+};
+
+const StatisticsReviews: FC<Props> = ({ type, toggleFullView, isFullView, filterValues }) => {
   const query = useQueryString();
+  const { year } = query;
   const { t } = useTranslation();
   const { css } = useStyle();
   const { loading: reportLoading } = useSelector(getReportMetaSelector);
   const list: List = useSelector(getListStatistics);
+
   const { loading } = useSelector(getStatisticsMetaSelector);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { pathname, search } = useLocation();
-  const { addToast } = useToast();
 
-  const searchedLoading = useDetailsStatistics(type, query);
-  useChartStatistics(type, query);
+  const filters = filterToRequest(filterValues) || {};
+
+  const searchedLoading = useDetailsStatistics(type, filters);
+  useChartStatistics(type, filters);
   const reviews = useTotalReviews(type);
+
+  const downloadReport = useDownloadExelFile({
+    resource: {
+      url: REPORT_URL,
+      params: {
+        year: year || getFinancialYear(),
+        status: Status.APPROVED.toLocaleLowerCase(),
+        ...filters,
+      },
+    },
+    fileName: `Objectives Report (${formatDateStringFromISO(new Date().toISOString(), 'dd LLL yyyy HH:mm:ms')})`,
+    ext: 'xlsx',
+    errorMassage: {
+      title: t('statistics_not_found', 'Statistics not found'),
+      description: t('try_to_select_another_year', 'Try to select another year.'),
+    },
+  });
 
   const handleView = (uuid: string) =>
     navigate(buildPath(paramsReplacer(`${Page.USER_REVIEWS}`, { ':uuid': uuid })), {
@@ -99,8 +124,6 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
         backPath: `${pathname}${search}`,
       },
     });
-
-  const { year } = query;
 
   if (reportLoading || searchedLoading) return <Spinner fullHeight />;
 
@@ -128,7 +151,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                           {type === ReportPage.REPORT_MID_YEAR_REVIEW ||
                           type === ReportPage.REPORT_END_YEAR_REVIEW ||
                           type === ReportPage.REPORT_ANNIVERSARY_REVIEWS
-                            ? switchTitltes(title, t)
+                            ? switchTitles(title, t)
                             : t(title)}
                           : {total} {isSingular(total) ? t('colleague', 'Colleague') : t('colleagues', 'Colleagues')}
                         </span>
@@ -140,7 +163,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                         {isWLPage && (
                           <div>
                             <IconButton
-                              onPress={() => downloadCsvFile(t, addToast)}
+                              onPress={downloadReport}
                               graphic='download'
                               customVariantRules={{ default: iconButtonStyles }}
                               iconStyles={iconStyles}
@@ -177,6 +200,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                                     status: title,
                                     'review-type': ReportType.OBJECTIVE,
                                     ...defaultSort,
+                                    ...filters,
                                   }),
                                 );
                                 break;
@@ -190,6 +214,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                                     status: title,
                                     'review-type': ReportType.OBJECTIVE,
                                     ...defaultSort,
+                                    ...filters,
                                   }),
                                 );
                                 break;
@@ -203,6 +228,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                                     _limit,
                                     _start,
                                     ...defaultSort,
+                                    ...filters,
                                   }),
                                 );
                                 break;
@@ -216,6 +242,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                                     _limit,
                                     _start,
                                     ...defaultSort,
+                                    ...filters,
                                   }),
                                 );
                                 break;
@@ -229,6 +256,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                                     _limit,
                                     _start,
                                     ...defaultSort,
+                                    ...filters,
                                   }),
                                 );
                                 break;
@@ -242,6 +270,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                                     _limit,
                                     _start,
                                     ...defaultSort,
+                                    ...filters,
                                   }),
                                 );
                                 break;
@@ -253,6 +282,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                                     _limit,
                                     _start,
                                     ...defaultSort,
+                                    ...filters,
                                   }),
                                 );
                                 break;
@@ -265,6 +295,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                                     _limit,
                                     _start,
                                     ...defaultSort,
+                                    ...filters,
                                   }),
                                 );
                                 break;
@@ -277,6 +308,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                                     _limit,
                                     _start,
                                     ...defaultSort,
+                                    ...filters,
                                   }),
                                 );
                                 break;
@@ -289,6 +321,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                                     _limit,
                                     _start,
                                     ...defaultSort,
+                                    ...filters,
                                   }),
                                 );
                                 break;
@@ -296,7 +329,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                             }
                           }}
                           loading={loading}
-                          limit={isWLPage ? 10 : 15}
+                          limit={10}
                           hasMore={hasMore}
                           render={() => (
                             <>

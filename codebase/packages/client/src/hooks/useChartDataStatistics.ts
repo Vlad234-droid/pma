@@ -117,7 +117,7 @@ export const useChartDataStatistics = (configKey: ReportPage): Array<Data> => {
 
   //@ts-ignore
   if (configKey === ReportPage.REPORT_MYR_BREAKDOWN || configKey === ReportPage.REPORT_EYR_BREAKDOWN) {
-    const order = ['Below expected', 'Satisfactory', 'Great', 'Outstanding'];
+    const order = ['New to business', 'Below expected', 'Satisfactory', 'Great', 'Outstanding'];
     //@ts-ignore
     return chart.sort((a, b) => order.indexOf(a.title) - order.indexOf(b.title));
   }

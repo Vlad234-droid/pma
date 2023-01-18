@@ -1,10 +1,17 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { CalibrationSessionStatusEnum } from '@pma/openapi';
-import { CalibrationSessionsAction, calibrationSessionsMetaSelector, getCalibrationSessionsSelector } from '@pma/store';
+import {
+  CalibrationSessionsAction,
+  calibrationSessionsMetaSelector,
+  colleagueFilterMetaSelector,
+  getCalibrationSessionsSelector,
+  getColleagueFilterSelector,
+  ColleagueFilterAction,
+} from '@pma/store';
 
 import { Page } from 'pages';
 import { paramsReplacer } from 'utils';
@@ -19,11 +26,16 @@ import { FilterStatus } from './utils/types';
 import { DateBadge } from './components/DateBadge';
 import { buildPath } from '../Routes';
 
+import { dataFromSessionResponse } from './utils';
+
 const CalibrationSessionList: FC<{ filterStatus: FilterStatus }> = ({ filterStatus }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const [sessionExpanded, setSessionExpanded] = useState<string>();
+  const [colleagueFilterInfo, setColleagueFilterInfo] = useState<any>({});
+
   const activeStatuses = [
     CalibrationSessionStatusEnum.Created,
     CalibrationSessionStatusEnum.Started,
@@ -32,6 +44,8 @@ const CalibrationSessionList: FC<{ filterStatus: FilterStatus }> = ({ filterStat
   const completedStatuses = [CalibrationSessionStatusEnum.Completed];
 
   const { loading: calibrationSessionLoading } = useSelector(calibrationSessionsMetaSelector);
+  const { loading: calibrationFilterLoading } = useSelector(colleagueFilterMetaSelector);
+  const colleagueFilter = useSelector(getColleagueFilterSelector) || {};
   const calibrationSessions = useSelector(getCalibrationSessionsSelector) || [];
   const calibrationSessionsByStatus = calibrationSessions.filter((calibrationSession) => {
     if (calibrationSession.status) {
@@ -42,10 +56,6 @@ const CalibrationSessionList: FC<{ filterStatus: FilterStatus }> = ({ filterStat
     return false;
   });
 
-  useEffect(() => {
-    dispatch(CalibrationSessionsAction.getCalibrationSessions({}));
-  }, []);
-
   const handleDelete = (uuid: string | null) => {
     if (uuid) {
       dispatch(CalibrationSessionsAction.deleteCalibrationSession({ uuid }));
@@ -53,8 +63,27 @@ const CalibrationSessionList: FC<{ filterStatus: FilterStatus }> = ({ filterStat
   };
   const handleEdit = (uuid) =>
     uuid
-      ? navigate(buildPath(paramsReplacer(Page.CALIBRATION_SESSION, { ':uuid': uuid })))
+      ? navigate(buildPath(paramsReplacer(Page.CALIBRATION_SESSION, { ':uuid': uuid })), {
+          state: {
+            filterStatus,
+          },
+        })
       : navigate(buildPath(Page.NOT_FOUND));
+
+  useEffect(() => {
+    if (sessionExpanded) {
+      const calibrationSession = calibrationSessions.find((cs) => cs.uuid === sessionExpanded) || {};
+      const { participants = {} } = calibrationSession;
+      const { filters = [] } = participants;
+      const defaultFilters = dataFromSessionResponse(filters, colleagueFilter);
+      setColleagueFilterInfo(defaultFilters);
+    }
+  }, [sessionExpanded]);
+
+  useEffect(() => {
+    dispatch(CalibrationSessionsAction.getCalibrationSessions({}));
+    dispatch(ColleagueFilterAction.getColleagueFilter({}));
+  }, []);
 
   if (calibrationSessionLoading) {
     return <Spinner fullHeight />;
@@ -70,83 +99,99 @@ const CalibrationSessionList: FC<{ filterStatus: FilterStatus }> = ({ filterStat
             customStyle={index === 0 ? borderStyles : marginStyles}
           >
             <BaseAccordion id={'session-base-accordion'}>
-              {() => (
-                <Section defaultExpanded={false}>
-                  <div className={css(sectionBodyStyle)}>
-                    <div className={css(titleStyle)}>{calibrationSession.title}</div>
-                    <div className={css(expandButtonStyle)}>
-                      <DateBadge time={calibrationSession.startTime || ''} />
-                      <ExpandButton />
-                    </div>
-                  </div>
-                  <Panel>
-                    <div className={css(infoContainerStyle)}>
-                      <div>
-                        <div>Work level:</div>
-                        <div>Colleagues</div>
-                      </div>
-                      <div>
-                        <div>Department</div>
-                        <div>Grocery</div>
-                      </div>
-                      <div>
-                        <div>Store</div>
-                        <div>5025</div>
-                      </div>
-                      <div>
-                        <div>Ratings changed: N/A</div>
-                      </div>
-                      <div>
-                        <div>Notes</div>
-                        <div>{calibrationSession.description}</div>
+              {({ collapseAllSections }) => {
+                if (calibrationSession.uuid !== sessionExpanded) {
+                  collapseAllSections();
+                }
+                return (
+                  <Section defaultExpanded={false}>
+                    <div className={css(sectionBodyStyle)}>
+                      <div className={css(titleStyle)}>{calibrationSession.title}</div>
+                      <div className={css(expandButtonStyle)}>
+                        <DateBadge time={calibrationSession.startTime || ''} />
+                        <ExpandButton onClick={(expanded) => expanded && setSessionExpanded(calibrationSession.uuid)} />
                       </div>
                     </div>
-                    <div className={css({ paddingBottom: '24px', display: ' flex', gap: '30px' })}>
-                      {calibrationSession?.status !== CalibrationSessionStatusEnum.Completed && (
-                        <>
+                    <Panel>
+                      <div className={css(infoContainerStyle)}>
+                        {calibrationFilterLoading ? (
+                          <Spinner fullHeight />
+                        ) : (
+                          <>
+                            {Object.entries(colleagueFilterInfo).map(([filterName, filterOptions]) => {
+                              return (
+                                <div key={filterName}>
+                                  <div className={css(groupStyles, boldStyles)}>
+                                    {t(`group_name_${filterName}`, filterName)}:
+                                  </div>
+                                  <div className={css(groupStyles)}>
+                                    {Array.isArray(filterOptions) &&
+                                      filterOptions.map((filterOption) => {
+                                        return (
+                                          <span key={filterOption.uuid || filterOption.code}>{filterOption?.name}</span>
+                                        );
+                                      })}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </>
+                        )}
+                        {!!calibrationSession.description?.length && (
+                          <div>
+                            <div className={css(groupStyles, boldStyles)}>Notes</div>
+                            <div className={css(groupStyles)}>{calibrationSession.description}</div>
+                          </div>
+                        )}
+                      </div>
+                      <div className={css({ paddingBottom: '24px', display: ' flex', gap: '30px' })}>
+                        {calibrationSession?.status !== CalibrationSessionStatusEnum.Completed && (
+                          <>
+                            <IconButton
+                              isDisabled={false}
+                              onPress={() => handleEdit(calibrationSession.uuid || null)}
+                              graphic='edit'
+                              customVariantRules={{ default: iconButtonStyles, disabled: iconButtonStyles }}
+                              iconStyles={iconStyles}
+                              iconPosition={Position.LEFT}
+                              iconProps={{ size: '16px' }}
+                            >
+                              <Trans i18nKey='edit_or_start_session'>Edit or start session</Trans>
+                            </IconButton>
+                            <ButtonWithConfirmation
+                              withIcon
+                              graphic={'delete'}
+                              onSave={() => handleDelete(calibrationSession.uuid || null)}
+                              buttonName={t('delete_session', 'Delete Session')}
+                              confirmationButtonTitle={t('delete_session', 'Delete Session')}
+                              styles={iconButtonStyles}
+                              isDisabled={false}
+                              confirmationTitle={''}
+                              confirmationDescription={t(
+                                'calibration_session_delete',
+                                'You are about to delete the calibration session. Once the session is deleted all changes will be lost.',
+                              )}
+                            />
+                          </>
+                        )}
+                        {calibrationSession?.status === CalibrationSessionStatusEnum.Completed && (
                           <IconButton
                             isDisabled={false}
                             onPress={() => handleEdit(calibrationSession.uuid || null)}
-                            graphic='edit'
+                            graphic='view'
                             customVariantRules={{ default: iconButtonStyles, disabled: iconButtonStyles }}
                             iconStyles={iconStyles}
                             iconPosition={Position.LEFT}
                             iconProps={{ size: '16px' }}
                           >
-                            <Trans i18nKey='edit_or_start_session'>Edit or start session</Trans>
+                            <Trans i18nKey='view_session'>View Session</Trans>
                           </IconButton>
-                          <ButtonWithConfirmation
-                            withIcon
-                            graphic={'delete'}
-                            onSave={() => handleDelete(calibrationSession.uuid || null)}
-                            buttonName={t('delete', 'Delete')}
-                            styles={iconButtonStyles}
-                            isDisabled={false}
-                            confirmationTitle={''}
-                            confirmationDescription={t(
-                              'calibration_session_delete',
-                              'Are you sure you want to delete calibration session?',
-                            )}
-                          />
-                        </>
-                      )}
-                      {calibrationSession?.status === CalibrationSessionStatusEnum.Completed && (
-                        <IconButton
-                          isDisabled={false}
-                          onPress={() => handleEdit(calibrationSession.uuid || null)}
-                          graphic='view'
-                          customVariantRules={{ default: iconButtonStyles, disabled: iconButtonStyles }}
-                          iconStyles={iconStyles}
-                          iconPosition={Position.LEFT}
-                          iconProps={{ size: '16px' }}
-                        >
-                          <Trans i18nKey='view_session'>View Session</Trans>
-                        </IconButton>
-                      )}
-                    </div>
-                  </Panel>
-                </Section>
-              )}
+                        )}
+                      </div>
+                    </Panel>
+                  </Section>
+                );
+              }}
             </BaseAccordion>
           </Accordion>
         ))
@@ -190,6 +235,16 @@ const sectionBodyStyle: Rule = {
 };
 
 const expandButtonStyle: Rule = { marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '10px' };
+
+const groupStyles: Rule = ({ theme }) => ({
+  padding: '0',
+  ...theme.font.fixed.f14,
+  letterSpacing: '0px',
+});
+
+const boldStyles: Rule = ({ theme }) => ({
+  fontWeight: theme.font.weight.bold,
+});
 
 const iconButtonStyles: Rule = ({ theme }) => ({
   padding: '0',

@@ -26,4 +26,5 @@ export enum setting {
   OBJECTIVE_SUBMITTED = 'Objective submitted',
   OBJECTIVE_APPROVED = 'Objective approved',
   OBJECTIVE_DECLINED = 'Objective declined',
+  CALIBRATION_OPEN = 'Calibration Open',
 }

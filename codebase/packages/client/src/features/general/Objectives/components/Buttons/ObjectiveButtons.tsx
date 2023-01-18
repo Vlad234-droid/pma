@@ -3,7 +3,14 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import { Trans, useTranslation } from 'components/Translation';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
-import { getReviewSchema, currentUserSelector, ReviewsActions, getTimelineByCodeSelector } from '@pma/store';
+import {
+  getReviewSchema,
+  currentUserSelector,
+  ReviewsActions,
+  getTimelineByCodeSelector,
+  colleagueUUIDSelector,
+  colleagueCurrentCycleSelector,
+} from '@pma/store';
 import { ReviewType, Status } from 'config/enum';
 import { USER } from 'config/constants';
 import { ButtonWithConfirmation } from 'features/general/Modal';
@@ -21,8 +28,10 @@ const ObjectiveButtons: FC<ObjectiveButtonsProps> = ({ id, status }) => {
   const { t } = useTranslation();
   const { info } = useSelector(currentUserSelector);
 
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
   const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
-  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current));
+  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current, currentCycle));
   const countDraftReviews = parseInt(timelineObjective?.statistics?.[Status.DRAFT] || '0');
   const countDeclinedReviews = parseInt(timelineObjective?.statistics?.[Status.DECLINED] || '0');
   const countApprovedReviews = parseInt(timelineObjective?.statistics?.[Status.APPROVED] || '0');

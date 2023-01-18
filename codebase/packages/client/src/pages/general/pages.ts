@@ -46,7 +46,7 @@ import UpdateObjectives, { CreateObjective } from './CreateUpdateObjectives';
 import { NotFound } from './NotFound';
 import PriorityNote from './Notes/PriorityNote';
 import PriorityNoteEdit from './Notes/PriorityNoteEdit';
-import CreateCalibrationRating from './CreateCalibrationRating';
+import CreateCalibrationRating, { CreateCalibrationSessionRating } from './CreateCalibrationRating';
 
 export type PageComponent = {
   Element: PageElement;
@@ -89,35 +89,37 @@ const pages: Record<Page, PageComponent> = {
     title: (_, t) => t('title_people_team'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
-    perform: [role.LINE_MANAGER],
+    perform: [role.TALENT_ADMIN, role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.CALIBRATION_SESSION_OVERVIEW]: {
     Element: CalibrationSessionOverview,
     title: (_, t) => t('calibration'),
+    backPath: Page.PEOPLE_TEAM,
     withHeader: true,
-    perform: [role.LINE_MANAGER],
+    perform: [role.TALENT_ADMIN, role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.CALIBRATION_SESSION]: {
     Element: CalibrationSession,
     title: (_, t) => t('calibration'),
     withHeader: true,
-    perform: [role.LINE_MANAGER],
+    perform: [role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.CALIBRATION_SESSION_LIST]: {
     Element: CalibrationSessionList,
     title: (_, t) => t('calibration_session'),
+    backPath: Page.CALIBRATION_SESSION_OVERVIEW,
     withHeader: true,
-    perform: [role.LINE_MANAGER, role.PEOPLE_TEAM],
+    perform: [role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.CREATE_CALIBRATION_SESSION]: {
     Element: CreateCalibrationSession,
     title: (_, t) => t('create_calibration_session'),
     withHeader: true,
-    perform: [role.LINE_MANAGER, role.PEOPLE_TEAM],
+    perform: [role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.EDIT_CALIBRATION_SESSION]: {
@@ -130,7 +132,13 @@ const pages: Record<Page, PageComponent> = {
   [Page.CREATE_CALIBRATION_RATING]: {
     Element: CreateCalibrationRating,
     withHeader: false,
-    perform: [role.LINE_MANAGER],
+    perform: [role.LINE_MANAGER, role.PEOPLE_TEAM, role.TALENT_ADMIN],
+    tenant: [Tenant.BANK, Tenant.GENERAL],
+  },
+  [Page.CREATE_CALIBRATION_SESSION_RATING]: {
+    Element: CreateCalibrationSessionRating,
+    withHeader: false,
+    perform: [role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.NOTES]: {
@@ -238,7 +246,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.CONTRIBUTION]: {
     Element: CareerPerformance,
-    title: (_, t) => t('people_team'),
+    title: (_, t) => t('your_contribution'),
     withHeader: true,
     withIcon: true,
     iconName: 'home',

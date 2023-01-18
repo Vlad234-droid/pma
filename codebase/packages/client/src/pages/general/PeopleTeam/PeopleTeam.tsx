@@ -1,12 +1,14 @@
 import React, { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useStyle, Styles } from '@pma/dex-wrapper';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
-import { buildPath } from 'features/general/Routes';
-import { Page } from 'pages';
-import { useTranslation } from 'components/Translation';
-import BaseWidget, { Props as SecondaryWidgetProps } from 'components/BaseWidget';
+import { AccessCalibration } from 'features/general/CalibrationSession';
 import ViewNavigation from 'features/general/ViewNavigation';
+import { buildPath } from 'features/general/Routes';
+import { useTranslation } from 'components/Translation';
+import BaseWidget from 'components/BaseWidget';
+import { Page } from 'pages';
 
 export const TEST_ID = 'test-people-team-id';
 export const SECONDARY_WIDGET_ID = 'secondary-widget-id';
@@ -14,34 +16,23 @@ export const SECONDARY_WIDGET_ID = 'secondary-widget-id';
 const PeopleTeam: FC = () => {
   const { css } = useStyle();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { pathname } = useLocation();
 
-  const widgets: SecondaryWidgetProps[] = [
-    {
-      iconGraphic: 'rating',
-      title: t('calibration', 'Calibration'),
-      data: t('click_here_to_access_calibration', 'Click here to access the calibration area'),
-      customStyle: { flex: '2 1 110px' },
-      onClick: () => navigate(buildPath(Page.CALIBRATION_SESSION_OVERVIEW)),
-      withButton: false,
-    },
-    {
-      iconGraphic: 'account',
-      title: t('reporting', 'Reporting'),
-      data: t('Manga quis vivera sit tristique'),
-      customStyle: { flex: '2 1 110px' },
-      onClick: () => console.log('Navigate to reporting page'),
-      withButton: false,
-    },
-  ];
+  const { t } = useTranslation();
 
   return (
     <div data-test-id={TEST_ID}>
       <ViewNavigation />
       <div data-test-id={SECONDARY_WIDGET_ID} className={css(wrapperStyle)}>
-        {widgets.map((props, idx) => (
-          <BaseWidget key={idx} {...props} />
-        ))}
+        <AccessCalibration />
+        <BaseWidget
+          withButton={false}
+          onClick={() => navigate(buildPath(Page.REPORT), { state: { backPath: pathname } })}
+          customStyle={{ flex: '2 1 110px' }}
+          data={t('access_your_team_reporting_dashboard', 'Access your team reporting dashboard')}
+          iconGraphic={'account'}
+          title={t('reporting', 'Reporting')}
+        />
       </div>
     </div>
   );

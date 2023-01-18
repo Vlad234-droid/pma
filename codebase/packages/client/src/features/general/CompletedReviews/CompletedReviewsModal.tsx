@@ -3,11 +3,12 @@ import { useSelector } from 'react-redux';
 import { CreateRule, Modal, Rule, theme, useStyle } from '@pma/dex-wrapper';
 import { Icon } from 'components/Icon';
 import { completedReviewsSelector } from '@pma/store';
-import { Input, Item as FormItem } from 'components/Form';
+import { useTranslation } from 'components/Translation';
+import { Select } from 'components/Form';
 
 import { RowReview } from './components/RowReview';
 import { ReviewModal } from './components/ReviewModal';
-import { useTranslation } from 'components/Translation';
+import { useOptions } from './hook';
 
 export type CompletedReviewsModalProps = {
   onClose: () => void;
@@ -20,8 +21,9 @@ const PreviousReviewFilesModal: FC<CompletedReviewsModalProps> = ({ onClose }) =
 
   const [isReviewModalOpen, setReviewModalOpen] = useState(false);
   const [selectedReviewId, setSelectedReviewId] = useState(null);
-  const [filter, setFilteredValue] = useState('');
   const reviews = useSelector(completedReviewsSelector);
+  const { options, defaultSelect } = useOptions(reviews);
+  const [period, setPeriod] = useState(defaultSelect);
 
   const selectReviewHandler = useCallback((e) => {
     e.preventDefault();
@@ -35,14 +37,10 @@ const PreviousReviewFilesModal: FC<CompletedReviewsModalProps> = ({ onClose }) =
     [selectedReviewId],
   );
 
-  const filteredReviews = reviews?.filter(({ type, lastUpdatedTime }) => {
-    const name = t(`review_type_description_${type?.toLowerCase()}`);
+  const filteredReviews = reviews?.filter(({ lastUpdatedTime }) => {
     const date = t('full_date', `${lastUpdatedTime}`, { date: new Date(lastUpdatedTime) });
-    const searchData = name + date + type;
-    return !filter || searchData.toLowerCase().includes(filter.toLowerCase());
+    return !period || date.includes(period);
   });
-
-  const handleChangeFilter = ({ target }) => setFilteredValue(target.value);
 
   return (
     <Modal
@@ -62,9 +60,13 @@ const PreviousReviewFilesModal: FC<CompletedReviewsModalProps> = ({ onClose }) =
       <div className={css(wrapperStyle)}>
         <div className={css(containerStyle)}>
           <div className={css({ marginBottom: '8px' })}>
-            <FormItem withIcon={false} marginBot={false} customIcon={<Icon graphic='search' iconStyles={iconStyles} />}>
-              <Input onChange={handleChangeFilter} placeholder={'Search review'} />
-            </FormItem>
+            <Select
+              options={options}
+              name={'targetType'}
+              placeholder={''}
+              value={period}
+              onChange={({ target: { value } }) => setPeriod(value)}
+            />
           </div>
           {filteredReviews &&
             filteredReviews.map((review) => (
@@ -129,10 +131,6 @@ const modalTitleOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
           lineHeight: `${theme.font.fluid.f28.lineHeight}`,
         }),
   };
-};
-
-const iconStyles: Rule = {
-  width: '19px',
 };
 
 export default PreviousReviewFilesModal;

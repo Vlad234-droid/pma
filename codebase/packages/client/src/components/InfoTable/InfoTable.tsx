@@ -98,13 +98,15 @@ const blockWrapper: CreateRule<{ small: boolean }> = ({ small }) => ({
   display: 'flex',
   justifyContent: 'space-between',
   flexDirection: !small ? 'row' : 'column',
-  alignItems: 'center',
+  alignItems: !small ? 'flex-start' : 'center',
   marginTop: '32px',
+  gap: '2%',
 });
 const infoBlock: CreateRule<{ small: boolean }> = ({ small }) => ({
   display: 'flex',
   flexDirection: 'column',
   ...(small && { justifyContent: 'center', alignItems: 'center' }),
+  flex: 1,
 });
 
 const flexStyle: Rule = {

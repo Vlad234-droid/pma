@@ -8,11 +8,13 @@ export const initialState = {
 
 const request = (state) => ({ ...state, meta: { ...state.meta, loading: true, error: null } });
 
-const success = (state, { payload }) => ({
-  ...state,
-  colleague: payload,
-  meta: { ...state.meta, loading: false, loaded: true },
-});
+const success = (state, { payload }) => {
+  return {
+    ...state,
+    colleague: payload,
+    meta: { ...state.meta, loading: false, loaded: true },
+  };
+};
 
 const failure = (state, { payload }) => ({
   ...state,

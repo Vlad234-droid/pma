@@ -50,7 +50,13 @@ const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timeline, schema, v
     [review],
   );
 
-  const yepSchema = components.reduce(createYupSchema(t), {});
+  const yepSchema = useMemo(
+    () =>
+      components
+        .filter(({ expression, key }) => key && expression?.auth?.permission?.write?.length)
+        .reduce(createYupSchema(t), {}),
+    [components],
+  );
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
@@ -58,7 +64,7 @@ const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timeline, schema, v
   });
 
   const {
-    formState: { isValid },
+    formState: { isValid, errors },
     watch,
     setValue,
     getValues,
@@ -104,6 +110,7 @@ const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timeline, schema, v
               borderStyle = {},
             } = component;
             const value = formValues[key] || '';
+            const error = errors?.[key]?.message;
 
             if (type === FormType.TEXT) {
               return (
@@ -129,6 +136,7 @@ const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timeline, schema, v
                       placeholder={description}
                       value={value}
                       readonly={false}
+                      error={error}
                     />
                   </div>
                 );
@@ -182,6 +190,7 @@ const styledMarkdown: Rule = ({ theme }) => {
     letterSpacing: '0px',
     '& > p': { margin: 0, padding: '20px 0' },
     '& > h2': { margin: 0, padding: '20px 0' },
+    '& > h3': { margin: 0, padding: '20px 0' },
   };
 };
 
@@ -195,6 +204,6 @@ const titleStyles: Rule = ({ theme }) => ({
   paddingBottom: '20px',
 });
 
-const valueStyle: Rule = ({ theme }) => ({ ...theme.font.fixed.f16, letterSpacing: '0px' });
+const valueStyle: Rule = ({ theme }) => ({ ...theme.font.fixed.f16, letterSpacing: '0px', whiteSpace: 'pre-wrap' });
 
 const fileListStyle: Rule = { padding: '0px 20px 20px' };

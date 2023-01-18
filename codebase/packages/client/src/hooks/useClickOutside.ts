@@ -1,7 +1,7 @@
 import { MouseEvent, RefObject, useCallback } from 'react';
 import useEventListener from 'hooks/useEventListener';
 
-export default (ref: RefObject<any>, handler: () => void) => {
+export default (ref: RefObject<any>, handler: () => void, event: keyof WindowEventMap = 'click') => {
   const handleClickOutside = useCallback(
     (event: MouseEvent<HTMLElement>) => {
       const element = event?.target as HTMLElement;
@@ -12,5 +12,5 @@ export default (ref: RefObject<any>, handler: () => void) => {
     [ref],
   );
 
-  useEventListener('click', handleClickOutside);
+  useEventListener(event, handleClickOutside);
 };

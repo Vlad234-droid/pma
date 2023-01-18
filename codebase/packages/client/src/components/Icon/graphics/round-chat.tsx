@@ -1,0 +1,20 @@
+import React from 'react';
+import { useStyle } from '@pma/dex-wrapper';
+
+import { invertColor } from '../utils';
+import { FCGraphicProps } from './types';
+
+export const RoundChat: FCGraphicProps = ({ invertColors }) => {
+  const { theme } = useStyle();
+
+  const color = invertColor(theme.colors.link, invertColors, theme);
+
+  return (
+    <path
+      fillRule='evenodd'
+      clipRule='evenodd'
+      d='M2 11.4965C2 6.25147 6.47686 2 12 2C17.5231 2 22 6.25147 22 11.4965C22 16.7416 17.5231 20.9931 12 20.9931C10.8699 20.9931 9.78823 20.8086 8.77851 20.4798C7.98267 21.2325 6.88483 21.7965 5.63042 21.9298L4.9703 22V21.3692V18.238C3.14108 16.5194 2 14.1368 2 11.4965ZM12 3.1283C7.13304 3.1283 3.18812 6.87462 3.18812 11.4965C3.18812 13.8992 4.25994 16.0601 5.97118 17.5873L6.15842 17.7544V17.9984V20.6832C6.96405 20.4613 7.66097 20.0088 8.16065 19.4546L8.43429 19.1511L8.82657 19.2955C9.81456 19.6592 10.8815 19.8648 12 19.8648C16.867 19.8648 20.8119 16.1185 20.8119 11.4965C20.8119 6.87462 16.867 3.1283 12 3.1283ZM7.04951 9.71007V8.58177H16.9505V9.71007H7.04951ZM7.04951 13.283V14.4113H16.9505V13.283H7.04951Z'
+      fill={color}
+    />
+  );
+};

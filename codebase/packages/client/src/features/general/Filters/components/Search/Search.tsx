@@ -25,7 +25,7 @@ const Search: FC<Props> = ({ focus, onFocus, iconStyles, onSearch, value }) => {
     <div
       data-test-id='search-wrapper'
       className={css({
-        width: focus ? '240px' : '38px',
+        width: focus ? '240px' : '40px',
         transition: '.3s all ease',
         marginLeft: '5px',
       })}
@@ -33,7 +33,7 @@ const Search: FC<Props> = ({ focus, onFocus, iconStyles, onSearch, value }) => {
       <FormItem
         withIcon={false}
         marginBot={false}
-        customIcon={<Icon graphic='search' iconStyles={iconStyles} />}
+        customIcon={<Icon graphic='search' iconStyles={iconStyles} size={'17px'} />}
         focus={focus}
         onFocus={onFocus}
       >
@@ -46,7 +46,7 @@ const Search: FC<Props> = ({ focus, onFocus, iconStyles, onSearch, value }) => {
             ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),
             ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),
             background: '#F6F6F6',
-            height: '38px',
+            height: '40px',
             border: '2px solid rgb(0, 83, 159)',
             cursor: 'pointer',
             ...(!focus && { borderRadius: '50%', padding: '0px' }),
