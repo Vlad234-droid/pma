@@ -143,7 +143,13 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
               )}
             </div>
             {isOpen && statusHistory && (
-              <SuccessModal isOpen={isOpen} statusHistory={statusHistory} setOpened={setOpened} />
+              <SuccessModal
+                statusHistory={statusHistory}
+                onClose={() => {
+                  setOpened(false);
+                  dispatch(ReviewsActions.updateReviewMeta({ saved: false }));
+                }}
+              />
             )}
           </>
         );
