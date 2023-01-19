@@ -36,6 +36,7 @@ const subTitleStyles: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   paddingTop: 0,
   paddingBottom: '2px',
+  whiteSpace: 'pre-wrap',
 });
 
 const descriptionStyles: Rule = ({ theme }) => ({
