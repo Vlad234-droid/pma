@@ -7,13 +7,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import SearchWithField from 'components/SearchWithField';
 import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
-import { Checkbox } from 'components/Form';
+import { Checkbox, SelectAll } from 'components/Form';
 import Spinner from 'components/Spinner';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import { getName } from './utils';
-
-import { FilterType } from './types';
 import { schema } from './config';
 
 export const FILTER_WRAPPER = 'filter-wrapper';
@@ -93,14 +91,14 @@ const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = fa
                         <div className={css(titleStyle)}>{t(`group_name_${key}`, key)}</div>
                         {Field}
                         <TileWrapper boxShadow={false} customStyle={tileStyles}>
-                          <label className={css(labelStyle, { display: searchValue ? 'none' : 'flex' })}>
-                            <Checkbox
-                              onChange={({ target }) =>
+                          <div className={css(labelStyle, { display: searchValue ? 'none' : 'flex' })}>
+                            <SelectAll
+                              onChange={(checked) =>
                                 setValue(
                                   key,
                                   properties.reduce(
-                                    (acc, { uuid, code }) => ({ ...acc, [uuid || code]: target.checked }),
-                                    {},
+                                    (acc, { uuid, code }) => ({ ...acc, [uuid || code]: checked }),
+                                    {} as any,
                                   ),
                                   {
                                     shouldValidate: true,
@@ -109,39 +107,39 @@ const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = fa
                                   },
                                 )
                               }
+                              disabled={properties.length === 0}
                               checked={
+                                Object.values(values?.[key] || {}).length > 0 &&
                                 Object.values(values?.[key] || {}).length === properties.length &&
                                 Object.values(values?.[key] || {}).every((val) => val)
                               }
-                              indeterminate={true}
+                              indeterminate={
+                                Object.values(values?.[key] || {}).length > 0 &&
+                                Object.values(values?.[key] || {}).some((val) => val)
+                              }
                             />
-                            <span className={css(selectAllStyles)}>
-                              <Trans>{FilterType.SELECT_ALL}</Trans>
-                            </span>
-                          </label>
+                          </div>
                           {/*//@ts-ignore*/}
                           {(filteredFields || properties).map(({ code, uuid, hidden = false, ...rest }) => {
                             const filter = uuid || code;
                             const name = getName(rest);
                             return (
                               <Fragment key={code}>
-                                <label className={css(labelStyle, { display: hidden ? 'none' : 'flex' })} key={code}>
+                                <div className={css(labelStyle, { display: hidden ? 'none' : 'flex' })} key={code}>
                                   <Checkbox
                                     id={`${key}_${name}`}
                                     name={`${key}.${filter}`}
+                                    label={name}
                                     checked={values?.[key]?.[filter] || false}
-                                    onChange={({ target: { name, checked } }) => {
-                                      setValue(name, checked, {
+                                    onChange={(checked) => {
+                                      setValue(`${key}.${filter}`, checked, {
                                         shouldValidate: true,
                                         shouldTouch: true,
                                         shouldDirty: true,
                                       });
                                     }}
                                   />
-                                  <span className={css(checkBoxItemTitle)}>
-                                    <Trans>{name}</Trans>
-                                  </span>
-                                </label>
+                                </div>
                               </Fragment>
                             );
                           })}
@@ -237,25 +235,6 @@ const wrapperContainer: Rule = () => ({
   position: 'relative',
   paddingBottom: '12px',
 });
-const checkBoxItemTitle: Rule = ({ theme }) => {
-  return {
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    fontSize: theme.font.fixed.f16.fontSize,
-    lineHeight: '20px',
-    color: theme.colors.base,
-    marginLeft: '16px',
-  };
-};
-const selectAllStyles: Rule = ({ theme }) => {
-  return {
-    fontWeight: theme.font.weight.bold,
-    fontSize: theme.font.fixed.f16.fontSize,
-    lineHeight: '20px',
-    color: theme.colors.link,
-    marginLeft: '16px',
-  };
-};
 const titleStyle: Rule = ({ theme }) => {
   return {
     fontStyle: 'normal',

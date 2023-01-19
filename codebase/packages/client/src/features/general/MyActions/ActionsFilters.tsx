@@ -4,7 +4,7 @@ import { Filters, getEmployeesSortingOptions, SortBy } from 'features/general/Fi
 import { ActionStatus } from 'config/enum';
 import { useTranslation } from 'components/Translation';
 
-import { SelectAll } from './components/SelectAll';
+import { SelectAll } from 'components/Form';
 import { RadioGroup } from './components/RadioGroup';
 
 type Props = {
@@ -40,11 +40,7 @@ const ActionsFilters: FC<Props> = ({
       <div className={css(headStyle)}>
         <div>
           {isWaitingForApproval && (
-            <SelectAll
-              onChange={(e) => onChangeCheckedAll(e.target.checked)}
-              checked={isCheckedAll}
-              indeterminate={false}
-            />
+            <SelectAll onChange={onChangeCheckedAll} checked={isCheckedAll} indeterminate={false} />
           )}
         </div>
         <RadioGroup status={status} setStatus={onChangeStatus} />

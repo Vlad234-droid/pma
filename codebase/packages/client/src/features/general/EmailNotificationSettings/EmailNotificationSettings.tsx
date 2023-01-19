@@ -57,7 +57,7 @@ const EmailNotificationSettings: FC = () => {
             <div key={name} className={css(checkBoxStyle)}>
               <Checkbox
                 id={name}
-                onChange={({ target: { checked: value } }) => handleUpdateSetting({ name, type, value })}
+                onChange={(checked) => handleUpdateSetting({ name, type, value: checked.toString() })}
                 checked={value === 'true'}
               />
               <label className={css(labelStyle)} htmlFor={name}>

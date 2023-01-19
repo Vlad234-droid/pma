@@ -5,6 +5,7 @@ import {
   Rule,
   CreateRule,
   Colors,
+  Checkbox,
   Theme,
   theme as baseTheme,
   useMedia,
@@ -14,14 +15,14 @@ import {
 import { AccessibilityProvider, useAccessibleStyle } from '@accessibility-toolbar/core';
 import merge from 'lodash.merge';
 import secondaryTheme from './src/theme';
-
-const theme = merge(baseTheme, secondaryTheme);
-const colors = theme.colors;
-const fontSettings = secondaryTheme.fontSettings;
-
 import { Button } from './src/components/Button';
 import { Modal } from './src/components/Modal';
 import { ModalWithHeader } from './src/components/ModalWithHeader';
+
+const theme = merge(baseTheme, secondaryTheme);
+const colors = theme.colors;
+
+const fontSettings = secondaryTheme.fontSettings;
 
 export type { Rule, CreateRule, Theme, Styles, Colors };
 export {
@@ -35,6 +36,7 @@ export {
   fontSettings,
   Icon,
   Button,
+  Checkbox,
   IconButton,
   ModalWithHeader,
   Modal,
