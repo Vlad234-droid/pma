@@ -95,17 +95,20 @@ const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = fa
                         <TileWrapper boxShadow={false} customStyle={tileStyles}>
                           <label className={css(labelStyle, { display: searchValue ? 'none' : 'flex' })}>
                             <Checkbox
-                              onChange={({ target }) => {
-                                //@ts-ignore
-                                properties.forEach(({ uuid, code }) => {
-                                  const field = `${key}.${uuid || code}`;
-                                  setValue(field, target.checked, {
+                              onChange={({ target }) =>
+                                setValue(
+                                  key,
+                                  properties.reduce(
+                                    (acc, { uuid, code }) => ({ ...acc, [uuid || code]: target.checked }),
+                                    {},
+                                  ),
+                                  {
                                     shouldValidate: true,
                                     shouldTouch: true,
                                     shouldDirty: true,
-                                  });
-                                });
-                              }}
+                                  },
+                                )
+                              }
                               checked={
                                 Object.values(values?.[key] || {}).length === properties.length &&
                                 Object.values(values?.[key] || {}).every((val) => val)

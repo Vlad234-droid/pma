@@ -1,6 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, CreateRule, IconButton as BackButton, Rule, useStyle } from '@pma/dex-wrapper';
-import { ColleagueFilterAction, getColleagueFilterSelector, getTotalReviewsByType, ReportPage } from '@pma/store';
+import {
+  ColleagueFilterAction,
+  getColleagueFilterSelector,
+  getTotalReviewsByType,
+  ReportPage,
+  StatisticsAction,
+} from '@pma/store';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -153,6 +159,7 @@ const ReportStatistics = () => {
   const handleChangeFilterValues = (values: Record<string, Record<string, boolean>>) => {
     setFilterValues(values);
     setFilterOpen(false);
+    dispatch(StatisticsAction.clearStatistics());
   };
 
   const appliedFilters: Array<string> = useMemo(() => {
