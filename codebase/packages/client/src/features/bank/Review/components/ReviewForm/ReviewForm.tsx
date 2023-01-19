@@ -138,7 +138,7 @@ const ReviewForm: FC<ReviewFormType & FormPropsType> = ({
             <div className={css(helperTextStyle)}>{t(...TRANSLATION[reviewType].helperText, { ns: 'bank' })}</div>
             <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
               <TriggerModal
-                triggerComponent={<InfoBlock text={t('bank_colleague_help', 'Bank Colleague Help')} />}
+                triggerComponent={<InfoBlock text={t('hints_and_tips', 'Hints and tips')} />}
                 title={t('completing_your_review', 'Completing your review')}
               >
                 <ReviewHelpModal />
