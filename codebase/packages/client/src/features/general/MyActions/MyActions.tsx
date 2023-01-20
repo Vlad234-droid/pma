@@ -93,8 +93,7 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
     );
   };
 
-  const handleSelectItem = (e) => {
-    const { id, checked } = e.target;
+  const handleSelectItem = (checked: boolean, id: string) => {
     if (!checked) {
       setCheckedItems(checkedItems.filter((uuid) => uuid !== id));
       return;
@@ -120,7 +119,7 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
                             id={colleague.uuid}
                             name={colleague.uuid}
                             checked={checkedItems.includes(colleague.uuid)}
-                            onChange={handleSelectItem}
+                            onChange={(checked) => handleSelectItem(checked, colleague.uuid)}
                           />
                         </div>
                       )}
