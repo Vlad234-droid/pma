@@ -38,12 +38,11 @@ export const getColleague = (params: { colleagueUuid: string }) => {
 
 export const getPerformanceCyclesByStatuses = ({
   colleagueUuid,
-  allowedStatuses,
+  params,
 }: {
   colleagueUuid: string;
-  allowedStatuses: string[];
-}) =>
-  httpClient.get(`${domain}/${colleagueUuid}/pm-cycles/`, { params: { allowedStatuses: allowedStatuses.toString() } });
+  params: Record<string, any>;
+}) => httpClient.get(`${domain}/${colleagueUuid}/pm-cycles/`, { params });
 
 export const getColleagueCyclesByPmCycleUuid = ({
   cycleUuid,
