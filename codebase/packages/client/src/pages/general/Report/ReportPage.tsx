@@ -109,7 +109,7 @@ const ReportPage: FC = () => {
         <div className={css(downloadWrapperStyle)}>
           <form>
             <h2 className={css(yearLabel)}>
-              <Trans i18nKey='select_financial_year'>Select financial year</Trans>
+              <Trans i18nKey='select_performance_cycle'>Select performance cycle</Trans>
             </h2>
 
             <Select
