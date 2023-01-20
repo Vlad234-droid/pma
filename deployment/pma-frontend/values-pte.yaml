@@ -117,6 +117,6 @@ environment:
   LOGGER_LEVEL: info
   LOGGER_PRETIFY: false
   LOGGER_THEME: Plain
-  SPLUNK_ENABLED: false
+  SPLUNK_ENABLED: true
   SPLUNK_SOURCETYPE: hec:colleague_pma
   SPLUNK_SOURCE: colleague_pma_pte
