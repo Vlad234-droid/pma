@@ -1,10 +1,8 @@
 import { SendLog, getSplunkLogger, sendLogToConsole, loggerMiddleware } from '@energon/splunk-logger';
 import { getUserData } from '@energon/onelogin';
-import { isCookiePresent } from '@energon/cookie-utils';
-import { AUTH_TOKEN_COOKIE_NAME } from '@pma-connectors/onelogin';
 import { ProcessConfig } from 'config';
 
-export const getLogger = ({
+export const createLogSender = ({
   splunkEnabled,
   splunkSource,
   splunkSourcetype,
@@ -29,12 +27,12 @@ export const getLogger = ({
 
 export const loggingMiddleware = (config: ProcessConfig) =>
   loggerMiddleware({
-    logSenders: [getLogger(config)],
+    logSenders: [createLogSender(config)],
     apiUrlPredicate: (url) => url.includes(`/api/`),
     userInfoResolver: userDataResolver,
   });
 
-const userDataResolver = (req, res) => {
+const userDataResolver = (_req, res) => {
   const colleagueUuid = res.colleagueUUID;
   const openIdData = getUserData<{ params?: { employeeNumber: string } }>(res);
 

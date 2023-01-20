@@ -6,7 +6,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
 // splunk logging
-import { uiLoggingMiddleware, loggerErrorMiddleware } from '@energon/splunk-logger';
+import { uiLoggingMiddleware, loggerErrorMiddleware, SendLog } from '@energon/splunk-logger';
 
 // utils
 import { getPackageDistFolder } from './utils/package';
@@ -30,9 +30,11 @@ import {
   camundaProxyMiddleware,
   loggingMiddleware,
   healthCheckMiddleware,
+  createLogSender,
 } from './middlewares';
 
 import { initialize as initializeLogger, getHttpLoggerMiddleware } from '@pma-common/logger';
+import { LogLevel } from '@energon/splunk-logger-core';
 
 getEnv().validate();
 const config = getConfig();
@@ -63,125 +65,169 @@ if (!API_SERVER_URL) {
   exit(-1);
 }
 
+const sendLog: SendLog = createLogSender(config);
+
 (async () => {
-  const app = express();
+  try {
+    const app = express();
 
-  const router = Router();
+    const router = Router();
 
-  router.use(bodyParser.json());
-  const buildPath = config.integrationBuildPath();
-  const integrationMode = config.integrationMode();
-  const mfModule = config.integrationMFModule();
+    router.use(bodyParser.json());
+    const buildPath = config.integrationBuildPath();
+    const integrationMode = config.integrationMode();
+    const mfModule = config.integrationMFModule();
 
-  const htmlFileName = 'index.html';
-  const clientDistFolder = getPackageDistFolder('@pma/client', buildPath);
-  const htmlFilePath = path.join(clientDistFolder, htmlFileName);
-  const mfModulePath = path.join(clientDistFolder, mfModule);
+    const htmlFileName = 'index.html';
+    const clientDistFolder = getPackageDistFolder('@pma/client', buildPath);
+    const htmlFilePath = path.join(clientDistFolder, htmlFileName);
+    const mfModulePath = path.join(clientDistFolder, mfModule);
 
-  const nodeBFFUrl = config.integrationNodeBFFUrl();
-  const mountPath = config.integrationMountPath();
-  const uiMountPath = config.integrationUIMountPath();
+    const nodeBFFUrl = config.integrationNodeBFFUrl();
+    const mountPath = config.integrationMountPath();
+    const uiMountPath = config.integrationUIMountPath();
 
-  router.use(
-    cors({
-      credentials: true,
-      origin: config.applicationOrigin(),
-    }),
-  );
+    router.use(
+      cors({
+        credentials: true,
+        origin: config.applicationOrigin(),
+      }),
+    );
 
-  // setup logger middlewares
-  router.use(getHttpLoggerMiddleware('http'));
-  router.use(loggingMiddleware(config));
+    // setup logger middlewares
+    router.use(getHttpLoggerMiddleware('http'));
+    router.use(loggingMiddleware(config));
 
-  if (config.useOneLogin() === false) {
-    logger.info(`WARNING! Authentication is turned off. Fake Login is used.`);
-    // fake login behavior
-    router.use(cookieParser(config.applicationCookieParserSecret()));
-    // TODO: specify default user with default role that api server recognize
-  } else {
+    if (config.useOneLogin() === false) {
+      logger.info(`WARNING! Authentication is turned off. Fake Login is used.`);
+      // fake login behavior
+      router.use(cookieParser(config.applicationCookieParserSecret()));
+      // TODO: specify default user with default role that api server recognize
+    } else {
+      switch (integrationMode) {
+        case 'integrity': {
+          router.use(authMiddleware(config));
+          break;
+        }
+        case 'standalone': {
+          const openIdMiddleware = await initializeOpenid(config);
+          router.use(openIdMiddleware);
+          break;
+        }
+      }
+    }
+
+    router.use(
+      await uiLoggingMiddleware({
+        sourceMapDirectory: clientDistFolder,
+        parseSourceMap: true,
+        logger: sendLog,
+      }),
+    );
+    router.use('/api/yc/v1', apiProxyMiddleware(config));
+
+    config.apiIdentityServerUrl() && router.use('/api/iam/v1', apiIdentityProxyMiddleware(config));
+    config.apiManagementServerUrl() && router.use('/api/actuator', apiManagementProxyMiddleware(config));
+    config.camundaServerUrl() && router.use('/camunda', camundaProxyMiddleware(config));
+    config.swaggerServerUrl() && router.use(swaggerProxyMiddleware(config));
+
+    router.use(healthCheckMiddleware(config));
+
+    const myInboxMiddleware = await myInboxConfig(config);
+    myInboxMiddleware && router.use(myInboxMiddleware);
+
+    router.use(express.static(clientDistFolder, { index: false }));
+    router.use(express.static('public'));
+
+    // static file serving section
     switch (integrationMode) {
       case 'integrity': {
-        router.use(authMiddleware(config));
+        router.use(
+          `/${mfModule}`,
+          mfModuleAssetHandler({
+            pathToFile: mfModulePath,
+            config: {
+              nodeBFFUrl,
+              mountPath: uiMountPath,
+            },
+          }),
+        );
+
+        app.use(mountPath, router);
         break;
       }
       case 'standalone': {
-        const openIdMiddleware = await initializeOpenid(config);
-        router.use(openIdMiddleware);
+        router.use(
+          standaloneIndexAssetHandler(config, {
+            pathToFile: htmlFilePath,
+            config: {
+              nodeBFFUrl,
+              mountPath: uiMountPath,
+            },
+          }),
+        );
+
+        app.use(uiMountPath, router);
         break;
       }
     }
-  }
 
-  router.use(
-    await uiLoggingMiddleware({
-      sourceMapDirectory: clientDistFolder,
-      parseSourceMap: true,
-    }),
-  );
-  router.use('/api/yc/v1', apiProxyMiddleware(config));
+    router.use(loggerErrorMiddleware);
+    app.use(
+      errorHandler({
+        appName: config.applicationName(),
+        logoutPath: config.integrationSSOLogoutPath(),
+        tryAgainPath: config.integrationCoreMountUrl(),
+      }),
+    );
 
-  config.apiIdentityServerUrl() && router.use('/api/iam/v1', apiIdentityProxyMiddleware(config));
-  config.apiManagementServerUrl() && router.use('/api/actuator', apiManagementProxyMiddleware(config));
-  config.camundaServerUrl() && router.use('/camunda', camundaProxyMiddleware(config));
-  config.swaggerServerUrl() && router.use(swaggerProxyMiddleware(config));
+    app.disable('x-powered-by');
 
-  router.use(healthCheckMiddleware(config));
+    const server = app.listen(NODE_PORT, () => {
+      logger.info(`Server is running at http://${os.hostname().toLowerCase()}:${NODE_PORT}`);
+    });
 
-  const myInboxMiddleware = await myInboxConfig(config);
-  myInboxMiddleware && router.use(myInboxMiddleware);
-
-  router.use(express.static(clientDistFolder, { index: false }));
-  router.use(express.static('public'));
-
-  // static file serving section
-  switch (integrationMode) {
-    case 'integrity': {
-      router.use(
-        `/${mfModule}`,
-        mfModuleAssetHandler({
-          pathToFile: mfModulePath,
-          config: {
-            nodeBFFUrl,
-            mountPath: uiMountPath,
+    // process.on('SIGHUP', () => server.close());
+    // process.on('SIGINT', () => server.close());
+    // process.on('SIGTERM', () => server.close());
+  } catch (error) {
+    if (sendLog) {
+      const {
+        splunkEnabled,
+        splunkSource,
+        splunkSourcetype,
+        buildEnvironment,
+        apiEnv,
+        integrationNodeBFFUrl,
+        integrationUIMountPath,
+        environment,
+        port,
+        applicationContextPath,
+        releaseName,
+      } = config;
+      sendLog(LogLevel.error, '[BOOTSTRAP]: Error during server initialization', {
+        type: 'bootstrap',
+        buildEnvironment: buildEnvironment(),
+        config: {
+          splunkConfig: {
+            splunkEnabled: splunkEnabled(),
+            splunkSource: splunkSource(),
+            splunkSourcetype: splunkSourcetype(),
           },
-        }),
-      );
-
-      app.use(mountPath, router);
-      break;
+          apiEnv: apiEnv(),
+          integrationNodeBFFUrl: integrationNodeBFFUrl(),
+          uiMountPath: integrationUIMountPath(),
+        },
+        environment: environment(),
+        appContext: applicationContextPath(),
+        port: port(),
+        releaseName: releaseName(),
+        error,
+      });
+    } else {
+      console.log(error);
     }
-    case 'standalone': {
-      router.use(
-        standaloneIndexAssetHandler(config, {
-          pathToFile: htmlFilePath,
-          config: {
-            nodeBFFUrl,
-            mountPath: uiMountPath,
-          },
-        }),
-      );
 
-      app.use(uiMountPath, router);
-      break;
-    }
+    process.exit(1);
   }
-
-  router.use(loggerErrorMiddleware);
-  app.use(
-    errorHandler({
-      appName: config.applicationName(),
-      logoutPath: config.integrationSSOLogoutPath(),
-      tryAgainPath: config.integrationCoreMountUrl(),
-    }),
-  );
-
-  app.disable('x-powered-by');
-
-  const server = app.listen(NODE_PORT, () => {
-    logger.info(`Server is running at http://${os.hostname().toLowerCase()}:${NODE_PORT}`);
-  });
-
-  // process.on('SIGHUP', () => server.close());
-  // process.on('SIGINT', () => server.close());
-  // process.on('SIGTERM', () => server.close());
 })();
