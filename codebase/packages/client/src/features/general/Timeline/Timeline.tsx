@@ -16,7 +16,7 @@ import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 import useDispatch from 'hooks/useDispatch';
 import { Option, Select } from 'components/Form';
-import { formatDateStringFromISO } from 'utils';
+import { formatDateStringFromISO, MONTH_FORMAT } from 'utils';
 import { Status } from 'config/enum';
 
 const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
@@ -33,7 +33,7 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const options: Option[] = useMemo(() => {
     return cycles.map(({ endTime, startTime, uuid }) => ({
       value: uuid,
-      label: `${formatDateStringFromISO(startTime, 'yyyy')} - ${formatDateStringFromISO(endTime, 'yyyy')}`,
+      label: `${formatDateStringFromISO(startTime, MONTH_FORMAT)} - ${formatDateStringFromISO(endTime, MONTH_FORMAT)}`,
     }));
   }, [cycles]);
 
