@@ -119,7 +119,9 @@ export const getPerformanceCyclesEpic: Epic = (actions$, _, { api }) =>
       from(
         api.getPerformanceCyclesByStatuses({
           colleagueUuid: colleague.colleagueUUID,
-          allowedStatuses: [/*'OPENED_STARTING',*/ 'STARTED', 'FINISHED', 'FINISHING', 'COMPLETED'],
+          params: {
+            'colleague-cycle-status_in': [/*'OPENED_STARTING',*/ 'STARTED', 'FINISHED', 'FINISHING', 'COMPLETED'],
+          },
         }),
       ).pipe(
         //@ts-ignore
