@@ -1,5 +1,6 @@
 import { min } from 'lodash';
 import { DateTime, DurationUnit } from 'luxon';
+
 export { DateTime };
 
 const PRECISE_UNITS: Record<string, DurationUnit> = {
@@ -7,6 +8,7 @@ const PRECISE_UNITS: Record<string, DurationUnit> = {
   hours: 'minutes',
   minutes: 'seconds',
   seconds: 'milliseconds',
+  years: 'years',
 };
 
 export const EXPIRATION_DATE = 'expiration_date';
@@ -18,6 +20,7 @@ const diffBy = (unit: DurationUnit) => (endDate: DateTime, startDate?: DateTime)
 };
 
 export const diffDays = diffBy('days');
+export const diffYears = diffBy('years');
 export const diffHours = diffBy('hours');
 export const diffSeconds = diffBy('seconds');
 export const DATE_STRING_FORMAT = 'dd LLL yyyy';
@@ -93,12 +96,18 @@ export const getToday = () => {
   now.setMilliseconds(0);
   return now;
 };
-//TODO: data check with cycle endTime
+// TODO: data check with cycle endTime
 export const getFinancialYear = (): string =>
-  (DateTime.local().get('month') >= 4
+  (DateTime.local().get('month') >= 2
     ? DateTime.local().year
     : DateTime.local().minus({ year: 1 }).toFormat('yyyy')
   ).toString();
+
+export const getDepthByYears = (startYear = 2021) => {
+  const start = DateTime.local(startYear);
+  const now = DateTime.local(Number(getFinancialYear()));
+  return diffYears(now, start) + 1;
+};
 
 export const isDateFromISOBeforeNow = (date: string) => DateTime.now() <= DateTime.fromISO(date);
 

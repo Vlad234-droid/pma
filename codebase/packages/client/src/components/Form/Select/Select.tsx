@@ -169,6 +169,8 @@ const listStyles: Rule = ({ theme }) => ({
   background: theme.colors.white,
   width: '100%',
   zIndex: 999,
+  maxHeight: '240px',
+  overflow: 'auto',
 });
 
 const optionStyles: Rule = ({ theme }) => ({

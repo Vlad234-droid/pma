@@ -18,7 +18,7 @@ import FilterForm from 'components/FilterForm';
 import ViewItems from 'components/ViewItems';
 import { Option, Select } from 'components/Form';
 
-import { getFinancialYear, getYearsFromCurrentYear } from 'utils/date';
+import { getDepthByYears, getFinancialYear, getYearsFromCurrentYear } from 'utils/date';
 import { useTenant } from 'features/general/Permission';
 import useDispatch from 'hooks/useDispatch';
 
@@ -95,7 +95,7 @@ const ReportPage: FC = () => {
     setFilterOpen(false);
   };
 
-  const fieldOptions: Option[] = getYearsFromCurrentYear(getFinancialYear()).map(({ value }) => ({
+  const fieldOptions: Option[] = getYearsFromCurrentYear(getFinancialYear(), getDepthByYears()).map(({ value }) => ({
     value,
     label: `${value} - ${Number(value) + 1}`,
   }));

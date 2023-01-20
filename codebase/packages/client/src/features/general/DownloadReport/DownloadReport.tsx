@@ -12,7 +12,7 @@ import { Checkbox, Item, Option, Select } from 'components/Form';
 import { Trans, useTranslation } from 'components/Translation';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 
-import { formatDateStringFromISO, getFinancialYear, getYearsFromCurrentYear } from 'utils/date';
+import { formatDateStringFromISO, getDepthByYears, getFinancialYear, getYearsFromCurrentYear } from 'utils/date';
 import success from 'images/success.jpg';
 import { checkboxes, getTopics, reportByYearSchema } from './config';
 
@@ -71,7 +71,7 @@ const DownloadReport: FC = () => {
 
   const handleClose = () => navigate(buildPath(Page.REPORT));
 
-  const fieldOptions: Option[] = getYearsFromCurrentYear(getFinancialYear()).map(({ value }) => ({
+  const fieldOptions: Option[] = getYearsFromCurrentYear(getFinancialYear(), getDepthByYears()).map(({ value }) => ({
     value,
     label: `${value} - ${Number(value) + 1}`,
   }));
