@@ -1,6 +1,11 @@
 import React, { FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { getTimelineByCodeSelector, isReviewsInStatus, timelineTypesAvailabilitySelector } from '@pma/store';
+import {
+  colleagueCurrentCycleSelector,
+  getTimelineByCodeSelector,
+  isReviewsInStatus,
+  timelineTypesAvailabilitySelector,
+} from '@pma/store';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
@@ -24,6 +29,7 @@ const UserObjectives: FC = () => {
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(uuid!));
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
   const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, uuid!));
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(uuid!));
 
   const status = timelineObjective?.summaryStatus;
   const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
@@ -31,7 +37,7 @@ const UserObjectives: FC = () => {
   const {
     objectives,
     meta: { loading, loaded },
-  } = useObjectivesData(uuid as string);
+  } = useObjectivesData(uuid as string, currentCycle);
   const download = useDownload(objectives);
 
   if (loading) return <Spinner fullHeight />;

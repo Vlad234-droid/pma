@@ -4,4 +4,5 @@ export * from './RoundIcon';
 export * from './graphics';
 export { SuccessMark } from './graphics/success-mark';
 export { ExclamationMark } from './graphics/exclamation-mark';
+export { DefaultMark } from './graphics/default-mark';
 export { getIcon } from './utils';

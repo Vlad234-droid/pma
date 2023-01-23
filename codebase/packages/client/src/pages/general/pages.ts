@@ -42,6 +42,7 @@ import ReportStatistics from './ReportStatistics';
 import PreviousObjectiveRatings from './PreviousObjectiveRatings';
 import PreviousReviewForms from './PreviousReviewForms';
 import Review from './Review';
+import UserReview from './UserReview';
 import UpdateObjectives, { CreateObjective } from './CreateUpdateObjectives';
 import { NotFound } from './NotFound';
 import PriorityNote from './Notes/PriorityNote';
@@ -342,13 +343,13 @@ const pages: Record<Page, PageComponent> = {
     title: (_, t) => t('title_colleague_overview'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
-    perform: [role.COLLEAGUE],
+    perform: [role.LINE_MANAGER],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.USER_TL_REVIEW]: {
-    Element: Review,
+    Element: UserReview,
     withHeader: true,
-    perform: [role.COLLEAGUE],
+    perform: [role.LINE_MANAGER],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.PROFILE]: {

@@ -2,7 +2,7 @@ import React, { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Rule, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { reviewOverallRatingByTypeSelector, ReviewsActions } from '@pma/store';
 
 import { ReviewType, Status } from 'config/enum';
@@ -24,6 +24,7 @@ export type Props = {
   components: any;
   defaultValues: any;
   reviewStatus: Status;
+  customButtons?: () => JSX.Element;
 };
 
 const overallRatingListeners: string[] = ['what_rating', 'how_rating'];
@@ -37,9 +38,11 @@ const ReviewForm: FC<Props> = ({
   onSubmit,
   onSaveDraft,
   reviewStatus,
+  customButtons,
 }) => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
   const { t } = useTranslation();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const dispatch = useDispatch();
 
   const rating = useSelector(reviewOverallRatingByTypeSelector(reviewType));
@@ -97,18 +100,54 @@ const ReviewForm: FC<Props> = ({
           onlyView={readonly}
         />
       </div>
-      <ReviewButtons
-        isValid={isValid}
-        readonly={readonly}
-        onClose={onClose}
-        onSaveDraft={() => onSaveDraft(getValues())}
-        onSave={handleSubmit(onSubmit)}
-        reviewStatus={reviewStatus}
-      />
+      <div className={css(containerStyle)}>
+        <div className={css(wrapperStyle)}>
+          <div className={css(buttonWrapperStyle({ mobileScreen }))}>
+            {customButtons ? (
+              customButtons()
+            ) : (
+              <ReviewButtons
+                isValid={isValid}
+                readonly={readonly}
+                onClose={onClose}
+                onSaveDraft={() => onSaveDraft(getValues())}
+                onSave={handleSubmit(onSubmit)}
+                reviewStatus={reviewStatus}
+              />
+            )}
+          </div>
+        </div>
+      </div>
     </form>
   );
 };
 
 const formFieldsWrapperStyle: Rule = ({ theme }) => ({ padding: `0 0 ${theme.spacing.s5}` });
+
+const containerStyle: Rule = {
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  width: '100%',
+};
+
+const wrapperStyle: Rule = ({ theme }) => ({
+  position: 'relative',
+  bottom: theme.spacing.s0,
+  left: theme.spacing.s0,
+  right: theme.spacing.s0,
+  // @ts-ignore
+  borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
+  background: theme.colors.white,
+  borderRadius: '0px 0 32px 32px',
+});
+
+const buttonWrapperStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s9,
+    display: 'flex',
+    justifyContent: 'center',
+  });
 
 export default ReviewForm;

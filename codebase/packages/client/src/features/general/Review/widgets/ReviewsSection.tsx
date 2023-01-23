@@ -15,11 +15,11 @@ import { ReviewType } from 'config/enum';
 
 type Props = {
   colleagueUuid: string;
+  isUserView: boolean;
 };
 
-export const ReviewsSection: FC<Props> = ({ colleagueUuid }) => {
+export const ReviewsSection: FC<Props> = ({ colleagueUuid, isUserView }) => {
   const { css } = useStyle();
-  const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid, currentCycle)) || {};
   const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, currentCycle));
@@ -38,11 +38,11 @@ export const ReviewsSection: FC<Props> = ({ colleagueUuid }) => {
       }}
     >
       {isAnniversary ? (
-        <AnnualReviewWidget colleagueUuid={colleagueUuid} />
+        <AnnualReviewWidget colleagueUuid={colleagueUuid} isUserView={isUserView} />
       ) : (
         <>
-          {hasMYR && <MidYearReviewWidget colleagueUuid={colleagueUuid} />}
-          {hasEYR && <YearEndReviewWidget colleagueUuid={colleagueUuid} />}
+          {hasMYR && <MidYearReviewWidget colleagueUuid={colleagueUuid} isUserView={isUserView} />}
+          {hasEYR && <YearEndReviewWidget colleagueUuid={colleagueUuid} isUserView={isUserView} />}
         </>
       )}
     </Section>

@@ -27,15 +27,15 @@ import {
 
 type Props = {
   colleagueUuid: string;
+  isUserView: boolean;
 };
 
-const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
+const AnnualReview: FC<Props> = ({ colleagueUuid, isUserView }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const tenant = useTenant();
   const navigate = useNavigate();
   const { pathname, state } = useLocation();
-  const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
   const tlPoint = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid, currentCycle));
   const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, currentCycle));

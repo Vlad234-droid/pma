@@ -49,10 +49,8 @@ const MyObjectives: FC = () => {
   }, [colleagueUuid]);
 
   useEffect(() => {
-    if (colleagueUuid) {
-      dispatch(SchemaActions.getSchema({ colleagueUuid, cycleUuid: currentCycle }));
-    }
     if (colleagueUuid && currentCycle) {
+      dispatch(SchemaActions.getSchema({ colleagueUuid, cycleUuid: currentCycle }));
       dispatch(TimelineActions.getTimeline({ colleagueUuid, cycleUuid: currentCycle }));
     }
   }, [colleagueUuid, currentCycle]);

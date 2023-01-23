@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  ColleagueActions,
   filterReviewsByTypeSelector,
   getReviewSchema,
   PreviousReviewFilesActions,
@@ -9,7 +8,6 @@ import {
   reviewsMetaSelector,
   SchemaActions,
   schemaMetaSelector,
-  TimelineActions,
 } from '@pma/store';
 
 //TODO: move utils to current feature

@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { colleagueCurrentCycleSelector, getTimelineByCodeSelector, uuidCompareSelector } from '@pma/store';
+import { colleagueCurrentCycleSelector, getTimelineByCodeSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
@@ -16,15 +16,15 @@ import { Page } from 'pages';
 
 type Props = {
   colleagueUuid: string;
+  isUserView: boolean;
 };
 
-const YearEndReview: FC<Props> = ({ colleagueUuid }) => {
+const YearEndReview: FC<Props> = ({ colleagueUuid, isUserView }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const tenant = useTenant();
   const navigate = useNavigate();
   const { pathname, state } = useLocation();
-  const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
 
   const tlPoint = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid, currentCycle));

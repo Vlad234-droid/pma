@@ -2,11 +2,13 @@ import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import {
+  ColleagueActions,
   colleagueCurrentCycleSelector,
-  colleagueCycleSelector,
   Component,
   currentUserSelector,
   ExpressionValueType,
+  getColleagueMetaSelector,
+  getColleagueSelector,
   getReviewByTypeSelector,
   getReviewSchema,
   getTimelineByReviewTypeSelector,
@@ -14,15 +16,19 @@ import {
   reviewsMetaSelector,
   SchemaActions,
   schemaMetaSelector,
+  Statuses,
 } from '@pma/store';
+import { useParams } from 'react-router';
 
 import { ReviewType, Status } from 'config/enum';
 import { TriggerModal } from 'features/general/Modal/components/TriggerModal';
 import { useTranslation } from 'components/Translation';
+import { ProfileInfo } from 'components/ProfileInfo';
 import SuccessModal from 'components/SuccessModal';
-import { Icon as IconComponent } from 'components/Icon';
+import { Icon as IconComponent, SuccessMark } from 'components/Icon';
 import Spinner from 'components/Spinner';
 
+import { LineManagerButtons } from './components/LineManagerButtons';
 import { ReviewHelpModal } from './components/ReviewHelp';
 import { InfoBlock } from 'components/InfoBlock';
 import { USER } from 'config/constants';
@@ -30,42 +36,26 @@ import { formTagComponents } from 'utils/schema';
 import { Review } from 'config/types';
 import ReviewForm from './components/ReviewForm';
 
-type Translation = [string, string];
-
-const TRANSLATION: Record<ReviewType.MYR | ReviewType.EYR, { title: Translation; helperText: Translation }> = {
-  [ReviewType.MYR]: {
-    title: ['mid_year_review_title', 'How is your year going so far?'],
-    helperText: [
-      'mid_year_review_help_text',
-      'Use this to capture the outcome of the conversation you’ve had with your line manager. Remember to focus as much on your how as your what. Use the look forward section to capture your development for the year ahead.',
-    ],
-  },
-  [ReviewType.EYR]: {
-    title: ['end_year_review_title', 'What have you contributed this year and how have you gone about it?'],
-    helperText: [
-      'end_year_review_help_text',
-      'Use this to capture the outcome of the conversation you’ve had with your line manager. Remember to focus as much on your how as your what. Use the look forward section to capture your priorities and development for the year ahead.',
-    ],
-  },
-};
-
 export type Props = {
   reviewType: ReviewType.MYR | ReviewType.EYR;
   onClose: () => void;
 };
 
-const MyReview: FC<Props> = ({ reviewType, onClose }) => {
+const UserReview: FC<Props> = ({ reviewType, onClose }) => {
   const { css, theme, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
+  const { uuid } = useParams<{ uuid: string }>();
+  const colleagueUuid = uuid!;
+
+  const colleague = useSelector(getColleagueSelector);
+  const { loaded: colleagueLoaded } = useSelector(getColleagueMetaSelector);
 
   const [successModal, setSuccessModal] = useState(false);
   const { info } = useSelector(currentUserSelector);
-  const colleagueUuid = info.colleagueUUID;
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
   const dispatch = useDispatch();
   const review: Review = useSelector(getReviewByTypeSelector(reviewType)) || {};
-  const colleagueCycle = useSelector(colleagueCycleSelector);
   const formValues = review?.properties || {};
 
   const { loading: reviewLoading, loaded: reviewLoaded, saving, saved } = useSelector(reviewsMetaSelector);
@@ -75,9 +65,10 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
   const timelineReview =
     useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current, currentCycle)) || ({} as any);
 
-  const readonly =
-    [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(review.status) ||
-    colleagueCycle?.status === Status.COMPLETED;
+  const yerModifyCondition =
+    reviewType === ReviewType.EYR && timelineReview?.status === Status.COMPLETED && review.status === Status.APPROVED;
+
+  const readonly = !yerModifyCondition;
 
   const { components = [] as Component[] } = schema;
 
@@ -109,33 +100,45 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
     }
   }, [reviewLoaded]);
 
-  const handleSaveDraft = (data) => {
-    dispatch(
-      ReviewsActions.updateReviews({
-        pathParams: { colleagueUuid: info.colleagueUUID, code: reviewType, cycleUuid: currentCycle },
-        data: [
-          {
-            status: Status.DRAFT,
-            properties: { ...data },
-          },
-        ],
-      }),
-    );
+  useEffect(() => {
+    if (!colleagueLoaded && colleagueUuid) {
+      dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid }));
+    }
+  }, [colleagueUuid, colleagueLoaded]);
+
+  const handleSaveDraft = () => {
+    //todo not used for manager view
   };
 
-  const handleSubmitData = async (data) => {
-    dispatch(
-      ReviewsActions.updateReviews({
-        pathParams: { colleagueUuid: info.colleagueUUID, code: reviewType, cycleUuid: currentCycle },
-        data: [
-          {
-            status: Status.WAITING_FOR_APPROVAL,
-            properties: { ...data },
+  const handleSubmitData = async () => {
+    //todo not used for manager view
+  };
+
+  const handleDeclineApprovedReview = () => {
+    if (colleague?.colleagueUUID) {
+      dispatch(
+        ReviewsActions.updateReviewStatus({
+          updateParams: {},
+          pathParams: {
+            colleagueUuid: colleague?.colleagueUUID,
+            approverUuid: info.colleagueUUID,
+            cycleUuid: currentCycle,
+            code: timelineReview.code,
+            status: Statuses.DECLINED,
           },
-        ],
-      }),
-    );
-    setSuccessModal(true);
+          data: {
+            reason: '',
+            status: Statuses.DECLINED,
+            code: timelineReview.code,
+            cycleUuid: currentCycle,
+            colleagueUuid: colleague?.colleagueUUID,
+            // @ts-ignore
+            reviews: [review],
+          },
+        }),
+      );
+      setSuccessModal(true);
+    }
   };
 
   if (reviewLoading || schemaLoading || saving) {
@@ -148,11 +151,11 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
     return (
       <SuccessModal
         title='Review sent'
+        mark={<SuccessMark />}
         onClose={onClose}
-        description={t(
-          `${timelineReview?.code?.toLowerCase()}_review_sent_to_manager`,
-          'Your review has been sent to your line manager.',
-        )}
+        description={`The Year-end review form was sent back to the ${
+          colleague?.profile?.fullName || 'undefined'
+        } to resubmit their rating.`}
       />
     );
   }
@@ -164,8 +167,18 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
           <IconComponent graphic='arrowLeft' invertColors={true} />
         </span>
         <div>
-          <div className={css(formTitleStyle)}>{t(...TRANSLATION[reviewType].title, { ns: 'general' })}</div>
-          <div className={css(helperTextStyle)}>{t(...TRANSLATION[reviewType].helperText, { ns: 'general' })}</div>
+          <div className={css({ paddingBottom: '24px' })}>
+            <div className={css(formTitleStyle, { paddingBottom: '24px' })}>
+              Review your collegue’s End-yeat performance
+            </div>
+            <ProfileInfo
+              firstName={colleague?.profile?.fullName}
+              lastName={''}
+              job={colleague?.profile?.job}
+              department={colleague?.profile?.department}
+              toneOfVoice={''}
+            />
+          </div>
           <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
             <TriggerModal
               triggerComponent={
@@ -176,14 +189,17 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
               <ReviewHelpModal />
             </TriggerModal>
             <ReviewForm
-              components={readonly ? formTagComponents(filteredComponent, theme) : filteredComponent}
-              readonly={readonly}
+              components={formTagComponents(filteredComponent, theme)}
+              readonly={true}
               onClose={onClose}
               onSubmit={handleSubmitData}
               onSaveDraft={handleSaveDraft}
               reviewType={reviewType}
               defaultValues={formValues}
               reviewStatus={review?.status}
+              customButtons={() => (
+                <LineManagerButtons onClose={onClose} onSave={handleDeclineApprovedReview} readonly={readonly} />
+              )}
             />
           </div>
         </div>
@@ -217,17 +233,7 @@ const formTitleStyle: Rule = ({ theme }) => ({
   fontSize: theme.font.fixed.f24.fontSize,
   lineHeight: theme.font.fluid.f24.lineHeight,
   letterSpacing: '0px',
-  color: theme.colors.tescoBlue,
   fontWeight: theme.font.weight.bold,
 });
 
-const helperTextStyle: Rule = ({ theme }) => ({
-  fontSize: theme.font.fixed.f18.fontSize,
-  lineHeight: theme.font.fluid.f18.lineHeight,
-  letterSpacing: '0px',
-  color: theme.colors.tescoBlue,
-  paddingTop: theme.spacing.s2,
-  paddingBottom: theme.spacing.s5,
-});
-
-export default MyReview;
+export default UserReview;

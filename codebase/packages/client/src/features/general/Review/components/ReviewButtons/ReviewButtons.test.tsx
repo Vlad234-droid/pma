@@ -4,7 +4,7 @@ import { renderWithTheme as render } from 'utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent } from '@testing-library/react';
 import { CONFIRM_MODAL } from 'components/ConfirmModal/ConfirmModal';
-import ReviewButtons, { TEST_WRAPPER_ID } from './ReviewButtons';
+import ReviewButtons from './ReviewButtons';
 
 describe('ReviewsButtons', () => {
   const onClose = jest.fn();
@@ -19,8 +19,8 @@ describe('ReviewsButtons', () => {
     onSave,
   };
   it('render ReviewsButtons wrapper', async () => {
-    const { getByTestId } = render(<ReviewButtons {...props} />);
-    const wrapper = getByTestId(TEST_WRAPPER_ID);
+    const { getByRole } = render(<ReviewButtons {...props} />);
+    const wrapper = getByRole('button');
 
     expect(wrapper).toBeInTheDocument();
   });

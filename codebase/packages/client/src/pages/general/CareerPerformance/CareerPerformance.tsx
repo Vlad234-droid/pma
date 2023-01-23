@@ -38,7 +38,7 @@ const CareerPerformancePage: FC = () => {
           <FeedbackView />
           <MyNotesView />
         </div>
-        <ReviewsSection colleagueUuid={colleagueUuid} />
+        <ReviewsSection colleagueUuid={colleagueUuid} isUserView={true} />
       </CareerPerformance>
     </div>
   );

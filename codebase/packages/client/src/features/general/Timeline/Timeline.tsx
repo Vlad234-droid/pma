@@ -8,7 +8,6 @@ import {
   TimelineActions,
   timelinesMetaSelector,
   UserActions,
-  uuidCompareSelector,
 } from '@pma/store';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper as Tile } from 'components/Tile/TileWrapper';
@@ -25,7 +24,6 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const dispatch = useDispatch();
-  const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
   const { loading } = useSelector(timelinesMetaSelector);
   const cycles = useSelector(colleaguePerformanceCyclesSelector);
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
@@ -70,11 +68,9 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
           <div className={css(wrapperStyle)}>
             <div className={css(headerStyle)}>
               <h2 className={css(titleStyle)}>{t('performance_timeline_title', 'Your Contribution timeline')}</h2>
-              {isUserView && (
-                <div className={css(selectStyle)}>
-                  <Select options={options} onChange={handleChange} name={'period'} placeholder={''} value={value} />
-                </div>
-              )}
+              <div className={css(selectStyle)}>
+                <Select options={options} onChange={handleChange} name={'period'} placeholder={''} value={value} />
+              </div>
             </div>
             {loading ? (
               <Spinner />

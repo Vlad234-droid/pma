@@ -75,7 +75,7 @@ const UserObjectivesPage = () => {
       </div>
       <div className={css(mainBlockStyles({ mobileScreen }))}>
         <UserObjectives />
-        <ReviewsSection colleagueUuid={uuid as string} />
+        <ReviewsSection colleagueUuid={uuid as string} isUserView={false} />
         <CompletedReviewsSection colleagueUuid={uuid} />
         <ReviewFilesSection colleagueUuid={uuid} />
         <div className={css(widgetsContainer)}>

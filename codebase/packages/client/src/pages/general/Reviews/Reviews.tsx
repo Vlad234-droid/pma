@@ -86,7 +86,7 @@ const ObjectivesPage: FC = () => {
         <div className={css(bodyWrapperStyles)}>
           <Timeline colleagueUuid={colleagueUuid} />
           <Objectives />
-          <ReviewsSection colleagueUuid={colleagueUuid} />
+          <ReviewsSection colleagueUuid={colleagueUuid} isUserView={true} />
           <CompletedReviewsSection />
           <ReviewFilesSection colleagueUuid={colleagueUuid} />
           <Shortcuts />
