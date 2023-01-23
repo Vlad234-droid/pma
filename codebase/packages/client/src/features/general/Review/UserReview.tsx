@@ -65,10 +65,9 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
   const timelineReview =
     useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current, currentCycle)) || ({} as any);
 
-  const yerModifyCondition =
-    reviewType === ReviewType.EYR && timelineReview?.status === Status.COMPLETED && review.status === Status.APPROVED;
+  const modifyCondition = timelineReview?.status === Status.COMPLETED && review.status === Status.APPROVED;
 
-  const readonly = !yerModifyCondition;
+  const readonly = !modifyCondition;
 
   const { components = [] as Component[] } = schema;
 
