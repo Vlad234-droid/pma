@@ -36,6 +36,7 @@ export const resolveTimezone = () => Intl.DateTimeFormat().resolvedOptions().tim
 export const minDate = (arr: Array<string>) => min(arr);
 
 export const filterByDate = (a: string, b: string) => (DateTime.fromISO(a) > DateTime.fromISO(b) ? 1 : -1);
+export const filterByDateDESC = (a: string, b: string) => (DateTime.fromISO(a) > DateTime.fromISO(b) ? -1 : 1);
 
 export const formatDateStringFromISO = (date: string, format: DateFormat = DATE_STRING_FORMAT) =>
   DateTime.fromISO(date).setLocale('en').toFormat(format);

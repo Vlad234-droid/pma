@@ -149,7 +149,9 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                         for (const status of statusStatistics) {
                           reviewGroupByStatus.push([
                             status,
-                            colleagueReviews.filter((review) => status === review.status),
+                            colleagueReviews
+                              .filter((review) => status === review.status)
+                              .sort(({ number }, { number: nextNumber }) => (number > nextNumber ? 1 : -1)),
                           ]);
                         }
 
@@ -183,7 +185,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                                         key={review.uuid}
                                         colleagueUuid={colleague.uuid}
                                         review={reviewData}
-                                        timeline={colleagueTimeline}
+                                        timelinePoint={colleagueTimeline}
                                         schema={reviewSchemaMap?.[colleagueTimeline?.cycleUuid]?.[code] || []}
                                         validateReview={handleValidateReview}
                                         onUpdate={handleChangeReview}

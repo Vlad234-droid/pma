@@ -16,7 +16,7 @@ import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 import useDispatch from 'hooks/useDispatch';
 import { Option, Select } from 'components/Form';
-import { formatDateStringFromISO, MONTH_FORMAT } from 'utils';
+import { filterByDate, filterByDateDESC, formatDateStringFromISO, MONTH_FORMAT } from 'utils';
 import { Status } from 'config/enum';
 
 const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
@@ -31,10 +31,15 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
     useSelector(getTimelineSelector(colleagueUuid, currentCycle)) || {};
 
   const options: Option[] = useMemo(() => {
-    return cycles.map(({ endTime, startTime, uuid }) => ({
-      value: uuid,
-      label: `${formatDateStringFromISO(startTime, MONTH_FORMAT)} - ${formatDateStringFromISO(endTime, MONTH_FORMAT)}`,
-    }));
+    return cycles
+      .sort(({ endTime }, { endTime: nextEndTime }) => filterByDateDESC(endTime, nextEndTime))
+      .map(({ endTime, startTime, uuid }) => ({
+        value: uuid,
+        label: `${formatDateStringFromISO(startTime, MONTH_FORMAT)} - ${formatDateStringFromISO(
+          endTime,
+          MONTH_FORMAT,
+        )}`,
+      }));
   }, [cycles]);
 
   useEffect(() => {
@@ -45,8 +50,12 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
     if (currentCycle !== 'CURRENT') {
       setValue(currentCycle);
     } else {
-      const startedCycles = cycles.find(({ status }) => status === Status.STARTED);
-      setValue(options.find(({ value }) => value === startedCycles.uuid)?.value as string);
+      const startedCycle =
+        cycles
+          .filter(({ status }) => status === Status.STARTED)
+          .sort(({ endTime }, { endTime: nextEndTime }) => filterByDate(endTime, nextEndTime))[0] || {};
+
+      setValue(options.find(({ value }) => value === startedCycle.uuid)?.value as string);
     }
   }, [options]);
 
