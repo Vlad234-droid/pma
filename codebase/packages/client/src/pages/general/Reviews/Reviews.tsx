@@ -87,7 +87,7 @@ const ObjectivesPage: FC = () => {
           <Timeline colleagueUuid={colleagueUuid} />
           <Objectives />
           <ReviewsSection colleagueUuid={colleagueUuid} isUserView={true} />
-          <CompletedReviewsSection />
+          {tenant === Tenant.BANK && <CompletedReviewsSection />}
           <ReviewFilesSection colleagueUuid={colleagueUuid} />
           <Shortcuts />
         </div>
