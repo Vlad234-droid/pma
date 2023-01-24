@@ -1,14 +1,14 @@
 // @ts-ignore
-import { Epic, isActionOf, RootState } from 'typesafe-actions';
+import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
-import { catchError, filter, map, mergeMap, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap } from 'rxjs/operators';
 
 import { getCompletedReviews } from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 import {
   colleagueCyclesSelector,
-  colleaguePerformanceCyclesSelector,
+  userPerformanceCyclesSelector,
   colleagueUUIDSelector,
   parseSchema,
 } from '../../selectors';
@@ -22,8 +22,8 @@ export const getCompletedReviewsEpic: Epic = (action$, state, { api }) =>
     mergeMap((data: any) => {
       const colleagueUuid = data.payload.colleagueUuid || colleagueUUIDSelector(state.value);
       const cycles = data.payload.colleagueUuid
-        ? colleagueCyclesSelector(state.value)
-        : colleaguePerformanceCyclesSelector(state.value) || [];
+        ? colleagueCyclesSelector(data.payload.colleagueUuid)(state.value)
+        : userPerformanceCyclesSelector(state.value) || [];
       const cyclesUUID = cycles.map(({ uuid }) => uuid);
 
       return from(

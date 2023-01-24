@@ -7,7 +7,7 @@ import useDispatch from './useDispatch';
 function useColleagueTenant(uuid: string): { tenant: Tenant; loading: boolean; loaded: boolean } {
   const dispatch = useDispatch();
   const { loaded, loading } = useSelector(getColleagueMetaSelector);
-  const colleague = useSelector(getColleagueSelector);
+  const colleague = useSelector(getColleagueSelector(uuid));
 
   useEffect(() => {
     dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid: uuid }));

@@ -5,27 +5,34 @@ import { RootState } from 'typesafe-actions';
 //@ts-ignore
 export const colleagueSelector = (state: RootState) => state.colleague;
 
-export const colleagueCyclesSelector = createSelector(
-  colleagueSelector,
-  (colleague: any) => colleague?.colleague?.cycles || [],
-);
+export const colleagueCyclesSelector = (uuid: string) =>
+  createSelector(colleagueSelector, (colleague: any) => colleague?.data[uuid]?.cycles || []);
 
 export const getColleagueMetaSelector = createSelector(colleagueSelector, (colleague: any) => colleague?.meta);
 
-export const getColleagueSelector = createSelector(colleagueSelector, ({ colleague: { colleague, tenant } }: any) => {
-  const workRelationships = colleague?.workRelationships?.[0];
+export const getColleagueSelector = (uuid: string) =>
+  createSelector(colleagueSelector, ({ data }: any) => {
+    const { colleague, tenant } = data[uuid] || {};
+    const workRelationships = colleague?.workRelationships?.[0];
 
-  return {
-    ...colleague,
-    tenant,
-    profile: {
-      fullName: getFullName(colleague?.profile),
-      managerName: getManagerFullName(workRelationships),
-      department: getDepartmentName(workRelationships),
-      job: workRelationships?.job?.name,
-    },
-  };
-});
+    return {
+      ...colleague,
+      tenant,
+      profile: {
+        fullName: getFullName(colleague?.profile),
+        managerName: getManagerFullName(workRelationships),
+        department: getDepartmentName(workRelationships),
+        job: workRelationships?.job?.name,
+      },
+    };
+  });
+
+export const getColleagueCycleSelector = (uuid: string) =>
+  createSelector(colleagueSelector, ({ data }: any) => {
+    const { cycles = [] } = data[uuid] || {};
+
+    return cycles;
+  });
 
 const getDepartmentName = (workRelationship) => workRelationship?.department?.name;
 

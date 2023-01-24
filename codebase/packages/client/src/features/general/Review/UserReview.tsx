@@ -48,7 +48,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
   const { uuid } = useParams<{ uuid: string }>();
   const colleagueUuid = uuid!;
 
-  const colleague = useSelector(getColleagueSelector);
+  const colleague = useSelector(getColleagueSelector(colleagueUuid));
   const { loaded: colleagueLoaded } = useSelector(getColleagueMetaSelector);
 
   const [successModal, setSuccessModal] = useState<Statuses.DECLINED | Statuses.APPROVED | null>(null);

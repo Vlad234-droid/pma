@@ -3,7 +3,7 @@ import { clearColleagueData, getColleagueByUuid } from './actions';
 
 export const initialState = {
   meta: { loading: false, loaded: false, error: null },
-  colleague: {},
+  data: {},
 };
 
 const request = (state) => ({ ...state, meta: { ...state.meta, loading: true, error: null } });
@@ -11,14 +11,16 @@ const request = (state) => ({ ...state, meta: { ...state.meta, loading: true, er
 const success = (state, { payload }) => {
   return {
     ...state,
-    colleague: payload,
+    data: {
+      ...state.data,
+      ...payload,
+    },
     meta: { ...state.meta, loading: false, loaded: true },
   };
 };
 
 const failure = (state, { payload }) => ({
   ...state,
-  colleague: {},
   meta: { ...state.meta, loading: false, loaded: true, error: payload },
 });
 

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { FormType, isAnniversaryTimelineType } from '@pma/store';
+import { FormType, getColleagueCycleSelector, isAnniversaryTimelineType } from '@pma/store';
 
 import { createYupSchema } from 'utils/yup';
 import { getYearFromISO, formatDateStringFromISO, MONTH_FORMAT } from 'utils';
@@ -34,6 +34,8 @@ const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timelinePoint, sche
   const { css, theme } = useStyle();
   const { t } = useTranslation();
   const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, timelinePoint?.cycleUuid));
+  const cycles = useSelector(getColleagueCycleSelector(colleagueUuid));
+  const cycle = cycles.find(({ uuid }) => uuid === timelinePoint?.cycleUuid) || {};
 
   const { components = [] } = schema;
   const styledComponents = formTagComponents(components, theme);
@@ -76,8 +78,8 @@ const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timelinePoint, sche
       )}`
     : `${t(`review_type_description_${timelinePoint.code?.toLowerCase()}`, timelinePoint.code, {
         num: review.number,
-      })}, ${formatDateStringFromISO(timelinePoint?.startTime, MONTH_FORMAT)}-${formatDateStringFromISO(
-        timelinePoint?.endTime,
+      })}, ${formatDateStringFromISO(cycle?.startTime, MONTH_FORMAT)}-${formatDateStringFromISO(
+        cycle?.endTime,
         MONTH_FORMAT,
       )}`;
 

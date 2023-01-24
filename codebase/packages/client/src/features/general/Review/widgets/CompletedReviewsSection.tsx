@@ -9,10 +9,9 @@ import { CompletedReviewsModal } from 'features/general/CompletedReviews';
 import useDispatch from 'hooks/useDispatch';
 import {
   colleagueCyclesSelector,
-  colleaguePerformanceCyclesSelector,
+  userPerformanceCyclesSelector,
   CompletedReviewsAction,
   completedReviewsSelector,
-  ReviewsActions,
 } from '@pma/store';
 import { useSelector } from 'react-redux';
 
@@ -25,10 +24,10 @@ export const CompletedReviewsSection: FC<Props> = ({ colleagueUuid }) => {
 
   const [isCompletedReviewsModalOpen, setCompletedReviewsModalOpen] = useState(false);
 
-  const isCollegueView = !!colleagueUuid;
+  const isColleagueView = !!colleagueUuid;
 
   const dispatch = useDispatch();
-  const cycles = useSelector(isCollegueView ? colleagueCyclesSelector : colleaguePerformanceCyclesSelector);
+  const cycles = useSelector(isColleagueView ? colleagueCyclesSelector(colleagueUuid) : userPerformanceCyclesSelector);
   const completedReviews = useSelector(completedReviewsSelector);
 
   useEffect(() => {

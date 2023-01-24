@@ -2,12 +2,14 @@ import React, { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   colleagueCurrentCycleSelector,
-  colleaguePerformanceCyclesSelector,
+  getColleagueCycleSelector,
   getTimelineSelector,
   ReviewsActions,
   TimelineActions,
   timelinesMetaSelector,
   UserActions,
+  userPerformanceCyclesSelector,
+  uuidCompareSelector,
 } from '@pma/store';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper as Tile } from 'components/Tile/TileWrapper';
@@ -25,7 +27,8 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const { css } = useStyle();
   const dispatch = useDispatch();
   const { loading } = useSelector(timelinesMetaSelector);
-  const cycles = useSelector(colleaguePerformanceCyclesSelector);
+  const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
+  const cycles = useSelector(isUserView ? userPerformanceCyclesSelector : getColleagueCycleSelector(colleagueUuid));
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
   const { descriptions, startDates, summaryStatuses, types, currentStep } =
     useSelector(getTimelineSelector(colleagueUuid, currentCycle)) || {};

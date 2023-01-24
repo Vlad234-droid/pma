@@ -89,7 +89,7 @@ export const currentUserSelector = createSelector(usersSelector, ({ current }) =
 
 export const currentUserMetaSelector = createSelector(usersSelector, ({ meta }) => meta);
 
-export const colleaguePerformanceCyclesSelector = (state: RootState) => {
+export const userPerformanceCyclesSelector = (state: RootState) => {
   const users = usersSelector(state);
   return users.current.metadata.cycles;
 };

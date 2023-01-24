@@ -38,6 +38,7 @@ const UserObjectives: FC = () => {
     objectives,
     meta: { loading, loaded },
   } = useObjectivesData(uuid as string, currentCycle);
+
   const download = useDownload(objectives);
 
   if (loading) return <Spinner fullHeight />;
