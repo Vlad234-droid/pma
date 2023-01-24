@@ -2,14 +2,16 @@ import React, { FC } from 'react';
 import { Button, Rule } from '@pma/dex-wrapper';
 import { Trans, useTranslation } from 'components/Translation';
 import { ButtonWithConfirmation } from 'features/general/Modal';
+import { Statuses } from '@pma/store';
 
 type ReviewButtonsProps = {
   onClose: () => void;
-  onSave: () => void;
-  readonly: boolean;
+  onSave: (status: Statuses.DECLINED | Statuses.APPROVED) => void;
+  canDecline: boolean;
+  canApprove: boolean;
 };
 
-const LineManagerButtons: FC<ReviewButtonsProps> = ({ onClose, onSave, readonly }) => {
+const LineManagerButtons: FC<ReviewButtonsProps> = ({ onClose, onSave, canApprove, canDecline }) => {
   const { t } = useTranslation();
 
   return (
@@ -17,16 +19,25 @@ const LineManagerButtons: FC<ReviewButtonsProps> = ({ onClose, onSave, readonly 
       <Button onPress={onClose} styles={[buttonWhiteStyle]}>
         <Trans i18nKey='close'>Close</Trans>
       </Button>
-      {!readonly && (
+      {canDecline && (
         <ButtonWithConfirmation
           buttonName={t('decline_anyway', 'Decline anyway')}
-          onSave={onSave}
+          onSave={() => onSave(Statuses.DECLINED)}
           styles={[buttonBlueStyle]}
           confirmationTitle={t('decline_approved_review_title', 'Do you want to decline this review form?')}
           confirmationDescription={t(
-            'review_confirmation_submit',
+            'review_confirmation_decline_approved',
             'Once you do it, it will be sent back to my colleague to resubmit their ratings.',
           )}
+        />
+      )}
+      {canApprove && (
+        <ButtonWithConfirmation
+          buttonName={t('approve', 'Approve')}
+          onSave={() => onSave(Statuses.APPROVED)}
+          styles={[buttonBlueStyle]}
+          confirmationTitle={t('approve_review_title', 'Do you want to approve this review form?')}
+          confirmationDescription={t('review_confirmation_approve', 'Are you sure you want to approve review?')}
         />
       )}
     </>

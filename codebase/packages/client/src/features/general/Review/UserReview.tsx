@@ -51,7 +51,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
   const colleague = useSelector(getColleagueSelector);
   const { loaded: colleagueLoaded } = useSelector(getColleagueMetaSelector);
 
-  const [successModal, setSuccessModal] = useState(false);
+  const [successModal, setSuccessModal] = useState<Statuses.DECLINED | Statuses.APPROVED | null>(null);
   const { info } = useSelector(currentUserSelector);
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
   const dispatch = useDispatch();
@@ -65,9 +65,10 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
   const timelineReview =
     useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current, currentCycle)) || ({} as any);
 
-  const modifyCondition = timelineReview?.status === Status.COMPLETED && review.status === Status.APPROVED;
-
-  const readonly = !modifyCondition;
+  const declineCondition =
+    timelineReview?.status === Status.COMPLETED &&
+    (review.status === Status.APPROVED || review.status === Status.WAITING_FOR_APPROVAL);
+  const approveCondition = timelineReview?.status === Status.COMPLETED && review.status === Status.WAITING_FOR_APPROVAL;
 
   const { components = [] as Component[] } = schema;
 
@@ -113,7 +114,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
     //todo not used for manager view
   };
 
-  const handleDeclineApprovedReview = () => {
+  const handleUpdateStatusReview = (status: Statuses.DECLINED | Statuses.APPROVED) => {
     if (colleague?.colleagueUUID) {
       dispatch(
         ReviewsActions.updateReviewStatus({
@@ -123,11 +124,11 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
             approverUuid: info.colleagueUUID,
             cycleUuid: currentCycle,
             code: timelineReview.code,
-            status: Statuses.DECLINED,
+            status: status,
           },
           data: {
             reason: '',
-            status: Statuses.DECLINED,
+            status: status,
             code: timelineReview.code,
             cycleUuid: currentCycle,
             colleagueUuid: colleague?.colleagueUUID,
@@ -136,7 +137,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
           },
         }),
       );
-      setSuccessModal(true);
+      setSuccessModal(status);
     }
   };
 
@@ -152,9 +153,21 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
         title='Review sent'
         mark={<SuccessMark />}
         onClose={onClose}
-        description={`The Year-end review form was sent back to the ${
-          colleague?.profile?.fullName || 'undefined'
-        } to resubmit their rating.`}
+        description={
+          successModal === Statuses.DECLINED
+            ? t(
+                `review_form_was_sent_back_${reviewType}`.toLowerCase(),
+                `The xx Year-end review form was sent back to the ${
+                  colleague?.profile?.fullName || 'undefined'
+                } to resubmit their rating.`,
+                { fullName: colleague?.profile?.fullName },
+              )
+            : t(
+                `review_form_approved_${reviewType}`.toLowerCase(),
+                `You xxx have approved ${colleague?.profile?.fullName || 'undefined'} year-end review.`,
+                { fullName: colleague?.profile?.fullName },
+              )
+        }
       />
     );
   }
@@ -197,7 +210,12 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
               defaultValues={formValues}
               reviewStatus={review?.status}
               customButtons={() => (
-                <LineManagerButtons onClose={onClose} onSave={handleDeclineApprovedReview} readonly={readonly} />
+                <LineManagerButtons
+                  onClose={onClose}
+                  onSave={handleUpdateStatusReview}
+                  canDecline={declineCondition}
+                  canApprove={approveCondition}
+                />
               )}
             />
           </div>
