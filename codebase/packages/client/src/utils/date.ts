@@ -24,6 +24,7 @@ export const diffYears = diffBy('years');
 export const diffHours = diffBy('hours');
 export const diffSeconds = diffBy('seconds');
 export const DATE_STRING_FORMAT = 'dd LLL yyyy';
+export const MONTH_FORMAT = 'LLL yyyy';
 export const DATE_TIME_STRING_FORMAT = 'dd LLL yyyy HH:mm';
 export const DATE_FORMAT = 'yyyy-MM-dd';
 export const DATE_FORMAT_FULL_MONTH = 'yyyy-mmm-dd';
@@ -35,6 +36,7 @@ export const resolveTimezone = () => Intl.DateTimeFormat().resolvedOptions().tim
 export const minDate = (arr: Array<string>) => min(arr);
 
 export const filterByDate = (a: string, b: string) => (DateTime.fromISO(a) > DateTime.fromISO(b) ? 1 : -1);
+export const filterByDateDESC = (a: string, b: string) => (DateTime.fromISO(a) > DateTime.fromISO(b) ? -1 : 1);
 
 export const formatDateStringFromISO = (date: string, format: DateFormat = DATE_STRING_FORMAT) =>
   DateTime.fromISO(date).setLocale('en').toFormat(format);

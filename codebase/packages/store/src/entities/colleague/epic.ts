@@ -14,22 +14,24 @@ export const getColleagueByUuidEpic: Epic = (action$, _, { api }) =>
         cycles: api.getPerformanceCyclesByStatuses({
           colleagueUuid: payload.colleagueUuid,
           params: {
-            'colleague-cycle-status_in': [/*'OPENED_STARTING',*/ 'STARTED', 'FINISHED', 'FINISHING', 'COMPLETED'],
+            'colleague-cycle-status_in': ['STARTED', 'FINISHED', 'FINISHING', 'COMPLETED'],
           },
         }),
       }).pipe(
         //@ts-ignore
         map(({ colleague, cycles }: any) => {
           const result = {
-            ...colleague.data,
-            cycles:
-              cycles.data.map(({ endTime, startTime, uuid, type, status }) => ({
-                endTime,
-                startTime,
-                uuid,
-                type,
-                status,
-              })) || [],
+            [payload.colleagueUuid]: {
+              ...colleague.data,
+              cycles:
+                cycles.data.map(({ endTime, startTime, uuid, type, status }) => ({
+                  endTime,
+                  startTime,
+                  uuid,
+                  type,
+                  status,
+                })) || [],
+            },
           };
           return getColleagueByUuid.success(result);
         }),

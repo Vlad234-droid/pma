@@ -62,7 +62,8 @@ const UserObjectivesPage = () => {
   return (
     <div className={css(bodyBlockStyles({ mobileScreen }))}>
       <div className={css(mainBlockStyles({ mobileScreen }))}>
-        <ColleagueProfileWidget />
+        {/*// @ts-ignore */}
+        <ColleagueProfileWidget uuid={uuid} />
         <div data-test-id={'test-step-indicator'} className={css(timelineWrapperStyles)}>
           <Timeline colleagueUuid={uuid} />
         </div>

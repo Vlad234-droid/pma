@@ -3,7 +3,7 @@ import {
   CalibrationReviewAction,
   calibrationReviewDataSelector,
   calibrationReviewMetaSelector,
-  colleaguePerformanceCyclesSelector,
+  userPerformanceCyclesSelector,
   SchemaActions,
 } from '@pma/store';
 import { useSelector } from 'react-redux';
@@ -11,7 +11,7 @@ import useDispatch from 'hooks/useDispatch';
 import { useParams } from 'react-router-dom';
 
 export const useCalibrationReview = () => {
-  const [cycle] = useSelector(colleaguePerformanceCyclesSelector);
+  const [cycle] = useSelector(userPerformanceCyclesSelector);
   const { uuid, userUuid: colleagueUuid } = useParams<{ uuid: string; userUuid: string }>() as {
     uuid: string;
     userUuid: string;

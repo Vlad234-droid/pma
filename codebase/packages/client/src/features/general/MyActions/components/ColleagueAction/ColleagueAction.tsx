@@ -1,7 +1,14 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { ReviewsActions, SchemaActions, getAllReviews, getColleaguesSchemas, TimelineActions } from '@pma/store';
+import {
+  ReviewsActions,
+  SchemaActions,
+  ColleagueActions,
+  getAllReviews,
+  getColleaguesSchemas,
+  TimelineActions,
+} from '@pma/store';
 
 import { useTenant, Tenant } from 'features/general/Permission';
 import useDispatch from 'hooks/useDispatch';
@@ -92,6 +99,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
     });
     cycleUuidList.forEach((cycleUuid) => {
       dispatch(TimelineActions.getUserTimeline({ colleagueUuid: colleague.uuid, cycleUuid }));
+      dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid: colleague.uuid }));
       dispatch(
         SchemaActions.getColleagueSchema({
           colleagueUuid: colleague.uuid,
@@ -149,7 +157,9 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                         for (const status of statusStatistics) {
                           reviewGroupByStatus.push([
                             status,
-                            colleagueReviews.filter((review) => status === review.status),
+                            colleagueReviews
+                              .filter((review) => status === review.status)
+                              .sort(({ number }, { number: nextNumber }) => (number > nextNumber ? 1 : -1)),
                           ]);
                         }
 
@@ -183,7 +193,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                                         key={review.uuid}
                                         colleagueUuid={colleague.uuid}
                                         review={reviewData}
-                                        timeline={colleagueTimeline}
+                                        timelinePoint={colleagueTimeline}
                                         schema={reviewSchemaMap?.[colleagueTimeline?.cycleUuid]?.[code] || []}
                                         validateReview={handleValidateReview}
                                         onUpdate={handleChangeReview}

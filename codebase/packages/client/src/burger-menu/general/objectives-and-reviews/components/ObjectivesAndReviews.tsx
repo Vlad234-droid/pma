@@ -1,5 +1,10 @@
 import React from 'react';
-import { colleagueUUIDSelector, timelinesExistSelector, timelineTypesAvailabilitySelector } from '@pma/store';
+import {
+  colleagueCurrentCycleSelector,
+  colleagueUUIDSelector,
+  timelinesExistSelector,
+  timelineTypesAvailabilitySelector,
+} from '@pma/store';
 import { useSelector } from 'react-redux';
 
 import { buildPath } from 'features/general/Routes';
@@ -11,7 +16,8 @@ import { ReviewType } from 'config/enum';
 const MenuItem = () => {
   const { t } = useTranslation();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const timelineExist = useSelector(timelinesExistSelector(colleagueUuid));
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
+  const timelineExist = useSelector(timelinesExistSelector(colleagueUuid, currentCycle));
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
 
   const canShowAnnualReview =

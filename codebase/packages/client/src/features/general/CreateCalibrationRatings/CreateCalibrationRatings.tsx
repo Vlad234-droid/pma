@@ -39,7 +39,7 @@ const CreateCalibrationRatings: FC = () => {
   const { state } = useLocation();
   const { backPath, activeList, prevBackPath, period } = (state as any) || {};
 
-  const { profile } = useSelector(getColleagueSelector) || {};
+  const { profile } = useSelector(getColleagueSelector(colleagueUuid)) || {};
 
   const { components } = useSelector(getFormByCode(STANDARD_CALIBRATION_FORM_CODE)) || {};
 

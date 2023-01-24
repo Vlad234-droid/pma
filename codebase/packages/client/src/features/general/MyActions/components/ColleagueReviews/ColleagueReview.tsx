@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { FormType, isAnniversaryTimelineType } from '@pma/store';
+import { FormType, getColleagueCycleSelector, isAnniversaryTimelineType } from '@pma/store';
 
 import { createYupSchema } from 'utils/yup';
-import { getYearFromISO } from 'utils';
+import { getYearFromISO, formatDateStringFromISO, MONTH_FORMAT } from 'utils';
 import { Input, Item, Select, Textarea, Field } from 'components/Form';
 import { useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
@@ -21,7 +21,7 @@ import { Timeline } from 'config/types';
 
 type Props = {
   review: any;
-  timeline: Timeline;
+  timelinePoint: Timeline;
   schema: any;
   colleagueUuid: string;
   validateReview: (review: { [key: string]: boolean }) => void;
@@ -30,10 +30,12 @@ type Props = {
 
 export const TEST_WRAPPER_ID = 'test-wrapper-id';
 
-const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timeline, schema, validateReview, onUpdate }) => {
+const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timelinePoint, schema, validateReview, onUpdate }) => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
-  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, timeline?.cycleUuid));
+  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, timelinePoint?.cycleUuid));
+  const cycles = useSelector(getColleagueCycleSelector(colleagueUuid));
+  const cycle = cycles.find(({ uuid }) => uuid === timelinePoint?.cycleUuid) || {};
 
   const { components = [] } = schema;
   const styledComponents = formTagComponents(components, theme);
@@ -71,12 +73,15 @@ const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timeline, schema, v
   } = methods;
 
   const title = isAnniversary
-    ? `${t('anniversary_review', 'Anniversary review')} ${getYearFromISO(timeline?.startTime)}-${getYearFromISO(
-        timeline?.endTime,
+    ? `${t('anniversary_review', 'Anniversary review')} ${getYearFromISO(timelinePoint?.startTime)}-${getYearFromISO(
+        timelinePoint?.endTime,
       )}`
-    : t(`review_type_description_${timeline.code?.toLowerCase()}`, timeline.code, {
+    : `${t(`review_type_description_${timelinePoint.code?.toLowerCase()}`, timelinePoint.code, {
         num: review.number,
-      });
+      })}, ${formatDateStringFromISO(cycle?.startTime, MONTH_FORMAT)}-${formatDateStringFromISO(
+        cycle?.endTime,
+        MONTH_FORMAT,
+      )}`;
 
   useEffect(() => {
     validateReview({ [review.uuid]: isValid });
