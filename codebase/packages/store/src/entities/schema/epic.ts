@@ -29,14 +29,16 @@ export const getSchemaEpic: Epic = (action$, state$, { api }) =>
               const reviews = data?.reviews?.data;
               const schema = data?.schema?.payload;
 
-              const elementCount =
-                reviews?.filter((review) => {
-                  return review.status === Status.APPROVED && review.type === ReviewType.OBJECTIVE;
-                })?.length || 0;
+              const elementNumbers =
+                reviews
+                  ?.filter((review) => {
+                    return review.status === Status.APPROVED && review.type === ReviewType.OBJECTIVE;
+                  })
+                  ?.map((review) => review.number) || [];
 
               const updatedForms: any[] = addStrategicObjectiveInForms(
                 convertFormsJsonToObject(schema.forms.filter((form) => form)),
-                elementCount,
+                elementNumbers,
               );
               return of(getSchema.success({ current: { ...schema, forms: updatedForms } }));
             }),
@@ -64,11 +66,15 @@ export const getColleagueSchemaEpic: Epic = (action$, state$, { api }) =>
           const timelinePoint = (state?.timeline?.data?.[colleagueUuid]?.[cycleUuid] || []).find(
             ({ reviewType }) => reviewType === 'OBJECTIVE',
           );
-          const count = (reviews.filter(({ tlPointUuid }) => tlPointUuid === timelinePoint?.uuid) || []).length;
+
+          const numbers =
+            (reviews.filter(({ tlPointUuid }) => tlPointUuid === timelinePoint?.uuid) || [])?.map(
+              (review) => review.number,
+            ) || [];
 
           const updatedForms: any[] = addStrategicObjectiveInForms(
             convertFormsJsonToObject(schema.forms.filter((form) => form)),
-            count,
+            numbers,
           );
           return of(
             getColleagueSchema.success({
@@ -113,17 +119,19 @@ export const getSchemaWithColleaguePermissionEpic: Epic = (action$, state$, { ap
               const userWorkLevels: string[] =
                 user?.colleague?.workRelationships?.map((workRelationship) => workRelationship.workLevel) || [];
 
-              const elementCount =
-                reviews?.filter((review) => {
-                  return review.status === Status.APPROVED && review.type === ReviewType.OBJECTIVE;
-                })?.length || 0;
+              const elementNumbers =
+                reviews
+                  ?.filter((review) => {
+                    return review.status === Status.APPROVED && review.type === ReviewType.OBJECTIVE;
+                  })
+                  ?.map((review) => review.number) || [];
 
               const updatedForms: any[] = addStrategicObjectiveInForms(
                 getPermittedForms(
                   schema.forms.filter((form) => form),
                   [...userRoles, ...userWorkLevels],
                 ),
-                elementCount,
+                elementNumbers,
               );
               return of(getSchema.success({ current: { ...schema, forms: updatedForms } }));
             }),
