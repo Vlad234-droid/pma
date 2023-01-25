@@ -136,7 +136,7 @@ export const initializeOpenid = async ({
      * Scopes of the data that we want to be present in the id_token
      * Availble scopes: 'openid', 'profile', 'params', 'groups'
      */
-    scope: ['openid', 'profile'],
+    scope: ['openid', 'profile', 'params'],
 
     /**
      * Optional, callback that will be called with Event type objects durring authentication process

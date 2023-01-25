@@ -67,6 +67,11 @@ export type ProcessConfig = {
   identityClientSecret: () => string;
   identityUserScopedTokenCookieName: () => string;
   identityUserScopedTokenCookieSecret: () => string;
+  //splunk
+  splunkEnabled: () => boolean;
+  splunkSourcetype: () => string;
+  splunkSource: () => string;
+  splunkTokenSecret: () => string;
 
   releaseName: () => string;
 };
@@ -184,6 +189,12 @@ export class ConfigAccessor {
       identityClientSecret: () => processEnv.IDENTITY_CLIENT_SECRET,
       identityUserScopedTokenCookieName: () => processEnv.IDENTITY_USER_SCOPED_TOKEN_COOKIE_NAME,
       identityUserScopedTokenCookieSecret: () => processEnv.IDENTITY_USER_SCOPED_TOKEN_COOKIE_SECRET,
+
+      //splunk
+      splunkEnabled: () => yn(processEnv.SPLUNK_ENABLED, { default: false }),
+      splunkSourcetype: () => processEnv.SPLUNK_SOURCETYPE || 'colleague_pma',
+      splunkSource: () => processEnv.SPLUNK_SOURCE || 'colleague_pma_local',
+      splunkTokenSecret: () => processEnv.SPLUNK_TOKEN_SECRET || 'invalid_secret',
 
       releaseName: () => processEnv.CICD_RELEASE_RELEASENAME || 'unknown',
     };

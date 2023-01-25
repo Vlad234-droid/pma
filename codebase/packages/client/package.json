@@ -45,6 +45,8 @@
   "dependencies": {
     "@dex-core-common/api-connectors": "^0.7.0",
     "@energon-components/hooks": "0.9.0",
+    "@energon/splunk-logger-core": "^0.3.0",
+    "@energon/splunk-logger-ui": "^0.7.4",
     "@hookform/resolvers": "^2.8.1",
     "@my-inbox/client": "0.5.6",
     "@pma/dex-wrapper": "1.0.0",

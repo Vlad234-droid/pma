@@ -82,6 +82,12 @@ declare namespace NodeJS {
     IDENTITY_USER_SCOPED_TOKEN_COOKIE_NAME: string;
     IDENTITY_USER_SCOPED_TOKEN_COOKIE_SECRET: string;
 
+    //splunk
+    SPLUNK_ENABLED: boolean;
+    SPLUNK_SOURCE: string;
+    SPLUNK_SOURCETYPE: string;
+    SPLUNK_TOKEN_SECRET: string;
+
     CICD_RELEASE_RELEASENAME: string | undefined;
   }
 
