@@ -12,7 +12,7 @@ import {
 import { ReviewType, Status } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 
-import { FormStateType, Objective, FormValues } from '../type';
+import { FormStateType, FormValues, Objective } from '../type';
 import { Props } from '../CreateObjectives';
 
 import { useTimelineContainer } from 'contexts/timelineContext';
@@ -26,7 +26,7 @@ export type FormPropsType = {
   setFormState: Dispatch<SetStateAction<FormStateType>>;
   onSaveAsDraft: (T) => void;
   onSubmit: (T) => void;
-  onPreview: () => void;
+  onPreview: (T) => void;
   onNext: (T) => void;
   onPrev: (withConfirmation: boolean) => void;
   onSelectStep: (index: number) => void;
@@ -85,6 +85,10 @@ export function withForm<
             data: [{ number: priority.number, properties: priority.properties, status: Status.DRAFT }],
           }),
         );
+        setLocalObjectives((current) => [
+          ...current,
+          { number: priority.number, properties: priority.properties, status: Status.DRAFT },
+        ]);
       } else {
         dispatch(
           ReviewsActions.updateReview({
@@ -92,11 +96,15 @@ export function withForm<
             data: [{ number: priority.number, properties: priority.properties, status: Status.DRAFT }],
           }),
         );
+        setLocalObjectives((current) => {
+          return current.map((objective) => {
+            if (objective.number === priority.number) {
+              return { ...objective, properties: priority.properties };
+            }
+            return objective;
+          });
+        });
       }
-      setLocalObjectives((current) => [
-        ...current,
-        { number: priority.number, properties: priority.properties, status: Status.DRAFT },
-      ]);
     };
 
     const saveData = (priorities: Objective[]) => {
@@ -146,7 +154,10 @@ export function withForm<
       if (data.data?.length) saveData(data.data);
     };
 
-    const handlePreview = () => setFormState(FormStateType.PREVIEW);
+    const handlePreview = (data: FormValues) => {
+      if (data.data?.length) saveDraftData(data.data[currentPriorityIndex]);
+      setFormState(FormStateType.PREVIEW);
+    };
 
     const handleSelectStep = (index: number) => setPriorityIndex(index);
 
@@ -163,7 +174,7 @@ export function withForm<
           properties: priority.properties,
         }));
 
-        if (minCreatePrioritiesIndex <= maxCreatePrioritiesIndex) {
+        if (minCreatePrioritiesIndex <= maxCreatePrioritiesIndex && ![FormStateType.PREVIEW].includes(formState)) {
           defaultPriorities.push({
             uuid: undefined,
             number: lastCreatedNumber + 1,
