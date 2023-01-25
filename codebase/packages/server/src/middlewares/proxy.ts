@@ -15,7 +15,6 @@ import {
 } from '@pma-common/logger';
 import { emptyIfRoot, getIdentityData } from '@pma-connectors/onelogin';
 import { OnErrorCallback, OnProxyReqCallback, OnProxyResCallback } from 'http-proxy-middleware/dist/types';
-import { proxyWithLogging } from '@energon/splunk-logger';
 
 export type ProxyMiddlewareOptions = {
   filter?: Filter;
@@ -82,9 +81,7 @@ export const initializeProxyMiddleware = ({
     ...allignedProxyOptions,
   };
 
-  return filter
-    ? createProxyMiddleware(filter, proxyWithLogging(proxyMiddlewareOptions))
-    : createProxyMiddleware(proxyWithLogging(proxyMiddlewareOptions));
+  return filter ? createProxyMiddleware(filter, proxyMiddlewareOptions) : createProxyMiddleware(proxyMiddlewareOptions);
 };
 
 export const extractAuthToken = (req: Request, res: Response) => {
