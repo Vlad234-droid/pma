@@ -21,9 +21,10 @@ const LineManagerButtons: FC<ReviewButtonsProps> = ({ onClose, onSave, canApprov
       </Button>
       {canDecline && (
         <ButtonWithConfirmation
-          buttonName={t('decline_anyway', 'Decline anyway')}
+          buttonName={t('decline', 'Decline')}
           onSave={() => onSave(Statuses.DECLINED)}
           styles={[buttonBlueStyle]}
+          confirmationButtonTitle={t('decline_anyway', 'Decline anyway')}
           confirmationTitle={t('decline_approved_review_title', 'Do you want to decline this review form?')}
           confirmationDescription={t(
             'review_confirmation_decline_approved',
@@ -36,6 +37,7 @@ const LineManagerButtons: FC<ReviewButtonsProps> = ({ onClose, onSave, canApprov
           buttonName={t('approve', 'Approve')}
           onSave={() => onSave(Statuses.APPROVED)}
           styles={[buttonBlueStyle]}
+          confirmationButtonTitle={t('approve', 'Approve')}
           confirmationTitle={t('approve_review_title', 'Do you want to approve this review form?')}
           confirmationDescription={t('review_confirmation_approve', 'Are you sure you want to approve review?')}
         />
