@@ -1,5 +1,5 @@
 import { createReducer } from 'typesafe-actions';
-import { clearColleagueData, getColleagueByUuid } from './actions';
+import { changeColleagueCurrentCycle, clearColleagueData, getColleagueByUuid } from './actions';
 
 export const initialState = {
   meta: { loading: false, loaded: false, error: null },
@@ -24,8 +24,20 @@ const failure = (state, { payload }) => ({
   meta: { ...state.meta, loading: false, loaded: true, error: payload },
 });
 
+const changeCycle = (state, { payload: { colleagueUuid, value } }) => ({
+  ...state,
+  data: {
+    ...state.data,
+    [colleagueUuid]: {
+      ...(state.data[colleagueUuid] || {}),
+      currentCycle: value,
+    },
+  },
+});
+
 export default createReducer(initialState)
   .handleAction(getColleagueByUuid.request, request)
   .handleAction(getColleagueByUuid.success, success)
   .handleAction(getColleagueByUuid.failure, failure)
+  .handleAction(changeColleagueCurrentCycle, changeCycle)
   .handleAction(clearColleagueData, () => initialState);
