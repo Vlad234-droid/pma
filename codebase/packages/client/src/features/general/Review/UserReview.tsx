@@ -66,9 +66,9 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
     useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current, currentCycle)) || ({} as any);
 
   const declineCondition =
-    timelineReview?.status === Status.COMPLETED &&
+    timelineReview?.status !== Status.COMPLETED &&
     (review.status === Status.APPROVED || review.status === Status.WAITING_FOR_APPROVAL);
-  const approveCondition = timelineReview?.status === Status.COMPLETED && review.status === Status.WAITING_FOR_APPROVAL;
+  const approveCondition = timelineReview?.status !== Status.COMPLETED && review.status === Status.WAITING_FOR_APPROVAL;
 
   const { components = [] as Component[] } = schema;
 
