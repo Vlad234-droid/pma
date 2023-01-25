@@ -96,14 +96,11 @@ export function withForm<
             data: [{ number: priority.number, properties: priority.properties, status: Status.DRAFT }],
           }),
         );
-        setLocalObjectives((current) => {
-          return current.map((objective) => {
-            if (objective.number === priority.number) {
-              return { ...objective, properties: priority.properties };
-            }
-            return objective;
-          });
-        });
+        setLocalObjectives((current) =>
+          current.map((objective) =>
+            objective.number === priority.number ? { ...objective, properties: priority.properties } : objective,
+          ),
+        );
       }
     };
 
