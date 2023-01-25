@@ -8,6 +8,7 @@ import {
   TimelineActions,
   timelinesMetaSelector,
   UserActions,
+  ColleagueActions,
   userPerformanceCyclesSelector,
   uuidCompareSelector,
 } from '@pma/store';
@@ -65,8 +66,12 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setValue(value);
-    dispatch(ReviewsActions.clearReviewData());
-    dispatch(UserActions.changeCurrentCycles(value));
+    if (isUserView) {
+      dispatch(ReviewsActions.clearReviewData());
+      dispatch(UserActions.changeCurrentCycles(value));
+      return;
+    }
+    dispatch(ColleagueActions.changeColleagueCurrentCycle({ value, colleagueUuid }));
   };
 
   useEffect(() => {
