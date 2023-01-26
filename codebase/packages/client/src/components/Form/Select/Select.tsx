@@ -91,17 +91,19 @@ const Select: FC<SelectProps> = ({
         </div>
       </button>
       {isOpen && (
-        <div role='list' data-test-id={`${name}-list`} className={css(listStyles)}>
-          {options.map((item) => (
-            <button
-              type='button'
-              key={item.value}
-              className={css(optionStyles)}
-              onClick={(event) => handleSelect(event, item)}
-            >
-              {item.label}
-            </button>
-          ))}
+        <div className={css(listWrapperStyles)}>
+          <div role='list' data-test-id={`${name}-list`} className={css(listStyles)}>
+            {options.map((item) => (
+              <button
+                type='button'
+                key={item.value}
+                className={css(optionStyles)}
+                onClick={(event) => handleSelect(event, item)}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </div>
@@ -160,15 +162,19 @@ const iconExpandStyles: Rule = {
   transform: 'rotate(180deg)',
 };
 
-const listStyles: Rule = ({ theme }) => ({
+const listWrapperStyles: Rule = {
   display: 'block',
   position: 'absolute',
+  zIndex: 999,
+  width: '100%',
+  paddingBottom: '10px',
+};
+
+const listStyles: Rule = ({ theme }) => ({
   // @ts-ignore
   border: `2px solid ${theme.colors.lightGray}`,
   borderRadius: theme.border.radius.sm,
   background: theme.colors.white,
-  width: '100%',
-  zIndex: 999,
   maxHeight: '240px',
   overflow: 'auto',
 });
