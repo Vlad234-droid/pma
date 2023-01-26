@@ -29,7 +29,7 @@ export const getPermittedForms = (forms: any[], access: string[]) =>
 export const getPermittedForm = (form: any, access: string[]) =>
   checkFormPermission(convertFormJsonToObject(form), access);
 
-export const addStrategicObjectiveInForm = (form: any, count: number) => {
+export const addStrategicObjectiveInForm = (form: any, numbers: number[]) => {
   const { json } = form;
   const { components = [], display: newSchemaVersion } = json;
 
@@ -46,19 +46,19 @@ export const addStrategicObjectiveInForm = (form: any, count: number) => {
           const reviewValues: string = componentV2?.properties?.[`${ExpressionType.REQUEST}.review`] || undefined;
 
           if (reviewValues === ExpressionValueType.OBJECTIVE) {
-            if (count > 0) {
-              [...Array(count)].forEach((_, index) =>
+            if (numbers.length > 0) {
+              numbers.forEach((number) =>
                 newComponents.push({
                   ...componentV2,
                   ...(componentV2?.id
-                    ? { id: componentV2?.id?.replace(componentV2?.id, `${componentV2?.id}_${index + 1}`) }
+                    ? { id: componentV2?.id?.replace(componentV2?.id, `${componentV2?.id}_${number}`) }
                     : {}),
                   ...(componentV2?.key
-                    ? { key: componentV2?.key?.replace(componentV2?.key, `${componentV2?.key}_${index + 1}`) }
+                    ? { key: componentV2?.key?.replace(componentV2?.key, `${componentV2?.key}_${number}`) }
                     : {}),
                   // todo ask backend about rules for replace.
                   ...(componentV2?.label
-                    ? { label: componentV2?.label?.replace('Objective', `Objective ${index + 1}`) }
+                    ? { label: componentV2?.label?.replace('Objective', `Objective ${number}`) }
                     : {}),
                 }),
               );
@@ -91,14 +91,14 @@ export const addStrategicObjectiveInForm = (form: any, count: number) => {
   const newComponents: any[] = [];
   components?.forEach((component) => {
     const reviewValues: string[] = get(component?.expression, `${ExpressionType.REQUEST}.review`, []);
-    if (reviewValues?.length && reviewValues.includes(ExpressionValueType.OBJECTIVE) && count) {
-      [...Array(count)].forEach((_, index) =>
+    if (reviewValues?.length && reviewValues.includes(ExpressionValueType.OBJECTIVE) && numbers.length) {
+      numbers.forEach((number) =>
         newComponents.push({
           ...component,
-          ...(component?.id ? { id: component?.id?.replace(component?.id, `${component?.id}_${index + 1}`) } : {}),
-          ...(component?.key ? { key: component?.key?.replace(component?.key, `${component?.key}_${index + 1}`) } : {}),
+          ...(component?.id ? { id: component?.id?.replace(component?.id, `${component?.id}_${number}`) } : {}),
+          ...(component?.key ? { key: component?.key?.replace(component?.key, `${component?.key}_${number}`) } : {}),
           // todo ask backend about rules for replace.
-          ...(component?.label ? { label: component?.label?.replace('Objective', `Objective ${index + 1}`) } : {}),
+          ...(component?.label ? { label: component?.label?.replace('Objective', `Objective ${number}`) } : {}),
           expression: {}, // remove expression to avoid duplicates
         }),
       );
@@ -110,8 +110,8 @@ export const addStrategicObjectiveInForm = (form: any, count: number) => {
   json.components = newComponents;
   return { ...form, json };
 };
-export const addStrategicObjectiveInForms = (forms: any[], count: number) =>
-  forms?.map((form) => addStrategicObjectiveInForm(form, count));
+export const addStrategicObjectiveInForms = (forms: any[], numbers: number[]) =>
+  forms?.map((form) => addStrategicObjectiveInForm(form, numbers));
 
 export const addOverallRatingInForm = (form: any, value: string) => {
   const { json } = form;

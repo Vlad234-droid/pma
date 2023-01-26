@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Rule, useStyle } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import { CalibrationReviewAction, getColleagueSelector, getFormByCode } from '@pma/store';
 import { useLocation, useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router';
@@ -35,7 +35,7 @@ const CreateCalibrationSessionRating = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { backPath, activeList } = (state as any) || {};
-  const { profile } = useSelector(getColleagueSelector) || {};
+  const { profile } = useSelector(getColleagueSelector(colleagueUuid)) || {};
 
   const { components } = useSelector(getFormByCode(STANDARD_CALIBRATION_FORM_CODE)) || {};
 

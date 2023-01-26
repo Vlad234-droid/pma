@@ -5,8 +5,8 @@ import { getColleagueMetaSelector, getColleagueSelector } from '@pma/store';
 import { TileWrapper } from 'components/Tile';
 import Profile from '../components/Profile';
 
-const ColleagueProfile: FC = () => {
-  const colleague = useSelector(getColleagueSelector);
+const ColleagueProfile: FC<{ uuid: string }> = ({ uuid }) => {
+  const colleague = useSelector(getColleagueSelector(uuid));
   const { loading } = useSelector(getColleagueMetaSelector);
   const fullName = colleague?.profile?.fullName;
 

@@ -3,6 +3,7 @@ import { createSelector } from 'reselect';
 import { RootState } from 'typesafe-actions';
 
 export const usersSelector = (state: RootState) => state.users;
+const colleagueSelector = (state: RootState) => state.colleague;
 
 export const getFullName = (profile) => {
   const { firstName, middleName, lastName } = profile || {};
@@ -89,7 +90,7 @@ export const currentUserSelector = createSelector(usersSelector, ({ current }) =
 
 export const currentUserMetaSelector = createSelector(usersSelector, ({ meta }) => meta);
 
-export const colleaguePerformanceCyclesSelector = (state: RootState) => {
+export const userPerformanceCyclesSelector = (state: RootState) => {
   const users = usersSelector(state);
   return users.current.metadata.cycles;
 };
@@ -101,8 +102,9 @@ export const colleagueCycleSelector = (state: RootState) => {
 
 export const colleagueCurrentCycleSelector = (colleagueUuid: string) => (state: RootState) => {
   const users = usersSelector(state);
+  const colleague = colleagueSelector(state);
   if (colleagueUuid === users.current.info?.colleague?.colleagueUUID) {
     return users.current.metadata.currentCycle;
   }
-  return 'CURRENT';
+  return colleague.data[colleagueUuid]?.currentCycle || 'CURRENT';
 };

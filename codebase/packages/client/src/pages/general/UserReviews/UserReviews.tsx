@@ -62,7 +62,8 @@ const UserObjectivesPage = () => {
   return (
     <div className={css(bodyBlockStyles({ mobileScreen }))}>
       <div className={css(mainBlockStyles({ mobileScreen }))}>
-        <ColleagueProfileWidget />
+        {/*// @ts-ignore */}
+        <ColleagueProfileWidget uuid={uuid} />
         <div data-test-id={'test-step-indicator'} className={css(timelineWrapperStyles)}>
           <Timeline colleagueUuid={uuid} />
         </div>
@@ -76,7 +77,7 @@ const UserObjectivesPage = () => {
       <div className={css(mainBlockStyles({ mobileScreen }))}>
         <UserObjectives />
         <ReviewsSection colleagueUuid={uuid as string} isUserView={false} />
-        <CompletedReviewsSection colleagueUuid={uuid} />
+        {/*<CompletedReviewsSection colleagueUuid={uuid} />*/}
         <ReviewFilesSection colleagueUuid={uuid} />
         <div className={css(widgetsContainer)}>
           {isLineManager && <SubmitCalibrationRatingsWidget userUuid={uuid as string} />}

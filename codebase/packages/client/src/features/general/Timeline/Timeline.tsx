@@ -2,12 +2,15 @@ import React, { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   colleagueCurrentCycleSelector,
-  colleaguePerformanceCyclesSelector,
+  getColleagueCycleSelector,
   getTimelineSelector,
   ReviewsActions,
   TimelineActions,
   timelinesMetaSelector,
   UserActions,
+  ColleagueActions,
+  userPerformanceCyclesSelector,
+  uuidCompareSelector,
 } from '@pma/store';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper as Tile } from 'components/Tile/TileWrapper';
@@ -16,7 +19,7 @@ import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 import useDispatch from 'hooks/useDispatch';
 import { Option, Select } from 'components/Form';
-import { formatDateStringFromISO } from 'utils';
+import { filterByDate, filterByDateDESC, formatDateStringFromISO, MONTH_FORMAT } from 'utils';
 import { Status } from 'config/enum';
 
 const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
@@ -25,16 +28,22 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const { css } = useStyle();
   const dispatch = useDispatch();
   const { loading } = useSelector(timelinesMetaSelector);
-  const cycles = useSelector(colleaguePerformanceCyclesSelector);
+  const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
+  const cycles = useSelector(isUserView ? userPerformanceCyclesSelector : getColleagueCycleSelector(colleagueUuid));
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
   const { descriptions, startDates, summaryStatuses, types, currentStep } =
     useSelector(getTimelineSelector(colleagueUuid, currentCycle)) || {};
 
   const options: Option[] = useMemo(() => {
-    return cycles.map(({ endTime, startTime, uuid }) => ({
-      value: uuid,
-      label: `${formatDateStringFromISO(startTime, 'yyyy')} - ${formatDateStringFromISO(endTime, 'yyyy')}`,
-    }));
+    return cycles
+      .sort(({ endTime }, { endTime: nextEndTime }) => filterByDateDESC(endTime, nextEndTime))
+      .map(({ endTime, startTime, uuid }) => ({
+        value: uuid,
+        label: `${formatDateStringFromISO(startTime, MONTH_FORMAT)} - ${formatDateStringFromISO(
+          endTime,
+          MONTH_FORMAT,
+        )}`,
+      }));
   }, [cycles]);
 
   useEffect(() => {
@@ -45,16 +54,24 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
     if (currentCycle !== 'CURRENT') {
       setValue(currentCycle);
     } else {
-      const startedCycles = cycles.find(({ status }) => status === Status.STARTED);
-      setValue(options.find(({ value }) => value === startedCycles.uuid)?.value as string);
+      const startedCycle =
+        cycles
+          .filter(({ status }) => status === Status.STARTED)
+          .sort(({ endTime }, { endTime: nextEndTime }) => filterByDate(endTime, nextEndTime))[0] || {};
+
+      setValue(options.find(({ value }) => value === startedCycle.uuid)?.value as string);
     }
   }, [options]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setValue(value);
-    dispatch(ReviewsActions.clearReviewData());
-    dispatch(UserActions.changeCurrentCycles(value));
+    if (isUserView) {
+      dispatch(ReviewsActions.clearReviewData());
+      dispatch(UserActions.changeCurrentCycles(value));
+      return;
+    }
+    dispatch(ColleagueActions.changeColleagueCurrentCycle({ value, colleagueUuid }));
   };
 
   useEffect(() => {

@@ -17,6 +17,7 @@ import {
   SchemaActions,
   schemaMetaSelector,
   Statuses,
+  colleagueCycleDataSelector,
 } from '@pma/store';
 import { useParams } from 'react-router';
 
@@ -48,12 +49,13 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
   const { uuid } = useParams<{ uuid: string }>();
   const colleagueUuid = uuid!;
 
-  const colleague = useSelector(getColleagueSelector);
+  const colleague = useSelector(getColleagueSelector(colleagueUuid));
   const { loaded: colleagueLoaded } = useSelector(getColleagueMetaSelector);
 
   const [successModal, setSuccessModal] = useState<Statuses.DECLINED | Statuses.APPROVED | null>(null);
   const { info } = useSelector(currentUserSelector);
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
+  const cycle = useSelector(colleagueCycleDataSelector(colleagueUuid, currentCycle));
   const dispatch = useDispatch();
   const review: Review = useSelector(getReviewByTypeSelector(reviewType)) || {};
   const formValues = review?.properties || {};
@@ -65,10 +67,10 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
   const timelineReview =
     useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current, currentCycle)) || ({} as any);
 
+  const cycleCompletedCondition = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
   const declineCondition =
-    timelineReview?.status === Status.COMPLETED &&
-    (review.status === Status.APPROVED || review.status === Status.WAITING_FOR_APPROVAL);
-  const approveCondition = timelineReview?.status === Status.COMPLETED && review.status === Status.WAITING_FOR_APPROVAL;
+    !cycleCompletedCondition && (review.status === Status.APPROVED || review.status === Status.WAITING_FOR_APPROVAL);
+  const approveCondition = !cycleCompletedCondition && review.status === Status.WAITING_FOR_APPROVAL;
 
   const { components = [] as Component[] } = schema;
 
@@ -181,7 +183,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
         <div>
           <div className={css({ paddingBottom: '24px' })}>
             <div className={css(formTitleStyle, { paddingBottom: '24px' })}>
-              Review your collegue’s End-yeat performance
+              Review your colleague’s End-year performance
             </div>
             <ProfileInfo
               firstName={colleague?.profile?.fullName}
