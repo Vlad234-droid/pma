@@ -11,13 +11,13 @@ import {
   getColleagueSelector,
   getReviewByTypeSelector,
   getReviewSchema,
-  colleagueCycleSelector,
   getTimelineByReviewTypeSelector,
   ReviewsActions,
   reviewsMetaSelector,
   SchemaActions,
   schemaMetaSelector,
   Statuses,
+  colleagueCycleDataSelector,
 } from '@pma/store';
 import { useParams } from 'react-router';
 
@@ -55,7 +55,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
   const [successModal, setSuccessModal] = useState<Statuses.DECLINED | Statuses.APPROVED | null>(null);
   const { info } = useSelector(currentUserSelector);
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
-  const cycle = useSelector(colleagueCycleSelector);
+  const cycle = useSelector(colleagueCycleDataSelector(colleagueUuid, currentCycle));
   const dispatch = useDispatch();
   const review: Review = useSelector(getReviewByTypeSelector(reviewType)) || {};
   const formValues = review?.properties || {};
@@ -67,10 +67,10 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
   const timelineReview =
     useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current, currentCycle)) || ({} as any);
 
-  const cycleStatusCondition = cycle?.status && ![Status.COMPLETED, Status.FINISHING].includes(cycle.status);
+  const cycleCompletedCondition = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
   const declineCondition =
-    cycleStatusCondition && (review.status === Status.APPROVED || review.status === Status.WAITING_FOR_APPROVAL);
-  const approveCondition = cycleStatusCondition && review.status === Status.WAITING_FOR_APPROVAL;
+    !cycleCompletedCondition && (review.status === Status.APPROVED || review.status === Status.WAITING_FOR_APPROVAL);
+  const approveCondition = !cycleCompletedCondition && review.status === Status.WAITING_FOR_APPROVAL;
 
   const { components = [] as Component[] } = schema;
 
