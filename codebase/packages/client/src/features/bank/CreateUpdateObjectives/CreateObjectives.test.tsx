@@ -83,10 +83,5 @@ describe('CreateObjectives', () => {
     expect(screen.queryByText(description1)).not.toBeInTheDocument();
     expect(screen.getByText(title2)).toBeInTheDocument();
     expect(screen.getByText(description2)).toBeInTheDocument();
-
-    // TODO: Make it work
-    // expect(ReviewsActions.updateReview).toHaveBeenCalled();
-
-    // TODO: Check it there are no duplicates in objectives
   });
 });
