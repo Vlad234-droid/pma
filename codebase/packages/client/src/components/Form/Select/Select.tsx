@@ -168,6 +168,7 @@ const listWrapperStyles: Rule = {
   zIndex: 999,
   width: '100%',
   paddingBottom: '10px',
+  pointerEvents: 'none',
 };
 
 const listStyles: Rule = ({ theme }) => ({
@@ -177,6 +178,7 @@ const listStyles: Rule = ({ theme }) => ({
   background: theme.colors.white,
   maxHeight: '240px',
   overflow: 'auto',
+  pointerEvents: 'auto',
 });
 
 const optionStyles: Rule = ({ theme }) => ({
