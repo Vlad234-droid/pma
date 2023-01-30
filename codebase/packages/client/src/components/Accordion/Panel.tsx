@@ -1,5 +1,7 @@
-import React, { ReactNode, useRef, FC, useState, useEffect } from 'react';
-import { useStyle, Rule } from '@pma/dex-wrapper';
+import React, { FC, ReactNode, useState } from 'react';
+import debounce from 'lodash.debounce';
+
+import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import useEventListener from 'hooks/useEventListener';
 import { AccordionConsumer, SectionConsumer } from './contexts';
@@ -46,20 +48,25 @@ export const BasePanel: FC<Props> = ({ children, ...baseRest }) => {
 
 const Panel: FC = ({ children, ...props }) => {
   const { css } = useStyle();
-  const content = useRef<HTMLDivElement>(null);
+  const [content, setContent] = useState<HTMLDivElement | null>(null);
   const [height, setHeight] = useState(0);
 
-  const updateHeight = () => {
-    const { scrollHeight } = content.current || {};
-    if (scrollHeight !== height) setHeight(scrollHeight || 0);
+  useEventListener(
+    'resize',
+    debounce(() => content?.scrollHeight && setHeight(content.scrollHeight || 0), 300),
+  );
+
+  const onSetRef = (ref: HTMLDivElement | null) => {
+    if (ref) {
+      if (ref.scrollHeight === 0) {
+        // Wait until all components are rendered to set correct height
+        setTimeout(() => onSetRef(ref), 100);
+      } else if (ref.scrollHeight !== height) {
+        setHeight(ref.scrollHeight);
+        setContent(ref);
+      }
+    }
   };
-
-  useEventListener('resize', updateHeight);
-
-  useEffect(() => {
-    // Wait until all components are rendered to set correct height
-    setTimeout(updateHeight, 100);
-  });
 
   return (
     <BasePanel {...props}>
@@ -69,7 +76,7 @@ const Panel: FC = ({ children, ...props }) => {
             className={css(accordionPanelStyles)}
             {...getPanelProps()}
             style={{ maxHeight: expanded ? `${height}px` : '0px' }}
-            ref={content}
+            ref={onSetRef}
           >
             <div>{children}</div>
           </div>
