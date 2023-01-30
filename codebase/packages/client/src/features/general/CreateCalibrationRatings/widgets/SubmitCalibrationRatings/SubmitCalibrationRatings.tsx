@@ -54,7 +54,7 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
     if (hasActions && !loading && !loaded) {
       dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: 'CURRENT' }));
     }
-  }, [loading, loading]);
+  }, [loading, loaded, isStartedPoint, hasActions]);
 
   if (isAnniversaryColleague || loading || !isStartedPoint) return null;
 
