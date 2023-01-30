@@ -29,10 +29,16 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   const { backPath } = (state as any) || {};
 
   const calibrationReview = useSelector(calibrationReviewDataSelector(userUuid)) || {};
-  const { endTime, startTime, status: TLPStatus } = useSelector(getCalibrationPointSelector(userUuid, 'CURRENT'));
+  const {
+    endTime,
+    startTime,
+    status: TLPStatus,
+    statistics = {},
+  } = useSelector(getCalibrationPointSelector(userUuid, 'CURRENT'));
   const isAnniversaryColleague = useSelector(isAnniversaryTimelineType(userUuid, 'CURRENT'));
+  const hasActions = Object.keys(statistics).length > 0;
 
-  const { loading } = useSelector(calibrationReviewMetaSelector);
+  const { loading, loaded } = useSelector(calibrationReviewMetaSelector);
   const { uuid = 'new', status } = calibrationReview;
   const isStartedPoint =
     ![Status.NOT_STARTED, Status.COMPLETED].includes(TLPStatus) &&
@@ -44,9 +50,11 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   const isViewing = !isSubmitting && !isEditing && status !== Status.WAITING_FOR_APPROVAL;
 
   useEffect(() => {
-    !isAnniversaryColleague &&
+    if (!isStartedPoint || isAnniversaryColleague) return;
+    if (hasActions && !loading && !loaded) {
       dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: 'CURRENT' }));
-  }, []);
+    }
+  }, [loading, loading]);
 
   if (isAnniversaryColleague || loading || !isStartedPoint) return null;
 

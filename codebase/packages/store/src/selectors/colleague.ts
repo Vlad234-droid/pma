@@ -1,6 +1,8 @@
 import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
+import { Statuses } from '../config/types';
+import { filterByDate } from '../utils/date';
 
 //@ts-ignore
 export const colleagueSelector = (state: RootState) => state.colleague;
@@ -33,6 +35,18 @@ export const getColleagueCycleSelector = (uuid: string) =>
 
     return cycles;
   });
+
+export const colleagueCycleDataSelector = (colleagueUuid: string, cycleId: string) => (state: RootState) => {
+  const colleague = colleagueSelector(state);
+  if (cycleId === 'CURRENT') {
+    return (
+      colleague.data[colleagueUuid]?.cycles
+        .filter(({ status }) => status === Statuses.STARTED)
+        .sort(({ endTime }, { endTime: nextEndTime }) => filterByDate(endTime, nextEndTime))[0] || {}
+    );
+  }
+  return colleague.data[colleagueUuid]?.cycles?.find((cycle) => cycle.uuid === cycleId) || {};
+};
 
 const getDepartmentName = (workRelationship) => workRelationship?.department?.name;
 

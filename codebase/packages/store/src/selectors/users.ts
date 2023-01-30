@@ -1,16 +1,15 @@
 import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
+import { Statuses } from '../config/types';
+import { filterByDate } from '../utils/date';
 
 export const usersSelector = (state: RootState) => state.users;
 const colleagueSelector = (state: RootState) => state.colleague;
 
 export const getFullName = (profile) => {
   const { firstName, middleName, lastName } = profile || {};
-  let fullName = '';
-  fullName = firstName ? firstName : '';
-  fullName = middleName ? `${fullName} ${middleName}` : fullName;
-  return lastName ? `${fullName} ${lastName}` : fullName;
+  return [firstName, middleName, lastName].filter(Boolean).join(' ');
 };
 
 export const colleagueUUIDSelector = (state: RootState) => {
@@ -93,6 +92,15 @@ export const currentUserMetaSelector = createSelector(usersSelector, ({ meta }) 
 export const userPerformanceCyclesSelector = (state: RootState) => {
   const users = usersSelector(state);
   return users.current.metadata.cycles;
+};
+
+export const userCurrentPerformanceCycleSelector = (state: RootState) => {
+  const users = usersSelector(state);
+  return (
+    users.current.metadata.cycles
+      .filter(({ status }) => status === Statuses.STARTED)
+      .sort(({ endTime }, { endTime: nextEndTime }) => filterByDate(endTime, nextEndTime))[0] || {}
+  );
 };
 
 export const colleagueCycleSelector = (state: RootState) => {

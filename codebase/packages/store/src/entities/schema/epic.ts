@@ -38,7 +38,7 @@ export const getSchemaEpic: Epic = (action$, state$, { api }) =>
 
               const updatedForms: any[] = addStrategicObjectiveInForms(
                 convertFormsJsonToObject(schema.forms.filter((form) => form)),
-                elementNumbers,
+                elementNumbers.sort(),
               );
               return of(getSchema.success({ current: { ...schema, forms: updatedForms } }));
             }),
@@ -59,7 +59,7 @@ export const getColleagueSchemaEpic: Epic = (action$, state$, { api }) =>
         mergeMap(({ data: schema }) => {
           const state = state$.value;
           // @ts-ignore
-          const { reviews } = state?.managers?.data?.PENDING?.find(({ uuid }) => uuid === colleagueUuid) || {
+          const { reviews } = state?.managers?.reviews?.data?.APPROVED?.find(({ uuid }) => uuid === colleagueUuid) || {
             reviews: [],
           };
           // @ts-ignore
@@ -74,7 +74,7 @@ export const getColleagueSchemaEpic: Epic = (action$, state$, { api }) =>
 
           const updatedForms: any[] = addStrategicObjectiveInForms(
             convertFormsJsonToObject(schema.forms.filter((form) => form)),
-            numbers,
+            numbers.sort(),
           );
           return of(
             getColleagueSchema.success({
@@ -131,7 +131,7 @@ export const getSchemaWithColleaguePermissionEpic: Epic = (action$, state$, { ap
                   schema.forms.filter((form) => form),
                   [...userRoles, ...userWorkLevels],
                 ),
-                elementNumbers,
+                elementNumbers.sort(),
               );
               return of(getSchema.success({ current: { ...schema, forms: updatedForms } }));
             }),

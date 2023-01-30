@@ -8,32 +8,14 @@ import { ExpressionType } from '../config/types';
 
 //@ts-ignore
 export const schemaMetaSelector = (state: RootState) => state.schema?.meta;
+export const schemaColleaguesMetaSelector = (state: RootState) => state.schema?.colleagueMeta;
 export const schemaSelector = (state: RootState) => state.schema.current;
 export const colleagueSchemaSelector = (colleagueUuid) => (state: RootState) =>
   state.schema.colleagueSchema[colleagueUuid] || [];
 export const schemaPDPSelector = (state: RootState) => state.pdp;
 
-//TODO: remove
-export const getObjectiveSchema = createSelector(schemaSelector, (schema: any) => {
-  if (!schema?.cycle) {
-    return { ...schema };
-  }
-  const {
-    cycle: { timelinePoints = [] },
-  } = schema;
-  const review = timelinePoints.find((review) => review.reviewType === ReviewType.OBJECTIVE);
-
-  const reviewMarkup = {
-    ...schema,
-    ...(review?.form?.json ? JSON.parse(review.form.json) : {}),
-    markup: {
-      min: Number(review?.properties?.pm_review_min || 0),
-      max: Number(review?.properties?.pm_review_max || 0),
-    },
-  };
-
-  return reviewMarkup;
-});
+export const schemaColleagueMetaSelector = (colleagueUuid: string) =>
+  createSelector(schemaColleaguesMetaSelector, (data) => data[colleagueUuid]);
 
 export const parseSchema = (schema: any) => {
   if (!schema?.metadata?.cycle) {

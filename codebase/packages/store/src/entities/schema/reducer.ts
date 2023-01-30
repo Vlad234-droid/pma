@@ -5,12 +5,14 @@ export type InitialStateType = {
   meta: { loading: boolean; loaded: boolean; updating: boolean; updated: boolean; error: any };
   current: { metadata?: any; forms?: any[] };
   colleagueSchema: any;
+  colleagueMeta: {};
 };
 
 export const initialState: InitialStateType = {
   meta: { loading: false, loaded: false, updating: false, updated: false, error: null },
   current: {},
   colleagueSchema: {},
+  colleagueMeta: {},
 };
 
 export default createReducer(initialState)
@@ -42,6 +44,10 @@ export default createReducer(initialState)
   })
   .handleAction(getColleagueSchema.success, (state, { payload }) => ({
     ...state,
+    colleagueMeta: {
+      ...state.colleagueMeta,
+      [payload.colleagueUuid]: { loading: false, loaded: true, updating: false, updated: false },
+    },
     colleagueSchema: {
       ...state.colleagueSchema,
       [payload.colleagueUuid]: {
