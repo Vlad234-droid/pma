@@ -74,15 +74,7 @@ export type Config<O> = {
 export const identityTokenSwapPlugin = <O>(config: Config<O> & Optional): Plugin => {
   const plugin: Plugin = async (req: Request, res: Response) => {
     // init plugin config
-    const {
-      identityClientId,
-      identityClientSecret,
-      strategy,
-      shouldRun = () => true,
-      apiEnv,
-      path = '/identity/v4/issue-token/token',
-      cookieConfig,
-    } = config;
+    const { identityClientId, identityClientSecret, strategy, shouldRun = () => true, apiEnv, cookieConfig } = config;
 
     const baseUrl = resolveBaseUrl(TESCO_API_URLS, { apiEnv });
 
