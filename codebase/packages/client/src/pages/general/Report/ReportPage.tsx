@@ -62,7 +62,7 @@ const ReportPage: FC = () => {
         ...(!isEmpty(filterValues) ? filterToRequest(filterValues) : {}),
       }),
     );
-  }, [filterValues, year]);
+  }, [year, JSON.stringify(filterValues)]);
 
   const changeYearHandler = (value) => {
     if (!value) return;
@@ -90,10 +90,7 @@ const ReportPage: FC = () => {
     dispatch(ColleagueFilterAction.getReportingFilters({ ...filterToRequest(data), year }));
   }, []);
 
-  const handleChangeFilterValues = (values: Record<string, Record<string, boolean>>) => {
-    setFilterValues(values);
-    setFilterOpen(false);
-  };
+  const handleChangeFilterValues = (values: Record<string, Record<string, boolean>>) => setFilterValues(values);
 
   const fieldOptions: Option[] = getYearsFromCurrentYear(getFinancialYear(), getDepthByYears()).map(({ value }) => ({
     value,
@@ -167,14 +164,16 @@ const ReportPage: FC = () => {
 
           {isFilterOpen && (
             <UnderlayModal onClose={() => setFilterOpen(false)} styles={{ maxWidth: !mobileScreen ? '500px' : '100%' }}>
-              {() => (
+              {({ onClose }) => (
                 <FilterForm
                   defaultValues={filterValues}
                   onCancel={() => {
-                    updateFilter({});
-                    handleChangeFilterValues({});
+                    onClose();
+                    setTimeout(() => {
+                      updateFilter({});
+                      handleChangeFilterValues({});
+                    }, 300);
                   }}
-                  onUpdate={updateFilter}
                   filters={
                     Object.fromEntries(
                       Object.entries(reportingFilters).sort(
@@ -182,15 +181,32 @@ const ReportPage: FC = () => {
                       ),
                     ) as { [key: string]: Array<{ [key: string]: string }> }
                   }
-                  onSubmit={handleChangeFilterValues}
+                  onSubmit={(data) => {
+                    onClose();
+                    setTimeout(() => {
+                      handleChangeFilterValues(data);
+                    }, 300);
+                  }}
                 >
-                  {({ onCancel: onChildrenCancel, onSubmit: onChildrenSubmit, isValid: isChildrenValid }) => {
+                  {({
+                    onCancel: onChildrenCancel,
+                    onSubmit: onChildrenSubmit,
+                    isValid: isChildrenValid,
+                    values: data,
+                  }) => {
                     return (
                       <div className={css(blockStyle, customStyles)}>
                         <div className={css(wrapperButtonStyle)}>
                           <div className={css(buttonsWrapper)}>
                             <Button isDisabled={false} styles={[buttonCancelStyle]} onPress={onChildrenCancel}>
                               Clear filter
+                            </Button>
+                            <Button
+                              //@ts-ignore
+                              onPress={() => handleChangeFilterValues(data)}
+                              styles={[submitButtonStyle({ isValid: true })]}
+                            >
+                              Apply filter
                             </Button>
                             <Button
                               //@ts-ignore

@@ -146,7 +146,7 @@ const ReportStatistics = () => {
         ...(!isEmpty(filterValues) ? filterToRequest(filterValues) : {}),
       }),
     );
-  }, [filterValues]);
+  }, [JSON.stringify(filterValues)]);
 
   useEffect(() => {
     setLinkTitle(defineHeaderTitle(convertToReportEnum(pathname), t));
@@ -156,11 +156,7 @@ const ReportStatistics = () => {
     dispatch(ColleagueFilterAction.getReportingFilters({ ...filterToRequest(data), year }));
   }, []);
 
-  const handleChangeFilterValues = (values: Record<string, Record<string, boolean>>) => {
-    setFilterValues(values);
-    setFilterOpen(false);
-    dispatch(StatisticsAction.clearStatistics());
-  };
+  const handleChangeFilterValues = (values: Record<string, Record<string, boolean>>) => setFilterValues(values);
 
   const appliedFilters: Array<string> = useMemo(() => {
     return (
@@ -228,14 +224,17 @@ const ReportStatistics = () => {
           />
           {isFilterOpen && (
             <UnderlayModal onClose={() => setFilterOpen(false)} styles={{ maxWidth: !mobileScreen ? '500px' : '100%' }}>
-              {() => (
+              {({ onClose }) => (
                 <FilterForm
                   defaultValues={filterValues}
                   onCancel={() => {
-                    updateFilter({});
-                    handleChangeFilterValues({});
+                    onClose();
+                    setTimeout(() => {
+                      updateFilter({});
+                      handleChangeFilterValues({});
+                      dispatch(StatisticsAction.clearStatistics());
+                    }, 300);
                   }}
-                  onUpdate={updateFilter}
                   filters={
                     Object.fromEntries(
                       Object.entries(reportingFilters).sort(
@@ -243,15 +242,33 @@ const ReportStatistics = () => {
                       ),
                     ) as { [key: string]: Array<{ [key: string]: string }> }
                   }
-                  onSubmit={handleChangeFilterValues}
+                  onSubmit={(data) => {
+                    onClose();
+                    setTimeout(() => {
+                      handleChangeFilterValues(data);
+                      dispatch(StatisticsAction.clearStatistics());
+                    }, 300);
+                  }}
                 >
-                  {({ onCancel: onChildrenCancel, onSubmit: onChildrenSubmit, isValid: isChildrenValid }) => {
+                  {({
+                    onCancel: onChildrenCancel,
+                    onSubmit: onChildrenSubmit,
+                    isValid: isChildrenValid,
+                    values: data,
+                  }) => {
                     return (
                       <div className={css(blockStyle, customStyles)}>
                         <div className={css(wrapperButtonStyle)}>
                           <div className={css(buttonsWrapper)}>
                             <Button isDisabled={false} styles={[buttonCancelStyle]} onPress={onChildrenCancel}>
                               Clear filter
+                            </Button>
+                            <Button
+                              //@ts-ignore
+                              onPress={() => handleChangeFilterValues(data)}
+                              styles={[submitButtonStyle({ isValid: true })]}
+                            >
+                              Apply filter
                             </Button>
                             <Button
                               //@ts-ignore
