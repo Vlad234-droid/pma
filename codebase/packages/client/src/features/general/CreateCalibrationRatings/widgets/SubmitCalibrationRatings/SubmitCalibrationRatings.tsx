@@ -21,7 +21,7 @@ type Props = {
   userUuid: string;
 };
 
-const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
+const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,7 +32,7 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   const { endTime, startTime, status: TLPStatus } = useSelector(getCalibrationPointSelector(userUuid, 'CURRENT'));
   const isAnniversaryColleague = useSelector(isAnniversaryTimelineType(userUuid, 'CURRENT'));
 
-  const { loading } = useSelector(calibrationReviewMetaSelector);
+  const { loading, loaded } = useSelector(calibrationReviewMetaSelector);
   const { uuid = 'new', status } = calibrationReview;
   const isStartedPoint =
     ![Status.NOT_STARTED, Status.COMPLETED].includes(TLPStatus) &&
@@ -45,8 +45,10 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
 
   useEffect(() => {
     !isAnniversaryColleague &&
+      !loading &&
+      !loaded &&
       dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: 'CURRENT' }));
-  }, []);
+  }, [loading, loading]);
 
   if (isAnniversaryColleague || loading || !isStartedPoint) return null;
 
@@ -79,6 +81,6 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
       }
     />
   );
-});
+};
 
 export default SubmitCalibrationRatings;

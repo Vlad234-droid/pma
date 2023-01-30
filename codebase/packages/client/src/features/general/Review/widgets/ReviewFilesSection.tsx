@@ -14,16 +14,10 @@ type Props = {
 };
 
 export const ReviewFilesSection: FC<Props> = ({ colleagueUuid }) => {
-  const dispatch = useDispatch();
-
   const { css, theme } = useStyle();
 
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
   const files: File[] = useSelector(getPreviousReviewFilesSelector()) || [];
-
-  useEffect(() => {
-    dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: colleagueUuid }));
-  }, []);
 
   return (
     <>
