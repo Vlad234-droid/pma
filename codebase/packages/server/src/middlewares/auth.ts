@@ -42,6 +42,10 @@ export const authMiddleware = ({
           httpOnly: true,
           secure: isProduction,
           signed: isProduction,
+          cookieShapeResolver: ({ access_token, claims }) => ({
+            access_token,
+            claims: { sub: claims.sub },
+          }),
         },
       }),
     ),
