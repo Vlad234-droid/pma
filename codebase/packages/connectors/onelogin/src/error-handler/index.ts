@@ -38,7 +38,7 @@ export const errorHandler =
       }
     } else if (status === 401) {
       // Client should refresh page on 401 status code.
-      return res.status(401).send(error);
+      next(error);
     } else {
       const message = `${status}, ${error.message}`;
       logger(LoggerEvent.error(flow, Error(message), { req, res }));
