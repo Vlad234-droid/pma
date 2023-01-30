@@ -122,6 +122,7 @@ const StatisticsReviews: FC<Props> = ({ type, toggleFullView, isFullView, filter
     navigate(buildPath(paramsReplacer(`${Page.USER_REVIEWS}`, { ':uuid': uuid })), {
       state: {
         backPath: `${pathname}${search}`,
+        filters: filterValues,
       },
     });
 

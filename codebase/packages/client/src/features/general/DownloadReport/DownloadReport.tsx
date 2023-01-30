@@ -69,7 +69,7 @@ const DownloadReport: FC = () => {
     }).then(() => setShowSuccessModal(true));
   };
 
-  const handleClose = () => navigate(buildPath(Page.REPORT));
+  const handleClose = () => navigate(buildPath(Page.REPORT), { state: { filters } });
 
   const fieldOptions: Option[] = getYearsFromCurrentYear(getFinancialYear(), getDepthByYears()).map(({ value }) => ({
     value,

@@ -26,7 +26,7 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { pathname, state } = useLocation();
-  const { backPath } = (state as any) || {};
+  const { backPath, filters } = (state as any) || {};
 
   const calibrationReview = useSelector(calibrationReviewDataSelector(userUuid)) || {};
   const {
@@ -82,7 +82,7 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
       background={isViewing ? 'white' : 'tescoBlue'}
       onClick={() =>
         navigate(buildPath(paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':userUuid': userUuid, ':uuid': uuid })), {
-          state: { backPath: pathname, prevBackPath: backPath },
+          state: { backPath: pathname, prevBackPath: backPath, filters },
         })
       }
     />

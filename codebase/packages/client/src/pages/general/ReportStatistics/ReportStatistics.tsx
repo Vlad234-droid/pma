@@ -122,6 +122,7 @@ const ReportStatistics = () => {
   const { pathname, state } = useLocation();
   const dispatch = useDispatch();
   const { filters } = (state as any) || {};
+
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const query = useQueryString() as Record<string, string>;
   const { year } = query;
@@ -232,7 +233,6 @@ const ReportStatistics = () => {
                     setTimeout(() => {
                       updateFilter({});
                       handleChangeFilterValues({});
-                      dispatch(StatisticsAction.clearStatistics());
                     }, 300);
                   }}
                   filters={
@@ -245,8 +245,8 @@ const ReportStatistics = () => {
                   onSubmit={(data) => {
                     onClose();
                     setTimeout(() => {
-                      handleChangeFilterValues(data);
                       dispatch(StatisticsAction.clearStatistics());
+                      handleChangeFilterValues(data);
                     }, 300);
                   }}
                 >
@@ -265,7 +265,10 @@ const ReportStatistics = () => {
                             </Button>
                             <Button
                               //@ts-ignore
-                              onPress={() => handleChangeFilterValues(data)}
+                              onPress={() => {
+                                dispatch(StatisticsAction.clearStatistics());
+                                handleChangeFilterValues(data);
+                              }}
                               styles={[submitButtonStyle({ isValid: true })]}
                             >
                               Apply filter

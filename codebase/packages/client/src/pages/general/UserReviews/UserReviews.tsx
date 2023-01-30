@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { CreateRule, IconButton as BackButton, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 
 import useColleagueTenant from 'hooks/useColleagueTenant';
 import { ColleagueProfileWidget } from 'features/general/Profile';
@@ -16,14 +16,15 @@ const UserObjectivesPage = () => {
   const { css, matchMedia } = useStyle();
   const tenant = useTenant();
   const navigate = useNavigate();
-  const { uuid } = useParams<{ uuid: string }>();
+  const { state } = useLocation();
+  const { backPath, filters } = (state as any) || {};
+  const { uuid } = useParams<{ uuid: string }>() as { uuid: string };
   const { tenant: userTenant, loading, loaded } = useColleagueTenant(uuid as string);
   const isLineManager = usePermission([role.LINE_MANAGER]);
 
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
   const handleWidgetClick = () => {
-    // @ts-ignore
     if (tenant === Tenant.GENERAL) {
       navigate(buildPath(Page.STRATEGIC_DRIVERS));
     } else {
@@ -39,7 +40,6 @@ const UserObjectivesPage = () => {
   const Widget = useMemo(
     () =>
       React.lazy(() =>
-        // @ts-ignore
         tenant === Tenant.GENERAL
           ? import('features/general/StrategicDrivers').then((module) => ({ default: module.OrganizationWidget }))
           : import('features/bank/Objectives').then((module) => ({ default: module.BusinessObjectives })),
@@ -62,7 +62,20 @@ const UserObjectivesPage = () => {
   return (
     <div className={css(bodyBlockStyles({ mobileScreen }))}>
       <div className={css(mainBlockStyles({ mobileScreen }))}>
-        {/*// @ts-ignore */}
+        <div className={css(arrowLeftStyle)}>
+          <BackButton
+            testId={'test-back-button'}
+            onPress={() => {
+              navigate(
+                {
+                  pathname: backPath || buildPath(Page.CONTRIBUTION),
+                },
+                { state: { filters } },
+              );
+            }}
+            graphic='backwardLink'
+          />
+        </div>
         <ColleagueProfileWidget uuid={uuid} />
         <div data-test-id={'test-step-indicator'} className={css(timelineWrapperStyles)}>
           <Timeline colleagueUuid={uuid} />
@@ -121,6 +134,18 @@ const mainBlockStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }
   display: 'flex',
   flexDirection: 'column',
 });
+
+const arrowLeftStyle: Rule = ({ theme }) => {
+  return {
+    position: 'fixed',
+    top: '34px',
+    textDecoration: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    left: theme.spacing.s4,
+    zIndex: '2',
+  };
+};
 
 const timelineWrapperStyles: Styles = {
   display: 'flex',
