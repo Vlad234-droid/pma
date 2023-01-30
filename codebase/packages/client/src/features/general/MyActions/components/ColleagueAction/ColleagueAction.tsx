@@ -1,26 +1,21 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import {
-  ReviewsActions,
-  SchemaActions,
-  ColleagueActions,
-  getAllReviews,
-  getColleaguesSchemas,
-  TimelineActions,
-} from '@pma/store';
+import { getAllReviews, getColleaguesSchemas } from '@pma/store';
 
 import { useTenant, Tenant } from 'features/general/Permission';
-import useDispatch from 'hooks/useDispatch';
 import ColleagueInfo from 'components/ColleagueInfo';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { TileWrapper } from 'components/Tile';
 import { Notification } from 'components/Notification';
 import { useTranslation } from 'components/Translation';
+import Spinner from 'components/Spinner';
 import { ActionStatus, ReviewType, Status } from 'config/enum';
+
 import { Buttons } from '../Buttons';
 import { ColleagueReview } from '../ColleagueReviews';
 import { useSuccessModalContext } from '../../context/successModalContext';
+import useFetchColleagueReviews from '../../hook/useFetchColleagueReviews';
 
 type Props = {
   status: ActionStatus;
@@ -30,21 +25,18 @@ type Props = {
 
 const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
   const { setOpened: setIsOpenSuccessModal, setStatusHistory } = useSuccessModalContext();
-  const [colleagueExpanded, setColleagueExpanded] = useState<string>();
+  const [colleagueExpanded, setColleagueExpanded] = useState<string | null>(null);
   const [colleagueReviews, updateColleagueReviews] = useState<any>([]);
   const [formsValid, validateReview] = useState<{ [key: string]: boolean }>({});
   const isButtonsDisabled = Object.values(formsValid).some((value) => !value);
   const showNotification = status !== ActionStatus.COMPLETED;
 
-  const dispatch = useDispatch();
   const { css } = useStyle();
   const { t } = useTranslation();
   const tenant = useTenant();
   const reviews = useSelector(getAllReviews) || [];
-  const cycleUuidList = useMemo(
-    () => [...new Set(colleague.timeline.map(({ cycleUuid }) => cycleUuid))] as string[],
-    [colleague.uuid],
-  );
+
+  const { loaded, loading } = useFetchColleagueReviews(colleagueExpanded, colleague);
 
   const reviewSchemaMap = useSelector(getColleaguesSchemas(colleague.uuid)) || {};
 
@@ -88,27 +80,6 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
     [colleague, colleagueReviews],
   );
 
-  const colleagueReviewUuids = useMemo(
-    () => colleague.reviews.map(({ uuid }) => uuid),
-    [JSON.stringify(colleague.reviews)],
-  );
-
-  useEffect(() => {
-    colleagueReviewUuids.forEach((uuid) => {
-      dispatch(ReviewsActions.getReviewByUuid({ uuid }));
-    });
-    cycleUuidList.forEach((cycleUuid) => {
-      dispatch(TimelineActions.getUserTimeline({ colleagueUuid: colleague.uuid, cycleUuid }));
-      dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid: colleague.uuid }));
-      dispatch(
-        SchemaActions.getColleagueSchema({
-          colleagueUuid: colleague.uuid,
-          cycleUuid,
-        }),
-      );
-    });
-  }, [colleagueReviewUuids]);
-
   useEffect(() => {
     updateColleagueReviews(reviews);
   }, [reviews]);
@@ -148,77 +119,81 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                       </div>
                     </div>
                     <Panel>
-                      {colleague.timeline.map((colleagueTimeline) => {
-                        const { code, uuid } = colleagueTimeline;
-                        const reviewGroupByStatus: [Status, any[]][] = [];
-                        const colleagueReviews = colleague.reviews.filter(({ tlPointUuid }) => tlPointUuid === uuid);
-                        const statusStatistics = Object.keys(colleagueTimeline.statistics || {}) as Status[];
+                      {!loaded && loading ? (
+                        <Spinner fullHeight />
+                      ) : (
+                        colleague.timeline.map((colleagueTimeline) => {
+                          const { code, uuid } = colleagueTimeline;
+                          const reviewGroupByStatus: [Status, any[]][] = [];
+                          const colleagueReviews = colleague.reviews.filter(({ tlPointUuid }) => tlPointUuid === uuid);
+                          const statusStatistics = Object.keys(colleagueTimeline.statistics || {}) as Status[];
 
-                        for (const status of statusStatistics) {
-                          reviewGroupByStatus.push([
-                            status,
-                            colleagueReviews
-                              .filter((review) => status === review.status)
-                              .sort(({ number }, { number: nextNumber }) => (number > nextNumber ? 1 : -1)),
-                          ]);
-                        }
+                          for (const status of statusStatistics) {
+                            reviewGroupByStatus.push([
+                              status,
+                              colleagueReviews
+                                .filter((review) => status === review.status)
+                                .sort(({ number }, { number: nextNumber }) => (number > nextNumber ? 1 : -1)),
+                            ]);
+                          }
 
-                        return (
-                          <div className={css({ margin: '24px 35px 24px 24px' })} key={uuid}>
-                            {showNotification && (
-                              <Notification
-                                graphic='information'
-                                iconColor='pending'
-                                text={t(
-                                  'time_to_approve_or_decline',
-                                  tenant === Tenant.GENERAL
-                                    ? 'It’s time to review your colleague’s objectives and / or reviews'
-                                    : "It's time to review your colleague's priorities and / or reviews",
-                                  { ns: tenant },
-                                )}
-                                customStyle={{
-                                  background: '#FFDBC2',
-                                  marginBottom: '20px',
-                                }}
-                              />
-                            )}
-                            {reviewGroupByStatus.map(([statusReview, colleagueReviews]) => {
-                              return (
-                                <div key={statusReview}>
-                                  {colleagueReviews.map((review) => {
-                                    const reviewData = reviews.find(({ uuid }) => uuid === review?.uuid);
-                                    if (!reviewData) return null;
-                                    return (
-                                      <ColleagueReview
-                                        key={review.uuid}
-                                        colleagueUuid={colleague.uuid}
-                                        review={reviewData}
-                                        timelinePoint={colleagueTimeline}
-                                        schema={reviewSchemaMap?.[colleagueTimeline?.cycleUuid]?.[code] || []}
-                                        validateReview={handleValidateReview}
-                                        onUpdate={handleChangeReview}
-                                      />
-                                    );
-                                  })}
-                                  {(statusReview === Status.WAITING_FOR_COMPLETION ||
-                                    statusReview === Status.WAITING_FOR_APPROVAL) &&
-                                    status === ActionStatus.PENDING && (
-                                      <Buttons
-                                        status={statusReview}
-                                        code={code}
-                                        tlPointUuid={colleagueTimeline.uuid}
-                                        reviewType={colleagueTimeline.reviewType}
-                                        cycleUuid={colleagueTimeline.cycleUuid || 'CURRENT'}
-                                        onUpdate={handleUpdateReview}
-                                        isDisabled={isButtonsDisabled}
-                                      />
-                                    )}
-                                </div>
-                              );
-                            })}
-                          </div>
-                        );
-                      })}
+                          return (
+                            <div className={css({ margin: '24px 35px 24px 24px' })} key={uuid}>
+                              {showNotification && (
+                                <Notification
+                                  graphic='information'
+                                  iconColor='pending'
+                                  text={t(
+                                    'time_to_approve_or_decline',
+                                    tenant === Tenant.GENERAL
+                                      ? 'It’s time to review your colleague’s objectives and / or reviews'
+                                      : "It's time to review your colleague's priorities and / or reviews",
+                                    { ns: tenant },
+                                  )}
+                                  customStyle={{
+                                    background: '#FFDBC2',
+                                    marginBottom: '20px',
+                                  }}
+                                />
+                              )}
+                              {reviewGroupByStatus.map(([statusReview, colleagueReviews]) => {
+                                return (
+                                  <div key={statusReview}>
+                                    {colleagueReviews.map((review) => {
+                                      const reviewData = reviews.find(({ uuid }) => uuid === review?.uuid);
+                                      if (!reviewData) return null;
+                                      return (
+                                        <ColleagueReview
+                                          key={review.uuid}
+                                          colleagueUuid={colleague.uuid}
+                                          review={reviewData}
+                                          timelinePoint={colleagueTimeline}
+                                          schema={reviewSchemaMap?.[colleagueTimeline?.cycleUuid]?.[code] || []}
+                                          validateReview={handleValidateReview}
+                                          onUpdate={handleChangeReview}
+                                        />
+                                      );
+                                    })}
+                                    {(statusReview === Status.WAITING_FOR_COMPLETION ||
+                                      statusReview === Status.WAITING_FOR_APPROVAL) &&
+                                      status === ActionStatus.PENDING && (
+                                        <Buttons
+                                          status={statusReview}
+                                          code={code}
+                                          tlPointUuid={colleagueTimeline.uuid}
+                                          reviewType={colleagueTimeline.reviewType}
+                                          cycleUuid={colleagueTimeline.cycleUuid || 'CURRENT'}
+                                          onUpdate={handleUpdateReview}
+                                          isDisabled={isButtonsDisabled}
+                                        />
+                                      )}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          );
+                        })
+                      )}
                     </Panel>
                   </Section>
                 </div>

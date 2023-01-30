@@ -145,6 +145,7 @@ export default createReducer(initialState)
   .handleAction(getReviewByUuid.success, (state, { payload }) => ({
     ...state,
     data: union([payload], state.data),
+    meta: { ...state.meta, loading: false, loaded: true },
   }))
   .handleAction(getReviewByUuid.failure, (state, { payload }) => ({
     ...state,
