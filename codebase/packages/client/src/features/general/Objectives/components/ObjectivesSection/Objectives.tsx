@@ -3,14 +3,11 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import { ReviewType, Status, Tenant } from 'config/enum';
 import {
   colleagueUUIDSelector,
-  getReviewSchema,
   getTimelineByCodeSelector,
   isReviewsInStatus,
   ReviewsActions,
   timelineTypesAvailabilitySelector,
-  getActiveTimelineByReviewTypeSelector,
   colleagueCurrentCycleSelector,
-  colleagueCycleDataSelector,
   colleagueCycleSelector,
 } from '@pma/store';
 import { Trans, useTranslation } from 'components/Translation';
@@ -24,7 +21,7 @@ import { IconButton } from 'components/IconButton';
 import Spinner from 'components/Spinner';
 import useDispatch from 'hooks/useDispatch';
 import { useObjectivesData, useDownload } from '../../hooks';
-import { canEditAllObjectiveFn } from '../../utils';
+import { checkIfCanEditAllObjective } from '../../utils';
 
 export const TEST_ID = 'objectives-test-id';
 
@@ -37,11 +34,6 @@ const Objectives: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const cycle = useSelector(colleagueCycleSelector);
   const isCycleCompleted = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
 
-  const activeTimeline = useSelector(
-    getActiveTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, USER.current, currentCycle),
-  );
-  const objectiveSchema = useSelector(getReviewSchema(activeTimeline?.code)) || {};
-
   const {
     objectives,
     meta: { loading, loaded },
@@ -50,18 +42,13 @@ const Objectives: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid, currentCycle)) || {};
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
 
-  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current, currentCycle));
-  const status = timelineObjective?.summaryStatus;
+  const timelinePoint = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current, currentCycle));
+  const status = timelinePoint?.summaryStatus;
   const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
 
   const download = useDownload(objectives);
 
-  const canEditAllObjective = isCycleCompleted
-    ? false
-    : canEditAllObjectiveFn({
-        schema: objectiveSchema,
-        timeline: timelineObjective,
-      });
+  const canEditAllObjective = isCycleCompleted ? false : checkIfCanEditAllObjective(timelinePoint);
 
   useEffect(() => {
     if (canShowObjectives) {
