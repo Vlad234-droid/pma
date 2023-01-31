@@ -7,6 +7,7 @@ import {
   calibrationReviewMetaSelector,
   isAnniversaryTimelineType,
   getCalibrationPointSelector,
+  colleagueCurrentCycleSelector,
 } from '@pma/store';
 
 import BaseWidget from 'components/BaseWidget';
@@ -29,13 +30,14 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   const { backPath, filters } = (state as any) || {};
 
   const calibrationReview = useSelector(calibrationReviewDataSelector(userUuid)) || {};
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(userUuid));
   const {
     endTime,
     startTime,
     status: TLPStatus,
     statistics = {},
-  } = useSelector(getCalibrationPointSelector(userUuid, 'CURRENT'));
-  const isAnniversaryColleague = useSelector(isAnniversaryTimelineType(userUuid, 'CURRENT'));
+  } = useSelector(getCalibrationPointSelector(userUuid, currentCycle));
+  const isAnniversaryColleague = useSelector(isAnniversaryTimelineType(userUuid, currentCycle));
   const hasActions = Object.keys(statistics).length > 0;
 
   const { loading, loaded } = useSelector(calibrationReviewMetaSelector);
@@ -52,7 +54,7 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   useEffect(() => {
     if (!isStartedPoint || isAnniversaryColleague) return;
     if (hasActions && !loading && !loaded) {
-      dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: 'CURRENT' }));
+      dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: currentCycle }));
     }
   }, [loading, loaded, isStartedPoint, hasActions]);
 
