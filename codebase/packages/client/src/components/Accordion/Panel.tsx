@@ -1,5 +1,4 @@
-import React, { FC, ReactNode, useState } from 'react';
-import debounce from 'lodash.debounce';
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react';
 
 import { Rule, useStyle } from '@pma/dex-wrapper';
 
@@ -48,25 +47,26 @@ export const BasePanel: FC<Props> = ({ children, ...baseRest }) => {
 
 const Panel: FC = ({ children, ...props }) => {
   const { css } = useStyle();
-  const [content, setContent] = useState<HTMLDivElement | null>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
   const [height, setHeight] = useState(0);
 
-  useEventListener(
-    'resize',
-    debounce(() => content?.scrollHeight && setHeight(content.scrollHeight || 0), 300),
-  );
-
-  const onSetRef = (ref: HTMLDivElement | null) => {
-    if (ref) {
-      if (ref.scrollHeight === 0) {
-        // Wait until all components are rendered to set correct height
-        setTimeout(() => onSetRef(ref), 100);
-      } else if (ref.scrollHeight !== height) {
-        setHeight(ref.scrollHeight);
-        setContent(ref);
-      }
+  const onChange = (target: HTMLDivElement) => {
+    if (target.scrollHeight !== height) {
+      setHeight(target.scrollHeight);
     }
   };
+
+  useEventListener('resize', () => ref.current && onChange(ref.current));
+
+  useEffect(() => {
+    const mutationObserver = new MutationObserver(([mutation]) => onChange(mutation.target as HTMLDivElement));
+
+    if (ref?.current) {
+      mutationObserver.observe(ref.current, { attributes: true, childList: true, subtree: true });
+    }
+
+    return () => mutationObserver.disconnect();
+  }, [ref]);
 
   return (
     <BasePanel {...props}>
@@ -76,7 +76,7 @@ const Panel: FC = ({ children, ...props }) => {
             className={css(accordionPanelStyles)}
             {...getPanelProps()}
             style={{ maxHeight: expanded ? `${height}px` : '0px' }}
-            ref={onSetRef}
+            ref={ref}
           >
             <div>{children}</div>
           </div>
