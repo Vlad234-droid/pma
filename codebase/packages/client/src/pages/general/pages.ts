@@ -342,7 +342,6 @@ const pages: Record<Page, PageComponent> = {
     Element: UserReviews,
     title: (_, t) => t('title_colleague_overview'),
     withHeader: true,
-    backPath: Page.CONTRIBUTION,
     perform: [role.LINE_MANAGER, role.EXECUTIVE],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },

@@ -7,9 +7,13 @@ import { catchError, filter, mergeMap, switchMap, takeUntil } from 'rxjs/operato
 import { ReviewType, Status } from '@pma/client/src/config/enum';
 
 import { getColleagueSchema, getSchema, getSchemaWithColleaguePermission } from './actions';
-import { addStrategicObjectiveInForms, getPermittedForms, convertFormsJsonToObject } from '../../utils/formExpression';
+import {
+  addStrategicObjectiveInForms,
+  getPermittedForms,
+  convertFormsJsonToObject,
+  filterFormsWithDependentKeys,
+} from '../../utils/formExpression';
 import { colleagueUUIDSelector } from '../../selectors';
-import { getColleagueMetadataByPerformanceCycle } from '@pma/api/src/rest';
 
 export const getSchemaEpic: Epic = (action$, state$, { api }) =>
   action$.pipe(
@@ -36,9 +40,11 @@ export const getSchemaEpic: Epic = (action$, state$, { api }) =>
                   })
                   ?.map((review) => review.number) || [];
 
-              const updatedForms: any[] = addStrategicObjectiveInForms(
-                convertFormsJsonToObject(schema.forms.filter((form) => form)),
-                elementNumbers.sort(),
+              const updatedForms: any[] = filterFormsWithDependentKeys(
+                addStrategicObjectiveInForms(
+                  convertFormsJsonToObject(schema.forms.filter((form) => form)),
+                  elementNumbers.sort(),
+                ),
               );
               return of(getSchema.success({ current: { ...schema, forms: updatedForms } }));
             }),
@@ -72,9 +78,8 @@ export const getColleagueSchemaEpic: Epic = (action$, state$, { api }) =>
               (review) => review.number,
             ) || [];
 
-          const updatedForms: any[] = addStrategicObjectiveInForms(
-            convertFormsJsonToObject(schema.forms.filter((form) => form)),
-            numbers.sort(),
+          const updatedForms: any[] = filterFormsWithDependentKeys(
+            addStrategicObjectiveInForms(convertFormsJsonToObject(schema.forms.filter((form) => form)), numbers.sort()),
           );
           return of(
             getColleagueSchema.success({
@@ -126,12 +131,14 @@ export const getSchemaWithColleaguePermissionEpic: Epic = (action$, state$, { ap
                   })
                   ?.map((review) => review.number) || [];
 
-              const updatedForms: any[] = addStrategicObjectiveInForms(
-                getPermittedForms(
-                  schema.forms.filter((form) => form),
-                  [...userRoles, ...userWorkLevels],
+              const updatedForms: any[] = filterFormsWithDependentKeys(
+                addStrategicObjectiveInForms(
+                  getPermittedForms(
+                    schema.forms.filter((form) => form),
+                    [...userRoles, ...userWorkLevels],
+                  ),
+                  elementNumbers.sort(),
                 ),
-                elementNumbers.sort(),
               );
               return of(getSchema.success({ current: { ...schema, forms: updatedForms } }));
             }),

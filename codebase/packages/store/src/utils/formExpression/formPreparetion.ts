@@ -15,6 +15,7 @@ export const convertFormJsonToObject = (form: any) => {
 
   json.components = components?.map((component) => {
     let objectExpression, originValue;
+    const originKey = {};
 
     if ([FormType.TEXT_FIELD, FormType.SELECT].includes(component.type)) {
       objectExpression = getExpressionObject(component.description);
@@ -23,8 +24,11 @@ export const convertFormJsonToObject = (form: any) => {
       objectExpression = getExpressionObject(component.text);
       originValue = { text_origin: replaceExpressionString(component.text) };
     }
+    if (component?.key) {
+      originKey['origin_key'] = component?.key;
+    }
 
-    return cleanComponentExpression({ ...component, ...originValue, expression: objectExpression });
+    return cleanComponentExpression({ ...component, ...originKey, ...originValue, expression: objectExpression });
   });
   return { ...form, json };
 };

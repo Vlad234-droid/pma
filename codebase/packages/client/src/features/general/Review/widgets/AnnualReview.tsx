@@ -82,6 +82,7 @@ const AnnualReview: FC<Props> = ({ colleagueUuid, isUserView }) => {
               state: {
                 backPath: pathname,
                 prevBackPath: (state as any)?.backPath,
+                filters: (state as any)?.filters,
               },
             },
           )

@@ -759,5 +759,7 @@
   "review_form_was_sent_back_myr": "The Mid-year review form was sent back to the {{fullName}} to resubmit their rating.",
   "review_form_was_sent_back_eyr": "The Year-end review form was sent back to the {{fullName}} to resubmit their rating.",
   "review_form_approved_myr": "You have approved {{fullName}} Mid-year review.",
-  "review_form_approved_eyr": "You have approved {{fullName}} Year-end review."
+  "review_form_approved_eyr": "You have approved {{fullName}} Year-end review.",
+  "review_your_colleagues_performance_eyr": "Review your colleague’s End-year performance",
+  "review_your_colleagues_performance_myr": "Review your colleague’s Mid-year performance"
 }
