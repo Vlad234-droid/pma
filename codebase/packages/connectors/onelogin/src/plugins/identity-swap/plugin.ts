@@ -65,7 +65,7 @@ export type Config<O> = {
   };
 };
 
-const refreshCookieName = (cookieName: string) => `${cookieName}-refresh`;
+// const refreshCookieName = (cookieName: string) => `${cookieName}-refresh`;
 
 /**
  * A plugin middleware to be used in onelogin.
@@ -74,15 +74,7 @@ const refreshCookieName = (cookieName: string) => `${cookieName}-refresh`;
 export const identityTokenSwapPlugin = <O>(config: Config<O> & Optional): Plugin => {
   const plugin: Plugin = async (req: Request, res: Response) => {
     // init plugin config
-    const {
-      identityClientId,
-      identityClientSecret,
-      strategy,
-      shouldRun = () => true,
-      apiEnv,
-      path = '/identity/v4/issue-token/token',
-      cookieConfig,
-    } = config;
+    const { identityClientId, identityClientSecret, strategy, shouldRun = () => true, apiEnv, cookieConfig } = config;
 
     const baseUrl = resolveBaseUrl(TESCO_API_URLS, { apiEnv });
 
@@ -92,9 +84,12 @@ export const identityTokenSwapPlugin = <O>(config: Config<O> & Optional): Plugin
       }
 
       if (cookieConfig) {
-        clearPluginCookiesIfSessionExpired(req, res, cookieConfig, [
-          { ...cookieConfig, cookieName: refreshCookieName(cookieConfig.cookieName) },
-        ]);
+        // clearPluginCookiesIfSessionExpired(req, res, cookieConfig, [
+        //   { ...cookieConfig, cookieName: refreshCookieName(cookieConfig.cookieName) },
+        // ]);
+        clearPluginCookiesIfSessionExpired(req, res, {
+          ...cookieConfig,
+        });
 
         const { secret, cookieName, compressed } = cookieConfig;
         const data = getDataFromCookie<UserTokenResponse>(req, {
@@ -110,13 +105,13 @@ export const identityTokenSwapPlugin = <O>(config: Config<O> & Optional): Plugin
         }
       }
 
-      const refreshToken = cookieConfig
-        ? getDataFromCookie<{ refreshToken: string }>(req, {
-            cookieName: refreshCookieName(cookieConfig.cookieName),
-            secret: cookieConfig.secret,
-            compressed: cookieConfig.compressed,
-          })?.refreshToken
-        : undefined;
+      // const refreshToken = cookieConfig
+      //   ? getDataFromCookie<{ refreshToken: string }>(req, {
+      //       cookieName: refreshCookieName(cookieConfig.cookieName),
+      //       secret: cookieConfig.secret,
+      //       compressed: cookieConfig.compressed,
+      //     })?.refreshToken
+      //   : undefined;
 
       const credentials = Buffer.from(`${identityClientId}:${identityClientSecret}`).toString('base64');
       const baseHeaders = {
@@ -129,22 +124,32 @@ export const identityTokenSwapPlugin = <O>(config: Config<O> & Optional): Plugin
         baseHeaders,
       });
 
-      const data = await (refreshToken
-        ? api.refreshUserToken({
-            body: {
-              grant_type: 'refresh_token',
-              refresh_token: refreshToken,
-            },
-          })
-        : api.exchangeUserToken({
-            body: {
-              grant_type: 'token_exchange',
-              trusted_token: getIdentitySwapToken(res, strategy),
-              identity_provider: 'onelogin',
-              token_type: strategy,
-              scope: 'internal public',
-            },
-          }));
+      // const data = await (refreshToken
+      //   ? api.refreshUserToken({
+      //       body: {
+      //         grant_type: 'refresh_token',
+      //         refresh_token: refreshToken,
+      //       },
+      //     })
+      //   : api.exchangeUserToken({
+      //       body: {
+      //         grant_type: 'token_exchange',
+      //         trusted_token: getIdentitySwapToken(res, strategy),
+      //         identity_provider: 'onelogin',
+      //         token_type: strategy,
+      //         scope: 'internal public',
+      //       },
+      //     }));
+
+      const data = await api.exchangeUserToken({
+        body: {
+          grant_type: 'token_exchange',
+          trusted_token: getIdentitySwapToken(res, strategy),
+          identity_provider: 'onelogin',
+          token_type: strategy,
+          scope: 'internal public',
+        },
+      });
 
       // Identity API subject, aka colleagueUUID;
       const sub = data.claims.sub;
@@ -162,17 +167,17 @@ export const identityTokenSwapPlugin = <O>(config: Config<O> & Optional): Plugin
           maxAge: identityTokenMaxAge,
         };
 
-        const refreshTokenMaxAge = identityTokenMaxAge + data.expires_in * 1000; // 59 mins
-        const identityRefreshTokenCookie = {
-          ...cookieConfig,
-          cookieName: refreshCookieName(cookieConfig.cookieName),
-          maxAge: refreshTokenMaxAge,
-        };
+        // const refreshTokenMaxAge = identityTokenMaxAge + data.expires_in * 1000; // 59 mins
+        // const identityRefreshTokenCookie = {
+        //   ...cookieConfig,
+        //   cookieName: refreshCookieName(cookieConfig.cookieName),
+        //   maxAge: refreshTokenMaxAge,
+        // };
 
         // set access token cookie
         setDataToCookie(res, payload, identityAccessTokenCookie);
         // set refresh token cookie
-        setDataToCookie(res, { refreshToken: data.refresh_token }, identityRefreshTokenCookie);
+        // setDataToCookie(res, { refreshToken: data.refresh_token }, identityRefreshTokenCookie);
 
         setIdentityData(res, payload);
         setColleagueUuid(res, sub);
@@ -183,10 +188,10 @@ export const identityTokenSwapPlugin = <O>(config: Config<O> & Optional): Plugin
     } catch (e) {
       if (cookieConfig) {
         clearCookie(res, cookieConfig);
-        clearCookie(res, {
-          ...cookieConfig,
-          cookieName: refreshCookieName(cookieConfig.cookieName),
-        });
+        // clearCookie(res, {
+        //   ...cookieConfig,
+        //   cookieName: refreshCookieName(cookieConfig.cookieName),
+        // });
       }
       throw e;
     }
