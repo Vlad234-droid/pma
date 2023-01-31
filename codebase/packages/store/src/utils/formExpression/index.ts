@@ -12,3 +12,4 @@ export * from './formModification';
 // {tag.block:open}
 // {tag.block:close}
 // {dependency.dependent.key:test;dependency.dependent.value:yes}
+// {dependency.dependent.key:test}

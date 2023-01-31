@@ -1,6 +1,6 @@
 import get from 'lodash.get';
 import { ExpressionType, ExpressionValueType, FormType } from '../../config/types';
-import { convertFormsJsonToObject, convertFormJsonToObject } from './formPreparetion';
+import { convertFormJsonToObject, convertFormsJsonToObject } from './formPreparetion';
 
 const checkComponentPermission = (component: any, access: string[]) => {
   const { expression } = component;
@@ -91,7 +91,7 @@ export const addStrategicObjectiveInForm = (form: any, numbers: number[]) => {
   const newComponents: any[] = [];
   components?.forEach((component) => {
     const reviewValues: string[] = get(component?.expression, `${ExpressionType.REQUEST}.review`, []);
-    if (reviewValues?.length && reviewValues.includes(ExpressionValueType.OBJECTIVE) && numbers.length) {
+    if (reviewValues?.length && reviewValues.includes(ExpressionValueType.OBJECTIVE)) {
       numbers.forEach((number) =>
         newComponents.push({
           ...component,
@@ -133,3 +133,22 @@ export const addOverallRatingInForm = (form: any, value: string) => {
 
 export const addOverallRatingInForms = (forms: any[], value: string) =>
   forms?.map((form) => addOverallRatingInForm(form, value));
+
+export const filterFormWithDependentKeys = (form: any) => {
+  const { json } = form;
+  const { components = [] } = json;
+  const formKeys = components
+    .filter((component) => component?.origin_key)
+    .map((component) => component?.origin_key)
+    .reduce((a, v) => ({ ...a, [v]: v }), {});
+
+  json.components = components.filter((component) => {
+    const [dependOnKey] =
+      component?.expression?.[ExpressionType.DEPENDENCY]?.[ExpressionType.DEPENDENT]?.[ExpressionType.KEY] || [];
+
+    return !!(!dependOnKey || (dependOnKey && dependOnKey in formKeys));
+  });
+  return { ...form, json };
+};
+
+export const filterFormsWithDependentKeys = (forms: any[]) => forms?.map((form) => filterFormWithDependentKeys(form));
