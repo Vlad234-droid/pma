@@ -21,10 +21,10 @@ const MyObjectives: FC = () => {
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
-  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid, currentCycle)) || {};
   const cycleType = useSelector(userCurrentCycleTypeSelector);
 
-  const isAvailable = useSelector(timelineStartedSelector(colleagueUuid));
+  const isAvailable = useSelector(timelineStartedSelector(colleagueUuid, currentCycle));
 
   const canShowAnnualReview = !timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
 
@@ -48,7 +48,7 @@ const MyObjectives: FC = () => {
 
   return (
     <div data-test-id={TEST_ID}>
-      <ObjectiveAccordion />
+      <ObjectiveAccordion colleagueUuid={colleagueUuid} />
     </div>
   );
 };

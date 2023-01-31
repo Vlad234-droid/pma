@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { ReviewType, Status, Tenant } from 'config/enum';
 import {
@@ -26,22 +26,24 @@ import { canEditAllObjectiveFn } from '../../utils';
 
 export const TEST_ID = 'objectives-test-id';
 
-const Objectives = () => {
+const Objectives: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const uuid = useSelector(colleagueUUIDSelector);
-
-  const activeTimeline = useSelector(getActiveTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, USER.current));
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const objectiveSchema = useSelector(getReviewSchema(activeTimeline?.code)) || {};
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
+
+  const activeTimeline = useSelector(
+    getActiveTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, USER.current, currentCycle),
+  );
+  const objectiveSchema = useSelector(getReviewSchema(activeTimeline?.code)) || {};
+
   const {
     objectives,
     meta: { loading, loaded },
   } = useObjectivesData(uuid, currentCycle);
 
-  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid, currentCycle)) || {};
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
 
   const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current, currentCycle));
