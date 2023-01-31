@@ -9,12 +9,17 @@ import {
   clearCookie,
   getMaxAge,
   clearPluginCookiesIfSessionExpired,
+  TRACE_ID_HEADER,
+  getTraceId,
+  isTraceIdAbsent,
 } from '../utils';
 
 import { identityApiConsumer, UserTokenResponse } from '@pma-connectors/identity-api';
 import { setIdentityData, getIdentityData, setColleagueUuid } from './identity-data';
 import { getOpenIdSessionId } from '../../oidc-data-extractor';
 import { Optional, Plugin } from '../plugin';
+import { markApiCall } from '@energon/splunk-logger';
+import { v4 as uuidv4 } from 'uuid';
 
 export type Strategy = 'oidc' | 'saml';
 
@@ -127,6 +132,18 @@ export const identityTokenSwapPlugin = <O>(config: Config<O> & Optional): Plugin
       const api = identityApiConsumer({
         baseUrl,
         baseHeaders,
+      });
+
+      const traceId = getTraceId(req);
+      if (isTraceIdAbsent(req)) {
+        req.headers[TRACE_ID_HEADER] = traceId;
+      }
+      res.logs.markApiCallEnd = markApiCall(res)({
+        traceId,
+        tescoTraceId: traceId,
+        requestUrl: req.url,
+        requestBody: req.body,
+        params: req.params,
       });
 
       const data = await (refreshToken
