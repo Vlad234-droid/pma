@@ -10,6 +10,8 @@ import {
   timelineTypesAvailabilitySelector,
   getActiveTimelineByReviewTypeSelector,
   colleagueCurrentCycleSelector,
+  colleagueCycleDataSelector,
+  colleagueCycleSelector,
 } from '@pma/store';
 import { Trans, useTranslation } from 'components/Translation';
 import { EditButton } from '../Buttons';
@@ -32,6 +34,8 @@ const Objectives: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const dispatch = useDispatch();
   const uuid = useSelector(colleagueUUIDSelector);
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
+  const cycle = useSelector(colleagueCycleSelector);
+  const isCycleCompleted = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
 
   const activeTimeline = useSelector(
     getActiveTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, USER.current, currentCycle),
@@ -52,16 +56,12 @@ const Objectives: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
 
   const download = useDownload(objectives);
 
-  const countDraftReviews = parseInt(timelineObjective?.statistics?.[Status.DRAFT] || '0');
-  const countDeclinedReviews = parseInt(timelineObjective?.statistics?.[Status.DECLINED] || '0');
-  const countWaitingForApprovalReviews = parseInt(timelineObjective?.statistics?.[Status.WAITING_FOR_APPROVAL] || '0');
-
-  const canEditAllObjective = canEditAllObjectiveFn({
-    objectiveSchema,
-    countDraftReviews,
-    countDeclinedReviews,
-    countWaitingForApprovalReviews,
-  });
+  const canEditAllObjective = isCycleCompleted
+    ? false
+    : canEditAllObjectiveFn({
+        schema: objectiveSchema,
+        timeline: timelineObjective,
+      });
 
   useEffect(() => {
     if (canShowObjectives) {
@@ -104,7 +104,11 @@ const Objectives: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
       }}
     >
       {loaded && objectives.length ? (
-        <Accordion objectives={objectives} canShowStatus={!isAllObjectivesInSameStatus} />
+        <Accordion
+          objectives={objectives}
+          canShowStatus={!isAllObjectivesInSameStatus}
+          isButtonsVisible={!isCycleCompleted}
+        />
       ) : (
         <div className={css(emptyBlockStyle)}>
           <Trans i18nKey={'no_objectives_created'} ns={Tenant.GENERAL}>

@@ -3,18 +3,11 @@ import { Status } from 'config/enum';
 /**
  * Available for min review count and status in [ DRAFT, DECLINED ]
  */
-export const canEditAllObjectiveFn = ({
-  objectiveSchema,
-  countDraftReviews,
-  countDeclinedReviews,
-  countWaitingForApprovalReviews,
-}: {
-  objectiveSchema: any;
-  countDraftReviews: number;
-  countDeclinedReviews: number;
-  countWaitingForApprovalReviews: number;
-}) => {
-  const { markup = { max: 0, min: 0 } } = objectiveSchema;
+export const canEditAllObjectiveFn = ({ schema, timeline }: { schema: any; timeline: any }) => {
+  const { markup = { max: 0, min: 0 } } = schema;
+  const countDraftReviews = parseInt(timeline?.statistics?.[Status.DRAFT] || '0');
+  const countDeclinedReviews = parseInt(timeline?.statistics?.[Status.DECLINED] || '0');
+  const countWaitingForApprovalReviews = parseInt(timeline?.statistics?.[Status.WAITING_FOR_APPROVAL] || '0');
 
   if (countWaitingForApprovalReviews > 0) {
     return false;
