@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
-import { DateTime } from 'luxon';
 import { Statuses } from '../config/types';
+import { filterByDate } from '../utils/date';
 
 //@ts-ignore
 export const colleagueSelector = (state: RootState) => state.colleague;
@@ -37,8 +37,6 @@ export const getColleagueCycleSelector = (uuid: string) =>
   });
 
 export const colleagueCycleDataSelector = (colleagueUuid: string, cycleId: string) => (state: RootState) => {
-  //todo create separate repo for constants, utils, helpers, enums
-  const filterByDate = (a: string, b: string) => (DateTime.fromISO(a) > DateTime.fromISO(b) ? 1 : -1);
   const colleague = colleagueSelector(state);
   if (cycleId === 'CURRENT') {
     return (

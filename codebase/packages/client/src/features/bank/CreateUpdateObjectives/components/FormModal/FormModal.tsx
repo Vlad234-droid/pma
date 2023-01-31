@@ -135,7 +135,7 @@ const FormModal: FC<FormModal> = ({
                         isValid={isValid}
                         isStepValid={!lastStep && isCurrentValid}
                         onSaveExit={() => onSaveAsDraft(formValues)}
-                        onSubmit={onPreview}
+                        onSubmit={() => onPreview(formValues)}
                         onNext={() => onNext(formValues)}
                       />
                     </>

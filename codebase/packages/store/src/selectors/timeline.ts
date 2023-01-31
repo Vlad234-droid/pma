@@ -19,6 +19,9 @@ export const USER = {
 
 export const timelineSelector = (state: RootState) => state.timeline;
 
+export const allUserTimelineSelector = (uuid: string) =>
+  createSelector(timelineSelector, (timeline) => timeline?.data?.[uuid] || {});
+
 export const userTimelineSelector = (uuid: string, cycle = 'CURRENT') =>
   createSelector(timelineSelector, (timeline) => timeline?.data?.[uuid]?.[cycle] || []);
 

@@ -42,14 +42,17 @@ export const authMiddleware = ({
           httpOnly: true,
           secure: isProduction,
           signed: isProduction,
+          cookieShapeResolver: ({ access_token, claims }) => ({
+            access_token,
+            claims: { sub: claims.sub },
+          }),
         },
       }),
     ),
   );
   /** dex-core consumes this endpoint for token exchange purpose (onelogin -> identity) */
   /** identity token swap (oidc -> cst) is done in previous onelogin middlewares */
-  router.use(
-    authPath(), (_res, res) => (console.log('getIdentityData', getIdentityData(res)), res.sendStatus(200)));
+  router.use(authPath(), (_res, res) => (console.log('getIdentityData', getIdentityData(res)), res.sendStatus(200)));
 
   return router;
 };
@@ -63,11 +66,13 @@ const authDataPlugin: Express.Handler = (req: Express.Request, res: Express.Resp
   next();
 };
 
-const pluginWrapper = (plugin: Plugin): Handler => async (req, res, next): Promise<void | OneloginError> => {
-  try {
-    await plugin(req, res);
-  } catch (error) {
-    const { message, status } = error as Error & { status };
-    next(new OneloginError('plugin', message, status));
-  }
-};
+const pluginWrapper =
+  (plugin: Plugin): Handler =>
+  async (req, res, next): Promise<void | OneloginError> => {
+    try {
+      await plugin(req, res);
+    } catch (error) {
+      const { message, status } = error as Error & { status };
+      next(new OneloginError('plugin', message, status));
+    }
+  };

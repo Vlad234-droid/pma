@@ -25,11 +25,10 @@ const ReviewPage = () => {
     [],
   );
 
-  const handleClose = () => {
+  const handleClose = () =>
     navigate(buildPath(paramsReplacer(Page.USER_REVIEWS, { ':uuid': uuid! })), {
-      state: { backPath: (state as any)?.prevBackPath },
+      state: { backPath: (state as any)?.prevBackPath, filters: (state as any)?.filters },
     });
-  };
 
   useEffect(() => {
     const reviewType = type?.toUpperCase();

@@ -21,6 +21,7 @@ type ChildrenProps = {
   onSubmit: () => void;
   handleSubmit: UseFormHandleSubmit<any>;
   isValid: boolean;
+  values: any;
 };
 
 type Props = {
@@ -154,7 +155,7 @@ const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = fa
         </div>
       </div>
       {children ? (
-        children({ onCancel, onSubmit: handleSubmit(onSubmit), handleSubmit, isValid })
+        children({ onCancel, onSubmit: handleSubmit(onSubmit), handleSubmit, isValid, values })
       ) : (
         <ButtonsWrapper
           leftText='clear_filter'
