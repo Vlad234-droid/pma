@@ -183,7 +183,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
         <div>
           <div className={css({ paddingBottom: '24px' })}>
             <div className={css(formTitleStyle, { paddingBottom: '24px' })}>
-              Review your colleague’s End-year performance
+              {t(`review_your_colleagues_performance_${reviewType.toLowerCase()}`)}
             </div>
             <ProfileInfo
               firstName={colleague?.profile?.fullName}
