@@ -31,6 +31,7 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
 
   const calibrationReview = useSelector(calibrationReviewDataSelector(userUuid)) || {};
   const currentCycle = useSelector(colleagueCurrentCycleSelector(userUuid));
+
   const {
     endTime,
     startTime,
@@ -40,37 +41,37 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   const isAnniversaryColleague = useSelector(isAnniversaryTimelineType(userUuid, currentCycle));
   const hasActions = Object.keys(statistics).length > 0;
 
-  const { loading, loaded } = useSelector(calibrationReviewMetaSelector);
+  const { loading } = useSelector(calibrationReviewMetaSelector);
   const { uuid = 'new', status } = calibrationReview;
   const isStartedPoint =
     ![Status.NOT_STARTED, Status.COMPLETED].includes(TLPStatus) &&
     isDateFromISOAfterNow(startTime) &&
     isDateFromISOBeforeNow(endTime);
 
+  const isFinished = isDateFromISOAfterNow(endTime);
+
   const isSubmitting = uuid === 'new' || status === Status.DRAFT;
   const isEditing = !isSubmitting && status === Status.WAITING_FOR_APPROVAL;
-  const isViewing = !isSubmitting && !isEditing && status !== Status.WAITING_FOR_APPROVAL;
+  const isViewing = isFinished || (!isSubmitting && !isEditing && status !== Status.WAITING_FOR_APPROVAL);
 
   useEffect(() => {
-    if (!isStartedPoint || isAnniversaryColleague) return;
-    if (hasActions && !loading && !loaded) {
-      dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: currentCycle }));
-    }
-  }, [loading, loaded, isStartedPoint, hasActions]);
+    if ((!isStartedPoint && !hasActions) || isAnniversaryColleague) return;
+    dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: currentCycle }));
+  }, [isStartedPoint, hasActions, currentCycle]);
 
-  if (isAnniversaryColleague || loading || !isStartedPoint) return null;
+  if (isAnniversaryColleague || loading || (!isStartedPoint && !hasActions)) return null;
 
   return (
     <BaseWidget
       buttonTitle={'view'}
       iconGraphic={isSubmitting || isEditing ? 'edit' : 'rating'}
       title={
-        isSubmitting
+        isViewing
+          ? t('view_calibration_ratings', 'View Calibration ratings')
+          : isSubmitting
           ? t('submit_calibration_ratings', 'Submit Calibration ratings')
           : isEditing
           ? t('edit_calibration_ratings', 'Edit Calibration ratings')
-          : isViewing
-          ? t('view_calibration_ratings', 'View Calibration ratings')
           : ''
       }
       description={
