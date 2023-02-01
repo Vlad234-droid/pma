@@ -155,6 +155,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
         title='Review sent'
         mark={<SuccessMark />}
         onClose={onClose}
+        customButtonStyles={{ color: theme.colors.white, background: theme.colors.tescoBlue }}
         description={
           successModal === Statuses.DECLINED
             ? t(
