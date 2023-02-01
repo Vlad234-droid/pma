@@ -16,7 +16,10 @@ export const getColleagueMetadata = (config: any) => {
 
 export const getColleagueMetadataByPerformanceCycle = (config: any) => {
   const { colleagueUuid, cycleUuid, ...params } = config || {};
-  return httpClient.get(`${domain}/${colleagueUuid}/pm-cycles/${cycleUuid}/metadata`, { params });
+  if (cycleUuid && cycleUuid !== 'CURRENT') {
+    return httpClient.get(`${domain}/${colleagueUuid}/pm-cycles/${cycleUuid}/metadata`, { params });
+  }
+  return httpClient.get(`${domain}/${colleagueUuid}/metadata`, { params });
 };
 
 export const getColleagueByUuid = (config: any) => {
