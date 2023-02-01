@@ -101,7 +101,7 @@ const StatisticsReviews: FC<Props> = ({ type, toggleFullView, isFullView, filter
   useChartStatistics(type, filters);
   const reviews = useTotalReviews(type);
 
-  const downloadReport = useDownloadExelFile({
+  const { download: downloadReport, loading: downloadReportLoading } = useDownloadExelFile({
     resource: {
       url: REPORT_URL,
       params: {
@@ -164,13 +164,15 @@ const StatisticsReviews: FC<Props> = ({ type, toggleFullView, isFullView, filter
                         {isWLPage && (
                           <div>
                             <IconButton
+                              isDisabled={downloadReportLoading}
                               onPress={downloadReport}
                               graphic='download'
-                              customVariantRules={{ default: iconButtonStyles }}
+                              customVariantRules={{ default: iconButtonStyles, disabled: disabledIconStyles }}
                               iconStyles={iconStyles}
                             >
                               <Trans i18nKey='download'>Download</Trans>
                             </IconButton>
+
                             <IconButton
                               onPress={toggleFullView}
                               graphic='full'
@@ -391,6 +393,11 @@ const iconButtonStyles: Rule = ({ theme }) => ({
   padding: theme.spacing.s2_5,
   color: theme.colors.tescoBlue,
   fontWeight: 700,
+});
+
+const disabledIconStyles: Rule = ({ theme }) => ({
+  padding: theme.spacing.s2_5,
+  cursor: 'default',
 });
 
 const profileStyles: Rule = {

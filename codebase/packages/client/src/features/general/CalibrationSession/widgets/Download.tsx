@@ -16,7 +16,7 @@ const Download: FC<{ uuid: string }> = ({ uuid }) => {
 
   const { startTime } = calibrationSessions.find((cs) => cs.uuid === uuid) || {};
 
-  const downloadReport = useDownloadExelFile({
+  const { download: downloadReport } = useDownloadExelFile({
     resource: {
       url: REPORT_URL,
       params: { year: getFinancialYear().toString(), 'calibration-session-uuid': uuid },

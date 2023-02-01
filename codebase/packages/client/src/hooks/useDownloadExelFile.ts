@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useToast, Variant } from 'features/general/Toast';
 import { downloadFile, createFile } from 'utils';
 
@@ -16,6 +17,8 @@ const useDownloadExelFile = ({
   };
 }) => {
   const { addToast } = useToast();
+  const [loading, setLoading] = useState<boolean>(false);
+
   const success = createFile(`${fileName}.${ext}`);
   const failure = () => {
     addToast({
@@ -25,7 +28,15 @@ const useDownloadExelFile = ({
     });
   };
 
-  return (params = {}) => downloadFile({ ...resource, params: resource.params || params }, success, failure);
+  const onLoaded = () => setLoading(() => false);
+
+  return {
+    loading,
+    download: function (params = {}) {
+      setLoading(() => true);
+      return downloadFile({ ...resource, params: resource.params || params }, success, onLoaded, failure);
+    },
+  };
 };
 
 export default useDownloadExelFile;

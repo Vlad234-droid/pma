@@ -62,6 +62,7 @@ const Panel: FC = ({ children, ...props }) => {
     const mutationObserver = new MutationObserver(([mutation]) => onChange(mutation.target as HTMLDivElement));
 
     if (ref?.current) {
+      onChange(ref.current);
       mutationObserver.observe(ref.current, { attributes: true, childList: true, subtree: true });
     }
 

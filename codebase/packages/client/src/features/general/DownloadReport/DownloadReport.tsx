@@ -11,12 +11,14 @@ import { buildPath } from 'features/general/Routes';
 import { Checkbox, Item, Option, Select } from 'components/Form';
 import { Trans, useTranslation } from 'components/Translation';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
+import SuccessModal from 'components/SuccessModal';
+import { SuccessMark } from 'components/Icon';
 
 import { formatDateStringFromISO, getDepthByYears, getFinancialYear, getYearsFromCurrentYear } from 'utils/date';
-import success from 'images/success.jpg';
 import { checkboxes, getTopics, reportByYearSchema } from './config';
 
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
+
 import { ReportPage } from 'config/enum';
 import { Page } from 'pages';
 import { filterToRequest } from 'utils';
@@ -33,11 +35,12 @@ const DownloadReport: FC = () => {
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
   const navigate = useNavigate();
+
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(reportByYearSchema),
   });
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successModal, setSuccessModal] = useState(false);
   const {
     formState: { isValid },
     getValues,
@@ -47,7 +50,7 @@ const DownloadReport: FC = () => {
 
   const values = getValues();
 
-  const downloadReport = useDownloadExelFile({
+  const { download: downloadReport, loading } = useDownloadExelFile({
     resource: { url: REPORT_URL },
     fileName: `Statistics Report (${formatDateStringFromISO(new Date().toISOString(), 'dd LLL yyyy HH:mm:ms')})`,
     ext: 'xlsx',
@@ -66,115 +69,101 @@ const DownloadReport: FC = () => {
         Object.entries(topics).reduce((acc, [keys, value]) => [...(value ? [keys] : []), ...acc], []),
       ),
       ...filterToRequest(filters),
-    }).then(() => setShowSuccessModal(true));
+    }).then(() => setSuccessModal(true));
   };
 
-  const handleClose = () => navigate(buildPath(Page.REPORT), { state: { filters } });
+  const handleClose = () => (loading ? null : navigate(buildPath(Page.REPORT), { state: { filters } }));
 
   const fieldOptions: Option[] = getYearsFromCurrentYear(getFinancialYear(), getDepthByYears()).map(({ value }) => ({
     value,
     label: `${value} - ${Number(value) + 1}`,
   }));
 
+  if (successModal) {
+    return (
+      <SuccessModal
+        title={t('download_and_extract', 'Download and Extract')}
+        onClose={handleClose}
+        mark={<SuccessMark />}
+        additionalText={t('downloaded_report', 'You have downloaded the report onto your device.')}
+        loading={loading}
+      />
+    );
+  }
+
   return (
     <WrapperModal onClose={handleClose} title={t('download_and_extract', 'Download and Extract')}>
       <div className={css(wrapperModalGiveFeedbackStyle)}>
-        {showSuccessModal ? (
-          <div data-test-id='success-wrapper' className={css(successContainer)}>
-            <img src={success} alt='success' />
-            <div className={css(successModalTitle)}>Done!</div>
-            <div className={css(successModalText)}>You have downloaded the report onto your device.</div>
-            <ButtonsWrapper
-              single={true}
-              rightIcon={false}
-              rightTextNotIcon='okay'
-              isValid={true}
-              onRightPress={handleClose}
-            />
-          </div>
-        ) : (
-          <>
-            <h3 className={css(modalTitleStyle({ mobileScreen }))} data-test-id={DOWNLOAD_WRAPPER}>
-              <Trans i18nKey='topics_to_download_into_excel_report'>
-                Choose which topics you’d like to download into an excel report
-              </Trans>
-            </h3>
-            <div>
-              <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' })}>
-                {checkboxes(t).map((item) =>
-                  item.id !== ReportPage.REPORT_WORK_LEVEL ? (
+        <h3 className={css(modalTitleStyle({ mobileScreen }))} data-test-id={DOWNLOAD_WRAPPER}>
+          <Trans i18nKey='topics_to_download_into_excel_report'>
+            Choose which topics you’d like to download into an excel report
+          </Trans>
+        </h3>
+        <div>
+          <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' })}>
+            {checkboxes(t).map((item) =>
+              item.id !== ReportPage.REPORT_WORK_LEVEL ? (
+                <label key={item.id} className={css(checkboxItemStyle)} data-test-id={item.id}>
+                  <Checkbox
+                    name={item.id}
+                    checked={values?.topics?.[item.id] ?? false}
+                    onChange={() =>
+                      setValue(`topics.${item.id}`, !values?.topics?.[item.id], {
+                        shouldValidate: true,
+                      })
+                    }
+                  />
+                  <span className={css({ marginLeft: '15px' })}>{item.label}</span>
+                </label>
+              ) : (
+                <CanPerform
+                  key={item.id}
+                  perform={[role.TALENT_ADMIN]}
+                  yes={() => (
                     <label key={item.id} className={css(checkboxItemStyle)} data-test-id={item.id}>
                       <Checkbox
-                        name={item.id}
                         checked={values?.topics?.[item.id] ?? false}
                         onChange={() =>
-                          setValue(`topics.${item.id}`, !values?.topics?.[item.id], {
-                            shouldValidate: true,
-                          })
+                          setValue(`topics.${item.id}`, !values?.topics?.[item.id], { shouldValidate: true })
                         }
                       />
                       <span className={css({ marginLeft: '15px' })}>{item.label}</span>
                     </label>
-                  ) : (
-                    <CanPerform
-                      key={item.id}
-                      perform={[role.TALENT_ADMIN]}
-                      yes={() => (
-                        <label key={item.id} className={css(checkboxItemStyle)} data-test-id={item.id}>
-                          <Checkbox
-                            checked={values?.topics?.[item.id] ?? false}
-                            onChange={() =>
-                              setValue(`topics.${item.id}`, !values?.topics?.[item.id], { shouldValidate: true })
-                            }
-                          />
-                          <span className={css({ marginLeft: '15px' })}>{item.label}</span>
-                        </label>
-                      )}
-                    />
-                  ),
-                )}
-              </div>
-
-              <Item withIcon={false} label={t('select_a_year', 'Select a year')}>
-                <Select
-                  options={fieldOptions}
-                  name={'year'}
-                  placeholder={t('please_select', 'Please select')}
-                  onChange={({ target: { value } }) => {
-                    setValue('year', value, { shouldValidate: true });
-                  }}
+                  )}
                 />
-              </Item>
+              ),
+            )}
+          </div>
 
-              <>
-                <div className={css(textBlock, { fontWeight: 700 })}>Guidance for colleagues</div>
-                <div className={css(textBlock, { marginBottom: '30px' })}>
-                  <Trans i18nKey='data_is_confidential'>
-                    This data is confidential. If you need to download this data, you must ensure you do not share with
-                    anyone else and that you store the data securely with a password.
-                  </Trans>
-                </div>
-              </>
-            </div>
-            <ButtonsWrapper
-              isValid={isValid}
-              onLeftPress={handleClose}
-              onRightPress={handleSubmit(onSubmit)}
-              rightIcon={false}
-              rightTextNotIcon={'download'}
+          <Item withIcon={false} label={t('select_a_year', 'Select a year')}>
+            <Select
+              options={fieldOptions}
+              name={'year'}
+              placeholder={t('please_select', 'Please select')}
+              onChange={({ target: { value } }) => {
+                setValue('year', value, { shouldValidate: true });
+              }}
             />
-          </>
-        )}
+          </Item>
+
+          <div className={css(textBlock, { fontWeight: 700 })}>Guidance for colleagues</div>
+          <div className={css(textBlock, { marginBottom: '30px' })}>
+            <Trans i18nKey='data_is_confidential'>
+              This data is confidential. If you need to download this data, you must ensure you do not share with anyone
+              else and that you store the data securely with a password.
+            </Trans>
+          </div>
+        </div>
+        <ButtonsWrapper
+          isValid={isValid}
+          onLeftPress={handleClose}
+          onRightPress={handleSubmit(onSubmit)}
+          rightIcon={false}
+          rightTextNotIcon={'download'}
+        />
       </div>
     </WrapperModal>
   );
-};
-
-const successContainer: Rule = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
 };
 
 const wrapperModalGiveFeedbackStyle: Rule = {
@@ -216,23 +205,6 @@ const textBlock: Rule = ({ theme }) => {
     fontSize: theme.font.fixed.f16.fontSize,
     lineHeight: theme.font.fixed.f16.lineHeight,
     marginBottom: '5px',
-  };
-};
-
-const successModalTitle: Rule = ({ theme }) => {
-  return {
-    fontSize: theme.font.fixed.f32.fontSize,
-    fontWeight: 700,
-    margin: '40px 0 15px',
-  };
-};
-
-const successModalText: Rule = ({ theme }) => {
-  return {
-    fontSize: theme.font.fixed.f24.fontSize,
-    lineHeight: theme.font.fixed.f24.lineHeight,
-    maxWidth: '370px',
-    textAlign: 'center',
   };
 };
 

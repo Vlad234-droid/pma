@@ -34,7 +34,7 @@ const CalibrationSessionPage: FC = () => {
   const [filters, setFilters] = useState<Record<string, Record<string, boolean>>>({});
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const downloadReport = useDownloadExelFile({
+  const { download: downloadReport } = useDownloadExelFile({
     resource: { url: REPORT_URL, params: { year: period } },
     fileName: 'Report',
     ext: 'xlsx',

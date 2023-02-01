@@ -1,7 +1,12 @@
 import { FileDescription, FileExtensions } from 'config/enum';
 import { httpClient } from '@pma/api';
 
-export const downloadFile = async (url: any, success: (blob: Blob) => void, failure: () => void) => {
+export const downloadFile = async (
+  url: any,
+  success: (blob: Blob) => void,
+  loaded: () => void,
+  failure: () => void,
+) => {
   httpClient({
     ...url,
     method: 'GET',
@@ -13,7 +18,8 @@ export const downloadFile = async (url: any, success: (blob: Blob) => void, fail
       }
       new Error('data not supported');
     })
-    .catch(failure);
+    .catch(failure)
+    .finally(() => loaded());
 };
 
 export const createFile = (fileName: string) => (blob: Blob) => {
