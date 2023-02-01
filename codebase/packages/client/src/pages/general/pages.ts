@@ -342,13 +342,13 @@ const pages: Record<Page, PageComponent> = {
     Element: UserReviews,
     title: (_, t) => t('title_colleague_overview'),
     withHeader: true,
-    perform: [role.LINE_MANAGER, role.EXECUTIVE],
+    perform: [role.LINE_MANAGER, role.EXECUTIVE, role.TALENT_ADMIN, role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.USER_TL_REVIEW]: {
     Element: UserReview,
     withHeader: true,
-    perform: [role.LINE_MANAGER, role.EXECUTIVE],
+    perform: [role.LINE_MANAGER, role.EXECUTIVE, role.TALENT_ADMIN, role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.PROFILE]: {
