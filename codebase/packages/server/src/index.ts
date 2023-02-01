@@ -177,7 +177,7 @@ const sendLog: SendLog = createLogSender(config);
       errorHandler({
         appName: config.applicationName(),
         logoutPath: config.integrationSSOLogoutPath(),
-        tryAgainPath: config.integrationCoreMountUrl(),
+        tryAgainPath: config.applicationContextPath(),
       }),
     );
 
