@@ -13,8 +13,15 @@ import {
   defaultResponseSerializer,
   defaultErrorSerializer,
 } from '@pma-common/logger';
-import { emptyIfRoot, getIdentityData } from '@pma-connectors/onelogin';
+import {
+  emptyIfRoot,
+  getIdentityData,
+  getTraceId,
+  TRACE_ID_HEADER,
+  TESCO_TRACE_ID_HEADER,
+} from '@pma-connectors/onelogin';
 import { OnErrorCallback, OnProxyReqCallback, OnProxyResCallback } from 'http-proxy-middleware/dist/types';
+import { markApiCall } from '@energon/splunk-logger';
 
 export type ProxyMiddlewareOptions = {
   filter?: Filter;
@@ -75,7 +82,11 @@ export const initializeProxyMiddleware = ({
     proxyTimeout: proxyTimeout,
     timeout: timeout,
     logProvider: pinoLogProvider(proxyLogger),
-    onProxyReq: proxyReqHandler(proxyLogger, httpProxyReqHandler, { requireIdentityToken, clearCookies, logAuthToken }),
+    onProxyReq: proxyReqHandler(proxyLogger, httpProxyReqHandler, {
+      requireIdentityToken,
+      clearCookies,
+      logAuthToken,
+    }),
     onProxyRes: proxyResHandler(proxyLogger, httpProxyResHandler),
     onError: proxyErrorHandler(proxyLogger, httpProxyErrorHandler),
     ...allignedProxyOptions,
@@ -120,6 +131,19 @@ const proxyReqHandler =
       return;
     }
 
+    const traceId = getTraceId(req);
+    proxyReq.setHeader(TRACE_ID_HEADER, traceId);
+    proxyReq.setHeader(TESCO_TRACE_ID_HEADER, traceId);
+
+    res.logs.markApiCallEnd = markApiCall(res)({
+      traceId,
+      tescoTraceId: traceId,
+      requestUrl: req.url,
+      requestBody: req.body,
+      params: req.params,
+      queryParams: req.query,
+    });
+
     clearCookies && proxyReq.removeHeader('Cookie');
 
     // fix request body, if body-parser involved
@@ -159,6 +183,7 @@ const proxyReqHandler =
 const proxyResHandler =
   (logger: Logger, customHandler: OnProxyResCallback | undefined) =>
   (proxyRes: IncomingMessage, req: Request, res: Response) => {
+    res.logs.markApiCallEnd!({ statusCode: proxyRes.statusCode });
     logger.debug(
       {
         req: defaultRequestSerializer(req),
@@ -176,6 +201,7 @@ const proxyResHandler =
 const proxyErrorHandler =
   (logger: Logger, customHandler: OnErrorCallback | undefined) =>
   (err: Error, req: Request, res: Response, target?: string | Partial<Url>) => {
+    res.logs.markApiCallEnd!({ statusCode: 500, error: err });
     if (typeof customHandler === 'function') {
       customHandler(err, req, res, target);
     } else if (err.message === 'proxy: Missing access_token') {

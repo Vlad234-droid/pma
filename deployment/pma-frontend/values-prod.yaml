@@ -120,5 +120,5 @@ environment:
   LOGGER_PRETIFY: false
   LOGGER_THEME: Plain
   SPLUNK_ENABLED: true
-  SPLUNK_SOURCETYPE: hec:colleague_pma
+  SPLUNK_SOURCETYPE: colleague_pma
   SPLUNK_SOURCE: colleague_pma_prod
