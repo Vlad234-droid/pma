@@ -4,7 +4,6 @@ import { Trans, useTranslation } from 'components/Translation';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import {
-  getReviewSchema,
   currentUserSelector,
   ReviewsActions,
   getTimelineByCodeSelector,
@@ -14,7 +13,7 @@ import {
 import { ReviewType, Status } from 'config/enum';
 import { USER } from 'config/constants';
 import { ButtonWithConfirmation } from 'features/general/Modal';
-import { canEditSingleObjectiveFn, canDeleteSingleObjectiveFn } from '../../utils';
+import { checkIfCanDeleteObjective, checkIfCanEditObjective } from '../../utils';
 import EditButton from './EditButton';
 
 export type ObjectiveButtonsProps = {
@@ -30,19 +29,12 @@ const ObjectiveButtons: FC<ObjectiveButtonsProps> = ({ id, status }) => {
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
-  const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
-  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current, currentCycle));
-  const countDraftReviews = parseInt(timelineObjective?.statistics?.[Status.DRAFT] || '0');
-  const countDeclinedReviews = parseInt(timelineObjective?.statistics?.[Status.DECLINED] || '0');
-  const countApprovedReviews = parseInt(timelineObjective?.statistics?.[Status.APPROVED] || '0');
+  const timelinePoint = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current, currentCycle));
 
-  const canEditSingleObjective = canEditSingleObjectiveFn({ status, objectiveSchema, number: id });
-  const canDelete = canDeleteSingleObjectiveFn({
+  const canEditSingleObjective = checkIfCanEditObjective({ status, timelinePoint, number: id });
+  const canDelete = checkIfCanDeleteObjective({
     status,
-    objectiveSchema,
-    countDraftReviews,
-    countDeclinedReviews,
-    countApprovedReviews,
+    timelinePoint,
   });
 
   const handleRemove = () => {
