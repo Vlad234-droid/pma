@@ -6,7 +6,7 @@ export const getSchema = createAsyncAction(
   'schema/FETCH_FAILURE',
   'schema/CANCEL',
 )<
-  { colleagueUuid: string; cycleUuid: string; includeForms?: boolean },
+  { colleagueUuid: string; cycleUuid?: string; includeForms?: boolean },
   { current: any; colleagueSchema?: any },
   Error,
   undefined

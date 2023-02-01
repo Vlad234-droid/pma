@@ -16,7 +16,7 @@ import { ObjectiveTypes as OT, transformReviewsToObjectives } from 'features/gen
 import { ReviewType } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 
-const useObjectivesData = (uuid: string, currentCycle?: string) => {
+const useObjectivesData = (uuid: string, currentCycle?: string, isUserView = false) => {
   const dispatch = useDispatch();
   const { loaded: schemaLoaded, loading: schemaLoading } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
@@ -39,7 +39,11 @@ const useObjectivesData = (uuid: string, currentCycle?: string) => {
 
   useEffect(() => {
     dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid: uuid, cycleUuid: currentCycle || 'CURRENT' } }));
-    dispatch(SchemaActions.getSchema({ colleagueUuid: uuid, cycleUuid: currentCycle || 'CURRENT' }));
+    if (currentCycle) {
+      dispatch(SchemaActions.getColleagueSchema({ colleagueUuid: uuid, cycleUuid: currentCycle }));
+    } else {
+      dispatch(SchemaActions.getSchema({ colleagueUuid: uuid }));
+    }
   }, [uuid, currentCycle]);
 
   return { objectives, meta: { loaded: schemaLoaded && reviewLoaded, loading: schemaLoading || reviewLoading } };

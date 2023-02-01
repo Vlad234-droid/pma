@@ -7,7 +7,7 @@ import { Icon, Graphics } from 'components/Icon';
 import useDispatch from 'hooks/useDispatch';
 import { OrgObjectiveActions, orgObjectivesSelector, colleagueCycleSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
-import { CycleType } from 'config/enum';
+import { Status } from 'config/enum';
 
 export type Props = {
   onClick: () => void;
@@ -22,9 +22,10 @@ const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const { cycleType } = useSelector(colleagueCycleSelector);
+  const cycle = useSelector(colleagueCycleSelector);
   const orgObjectives = useSelector(orgObjectivesSelector) || [];
   const hasObjectives = !!orgObjectives.length;
+  const isCompleted = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
 
   const getContent = (): [Graphics, string, string] => {
     return [
@@ -37,12 +38,12 @@ const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
   const [graphic, description, actionTitle] = getContent();
 
   useEffect(() => {
-    if (cycleType && cycleType !== CycleType.FISCAL) {
+    if (!isCompleted) {
       dispatch(OrgObjectiveActions.getOrgObjectives({}));
     }
-  }, [cycleType]);
+  }, [isCompleted]);
 
-  if (cycleType === CycleType.FISCAL || !hasObjectives) return null;
+  if (isCompleted || !hasObjectives) return null;
 
   return (
     <TileWrapper customStyle={{ ...customStyle }}>

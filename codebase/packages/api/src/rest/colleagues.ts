@@ -8,7 +8,7 @@ export const getColleagues = (params: any) => {
 
 export const getColleagueMetadata = (config: any) => {
   const { colleagueUuid, cycleUuid, ...params } = config || {};
-  if (cycleUuid) {
+  if (cycleUuid && cycleUuid !== 'CURRENT') {
     return httpClient.get(`${domain}/${colleagueUuid}/pm-cycles/${cycleUuid}/metadata`, { params });
   }
   return httpClient.get(`${domain}/${colleagueUuid}/metadata`, { params });

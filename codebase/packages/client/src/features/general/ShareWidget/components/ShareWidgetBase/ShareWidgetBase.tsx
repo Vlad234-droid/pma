@@ -84,13 +84,14 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
   // TODO: add selectors
   const { info } = useSelector(currentUserSelector);
   const isShared = useSelector(isSharedSelector);
-  const { cycleType } = useSelector(colleagueCycleSelector);
+  const cycle = useSelector(colleagueCycleSelector);
   const { loading: sharingLoading } = useSelector(sharingObjectivesMetaSelector);
   const hasApprovedObjective = useSelector(hasStatusInReviews(ReviewType.OBJECTIVE, Status.APPROVED));
   const hasApprovedPriorities = useSelector(hasStatusInReviews(ReviewType.QUARTER, Status.APPROVED));
   const hasApproved = hasApprovedObjective || hasApprovedPriorities;
   const { currentTimelines } = useTimelineContainer();
   const { code: currentCode } = currentTimelines[ReviewType.QUARTER] || { code: '' };
+  const isCompleted = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
 
   const { components = [] } = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const sharedObjectives = useSelector(getAllSharedObjectives);
@@ -151,8 +152,7 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
     sharedObjectivesCount && setObjectives(transformReviewsToObjectives(sharedObjectives, formElements, tenant));
   }, [sharedObjectivesCount, formElementsCount, type]);
 
-  const isDisplayed =
-    title === 'N/A' || cycleType === CycleType.FISCAL || (!stopShare && !hasApproved && !sharing && !isManager);
+  const isDisplayed = title === 'N/A' || isCompleted || (!stopShare && !hasApproved && !sharing && !isManager);
 
   if (isDisplayed) {
     return null;
