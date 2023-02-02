@@ -1,11 +1,6 @@
 import React, { FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import {
-  colleagueCurrentCycleSelector,
-  getTimelineByCodeSelector,
-  isReviewsInStatus,
-  timelineTypesAvailabilitySelector,
-} from '@pma/store';
+import { colleagueCurrentCycleSelector, getTimelineByCodeSelector, isReviewsInStatus } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
@@ -26,10 +21,8 @@ const UserObjectives: FC = () => {
   const { t } = useTranslation();
   const { uuid } = useParams<{ uuid: string }>();
 
-  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(uuid!));
-  const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
-  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, uuid!));
   const currentCycle = useSelector(colleagueCurrentCycleSelector(uuid!));
+  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, uuid!, currentCycle));
 
   const status = timelineObjective?.summaryStatus;
   const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
@@ -45,7 +38,7 @@ const UserObjectives: FC = () => {
 
   return (
     <>
-      {canShowObjectives && (
+      {timelineObjective && (
         <>
           {loaded && !objectives.length ? (
             <Plug text={t('no_objectives_created', 'No objectives created')} />
