@@ -20,7 +20,7 @@ const TeamReporting: FC = () => {
         'See how your team are progressing throughout the year',
       )}
       onClick={() => navigate(buildPath(Page.REPORT))}
-      hover={false}
+      hover={true}
       withButton={false}
       customStyle={{
         fontSize: theme.font.fixed.f16.fontSize,

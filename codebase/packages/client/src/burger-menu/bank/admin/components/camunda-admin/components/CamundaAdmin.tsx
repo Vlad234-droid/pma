@@ -21,15 +21,30 @@ const List = () => {
   );
 };
 
-const itemSettingsStyle: Rule = {
+const itemSettingsStyle: Rule = ({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
-  padding: '12px 0',
-  margin: '0 0 0 20px',
-};
+  padding: '12px 0 12px 20px',
+  ':hover': {
+    // @ts-ignore
+    background: theme.colors.lightBlue,
+    opacity: 0.9,
+  },
+});
+
 const itemSettingsBorderStyle: Rule = ({ theme }) => ({
-  // @ts-ignore
-  borderTop: `2px solid ${theme.colors.lightGray}`,
+  position: 'relative',
+  marginTop: '2px',
+  ':before': {
+    position: 'absolute',
+    width: '100%',
+    content: "''",
+    left: 20,
+    top: '-2px',
+    height: '2px',
+    // @ts-ignore
+    backgroundColor: theme.colors.lightGray,
+  },
 });
 
 const itemSettingsTextStyle: Rule = ({ theme }) => ({
