@@ -1,8 +1,15 @@
-import { calibrationReviewDataSelector, colleagueInfo, colleagueUUIDSelector } from '@pma/store';
+import {
+  calibrationReviewDataSelector,
+  colleagueCurrentCycleSelector,
+  colleagueInfo,
+  colleagueUUIDSelector,
+  getCalibrationPointSelector,
+} from '@pma/store';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { role, usePermission } from 'features/general/Permission';
 import { Status } from 'config/enum';
+import { isDateFromISOAfterNow } from 'utils';
 
 export const usePermissions = () => {
   const { uuid, userUuid: colleagueUuid } = useParams<{ uuid: string; userUuid: string }>() as {
@@ -20,6 +27,9 @@ export const usePermissions = () => {
   const userUuid = useSelector(colleagueUUIDSelector);
   const { managerUuid } = useSelector(colleagueInfo);
   const calibrationReview = useSelector(calibrationReviewDataSelector(colleagueUuid)) || {};
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(userUuid));
+  const { endTime } = useSelector(getCalibrationPointSelector(userUuid, currentCycle));
+  const isFinished = isDateFromISOAfterNow(endTime);
 
   const directReport = userUuid === managerUuid;
   const isNew = uuid === 'new';
@@ -38,6 +48,7 @@ export const usePermissions = () => {
     calibrationReview?.status === Status.APPROVED || calibrationReview?.status === Status.WAITING_FOR_COMPLETION;
 
   const checkPerformMode = () => {
+    if (isFinished) return true;
     if (sessionModeCreate) return false;
     if (sessionMode) return !editablePPSession;
     if (isPerformForTA && isLNwithTA) return !isDraft && LNDisabledStatuses;

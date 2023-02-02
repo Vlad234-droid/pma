@@ -24,9 +24,13 @@ export const initialState: InitialStateType = {
 };
 
 export default createReducer(initialState)
-  .handleAction(getCalibrationReview.request, (state) => {
+  .handleAction(getCalibrationReview.request, (state, { payload: { colleagueUuid } }) => {
     return {
       ...state,
+      data: {
+        ...state.data,
+        [colleagueUuid]: null,
+      },
       meta: { ...state.meta, loading: true, loaded: false },
     };
   })
