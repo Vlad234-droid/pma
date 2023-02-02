@@ -132,13 +132,14 @@ export const identityTokenSwapPlugin = <O>(config: Config<O> & Optional): Plugin
       if (isTraceIdAbsent(req)) {
         req.headers[TRACE_ID_HEADER] = traceId;
       }
-      res.logs.markApiCallEnd = markApiCall(res)({
-        traceId,
-        tescoTraceId: traceId,
-        requestUrl: req.url,
-        requestBody: req.body,
-        params: req.params,
-      });
+      res?.logs &&
+        (res.logs.markApiCallEnd = markApiCall(res)({
+          traceId,
+          tescoTraceId: traceId,
+          requestUrl: req.url,
+          requestBody: req.body,
+          params: req.params,
+        }));
 
       // const data = await (refreshToken
       //   ? api.refreshUserToken({
