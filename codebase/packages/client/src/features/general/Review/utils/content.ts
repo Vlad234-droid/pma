@@ -4,7 +4,7 @@ import { Graphics } from 'components/Icon';
 import { Colors } from 'config/types';
 
 export const getContent = (
-  { status, startTime = '', lastUpdatedTime = '' },
+  { status, startTime = '', lastUpdatedTime = '', viewOnly = false },
   t: TFunction,
   tenant: Tenant,
 ): [Graphics, Colors, Colors, boolean, boolean, string, string] => {
@@ -39,7 +39,7 @@ export const getContent = (
         true,
         true,
         isGeneral ? t('review_form_declined', 'Declined') : t('request_to_amend ', 'Request to amend'),
-        t('view_and_edit', 'View and edit'),
+        viewOnly ? t('view', 'View') : t('view_and_edit', 'View and edit'),
       ];
     case Status.OVERDUE:
       return ['roundAlert', 'error', 'tescoBlue', true, true, t('overdue', 'Overdue'), t('view', 'View')];

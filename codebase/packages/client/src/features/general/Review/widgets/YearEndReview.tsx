@@ -1,6 +1,11 @@
 import React, { FC, useMemo } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { colleagueCurrentCycleSelector, getTimelineByCodeSelector } from '@pma/store';
+import {
+  colleagueCurrentCycleSelector,
+  colleagueCycleDataSelector,
+  colleagueCycleSelector,
+  getTimelineByCodeSelector,
+} from '@pma/store';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
@@ -26,6 +31,10 @@ const YearEndReview: FC<Props> = ({ colleagueUuid, isUserView }) => {
   const navigate = useNavigate();
   const { pathname, state } = useLocation();
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
+  const cycle = isUserView
+    ? useSelector(colleagueCycleSelector)
+    : useSelector(colleagueCycleDataSelector(colleagueUuid, currentCycle));
+  const isCycleCompleted = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
 
   const tlPoint = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid, currentCycle));
 
@@ -44,11 +53,12 @@ const YearEndReview: FC<Props> = ({ colleagueUuid, isUserView }) => {
           status,
           startTime,
           lastUpdatedTime,
+          viewOnly: isCycleCompleted || !isUserView,
         },
         t,
         tenant,
       ),
-    [summaryStatus, startTime, lastUpdatedTime],
+    [summaryStatus, startTime, lastUpdatedTime, isCycleCompleted, isUserView],
   );
   const disabled = isUserView
     ? status === Status.NOT_STARTED

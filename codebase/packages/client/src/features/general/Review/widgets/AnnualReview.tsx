@@ -4,9 +4,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import {
   colleagueCurrentCycleSelector,
+  colleagueCycleDataSelector,
+  colleagueCycleSelector,
   getTimelineByCodeSelector,
   isAnniversaryTimelineType,
-  uuidCompareSelector,
 } from '@pma/store';
 
 import { useTenant } from 'features/general/Permission';
@@ -37,6 +38,10 @@ const AnnualReview: FC<Props> = ({ colleagueUuid, isUserView }) => {
   const navigate = useNavigate();
   const { pathname, state } = useLocation();
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
+  const cycle = isUserView
+    ? useSelector(colleagueCycleSelector)
+    : useSelector(colleagueCycleDataSelector(colleagueUuid, currentCycle));
+  const isCycleCompleted = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
   const tlPoint = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid, currentCycle));
   const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, currentCycle));
 
@@ -51,11 +56,12 @@ const AnnualReview: FC<Props> = ({ colleagueUuid, isUserView }) => {
           status,
           startTime,
           lastUpdatedTime,
+          viewOnly: isCycleCompleted || !isUserView,
         },
         t,
         tenant,
       ),
-    [summaryStatus, startTime, lastUpdatedTime],
+    [summaryStatus, startTime, lastUpdatedTime, isCycleCompleted, isUserView],
   );
 
   if (!tlPoint) {

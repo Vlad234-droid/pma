@@ -1,7 +1,13 @@
 import React, { FC, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { colleagueCurrentCycleSelector, getTimelineByCodeSelector, uuidCompareSelector } from '@pma/store';
+import {
+  colleagueCurrentCycleSelector,
+  colleagueCycleDataSelector,
+  colleagueCycleSelector,
+  getTimelineByCodeSelector,
+  uuidCompareSelector,
+} from '@pma/store';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
 
@@ -26,6 +32,10 @@ const MidYearReview: FC<Props> = ({ colleagueUuid, isUserView }) => {
   const navigate = useNavigate();
   const { pathname, state } = useLocation();
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
+  const cycle = isUserView
+    ? useSelector(colleagueCycleSelector)
+    : useSelector(colleagueCycleDataSelector(colleagueUuid, currentCycle));
+  const isCycleCompleted = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
 
   const tlPoint = useSelector(getTimelineByCodeSelector(ReviewType.MYR, colleagueUuid, currentCycle));
 
@@ -44,11 +54,12 @@ const MidYearReview: FC<Props> = ({ colleagueUuid, isUserView }) => {
           status,
           startTime,
           lastUpdatedTime,
+          viewOnly: isCycleCompleted || !isUserView,
         },
         t,
         tenant,
       ),
-    [summaryStatus, startTime, lastUpdatedTime],
+    [summaryStatus, startTime, lastUpdatedTime, isCycleCompleted, isUserView],
   );
 
   const disabled = isUserView
