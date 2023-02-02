@@ -19,8 +19,8 @@ const ApproveModal: FC<Props> = ({ onSave, onClose }) => {
   return (
     <ConfirmModal
       title={t(
-        'submit_objectives_or_reviews',
-        tenant === Tenant.GENERAL ? 'Submit objectives or reviews' : 'Submit priorities or reviews',
+        'my_actions_approve_modal_title',
+        tenant === Tenant.GENERAL ? 'Submit objectives or reviews' : 'Agree priorities or reviews',
         {
           ns: tenant,
         },
