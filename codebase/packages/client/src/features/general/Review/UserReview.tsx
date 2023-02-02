@@ -18,6 +18,8 @@ import {
   schemaMetaSelector,
   Statuses,
   colleagueCycleDataSelector,
+  TimelineActions,
+  timelinesMetaSelector,
 } from '@pma/store';
 import { useParams } from 'react-router';
 
@@ -32,7 +34,6 @@ import Spinner from 'components/Spinner';
 import { LineManagerButtons } from './components/LineManagerButtons';
 import { ReviewHelpModal } from './components/ReviewHelp';
 import { InfoBlock } from 'components/InfoBlock';
-import { USER } from 'config/constants';
 import { formTagComponents } from 'utils/schema';
 import { Review } from 'config/types';
 import ReviewForm from './components/ReviewForm';
@@ -62,10 +63,10 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
 
   const { loading: reviewLoading, loaded: reviewLoaded, saving, saved } = useSelector(reviewsMetaSelector);
   const { loading: schemaLoading, loaded: schemaLoaded } = useSelector(schemaMetaSelector);
+  const { loading: timelineLoading } = useSelector(timelinesMetaSelector) || {};
   const schema = useSelector(getReviewSchema(reviewType));
 
-  const timelineReview =
-    useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current, currentCycle)) || ({} as any);
+  const timeline = useSelector(getTimelineByReviewTypeSelector(reviewType, colleagueUuid, currentCycle)) || ({} as any);
 
   const cycleCompletedCondition = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
   const declineCondition =
@@ -99,6 +100,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
   useEffect(() => {
     if (reviewLoaded) {
       dispatch(SchemaActions.getSchema({ colleagueUuid, cycleUuid: currentCycle || 'CURRENT' }));
+      dispatch(TimelineActions.getUserTimeline({ colleagueUuid, cycleUuid: currentCycle }));
     }
   }, [reviewLoaded]);
 
@@ -125,13 +127,13 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
             colleagueUuid: colleague?.colleagueUUID,
             approverUuid: info.colleagueUUID,
             cycleUuid: currentCycle,
-            code: timelineReview.code,
+            code: timeline?.code || reviewType,
             status: status,
           },
           data: {
             reason: '',
             status: status,
-            code: timelineReview.code,
+            code: timeline?.code || reviewType,
             cycleUuid: currentCycle,
             colleagueUuid: colleague?.colleagueUUID,
             // @ts-ignore
@@ -143,7 +145,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
     }
   };
 
-  if (reviewLoading || schemaLoading || saving) {
+  if (reviewLoading || schemaLoading || saving || timelineLoading) {
     return <Spinner fullHeight />;
   }
 

@@ -201,7 +201,7 @@ const proxyResHandler =
 const proxyErrorHandler =
   (logger: Logger, customHandler: OnErrorCallback | undefined) =>
   (err: Error, req: Request, res: Response, target?: string | Partial<Url>) => {
-    res.logs.markApiCallEnd!({ statusCode: 500, error: err });
+    res?.logs?.markApiCallEnd && res.logs.markApiCallEnd({ statusCode: 500, error: err });
     if (typeof customHandler === 'function') {
       customHandler(err, req, res, target);
     } else if (err.message === 'proxy: Missing access_token') {
