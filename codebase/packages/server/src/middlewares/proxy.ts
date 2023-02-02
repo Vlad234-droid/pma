@@ -135,14 +135,14 @@ const proxyReqHandler =
     proxyReq.setHeader(TRACE_ID_HEADER, traceId);
     proxyReq.setHeader(TESCO_TRACE_ID_HEADER, traceId);
 
-    res.logs.markApiCallEnd = markApiCall(res)({
-      traceId,
-      tescoTraceId: traceId,
-      requestUrl: req.url,
-      requestBody: req.body,
-      params: req.params,
-      queryParams: req.query,
-    });
+    res?.logs &&
+      (res.logs.markApiCallEnd = markApiCall(res)({
+        traceId,
+        tescoTraceId: traceId,
+        requestUrl: req.url,
+        requestBody: req.body,
+        params: req.params,
+      }));
 
     clearCookies && proxyReq.removeHeader('Cookie');
 
@@ -183,7 +183,7 @@ const proxyReqHandler =
 const proxyResHandler =
   (logger: Logger, customHandler: OnProxyResCallback | undefined) =>
   (proxyRes: IncomingMessage, req: Request, res: Response) => {
-    res.logs.markApiCallEnd!({ statusCode: proxyRes.statusCode });
+    res?.logs?.markApiCallEnd && res.logs.markApiCallEnd({ statusCode: proxyRes.statusCode });
     logger.debug(
       {
         req: defaultRequestSerializer(req),
