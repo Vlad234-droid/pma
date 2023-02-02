@@ -3,6 +3,7 @@ import {
   CalibrationReviewAction,
   calibrationReviewDataSelector,
   calibrationReviewMetaSelector,
+  colleagueCurrentCycleSelector,
   SchemaActions,
 } from '@pma/store';
 import { useSelector } from 'react-redux';
@@ -14,6 +15,7 @@ export const useCalibrationReview = () => {
     uuid: string;
     userUuid: string;
   };
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
   const dispatch = useDispatch();
   const { loading, loaded, updated } = useSelector(calibrationReviewMetaSelector);
   const calibrationReview = useSelector(calibrationReviewDataSelector(colleagueUuid)) || {};
@@ -21,9 +23,9 @@ export const useCalibrationReview = () => {
 
   useEffect(() => {
     if (!isNew) {
-      dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid, cycleUuid: 'CURRENT' }));
+      dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid, cycleUuid: currentCycle }));
     }
-    dispatch(SchemaActions.getSchema({ colleagueUuid, cycleUuid: 'CURRENT' }));
+    dispatch(SchemaActions.getSchema({ colleagueUuid, cycleUuid: currentCycle }));
 
     return () => {
       dispatch(CalibrationReviewAction.clearCalibrationReview());

@@ -10,10 +10,11 @@ import {
   colleagueCurrentCycleSelector,
 } from '@pma/store';
 
-import BaseWidget from 'components/BaseWidget';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import { paramsReplacer, isDateFromISOBeforeNow, isDateFromISOAfterNow } from 'utils';
+import BaseWidget from 'components/BaseWidget';
+import Spinner from 'components/Spinner';
 import { useTranslation } from 'components/Translation';
 import useDispatch from 'hooks/useDispatch';
 import { Status } from 'config/enum';
@@ -43,7 +44,7 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
 
   const { loading } = useSelector(calibrationReviewMetaSelector);
   const { uuid = 'new', status } = calibrationReview;
-  const isStartedPoint =
+  const isActivePoint =
     ![Status.NOT_STARTED, Status.COMPLETED].includes(TLPStatus) &&
     isDateFromISOAfterNow(startTime) &&
     isDateFromISOBeforeNow(endTime);
@@ -55,11 +56,12 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   const isViewing = isFinished || (!isSubmitting && !isEditing && status !== Status.WAITING_FOR_APPROVAL);
 
   useEffect(() => {
-    if ((!isStartedPoint && !hasActions) || isAnniversaryColleague) return;
+    if ((!isActivePoint && !hasActions) || isAnniversaryColleague) return;
     dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: currentCycle }));
-  }, [isStartedPoint, hasActions, currentCycle]);
+  }, [isActivePoint, hasActions, currentCycle]);
 
-  if (isAnniversaryColleague || loading || (!isStartedPoint && !hasActions)) return null;
+  if (isAnniversaryColleague || loading || (!isActivePoint && !hasActions)) return null;
+  if (loading) return <Spinner />;
 
   return (
     <BaseWidget
