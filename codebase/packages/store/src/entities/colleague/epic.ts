@@ -21,7 +21,8 @@ export const getColleagueByUuidEpic: Epic = (action$, _, { api }) =>
         //@ts-ignore
         map(({ colleague, cycles }: any) => {
           const result = {
-            [payload.colleagueUuid]: {
+            colleagueUuid: payload.colleagueUuid,
+            data: {
               ...colleague.data,
               cycles:
                 cycles.data.map(({ endTime, startTime, uuid, type, status }) => ({
