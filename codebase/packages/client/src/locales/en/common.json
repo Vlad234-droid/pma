@@ -96,7 +96,7 @@
   "decline_review_agreement": "Done, you’ve rejected this form as it doesn't reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.",
   "decline_reason": "Decline reason",
   "please_select": "Please select",
-  "submit_objectives_or_reviews": "Submit objectives or reviews",
+  "my_actions_approve_modal_title": "Submit objectives or reviews",
   "approve_objectives_or_reviews": "Are you sure you want to approve objectives or reviews?",
   "approve_or_decline": "Approve or decline",
   "mid_year_review_help_text": "Use this to capture a summary of the mid-year conversation you’ve had with your line manager. Remember to focus as much on your how as your what.",
