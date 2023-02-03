@@ -49,9 +49,12 @@ export const getReportingFiltersEpic: Epic = (action$, _, { api }) =>
         }),
         catchError((e) => {
           const errors = e?.data?.errors;
+          const { code, message } = errors?.[0];
+          const errorMessage = CODES[code] || message;
+
           return concatWithErrorToast(
             of(getReportingFilters.failure(errors?.[0])),
-            errorPayloadConverter({ ...errors?.[0], title: errors?.[0].message }),
+            errorPayloadConverter({ ...errors?.[0], title: errorMessage, message: '' }),
           );
         }),
         takeUntil(action$.pipe(filter(isActionOf(getReportingFilters.cancel)))),
