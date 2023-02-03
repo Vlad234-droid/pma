@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import useDispatch from 'hooks/useDispatch';
 import { useParams } from 'react-router-dom';
 
-export const useCalibrationReview = () => {
+export const useCalibrationReview = (cycle?: string) => {
   const { uuid, userUuid: colleagueUuid } = useParams<{ uuid: string; userUuid: string }>() as {
     uuid: string;
     userUuid: string;
@@ -23,14 +23,10 @@ export const useCalibrationReview = () => {
 
   useEffect(() => {
     if (!isNew) {
-      dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid, cycleUuid: currentCycle }));
+      dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid, cycleUuid: cycle || currentCycle }));
     }
-    dispatch(SchemaActions.getSchema({ colleagueUuid, cycleUuid: currentCycle }));
-
-    return () => {
-      dispatch(CalibrationReviewAction.clearCalibrationReview());
-    };
-  }, []);
+    dispatch(SchemaActions.getSchema({ colleagueUuid, cycleUuid: cycle || currentCycle }));
+  }, [currentCycle, colleagueUuid]);
 
   return {
     loading,

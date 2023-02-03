@@ -37,13 +37,13 @@ const CreateCalibrationRatings: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { backPath, activeList, prevBackPath, period, filters } = (state as any) || {};
+  const { backPath, activeList, prevBackPath, period, filters, currentCycle } = (state as any) || {};
 
   const { profile } = useSelector(getColleagueSelector(colleagueUuid)) || {};
 
   const { components } = useSelector(getFormByCode(STANDARD_CALIBRATION_FORM_CODE)) || {};
 
-  const { loading, loaded, updated, calibrationReview } = useCalibrationReview();
+  const { loading, loaded, updated, calibrationReview } = useCalibrationReview(currentCycle);
   const { loading: colleagueLoading } = useColleague();
   const { isNew, isDraft, readOnly, sessionMode, editablePPSession, sessionModeCreate } = usePermissions();
 
