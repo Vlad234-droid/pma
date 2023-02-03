@@ -4,6 +4,7 @@ import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import {
   ColleagueActions,
   colleagueCurrentCycleSelector,
+  colleagueCycleDataSelector,
   Component,
   currentUserSelector,
   ExpressionValueType,
@@ -17,7 +18,6 @@ import {
   SchemaActions,
   schemaMetaSelector,
   Statuses,
-  colleagueCycleDataSelector,
   TimelineActions,
   timelinesMetaSelector,
 } from '@pma/store';
@@ -37,6 +37,7 @@ import { InfoBlock } from 'components/InfoBlock';
 import { formTagComponents } from 'utils/schema';
 import { Review } from 'config/types';
 import ReviewForm from './components/ReviewForm';
+import { role, usePermission } from '../Permission';
 
 export type Props = {
   reviewType: ReviewType.MYR | ReviewType.EYR;
@@ -45,6 +46,7 @@ export type Props = {
 
 const UserReview: FC<Props> = ({ reviewType, onClose }) => {
   const { css, theme, matchMedia } = useStyle();
+  const isPerform = usePermission([role.EXECUTIVE, role.LINE_MANAGER]);
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
   const { uuid } = useParams<{ uuid: string }>();
@@ -70,8 +72,10 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
 
   const cycleCompletedCondition = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
   const declineCondition =
-    !cycleCompletedCondition && (review.status === Status.APPROVED || review.status === Status.WAITING_FOR_APPROVAL);
-  const approveCondition = !cycleCompletedCondition && review.status === Status.WAITING_FOR_APPROVAL;
+    !cycleCompletedCondition &&
+    isPerform &&
+    (review.status === Status.APPROVED || review.status === Status.WAITING_FOR_APPROVAL);
+  const approveCondition = !cycleCompletedCondition && isPerform && review.status === Status.WAITING_FOR_APPROVAL;
 
   const { components = [] as Component[] } = schema;
 
