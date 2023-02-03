@@ -45,7 +45,7 @@ const Graph: FC<Props> = ({ currentData, compareData, title, properties }) => {
           barCategoryGap={small ? '0%' : undefined}
           data={data}
           layout={small ? 'horizontal' : 'vertical'}
-          margin={!small ? { top: 32, right: 50, left: 100, bottom: 50 } : { top: 29, right: 0, left: 23, bottom: 150 }}
+          margin={!small ? { top: 32, right: 50, left: 100, bottom: 50 } : { top: 45, right: 0, left: 23, bottom: 150 }}
         >
           <CartesianGrid horizontal={false} vertical={false} fill={theme.colors.backgroundDark} />
           {small ? (
@@ -225,7 +225,7 @@ const CustomizedLabel = (props) => {
     <>
       <g>
         <text
-          x={small ? x + width / 16 : x + width + 4}
+          x={small ? x + width / 16 : value === 100 ? x + width : x + width + 4}
           y={small ? y - 25 : y + height / 2.5}
           dy={0}
           fontSize='20'
