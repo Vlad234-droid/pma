@@ -39,7 +39,7 @@ const HelpModalReceiveFeedback: FC<Info360ModalProps> = ({ setHelpModalReceiveFe
             Take time to reflect on the feedback you&apos;ve received, don&apos;t feel like you must take action right
             away. If you&apos;re having a bad day, you&apos;re more likely to receive feedback negatively, so making
             sure you&apos;re in a positive frame of mind where you can stay curious about your feedback will set you up
-            to receive feedback as constructive and well meaning.
+            to receive feedback as constructive. Fill out the questions below to share your feedback and well meaning.
           </Trans>
         </li>
         <li>
