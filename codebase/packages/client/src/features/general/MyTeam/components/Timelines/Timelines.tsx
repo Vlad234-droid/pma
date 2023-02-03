@@ -1,11 +1,12 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 
-import { TimelineType, Employee, ReviewType } from 'config/types';
+import { TimelineType, Employee, ReviewType, Timeline } from 'config/types';
 import { Icon, getIcon } from 'components/Icon';
 import { useTranslation } from 'components/Translation';
 
 import { Priority } from '../Priority';
+import { filterByDate } from 'utils';
 
 type Props = {
   employee: Employee;
@@ -17,15 +18,30 @@ const TimeLines: FC<Props> = ({ employee }) => {
   const { timeline: timelines } = employee;
 
   const hasQuarterTimeline = timelines.some(({ reviewType }) => reviewType === ReviewType.QUARTER);
-  const reviews = timelines?.filter(
-    (timeline) => timeline.type !== TimelineType.TIMELINE_POINT && timeline.properties.TIMELINE_POINT_HIDDEN !== 'true',
-  );
+
+  const currentTLPoints = useMemo(() => {
+    const gropedByCycle = timelines
+      ?.filter(
+        (timeline) =>
+          timeline.type !== TimelineType.TIMELINE_POINT && timeline.properties.TIMELINE_POINT_HIDDEN !== 'true',
+      )
+      ?.reduce((acc, tlPoint) => {
+        acc[tlPoint.colleagueCycleUuid] = [...(acc[tlPoint.colleagueCycleUuid] || []), tlPoint];
+        return acc;
+      }, {} as Record<string, Timeline[]>);
+    return (
+      Object.keys(gropedByCycle)
+        .map((colleagueCycleUuid) => [...gropedByCycle[colleagueCycleUuid]])
+        .sort(([{ startTime }], [{ startTime: sEndTime }]) => filterByDate(startTime, sEndTime))[0]
+        ?.sort(({ endTime }, { endTime: sEndTime }) => filterByDate(endTime, sEndTime)) || []
+    );
+  }, [JSON.stringify(timelines)]);
 
   return (
     <>
       <div data-test-id='timelines' className={css(wrapperStyles)}>
         <div className={css(listStyles)}>
-          {reviews?.map((review) => {
+          {currentTLPoints.map((review) => {
             const [graphics, color, title] = getIcon(review.summaryStatus, t);
 
             return (
