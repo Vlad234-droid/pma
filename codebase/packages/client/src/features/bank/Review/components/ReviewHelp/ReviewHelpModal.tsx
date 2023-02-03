@@ -51,9 +51,9 @@ const ReviewHelpModal: FC = () => {
           </div>
           <div className={css(tipsStyle)}>
             <span className={css(dotStyle)} />
-            <Trans i18nKey={'hint_review_7'}>
+            <Trans i18nKey={'hint_review_7'} ns='bank'>
               Make sure what you write properly captures the conversation you and your manager had – remember they will
-              be sent this for their approval
+              be sent this for their agreement.
             </Trans>
           </div>
         </div>
