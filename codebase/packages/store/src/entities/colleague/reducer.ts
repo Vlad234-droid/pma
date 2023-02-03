@@ -8,12 +8,15 @@ export const initialState = {
 
 const request = (state) => ({ ...state, meta: { ...state.meta, loading: true, error: null } });
 
-const success = (state, { payload }) => {
+const success = (state, { payload: { colleagueUuid, data } }) => {
   return {
     ...state,
     data: {
       ...state.data,
-      ...payload,
+      [colleagueUuid]: {
+        ...(state.data[colleagueUuid] || null),
+        ...data,
+      },
     },
     meta: { ...state.meta, loading: false, loaded: true },
   };
