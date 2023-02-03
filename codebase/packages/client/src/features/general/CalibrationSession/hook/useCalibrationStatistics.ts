@@ -29,7 +29,7 @@ export const useCalibrationStatistics = ({
       'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED],
       'timeline-point-status_in': [Status.STARTED, Status.FINISHING, Status.COMPLETED],
       _search: searchValue,
-      ...(period ? { year: period } : {}),
+      year: period,
       ...filterToRequest(filters),
     };
     dispatch(CalibrationStatisticsAction.getCalibrationStatistics(params));

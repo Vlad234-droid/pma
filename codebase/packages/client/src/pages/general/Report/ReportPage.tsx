@@ -1,11 +1,17 @@
 import React, { FC, useState, useMemo, useEffect, useCallback } from 'react';
 import { Button, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
-import { ColleagueFilterAction, getColleagueFilterSelector, totalColleaguesSelector } from '@pma/store';
+import {
+  ColleagueFilterAction,
+  getColleagueFilterSelector,
+  totalColleaguesSelector,
+  userCurrentPerformanceCyclePeriodSelector,
+} from '@pma/store';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { ReportModal } from 'features/general/Report/Modals';
+import { useTenant } from 'features/general/Permission';
 import { FilterOption } from 'features/general/Shared';
 import { buildPath } from 'features/general/Routes';
 import { Trans, useTranslation } from 'components/Translation';
@@ -14,12 +20,11 @@ import { HoverContainer } from 'components/HoverContainer';
 import { HoverMessage } from 'components/HoverMessage';
 import UnderlayModal from 'components/UnderlayModal';
 import { IconButton } from 'components/IconButton';
+import { Option, Select } from 'components/Form';
 import FilterForm from 'components/FilterForm';
 import ViewItems from 'components/ViewItems';
-import { Option, Select } from 'components/Form';
 
-import { getDepthByYears, getFinancialYear, getYearsFromCurrentYear } from 'utils/date';
-import { useTenant } from 'features/general/Permission';
+import { getCurrentYear, getDepthByYears, getFinancialYear, getYearsFromCurrentYear } from 'utils/date';
 import useDispatch from 'hooks/useDispatch';
 
 import { Page } from 'pages';
@@ -39,7 +44,6 @@ const ReportPage: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-  const year = searchParams.get('year') || getFinancialYear();
   const { css, matchMedia } = useStyle();
   const small = matchMedia({ xSmall: true, small: true }) || false;
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
@@ -54,6 +58,8 @@ const ReportPage: FC = () => {
 
   const reportingFilters = useSelector(getColleagueFilterSelector) || {};
   const totalColleagues = useSelector(totalColleaguesSelector) ?? 0;
+  const performancePeriod = useSelector(userCurrentPerformanceCyclePeriodSelector) || getCurrentYear();
+  const year = searchParams.get('year') || performancePeriod;
 
   useEffect(() => {
     dispatch(

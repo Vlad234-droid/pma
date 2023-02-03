@@ -1,8 +1,9 @@
+import { formatDateStringFromISO } from '@pma/client/src/utils';
 import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
 import { Statuses } from '../config/types';
-import { filterByDate } from '../utils/date';
+import { filterByDate, YEAR_FORMAT } from '../utils/date';
 
 export const usersSelector = (state: RootState) => state.users;
 const colleagueSelector = (state: RootState) => state.colleague;
@@ -115,4 +116,18 @@ export const colleagueCurrentCycleSelector = (colleagueUuid: string) => (state: 
     return users.current.metadata.currentCycle;
   }
   return colleague.data[colleagueUuid]?.currentCycle || 'CURRENT';
+};
+
+export const userCurrentPerformanceCyclePeriodSelector = (state: RootState) => {
+  const users = usersSelector(state);
+
+  return users.current.metadata.cycles
+    .filter(({ status }) => status === Statuses.STARTED || status === Statuses.FINISHING)
+    .map(({ endTime, startTime }) => ({
+      endTime,
+      startTime,
+      value: `${formatDateStringFromISO(startTime, YEAR_FORMAT)}`,
+      label: `${formatDateStringFromISO(startTime, YEAR_FORMAT)} - ${formatDateStringFromISO(endTime, YEAR_FORMAT)}`,
+    }))
+    .sort(({ endTime }, { endTime: nextEndTime }) => filterByDate(endTime, nextEndTime))?.[0]?.value;
 };

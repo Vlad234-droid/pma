@@ -25,6 +25,7 @@ export const diffHours = diffBy('hours');
 export const diffSeconds = diffBy('seconds');
 export const DATE_STRING_FORMAT = 'dd LLL yyyy';
 export const MONTH_FORMAT = 'LLL yyyy';
+export const YEAR_FORMAT = 'yyyy';
 export const DATE_TIME_STRING_FORMAT = 'dd LLL yyyy HH:mm';
 export const DATE_FORMAT = 'yyyy-MM-dd';
 export const DATE_FORMAT_FULL_MONTH = 'yyyy-mmm-dd';
@@ -98,7 +99,7 @@ export const getToday = () => {
   now.setMilliseconds(0);
   return now;
 };
-// TODO: data check with cycle endTime
+
 export const getFinancialYear = (): string =>
   (DateTime.local().get('month') >= 2
     ? DateTime.local().year

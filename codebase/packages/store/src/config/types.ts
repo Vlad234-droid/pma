@@ -149,6 +149,7 @@ export enum ReviewType {
 
 export enum Statuses {
   PENDING = 'PENDING',
+  FINISHING = 'FINISHING',
   DRAFT = 'DRAFT',
   WAITING_FOR_APPROVAL = 'WAITING_FOR_APPROVAL',
   APPROVED = 'APPROVED',

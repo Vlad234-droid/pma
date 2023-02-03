@@ -1,7 +1,9 @@
 import React, { FC, useState } from 'react';
+import { userCurrentPerformanceCyclePeriodSelector } from '@pma/store';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import CalibrationSessionOverview, {
   AddedToSession,
@@ -18,7 +20,7 @@ import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 import { Page } from 'pages/general/types';
 import useDownloadExelFile from 'hooks/useDownloadExelFile';
-import { getFinancialYear } from 'utils';
+import { getCurrentYear } from '../../../utils';
 
 const REPORT_URL = 'reports/calibration-overview';
 
@@ -30,11 +32,13 @@ const CalibrationSessionPage: FC = () => {
   const { period: backPeriod } = (state as any) || {};
   const isPerform = usePermission([role.TALENT_ADMIN]);
 
-  const [period, setPeriod] = useState<string>(backPeriod || getFinancialYear());
   const [filters, setFilters] = useState<Record<string, Record<string, boolean>>>({});
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const { download: downloadReport } = useDownloadExelFile({
+  const performancePeriod = useSelector(userCurrentPerformanceCyclePeriodSelector) || getCurrentYear();
+  const [period, setPeriod] = useState<string>(backPeriod || performancePeriod.toString());
+
+  const { download: downloadReport, loading: reportLoading } = useDownloadExelFile({
     resource: { url: REPORT_URL, params: { year: period } },
     fileName: 'Report',
     ext: 'xlsx',
@@ -67,7 +71,12 @@ const CalibrationSessionPage: FC = () => {
           <Spinner fullHeight />
         ) : (
           <div className={css(widgetContainerStyles)}>
-            <Widget title={t('download_report', 'Download report')} graphics={'download'} onClick={downloadReport} />
+            <Widget
+              title={t('download_report', 'Download report')}
+              graphics={'download'}
+              onClick={downloadReport}
+              isDisabled={reportLoading}
+            />
             <Widget
               title={t('calibration_sessions', 'Calibration sessions')}
               graphics={'chart'}

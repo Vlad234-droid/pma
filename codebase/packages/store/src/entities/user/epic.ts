@@ -16,7 +16,7 @@ import { getColleagueSchema } from '../schema/actions';
 
 const NUMBER_OF_DEFAULT_ATTRIBUTES = 18;
 
-export const getCurrentUserEpic: Epic = (action$, _, { openapi }) =>
+export const getCurrentUserEpic: Epic = (action$, _, { openapi, api }) =>
   action$.pipe(
     filter(isActionOf(getCurrentUser.request)),
     switchMap(() =>
@@ -30,9 +30,35 @@ export const getCurrentUserEpic: Epic = (action$, _, { openapi }) =>
             openapi.config.updateDefaultAttributes({ colleagueUuid: data?.colleague.colleagueUUID });
           }
         }),
-        // @ts-ignore
-        map(({ data }) => {
-          return getCurrentUser.success(data);
+        mergeMap(({ data }) => {
+          return from(
+            api.getPerformanceCyclesByStatuses({
+              colleagueUuid: (data as any)?.colleague?.colleagueUUID,
+              params: {
+                'colleague-cycle-status_in': [/*'OPENED_STARTING',*/ 'STARTED', 'FINISHED', 'FINISHING', 'COMPLETED'],
+              },
+            }),
+          ).pipe(
+            //@ts-ignore
+            mergeMap(({ data: cycles }) => {
+              return from([
+                getPerformanceCycles.success(
+                  cycles.map(({ endTime, startTime, uuid, type, status }) => ({
+                    endTime,
+                    startTime,
+                    uuid,
+                    type,
+                    status,
+                  })),
+                ),
+                getCurrentUser.success(data),
+              ]);
+            }),
+            catchError((e) => {
+              const errors = e?.data?.errors;
+              return of(getPerformanceCycles.failure(errors?.[0]), getCurrentUser.success(data));
+            }),
+          );
         }),
         catchError((e) => {
           const { status, data } = e || {};
@@ -110,34 +136,6 @@ export const deleteProfileAttributesEpic: Epic = (action$, _, { api }) =>
     ),
   );
 
-export const getPerformanceCyclesEpic: Epic = (actions$, _, { api }) =>
-  actions$.pipe(
-    filter(isActionOf(getCurrentUser.success)),
-    //@ts-ignore
-    switchMap(({ payload: { colleague } }) =>
-      //@ts-ignore
-      from(
-        api.getPerformanceCyclesByStatuses({
-          colleagueUuid: colleague.colleagueUUID,
-          params: {
-            'colleague-cycle-status_in': [/*'OPENED_STARTING',*/ 'STARTED', 'FINISHED', 'FINISHING', 'COMPLETED'],
-          },
-        }),
-      ).pipe(
-        //@ts-ignore
-        map(({ data }) =>
-          getPerformanceCycles.success(
-            data.map(({ endTime, startTime, uuid, type, status }) => ({ endTime, startTime, uuid, type, status })),
-          ),
-        ),
-        catchError((e) => {
-          const errors = e?.data?.errors;
-          return of(getPerformanceCycles.failure(errors?.[0]));
-        }),
-      ),
-    ),
-  );
-
 export const getColleagueCyclesEpic: Epic = (actions$, _, { api }) =>
   actions$.pipe(
     filter(isActionOf(getColleagueCycles.request)),
@@ -184,6 +182,5 @@ export default combineEpics(
   createProfileAttributeEpic,
   updateProfileAttributesEpic,
   deleteProfileAttributesEpic,
-  getPerformanceCyclesEpic,
   getColleagueCyclesEpic,
 );
