@@ -1,4 +1,5 @@
 import { createAsyncAction, createAction } from 'typesafe-actions';
+import { initialState } from './reducer';
 
 export const getCalibrationReview = createAsyncAction(
   'calibration/review/GET_REQUEST',
@@ -30,10 +31,15 @@ export const updateCalibrationReview = createAsyncAction(
 
 export const clearCalibrationReview = createAction('calibration/review-rating/CLEAR')<undefined>();
 
+export const changeCalibrationReviewMeta = createAction('calibration/review-rating/CLEAR')<
+  Partial<typeof initialState.meta>
+>();
+
 export const Actions = {
   getCalibrationReview: getCalibrationReview.request,
   saveCalibrationReview: saveCalibrationReview.request,
   updateCalibrationReview: updateCalibrationReview.request,
   saveCalibrationSessionReview: saveCalibrationSessionReview.request,
+  changeCalibrationReviewMeta,
   clearCalibrationReview,
 };

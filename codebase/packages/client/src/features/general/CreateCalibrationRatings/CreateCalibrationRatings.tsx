@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
@@ -47,6 +47,8 @@ const CreateCalibrationRatings: FC = () => {
   const { loading: colleagueLoading } = useColleague();
   const { isNew, isDraft, readOnly, sessionMode, editablePPSession, sessionModeCreate } = usePermissions();
 
+  console.log({ calibrationReview, updated });
+
   const handleSave = (values: any) => {
     const data = {
       ...values,
@@ -55,6 +57,12 @@ const CreateCalibrationRatings: FC = () => {
     setSuccessTitle(() => t('submit_calibration_ratings', 'Submit calibration ratings'));
     dispatch(CalibrationReviewAction.saveCalibrationReview(buildData(data, colleagueUuid)));
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(CalibrationReviewAction.changeCalibrationReviewMeta({ updated: false }));
+    };
+  }, []);
 
   const handleUpdate = (values) => {
     const data = {
