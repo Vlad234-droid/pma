@@ -21,16 +21,9 @@ const Buttons: FC<ButtonsProps> = ({ onSubmit, onClose, isValid }) => {
           <Button onPress={onClose} styles={[buttonWhiteStyle]}>
             <Trans i18nKey='cancel'>Cancel</Trans>
           </Button>
-          <ButtonWithConfirmation
-            isDisabled={!isValid}
-            onSave={onSubmit}
-            styles={[buttonBlueStyle]}
-            confirmationTitle={''}
-            confirmationDescription={t(
-              'review_confirmation_submit',
-              'Are you sure you want to submit your review to your line manager for approval?',
-            )}
-          />
+          <Button onPress={onSubmit} styles={[buttonBlueStyle]} isDisabled={!isValid}>
+            <Trans i18nKey='submit'>Submit</Trans>
+          </Button>
         </div>
       </div>
     </div>
