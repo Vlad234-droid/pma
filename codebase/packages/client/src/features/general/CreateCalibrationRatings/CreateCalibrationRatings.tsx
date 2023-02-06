@@ -47,8 +47,6 @@ const CreateCalibrationRatings: FC = () => {
   const { loading: colleagueLoading } = useColleague();
   const { isNew, isDraft, readOnly, sessionMode, editablePPSession, sessionModeCreate } = usePermissions();
 
-  console.log({ calibrationReview, updated });
-
   const handleSave = (values: any) => {
     const data = {
       ...values,
