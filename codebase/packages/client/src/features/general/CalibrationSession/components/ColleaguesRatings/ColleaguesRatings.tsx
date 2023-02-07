@@ -85,9 +85,6 @@ const ColleaguesRatings: FC<Props> = ({
     <div className={css(styles)}>
       {Object.entries(data).map(([title, data]) => {
         //@ts-ignore
-        const sortedColleague = data?.sort((a, b) =>
-          a?.colleague?.firstName?.localeCompare(b?.colleague?.firstName as string, 'es', { sensitivity: 'base' }),
-        );
 
         if (title === Ratings.Unsubmitted.toLowerCase() && activeList === View.TABLE) return null;
 
@@ -132,8 +129,8 @@ const ColleaguesRatings: FC<Props> = ({
                         render={() => (
                           <>
                             <div key={title} className={css({ marginBottom: '24px', width: '100%' })}>
-                              {!!sortedColleague?.length &&
-                                sortedColleague.map((item, i) => {
+                              {!!data?.length &&
+                                data.map((item, i) => {
                                   const lineManagerUuid = item?.colleague?.lineManager?.uuid;
 
                                   const isDisabled =

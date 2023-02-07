@@ -31,6 +31,7 @@ export const useReviewsCalibrationList = ({
       const isScroll = _start || _limit;
       const params = {
         _search,
+        _sort: 'first-name:asc',
         'review-rating_in': isSpaced ? [rating.toUpperCase().replace(' ', '_')] : [rating.toUpperCase()],
         ...(!uuid && {
           'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED, Status.COMPLETED],
