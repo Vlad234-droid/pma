@@ -5,6 +5,7 @@ import {
   getCalibrationReview,
   clearCalibrationReview,
   saveCalibrationSessionReview,
+  changeCalibrationReviewMeta,
 } from './actions';
 
 export type InitialStateType = {
@@ -116,4 +117,8 @@ export default createReducer(initialState)
       meta: { ...state.meta, updating: false, updated: false, error: payload },
     };
   })
-  .handleAction(clearCalibrationReview, () => initialState);
+  .handleAction(clearCalibrationReview, () => initialState)
+  .handleAction(changeCalibrationReviewMeta, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, ...payload },
+  }));
