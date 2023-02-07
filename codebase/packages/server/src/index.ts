@@ -30,11 +30,11 @@ import {
   camundaProxyMiddleware,
   loggingMiddleware,
   healthCheckMiddleware,
-  createLogSender,
 } from './middlewares';
 
 import { initialize as initializeLogger, getHttpLoggerMiddleware } from '@pma-common/logger';
 import { LogLevel } from '@energon/splunk-logger-core';
+import { createLogSender, logStartupFail, logStartupSuccess } from 'utils/splunk-logger';
 
 getEnv().validate();
 const config = getConfig();
@@ -66,6 +66,8 @@ if (!API_SERVER_URL) {
 }
 
 const sendLog: SendLog = createLogSender(config);
+
+const { environment, apiEnv, port, applicationContextPath, splunkEnabled, splunkSourcetype } = config;
 
 (async () => {
   try {
@@ -185,49 +187,22 @@ const sendLog: SendLog = createLogSender(config);
 
     const server = app.listen(NODE_PORT, () => {
       logger.info(`Server is running at http://${os.hostname().toLowerCase()}:${NODE_PORT}`);
+      logStartupSuccess({
+        sendLog,
+        environment,
+        apiEnv,
+        port,
+        applicationContextPath,
+        splunkEnabled,
+        splunkSourcetype,
+      });
     });
 
     // process.on('SIGHUP', () => server.close());
     // process.on('SIGINT', () => server.close());
     // process.on('SIGTERM', () => server.close());
   } catch (error) {
-    if (sendLog) {
-      const {
-        splunkEnabled,
-        splunkSource,
-        splunkSourcetype,
-        buildEnvironment,
-        apiEnv,
-        integrationNodeBFFUrl,
-        integrationUIMountPath,
-        environment,
-        port,
-        applicationContextPath,
-        releaseName,
-      } = config;
-      sendLog(LogLevel.error, '[BOOTSTRAP]: Error during server initialization', {
-        type: 'bootstrap',
-        buildEnvironment: buildEnvironment(),
-        config: {
-          splunkConfig: {
-            splunkEnabled: splunkEnabled(),
-            splunkSource: splunkSource(),
-            splunkSourcetype: splunkSourcetype(),
-          },
-          apiEnv: apiEnv(),
-          integrationNodeBFFUrl: integrationNodeBFFUrl(),
-          uiMountPath: integrationUIMountPath(),
-        },
-        environment: environment(),
-        appContext: applicationContextPath(),
-        port: port(),
-        releaseName: releaseName(),
-        error,
-      });
-    } else {
-      console.log(error);
-    }
-
+    logStartupFail({ sendLog, environment, apiEnv, port, applicationContextPath, splunkEnabled, splunkSourcetype });
     process.exit(1);
   }
 })();
