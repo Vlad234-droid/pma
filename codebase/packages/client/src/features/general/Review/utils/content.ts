@@ -35,7 +35,7 @@ export const getContent = (
       return [
         'roundAlert',
         'error',
-        'white',
+        'tescoBlue',
         true,
         true,
         isGeneral ? t('review_form_declined', 'Declined') : t('request_to_amend ', 'Request to amend'),
