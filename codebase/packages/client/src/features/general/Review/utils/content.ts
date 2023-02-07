@@ -16,7 +16,7 @@ export const getContent = (
         'calender',
         'tescoBlue',
         'white',
-        true,
+        false,
         false,
         t('form_available_in_date', `The form will be available on ${startTime}`, { date: new Date(startTime) }),
         '',
