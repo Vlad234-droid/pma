@@ -26,7 +26,7 @@ export const useCalibrationStatistics = ({
 
   useEffect(() => {
     const params = {
-      'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED],
+      'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED, Status.COMPLETED],
       'timeline-point-status_in': [Status.STARTED, Status.FINISHING, Status.COMPLETED],
       _search: searchValue,
       year: period,

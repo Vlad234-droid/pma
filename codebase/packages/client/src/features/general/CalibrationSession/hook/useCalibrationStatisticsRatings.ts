@@ -41,7 +41,7 @@ export const useCalibrationStatisticsRatings = ({
       _search: searchValue || undefined,
       sessionUuid: uuid,
       ...(!uuid && {
-        'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED],
+        'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED, Status.COMPLETED],
         'timeline-point-status_in': [Status.STARTED, Status.FINISHING, Status.COMPLETED],
       }),
       ...(activeList !== View.LIST ? { 'review-rating_in': initialRatings } : {}),
