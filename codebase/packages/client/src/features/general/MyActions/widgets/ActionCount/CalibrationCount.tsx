@@ -19,7 +19,7 @@ const ActionCount: FC = () => {
 
   const waitingCount = useMemo(() => {
     const colleaguesWithCalibration = colleagues.filter(({ timeline }) => {
-      const calibrationPoint = timeline.find(({ code }) => code === 'CALIBRATION');
+      const calibrationPoint = timeline.find(({ code, status }) => code === 'CALIBRATION' && status === 'STARTED');
       if (!calibrationPoint) return false;
       const { status, startTime, endTime } = calibrationPoint;
 

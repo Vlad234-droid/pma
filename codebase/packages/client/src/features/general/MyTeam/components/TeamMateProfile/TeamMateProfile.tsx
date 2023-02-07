@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { TileWrapper } from 'components/Tile';
@@ -25,7 +25,7 @@ const TeamMateProfile: FC<Props> = ({ uuid, status, employee, fullTeamView = fal
     ({ type, status }) => type === 'CALIBRATION' && status !== Status.DRAFT,
   );
 
-  const calibrationPoint = employee.timeline.find(({ code }) => code === 'CALIBRATION');
+  const calibrationPoint = employee.timeline.find(({ code, status }) => code === 'CALIBRATION' && status === 'STARTED');
   const { status: TLPStatus, startTime, endTime } = calibrationPoint || {};
 
   const isStartedCalibration =
