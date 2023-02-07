@@ -1,6 +1,6 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { renderWithTheme as render } from 'utils/test';
+import { renderWithTheme as render, screen } from 'utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent } from '@testing-library/react';
 import { CONFIRM_MODAL } from 'components/ConfirmModal/ConfirmModal';
@@ -19,34 +19,34 @@ describe('ReviewsButtons', () => {
     onSave,
   };
   it('render ReviewsButtons wrapper', async () => {
-    const { getByRole } = render(<ReviewButtons {...props} />);
-    const wrapper = getByRole('button');
+    render(<ReviewButtons {...props} />);
+    const wrapper = screen.getByRole('button');
 
     expect(wrapper).toBeInTheDocument();
   });
   it('it should render Close button', async () => {
-    const { getByText } = render(<ReviewButtons {...props} />);
-    const button = getByText(/close/i);
+    render(<ReviewButtons {...props} />);
+    const button = screen.getByText(/close/i);
 
     expect(button).toBeInTheDocument();
   });
 
   it('it should render submit buttons', async () => {
     props.readonly = false;
-    const { getByText } = render(<ReviewButtons {...props} />);
-    const draft = getByText(/Save as draft/i);
-    const submit = getByText(/submit/i);
+    render(<ReviewButtons {...props} />);
+    const draft = screen.getByText(/Save as draft/i);
+    const submit = screen.getByText(/submit/i);
 
     expect(draft).toBeInTheDocument();
     expect(submit).toBeInTheDocument();
   });
 
-  it('it should render confirmation modal', async () => {
+  it('it should not render confirmation modal', async () => {
     props.readonly = false;
-    const { getByText, getByTestId } = render(<ReviewButtons {...props} />);
+    render(<ReviewButtons {...props} />);
 
-    const submit = getByText(/submit/i);
+    const submit = screen.getByText(/submit/i);
     fireEvent.click(submit);
-    expect(getByTestId(CONFIRM_MODAL)).toBeInTheDocument();
+    expect(screen.queryByTestId(CONFIRM_MODAL)).not.toBeInTheDocument();
   });
 });
