@@ -44,7 +44,8 @@ const ColleaguesRatings: FC<Props> = ({
 
   const { pathname } = useLocation();
 
-  const handleView = (userUuid: string, uuid: string, rating: string) => {
+  //TODO: change comma separated args change to object with defined keys
+  const handleView = (rating: string, userUuid: string, uuid = 'new') => {
     if (sessionUuid && rating === Ratings.Unsubmitted.toLowerCase()) {
       navigate(
         buildPath(
@@ -58,6 +59,7 @@ const ColleaguesRatings: FC<Props> = ({
             backPath: pathname,
             activeList,
             period,
+            currentCycle: 'CURRENT',
           },
         },
       );
@@ -73,6 +75,7 @@ const ColleaguesRatings: FC<Props> = ({
           backPath: pathname,
           activeList,
           period,
+          currentCycle: 'CURRENT',
         },
       },
     );
@@ -155,11 +158,7 @@ const ColleaguesRatings: FC<Props> = ({
                                           opacity: isDisabled ? '0.4' : '1',
                                         }}
                                         onClick={() => {
-                                          handleView(
-                                            item?.colleague?.uuid as string,
-                                            item?.review?.uuid as string,
-                                            title,
-                                          );
+                                          handleView(title, item?.colleague?.uuid as string, item?.review?.uuid);
                                         }}
                                         properties={activeList === View.LIST ? item?.review?.properties : {}}
                                       />
