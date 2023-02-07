@@ -117,7 +117,7 @@ const ColleaguesRatings: FC<Props> = ({
                         </div>
                       )}
                     </div>
-                    <Panel>
+                    <Panel defaultHeight={1084}>
                       <InfinityScrollLoad
                         loadOnScroll={false}
                         loadMore={(_limit, _start) => {

@@ -45,13 +45,13 @@ export const BasePanel: FC<Props> = ({ children, ...baseRest }) => {
   );
 };
 
-const Panel: FC = ({ children, ...props }) => {
+const Panel: FC<any> = ({ children, defaultHeight = 0, ...props }) => {
   const { css } = useStyle();
   const ref = useRef<HTMLDivElement | null>(null);
-  const [height, setHeight] = useState(0);
+  const [height, setHeight] = useState<number>(defaultHeight);
 
   const onChange = (target: HTMLDivElement) => {
-    if (target.scrollHeight !== height) {
+    if (target.scrollHeight !== height && target.scrollHeight !== 0) {
       setHeight(target.scrollHeight);
     }
   };
@@ -67,7 +67,7 @@ const Panel: FC = ({ children, ...props }) => {
     }
 
     return () => mutationObserver.disconnect();
-  }, [ref]);
+  }, [ref, height]);
 
   return (
     <BasePanel {...props}>
