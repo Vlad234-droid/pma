@@ -1,29 +1,7 @@
-import { SendLog, getSplunkLogger, sendLogToConsole, loggerMiddleware } from '@energon/splunk-logger';
+import { loggerMiddleware } from '@energon/splunk-logger';
 import { getUserData } from '@energon/onelogin';
 import { ProcessConfig } from 'config';
-
-export const createLogSender = ({
-  splunkEnabled,
-  splunkSource,
-  splunkSourcetype,
-  splunkTokenSecret,
-  buildEnvironment,
-}: ProcessConfig): SendLog => {
-  const sendLogToSplunk = getSplunkLogger({
-    token: splunkTokenSecret(),
-    sourcetype: splunkSourcetype(),
-    source: splunkSource(),
-  });
-
-  return (...args) => {
-    if (splunkEnabled()) {
-      sendLogToSplunk(...args);
-    }
-    if (buildEnvironment() === 'local') {
-      sendLogToConsole(...args);
-    }
-  };
-};
+import { createLogSender } from 'utils/splunk-logger';
 
 export const loggingMiddleware = (config: ProcessConfig) =>
   loggerMiddleware({
