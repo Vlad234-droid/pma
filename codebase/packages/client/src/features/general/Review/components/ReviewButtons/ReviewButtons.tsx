@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
 import { Button, Rule } from '@pma/dex-wrapper';
 import { Status } from 'config/enum';
-import { Trans, useTranslation } from 'components/Translation';
-import { ButtonWithConfirmation } from 'features/general/Modal';
+import { Trans } from 'components/Translation';
 
 type ReviewButtonsProps = {
   reviewStatus?: Status;
@@ -14,8 +13,6 @@ type ReviewButtonsProps = {
 };
 
 const ReviewButtons: FC<ReviewButtonsProps> = ({ readonly, isValid, onClose, onSaveDraft, onSave, reviewStatus }) => {
-  const { t } = useTranslation();
-
   return (
     <>
       {readonly ? (
@@ -33,16 +30,9 @@ const ReviewButtons: FC<ReviewButtonsProps> = ({ readonly, isValid, onClose, onS
               <Trans i18nKey='save_as_draft'>Save as draft</Trans>
             </Button>
           )}
-          <ButtonWithConfirmation
-            onSave={onSave}
-            styles={[buttonBlueStyle]}
-            isDisabled={!isValid}
-            confirmationTitle={''}
-            confirmationDescription={t(
-              'review_confirmation_submit',
-              'Are you sure you want to submit your review to your line manager for approval?',
-            )}
-          />
+          <Button onPress={onSave} styles={[buttonBlueStyle]} isDisabled={!isValid}>
+            <Trans i18nKey='submit'>Submit</Trans>
+          </Button>
         </>
       )}
     </>
