@@ -27,8 +27,8 @@ export const usePermissions = () => {
   const userUuid = useSelector(colleagueUUIDSelector);
   const { managerUuid } = useSelector(colleagueInfo);
   const calibrationReview = useSelector(calibrationReviewDataSelector(colleagueUuid)) || {};
-  const currentCycle = useSelector(colleagueCurrentCycleSelector(userUuid));
-  const { endTime } = useSelector(getCalibrationPointSelector(userUuid, currentCycle));
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
+  const { endTime } = useSelector(getCalibrationPointSelector(colleagueUuid, currentCycle));
   const isFinished = isDateFromISOAfterNow(endTime);
 
   const directReport = userUuid === managerUuid;
