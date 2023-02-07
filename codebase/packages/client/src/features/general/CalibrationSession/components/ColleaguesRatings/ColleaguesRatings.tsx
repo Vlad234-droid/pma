@@ -44,6 +44,7 @@ const ColleaguesRatings: FC<Props> = ({
 
   const { pathname } = useLocation();
 
+  //TODO: change comma separated args change to object with defined keys
   const handleView = (rating: string, userUuid: string, uuid = 'new') => {
     if (sessionUuid && rating === Ratings.Unsubmitted.toLowerCase()) {
       navigate(
