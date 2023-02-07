@@ -28,8 +28,6 @@ const TeamMateProfile: FC<Props> = ({ uuid, status, employee, fullTeamView = fal
   const calibrationPoint = employee.timeline.find(({ code, status }) => code === 'CALIBRATION' && status === 'STARTED');
   const { status: TLPStatus, startTime, endTime } = calibrationPoint || {};
 
-  console.log({ calibrationPoint });
-
   const isStartedCalibration =
     !!TLPStatus &&
     !!startTime &&
