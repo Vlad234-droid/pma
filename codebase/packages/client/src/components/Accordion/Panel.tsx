@@ -67,7 +67,7 @@ const Panel: FC<any> = ({ children, defaultHeight = 0, ...props }) => {
     }
 
     return () => mutationObserver.disconnect();
-  }, [ref, height]);
+  }, [ref]);
 
   return (
     <BasePanel {...props}>
