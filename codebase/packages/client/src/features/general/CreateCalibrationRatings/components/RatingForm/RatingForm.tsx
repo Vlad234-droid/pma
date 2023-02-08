@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { FC, useCallback, useEffect, useMemo } from 'react';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'components/Translation';
@@ -9,6 +9,7 @@ import useOverallRating from 'hooks/useOverallRating';
 import { Mode, Status } from 'config/types';
 
 import { createYupSchema, createYupSchemaForDraft } from 'utils/yup';
+import debounce from 'lodash.debounce';
 
 const overallRatingListeners: string[] = ['what_rating', 'how_rating'];
 const LONG_TERM_ANSENCE = 'long_term_ansence';
@@ -69,8 +70,15 @@ const RatingForm: FC<Props> = ({ onSubmit, onCancel, components, defaultValues, 
     return Object.values(values).filter((val) => !!val).length;
   }, [JSON.stringify(values)]);
 
-  const handleSave = (data: any) => onSubmit({ ...data, status: Status.WAITING_FOR_APPROVAL });
-  const handleSaveDraft = (data: any) => onSubmit({ ...data, status: Status.DRAFT });
+  const handleSave = useCallback(
+    debounce((data: any) => onSubmit({ ...data, status: Status.WAITING_FOR_APPROVAL }), 300),
+    [onSubmit],
+  );
+
+  const handleSaveDraft = useCallback(
+    debounce((data) => onSubmit({ ...data, status: Status.DRAFT }), 300),
+    [onSubmit],
+  );
 
   return (
     <div>
