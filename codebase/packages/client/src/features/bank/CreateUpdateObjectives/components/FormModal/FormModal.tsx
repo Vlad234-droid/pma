@@ -153,7 +153,7 @@ const FormModal: FC<FormModal> = ({
                             currentPriorityIndex={currentPriorityIndex}
                           />
                           <ButtonsModifySingleStep
-                            onClose={onClose}
+                            onSaveAndExit={() => onSaveAsDraft(formValues)}
                             isValid={canModify && isCurrentValid}
                             onSubmit={handleSubmit(onSubmit)}
                           />

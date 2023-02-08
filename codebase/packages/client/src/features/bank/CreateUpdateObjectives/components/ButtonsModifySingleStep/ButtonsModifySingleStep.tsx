@@ -1,25 +1,23 @@
 import React, { FC } from 'react';
-import { useStyle, Button, Rule, CreateRule } from '@pma/dex-wrapper';
-import { Trans, useTranslation } from 'components/Translation';
-import { ButtonWithConfirmation } from 'features/general/Modal';
+import { Button, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import { Trans } from 'components/Translation';
 
 type ButtonsProps = {
-  onClose: () => void;
+  onSaveAndExit: () => void;
   isValid: boolean;
   onSubmit: (T?) => void;
 };
 
-const Buttons: FC<ButtonsProps> = ({ onSubmit, onClose, isValid }) => {
+const Buttons: FC<ButtonsProps> = ({ onSubmit, onSaveAndExit, isValid }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
-  const { t } = useTranslation();
 
   return (
     <div className={css(containerStyle)}>
       <div className={css(wrapperStyle)}>
         <div className={css(buttonWrapperStyle({ mobileScreen }))}>
-          <Button onPress={onClose} styles={[buttonWhiteStyle]}>
-            <Trans i18nKey='cancel'>Cancel</Trans>
+          <Button onPress={onSaveAndExit} styles={[buttonWhiteStyle]}>
+            <Trans i18nKey='save_and_exit'>Save and exit</Trans>
           </Button>
           <Button onPress={onSubmit} styles={[buttonBlueStyle]} isDisabled={!isValid}>
             <Trans i18nKey='submit'>Submit</Trans>
