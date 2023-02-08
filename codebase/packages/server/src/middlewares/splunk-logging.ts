@@ -1,7 +1,7 @@
 import { loggerMiddleware } from '@energon/splunk-logger';
 import { getUserData } from '@energon/onelogin';
 import { ProcessConfig } from 'config';
-import { createLogSender } from 'utils/splunk-logger';
+import { createLogSender } from '../utils/splunk-logger';
 
 export const loggingMiddleware = (config: ProcessConfig) =>
   loggerMiddleware({

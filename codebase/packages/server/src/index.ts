@@ -34,7 +34,7 @@ import {
 
 import { initialize as initializeLogger, getHttpLoggerMiddleware } from '@pma-common/logger';
 import { LogLevel } from '@energon/splunk-logger-core';
-import { createLogSender, logStartupFail, logStartupSuccess } from 'utils/splunk-logger';
+import { createLogSender, logStartupFail, logStartupSuccess } from './utils/splunk-logger';
 
 getEnv().validate();
 const config = getConfig();
