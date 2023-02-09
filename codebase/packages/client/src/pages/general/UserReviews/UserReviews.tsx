@@ -20,7 +20,7 @@ const UserObjectivesPage = () => {
   const { backPath, filters } = (state as any) || {};
   const { uuid } = useParams<{ uuid: string }>() as { uuid: string };
   const { tenant: userTenant, loading, loaded } = useColleagueTenant(uuid as string);
-  const canViewCalibration = usePermission([role.LINE_MANAGER, role.PEOPLE_TEAM]);
+  const canViewCalibration = usePermission([role.LINE_MANAGER, role.PEOPLE_TEAM, role.TALENT_ADMIN]);
 
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
