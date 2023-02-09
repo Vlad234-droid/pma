@@ -30,7 +30,7 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   const dispatch = useDispatch();
   const { pathname, state } = useLocation();
   const { backPath, filters } = (state as any) || {};
-  const isPeopleTeam = usePermission([role.PEOPLE_TEAM]);
+  const isLineManager = usePermission([role.LINE_MANAGER]);
 
   const calibrationReview = useSelector(calibrationReviewDataSelector(userUuid)) || null;
   const currentCycle = useSelector(colleagueCurrentCycleSelector(userUuid));
@@ -46,7 +46,7 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   const isSubmitting = uuid === 'new' || status === Status.DRAFT;
   const isEditing = !isSubmitting && status === Status.WAITING_FOR_APPROVAL;
   const isViewing =
-    isPeopleTeam || isFinished || (!isSubmitting && !isEditing && status !== Status.WAITING_FOR_APPROVAL);
+    !isLineManager || isFinished || (!isSubmitting && !isEditing && status !== Status.WAITING_FOR_APPROVAL);
 
   useEffect(() => {
     if (!isActivePoint || isAnniversaryColleague) return;
