@@ -134,12 +134,12 @@ const proxyReqHandler =
     const traceId = getTraceId(req);
     proxyReq.setHeader(TRACE_ID_HEADER, traceId);
     proxyReq.setHeader(TESCO_TRACE_ID_HEADER, traceId);
-
+    const proxyReqUrl = `${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`;
     res?.logs &&
       (res.logs.markApiCallEnd = markApiCall(res)({
         traceId,
         tescoTraceId: traceId,
-        requestUrl: req.url,
+        requestUrl: proxyReqUrl,
         requestBody: req.body,
         params: req.params,
       }));
@@ -167,7 +167,7 @@ const proxyReqHandler =
           proxyReq: defaultRequestSerializer(proxyReq),
           identityToken: authToken,
         },
-        `Proxying API request ${originalUrl} to ${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`,
+        `Proxying API request ${originalUrl} to ${proxyReqUrl}`,
       );
     } else {
       logger.info(
@@ -175,7 +175,7 @@ const proxyReqHandler =
           req: defaultRequestSerializer(req),
           proxyReq: defaultRequestSerializer(proxyReq),
         },
-        `Proxying API request ${originalUrl} to ${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`,
+        `Proxying API request ${originalUrl} to ${proxyReqUrl}`,
       );
     }
   };
