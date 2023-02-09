@@ -18,6 +18,7 @@ import Spinner from 'components/Spinner';
 import { useTranslation } from 'components/Translation';
 import useDispatch from 'hooks/useDispatch';
 import { Status } from 'config/enum';
+import { role, usePermission } from 'features/general/Permission';
 
 type Props = {
   userUuid: string;
@@ -29,6 +30,7 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   const dispatch = useDispatch();
   const { pathname, state } = useLocation();
   const { backPath, filters } = (state as any) || {};
+  const isPeopleTeam = usePermission([role.PEOPLE_TEAM]);
 
   const calibrationReview = useSelector(calibrationReviewDataSelector(userUuid)) || null;
   const currentCycle = useSelector(colleagueCurrentCycleSelector(userUuid));
@@ -43,7 +45,8 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
 
   const isSubmitting = uuid === 'new' || status === Status.DRAFT;
   const isEditing = !isSubmitting && status === Status.WAITING_FOR_APPROVAL;
-  const isViewing = isFinished || (!isSubmitting && !isEditing && status !== Status.WAITING_FOR_APPROVAL);
+  const isViewing =
+    isPeopleTeam || isFinished || (!isSubmitting && !isEditing && status !== Status.WAITING_FOR_APPROVAL);
 
   useEffect(() => {
     if (!isActivePoint || isAnniversaryColleague) return;

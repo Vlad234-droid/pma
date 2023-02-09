@@ -20,7 +20,7 @@ const UserObjectivesPage = () => {
   const { backPath, filters } = (state as any) || {};
   const { uuid } = useParams<{ uuid: string }>() as { uuid: string };
   const { tenant: userTenant, loading, loaded } = useColleagueTenant(uuid as string);
-  const isLineManager = usePermission([role.LINE_MANAGER]);
+  const isCanViewCalibration = usePermission([role.LINE_MANAGER, role.PEOPLE_TEAM]);
 
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
@@ -93,7 +93,7 @@ const UserObjectivesPage = () => {
         {/*<CompletedReviewsSection colleagueUuid={uuid} />*/}
         <ReviewFilesSection colleagueUuid={uuid} />
         <div className={css(widgetsContainer)}>
-          {isLineManager && <SubmitCalibrationRatingsWidget userUuid={uuid as string} />}
+          {isCanViewCalibration && <SubmitCalibrationRatingsWidget userUuid={uuid as string} />}
         </div>
       </div>
     </div>
