@@ -50,6 +50,11 @@ const environmentParameters: Array<keyof NodeJS.ProcessEnv> = [
   'LOGGER_PRETIFY',
   'LOGGER_THEME',
   'LOGGER_LOG_AUTHTOKEN',
+  // splunk
+  'SPLUNK_TOKEN_SECRET',
+  'SPLUNK_ENABLED',
+  'SPLUNK_SOURCETYPE',
+  'SPLUNK_SOURCE',
 ];
 
 /**
@@ -75,6 +80,10 @@ const optionalEnvironmentParameters = [
   'LOGGER_THEME',
   'LOGGER_LOG_AUTHTOKEN',
   'USE_REQUIRE_IDENTITY_TOKEN',
+  'SPLUNK_TOKEN_SECRET',
+  'SPLUNK_ENABLED',
+  'SPLUNK_SOURCETYPE',
+  'SPLUNK_SOURCE',
 ];
 
 export class EnvAccessor {
