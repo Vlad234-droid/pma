@@ -12,12 +12,13 @@ import {
 
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
-import { paramsReplacer, isDateFromISOBeforeNow, isDateFromISOAfterNow } from 'utils';
+import { paramsReplacer, isDateFromISOAfterNow } from 'utils';
 import BaseWidget from 'components/BaseWidget';
 import Spinner from 'components/Spinner';
 import { useTranslation } from 'components/Translation';
 import useDispatch from 'hooks/useDispatch';
 import { Status } from 'config/enum';
+import { role, usePermission } from 'features/general/Permission';
 
 type Props = {
   userUuid: string;
@@ -29,39 +30,31 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   const dispatch = useDispatch();
   const { pathname, state } = useLocation();
   const { backPath, filters } = (state as any) || {};
+  const isLineManager = usePermission([role.LINE_MANAGER]);
 
-  const calibrationReview = useSelector(calibrationReviewDataSelector(userUuid)) || {};
+  const calibrationReview = useSelector(calibrationReviewDataSelector(userUuid)) || null;
   const currentCycle = useSelector(colleagueCurrentCycleSelector(userUuid));
 
-  const {
-    endTime,
-    startTime,
-    status: TLPStatus,
-    statistics = {},
-  } = useSelector(getCalibrationPointSelector(userUuid, currentCycle));
+  const { endTime, startTime, status: TLPStatus } = useSelector(getCalibrationPointSelector(userUuid, currentCycle));
   const isAnniversaryColleague = useSelector(isAnniversaryTimelineType(userUuid, currentCycle));
-  const hasActions = Object.keys(statistics).length > 0;
-
   const { loading } = useSelector(calibrationReviewMetaSelector);
-  const { uuid = 'new', status } = calibrationReview;
-  const isActivePoint =
-    ![Status.NOT_STARTED, Status.COMPLETED].includes(TLPStatus) &&
-    isDateFromISOAfterNow(startTime) &&
-    isDateFromISOBeforeNow(endTime);
 
+  const { uuid = 'new', status } = calibrationReview || {};
+  const isActivePoint = TLPStatus !== Status.NOT_STARTED && isDateFromISOAfterNow(startTime);
   const isFinished = isDateFromISOAfterNow(endTime);
 
   const isSubmitting = uuid === 'new' || status === Status.DRAFT;
   const isEditing = !isSubmitting && status === Status.WAITING_FOR_APPROVAL;
-  const isViewing = isFinished || (!isSubmitting && !isEditing && status !== Status.WAITING_FOR_APPROVAL);
+  const isViewing =
+    !isLineManager || isFinished || (!isSubmitting && !isEditing && status !== Status.WAITING_FOR_APPROVAL);
 
   useEffect(() => {
-    if ((!isActivePoint && !hasActions) || isAnniversaryColleague) return;
+    if (!isActivePoint || isAnniversaryColleague) return;
     dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: currentCycle }));
-  }, [isActivePoint, hasActions, currentCycle]);
+  }, [isActivePoint, currentCycle]);
 
-  if (isAnniversaryColleague || loading || (!isActivePoint && !hasActions)) return null;
   if (loading) return <Spinner />;
+  if (isAnniversaryColleague || !isActivePoint || (isFinished && !calibrationReview)) return null;
 
   return (
     <BaseWidget
