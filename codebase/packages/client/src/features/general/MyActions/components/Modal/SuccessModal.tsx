@@ -39,7 +39,7 @@ const ReviewSuccessModal: FC<{
     [ActionStatus.ERROR]: t('error', 'Error'),
     [ActionStatus.PENDING]: t('pending', 'Pending'),
     [ActionStatus.COMPLETED]: t('completed', 'Completed'),
-    [ActionStatus.APPROVED]: t('agree_priorities_and_or_reviews', 'Agree priorities and / or reviews'),
+    [ActionStatus.APPROVED]: t('approved', 'Approved'),
     [ActionStatus.COMPLETE_DECLINED]: t('declined', 'Declined'),
     [ActionStatus.APPROVE_DECLINED]: t(
       'request_amend_priorities_and_or_reviews',
