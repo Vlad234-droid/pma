@@ -35,7 +35,7 @@ const MyObjectives: FC = () => {
 
   useEffect(() => {
     colleagueUuid && dispatch(ReviewSharingActions.checkSharing({ colleagueUuid, cycleUuid: CURRENT, code }));
-    colleagueUuid && dispatch(ReviewSharingActions.getSharings({ colleagueUuid, code }));
+    colleagueUuid && dispatch(ReviewSharingActions.getSharings({ colleagueUuid, code, cycleUuid: CURRENT }));
   }, [colleagueUuid, code]);
 
   useEffect(() => {
