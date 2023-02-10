@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, type Location } from 'react-router-dom';
 import { CreateRule, IconButton as BackButton, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 
 import useColleagueTenant from 'hooks/useColleagueTenant';
@@ -11,13 +11,22 @@ import { useTenant, Tenant, usePermission, role } from 'features/general/Permiss
 import { SubmitCalibrationRatingsWidget } from 'features/general/CreateCalibrationRatings';
 import { Page } from 'pages/general/types';
 import Spinner from 'components/Spinner';
+import { View } from 'features/general/MyTeam';
+
+interface LocationWithState extends Location {
+  state: {
+    backPath?: string;
+    filters?: any;
+    view?: View;
+  };
+}
 
 const UserObjectivesPage = () => {
   const { css, matchMedia } = useStyle();
   const tenant = useTenant();
   const navigate = useNavigate();
-  const { state } = useLocation();
-  const { backPath, filters } = (state as any) || {};
+  const { state } = useLocation() as LocationWithState;
+  const { backPath, filters, view } = state || {};
   const { uuid } = useParams<{ uuid: string }>() as { uuid: string };
   const { tenant: userTenant, loading, loaded } = useColleagueTenant(uuid as string);
   const canViewCalibration = usePermission([role.LINE_MANAGER, role.PEOPLE_TEAM, role.TALENT_ADMIN]);
@@ -70,7 +79,7 @@ const UserObjectivesPage = () => {
                 {
                   pathname: backPath || buildPath(Page.CONTRIBUTION),
                 },
-                { state: { filters } },
+                { state: { filters, view } },
               );
             }}
             graphic='backwardLink'

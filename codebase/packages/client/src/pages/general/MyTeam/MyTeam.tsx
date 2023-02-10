@@ -13,8 +13,15 @@ import { Filters, getEmployeesSortingOptions, useSearch, useSorting } from 'feat
 import { CanPerform, role, useTenant } from 'features/general/Permission';
 
 import { useTranslation } from 'components/Translation';
+import { useLocation, type Location } from 'react-router-dom';
 
 export const TEST_ID = 'my-team';
+
+interface LocationWithState extends Location {
+  state: {
+    view?: View;
+  };
+}
 
 const MyTeamPage: FC = () => {
   const { css, matchMedia } = useStyle();
@@ -23,7 +30,8 @@ const MyTeamPage: FC = () => {
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const options = getEmployeesSortingOptions(t);
-  const [view, setView] = useState<View>(View.DIRECT_REPORTS);
+  const { state } = useLocation() as LocationWithState;
+  const [view, setView] = useState<View>(state?.view ?? View.DIRECT_REPORTS);
   const [sortValue, setSortValue] = useSorting();
   const [searchValue, setSearchValue] = useSearch();
 
