@@ -11,8 +11,8 @@ export const checkColleagueReviewsShared = ({ colleagueUuid, cycleUuid, code }: 
   return httpClient.get(`${domain}/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/sharing`);
 };
 
-export const getAllSharedReviews = ({ colleagueUuid, code }: GetAllSharedColleagueReviewsParams) => {
-  return httpClient.get(`${domain}/${colleagueUuid}/review-codes/${code}/sharing`);
+export const getAllSharedReviews = ({ colleagueUuid, code, cycleUuid }: ShareColleagueReviewsParams) => {
+  return httpClient.get(`${domain}/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/sharing/reviews`);
 };
 
 export const shareColleagueReviews = ({ colleagueUuid, cycleUuid, code }: ShareColleagueReviewsParams) => {

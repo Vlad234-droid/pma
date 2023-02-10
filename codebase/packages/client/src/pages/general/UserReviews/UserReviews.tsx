@@ -6,7 +6,7 @@ import useColleagueTenant from 'hooks/useColleagueTenant';
 import { ColleagueProfileWidget } from 'features/general/Profile';
 import { ShareWidget } from 'features/general/ShareWidget';
 import { buildPath } from 'features/general/Routes';
-import { CompletedReviewsSection, ReviewFilesSection, ReviewsSection } from 'features/general/Review';
+import { ReviewFilesSection, ReviewsSection } from 'features/general/Review';
 import { useTenant, Tenant, usePermission, role } from 'features/general/Permission';
 import { SubmitCalibrationRatingsWidget } from 'features/general/CreateCalibrationRatings';
 import { Page } from 'pages/general/types';

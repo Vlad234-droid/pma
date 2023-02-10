@@ -10,6 +10,7 @@ import {
   isSharedSelector,
   ReviewSharingActions,
   sharingObjectivesMetaSelector,
+  userCurrentCycleTypeSelector,
 } from '@pma/store';
 
 import { TileWrapper } from 'components/Tile';
@@ -19,15 +20,14 @@ import { ConfirmModal } from 'components/ConfirmModal';
 import { WrapperModal } from 'features/general/Modal';
 import { ShareObjectivesModal } from '../ShareObjectivesModal';
 import SuccessModal from 'components/SuccessModal';
-import { CycleType, ReviewType, Status } from 'config/enum';
+import { ReviewType, Status } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
-import { usePermission, role, useTenant } from 'features/general/Permission';
+import { usePermission, role, useTenant, Tenant } from 'features/general/Permission';
 
 //TODO: should move to general types
 import * as T from 'features/general/Review/types';
 //TODO: should move to src/utils
 import { transformReviewsToObjectives } from 'features/general/Review/utils';
-import { Tenant } from 'utils';
 import { useTimelineContainer } from 'contexts/timelineContext';
 
 export type ShareWidgetBaseProps = {
@@ -85,6 +85,7 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
   const { info } = useSelector(currentUserSelector);
   const isShared = useSelector(isSharedSelector);
   const cycle = useSelector(colleagueCycleSelector);
+  const currentCycle = useSelector(userCurrentCycleTypeSelector);
   const { loading: sharingLoading } = useSelector(sharingObjectivesMetaSelector);
   const hasApprovedObjective = useSelector(hasStatusInReviews(ReviewType.OBJECTIVE, Status.APPROVED));
   const hasApprovedPriorities = useSelector(hasStatusInReviews(ReviewType.QUARTER, Status.APPROVED));
@@ -110,7 +111,7 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
     dispatch(
       ReviewSharingActions.startSharing({
         colleagueUuid: info.colleagueUUID,
-        cycleUuid: 'CURRENT',
+        cycleUuid: currentCycle,
         code: tenant === Tenant.GENERAL ? 'OBJECTIVE' : currentCode,
       }),
     );
@@ -122,7 +123,7 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
     dispatch(
       ReviewSharingActions.stopSharing({
         colleagueUuid: info.colleagueUUID,
-        cycleUuid: 'CURRENT',
+        cycleUuid: currentCycle,
         code: tenant === Tenant.GENERAL ? 'OBJECTIVE' : currentCode,
       }),
     );
@@ -165,11 +166,7 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
           <div className={css(headStyle)}>
             <div className={css(headerBlockStyle)}>
               <div className={css({ display: 'flex', alignItems: 'center' })}>
-                <Icon
-                  graphic={'document'}
-                  iconStyles={{ verticalAlign: 'middle', margin: '0px 10px 0px 0px' }}
-                  backgroundRadius={10}
-                />
+                <Icon graphic={'document'} iconStyles={iconStyle} backgroundRadius={10} />
                 <span className={css(titleStyle)}>{title}</span>
               </div>
               <span className={css(descriptionStyle)}>{description}</span>
@@ -298,3 +295,5 @@ const btnViewStyle = ({ theme }) => ({
   color: theme.colors.tescoBlue,
   border: `2px solid ${theme.colors.tescoBlue}`,
 });
+
+const iconStyle: Rule = { verticalAlign: 'middle', margin: '0px 10px 0px 0px' };

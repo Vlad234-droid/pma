@@ -17,7 +17,7 @@ export const getSharings = createAsyncAction(
   'sharing/GET_SHARINGS_REQUEST',
   'sharing/GET_SHARINGS_SUCCESS',
   'sharing/GET_SHARINGS_FAILURE',
-)<GetAllSharedColleagueReviewsParams, any, Error>();
+)<ShareColleagueReviewsParams, any, Error>();
 
 export const checkSharing = createAsyncAction(
   'sharing/CHECK_SHARING_REQUEST',
