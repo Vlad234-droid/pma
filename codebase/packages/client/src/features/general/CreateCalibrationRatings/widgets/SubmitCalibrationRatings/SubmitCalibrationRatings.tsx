@@ -35,11 +35,19 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   const calibrationReview = useSelector(calibrationReviewDataSelector(userUuid)) || null;
   const currentCycle = useSelector(colleagueCurrentCycleSelector(userUuid));
 
-  const { endTime, startTime, status: TLPStatus } = useSelector(getCalibrationPointSelector(userUuid, currentCycle));
+  const {
+    endTime,
+    startTime,
+    status: TLPStatus,
+    statistics = {},
+  } = useSelector(getCalibrationPointSelector(userUuid, currentCycle));
   const isAnniversaryColleague = useSelector(isAnniversaryTimelineType(userUuid, currentCycle));
   const { loading } = useSelector(calibrationReviewMetaSelector);
 
-  const { uuid = 'new', status } = calibrationReview || {};
+  const { uuid = 'new', status: reviewStatus } = calibrationReview || {};
+  const statisticsKeys = Object.keys(statistics);
+  const hasStatistics = statisticsKeys.length > 0;
+  const status = hasStatistics ? statisticsKeys[0] : reviewStatus;
   const isActivePoint = TLPStatus !== Status.NOT_STARTED && isDateFromISOAfterNow(startTime);
   const isFinished = isDateFromISOAfterNow(endTime);
 
@@ -49,9 +57,9 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
     !isLineManager || isFinished || (!isSubmitting && !isEditing && status !== Status.WAITING_FOR_APPROVAL);
 
   useEffect(() => {
-    if (!isActivePoint || isAnniversaryColleague) return;
+    if (!isActivePoint || isAnniversaryColleague || !hasStatistics) return;
     dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: currentCycle }));
-  }, [isActivePoint, currentCycle]);
+  }, [isActivePoint, currentCycle, hasStatistics]);
 
   if (loading) return <Spinner />;
   if (isAnniversaryColleague || !isActivePoint || (isFinished && !calibrationReview)) return null;
