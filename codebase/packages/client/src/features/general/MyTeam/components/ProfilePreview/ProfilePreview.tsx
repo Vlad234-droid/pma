@@ -8,6 +8,7 @@ import { Status } from 'config/enum';
 import { Page } from 'pages/general/types';
 import { paramsReplacer } from 'utils';
 import { buildPath } from 'features/general/Routes';
+import { View } from 'features/general/MyTeam';
 
 import { Employee } from 'config/types';
 import { useTranslation } from 'components/Translation';
@@ -40,6 +41,7 @@ const ProfilePreview: FC<Props> = ({
     navigate(buildPath(paramsReplacer(`${Page.USER_REVIEWS}`, { ':uuid': uuid })), {
       state: {
         backPath: `${pathname}`,
+        view: fullTeamView ? View.FULL_TEAM : View.DIRECT_REPORTS,
       },
     });
   };
