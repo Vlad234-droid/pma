@@ -30,7 +30,7 @@ const BusinessObjectives: FC<Props> = ({ onClick, customStyle }) => {
               />
               <span className={css(titleStyle)}>
                 <Trans i18nKey={'business_objectives'} ns={'bank'}>
-                  Big 6 business objectives
+                  Bank wide objectives
                 </Trans>
               </span>
             </div>
