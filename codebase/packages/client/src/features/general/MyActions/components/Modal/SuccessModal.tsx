@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useTranslation } from 'components/Translation';
@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { getEmployeesWithReviewStatuses, getManagersMetaSelector, reviewsMetaSelector } from '@pma/store';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
-import { useTenant } from 'features/general/Permission';
+import { useTenant, Tenant } from 'features/general/Permission';
 import { StatusHistoryType } from '../../context/successModalContext';
 
 const ReviewSuccessModal: FC<{
@@ -58,6 +58,14 @@ const ReviewSuccessModal: FC<{
     [ActionStatus.APPROVE_DECLINED]: t('you_have_rejected', { ns: tenant }),
   };
 
+  const title = useMemo(() => {
+    if (tenant === Tenant.BANK && actionStatus === ActionStatus.APPROVED) {
+      return t('agree_priorities_and_or_reviews', 'Agree priorities and / or reviews');
+    }
+
+    return titleMap[actionStatus];
+  }, [actionStatus, tenant]);
+
   const handleClose = () => {
     if (loading || saving || managerLoading) return;
     if (!colleaguesWaitingForApproval.length) {
@@ -68,7 +76,7 @@ const ReviewSuccessModal: FC<{
 
   return (
     <SuccessModal
-      title={titleMap[actionStatus]}
+      title={title}
       onClose={handleClose}
       mark={
         [ActionStatus.APPROVE_DECLINED, ActionStatus.COMPLETE_DECLINED, ActionStatus.ERROR].includes(actionStatus) ? (
