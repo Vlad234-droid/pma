@@ -107,6 +107,12 @@ export interface AuditOrgObjectiveReport {
      * @memberof AuditOrgObjectiveReport
      */
     'action'?: AuditOrgObjectiveReportActionEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof AuditOrgObjectiveReport
+     */
+    'version'?: number;
 }
 
 /**
@@ -399,168 +405,6 @@ export enum ColleagueChangeEventPayloadSubcategoriesEnum {
 /**
  * 
  * @export
- * @interface ColleagueEntity
- */
-export interface ColleagueEntity {
-    /**
-     * 
-     * @type {string}
-     * @memberof ColleagueEntity
-     */
-    'uuid'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ColleagueEntity
-     */
-    'firstName'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ColleagueEntity
-     */
-    'middleName'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ColleagueEntity
-     */
-    'lastName'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ColleagueEntity
-     */
-    'email'?: string;
-    /**
-     * 
-     * @type {WorkLevel}
-     * @memberof ColleagueEntity
-     */
-    'workLevel'?: WorkLevel;
-    /**
-     * 
-     * @type {PrimaryEntity}
-     * @memberof ColleagueEntity
-     */
-    'primaryEntity'?: PrimaryEntity;
-    /**
-     * 
-     * @type {Country}
-     * @memberof ColleagueEntity
-     */
-    'country'?: Country;
-    /**
-     * 
-     * @type {Department}
-     * @memberof ColleagueEntity
-     */
-    'department'?: Department;
-    /**
-     * 
-     * @type {string}
-     * @memberof ColleagueEntity
-     */
-    'salaryFrequency'?: string;
-    /**
-     * 
-     * @type {Job}
-     * @memberof ColleagueEntity
-     */
-    'job'?: Job;
-    /**
-     * 
-     * @type {string}
-     * @memberof ColleagueEntity
-     */
-    'iamSource'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ColleagueEntity
-     */
-    'iamId'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ColleagueEntity
-     */
-    'managerUuid'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ColleagueEntity
-     */
-    'employmentType'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ColleagueEntity
-     */
-    'hireDate'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ColleagueEntity
-     */
-    'leavingDate'?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ColleagueEntity
-     */
-    'manager'?: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof ColleagueEntity
-     */
-    'locationId'?: string;
-    /**
-     * 
-     * @type {LegalEntity}
-     * @memberof ColleagueEntity
-     */
-    'legalEntity'?: LegalEntity;
-    /**
-     * 
-     * @type {Array<Skill>}
-     * @memberof ColleagueEntity
-     */
-    'skills'?: Array<Skill>;
-    /**
-     * 
-     * @type {string}
-     * @memberof ColleagueEntity
-     */
-    'colleagueType'?: ColleagueEntityColleagueTypeEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof ColleagueEntity
-     */
-    'lastUpdatedTime'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ColleagueEntity
-     */
-    'md5sum'?: string;
-}
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum ColleagueEntityColleagueTypeEnum {
-    Employee = 'EMPLOYEE',
-    External = 'EXTERNAL',
-    Contractor = 'CONTRACTOR'
-}
-
-/**
- * 
- * @export
  * @interface ColleagueFilterOptions
  */
 export interface ColleagueFilterOptions {
@@ -711,6 +555,12 @@ export interface ColleagueReview {
      * @memberof ColleagueReview
      */
     'review'?: Review;
+    /**
+     * 
+     * @type {PMCycle}
+     * @memberof ColleagueReview
+     */
+    'pmCycle'?: PMCycle;
 }
 /**
  * 
@@ -1241,19 +1091,19 @@ export interface DecisionInfo {
      * @type {string}
      * @memberof DecisionInfo
      */
-    'resourceName'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DecisionInfo
-     */
     'category'?: string;
     /**
      * 
      * @type {string}
      * @memberof DecisionInfo
      */
-    'versionTag'?: string;
+    'resourceName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DecisionInfo
+     */
+    'tenantId'?: string;
     /**
      * 
      * @type {string}
@@ -1265,7 +1115,7 @@ export interface DecisionInfo {
      * @type {string}
      * @memberof DecisionInfo
      */
-    'tenantId'?: string;
+    'versionTag'?: string;
     /**
      * 
      * @type {string}
@@ -1450,7 +1300,7 @@ export interface Event {
      * @type {string}
      * @memberof Event
      */
-    'callbackServiceURL'?: string;
+    'eventPriority'?: EventEventPriorityEnum;
     /**
      * 
      * @type {string}
@@ -1462,7 +1312,7 @@ export interface Event {
      * @type {string}
      * @memberof Event
      */
-    'eventPriority'?: EventEventPriorityEnum;
+    'callbackServiceURL'?: string;
 }
 
 /**
@@ -3106,25 +2956,6 @@ export interface Position {
 /**
  * 
  * @export
- * @interface PrimaryEntity
- */
-export interface PrimaryEntity {
-    /**
-     * 
-     * @type {string}
-     * @memberof PrimaryEntity
-     */
-    'uuid'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PrimaryEntity
-     */
-    'name'?: string;
-}
-/**
- * 
- * @export
  * @interface ProcessInfo
  */
 export interface ProcessInfo {
@@ -3163,19 +2994,19 @@ export interface ProcessInfo {
      * @type {string}
      * @memberof ProcessInfo
      */
-    'resourceName'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProcessInfo
-     */
     'category'?: string;
     /**
      * 
      * @type {string}
      * @memberof ProcessInfo
      */
-    'versionTag'?: string;
+    'resourceName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProcessInfo
+     */
+    'tenantId'?: string;
     /**
      * 
      * @type {string}
@@ -3187,7 +3018,7 @@ export interface ProcessInfo {
      * @type {string}
      * @memberof ProcessInfo
      */
-    'tenantId'?: string;
+    'versionTag'?: string;
     /**
      * 
      * @type {string}
@@ -3784,31 +3615,6 @@ export interface RestResponseListCalibrationSession {
      * 
      * @type {Array<ApiError>}
      * @memberof RestResponseListCalibrationSession
-     */
-    'errors'?: Array<ApiError>;
-}
-/**
- * 
- * @export
- * @interface RestResponseListColleagueEntity
- */
-export interface RestResponseListColleagueEntity {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RestResponseListColleagueEntity
-     */
-    'success'?: boolean;
-    /**
-     * 
-     * @type {Array<ColleagueEntity>}
-     * @memberof RestResponseListColleagueEntity
-     */
-    'data'?: Array<ColleagueEntity>;
-    /**
-     * 
-     * @type {Array<ApiError>}
-     * @memberof RestResponseListColleagueEntity
      */
     'errors'?: Array<ApiError>;
 }
@@ -4584,6 +4390,31 @@ export interface RestResponseMapStringListContentEntry {
      * 
      * @type {Array<ApiError>}
      * @memberof RestResponseMapStringListContentEntry
+     */
+    'errors'?: Array<ApiError>;
+}
+/**
+ * 
+ * @export
+ * @interface RestResponseMapStringObject
+ */
+export interface RestResponseMapStringObject {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RestResponseMapStringObject
+     */
+    'success'?: boolean;
+    /**
+     * 
+     * @type {{ [key: string]: object; }}
+     * @memberof RestResponseMapStringObject
+     */
+    'data'?: { [key: string]: object; };
+    /**
+     * 
+     * @type {Array<ApiError>}
+     * @memberof RestResponseMapStringObject
      */
     'errors'?: Array<ApiError>;
 }
@@ -6265,9 +6096,9 @@ export const CalibrationApiAxiosParamCreator = function (configuration?: Configu
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getColleagueFilterOptions: async (requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getColleagueFilterOptions1: async (requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'requestQuery' is not null or undefined
-            assertParamExists('getColleagueFilterOptions', 'requestQuery', requestQuery)
+            assertParamExists('getColleagueFilterOptions1', 'requestQuery', requestQuery)
             const localVarPath = `/calibration/sessions/filters`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -6915,8 +6746,8 @@ export const CalibrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getColleagueFilterOptions(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseColleagueFilterOptions>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getColleagueFilterOptions(requestQuery, options);
+        async getColleagueFilterOptions1(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseColleagueFilterOptions>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getColleagueFilterOptions1(requestQuery, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -7175,8 +7006,8 @@ export const CalibrationApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getColleagueFilterOptions(requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseColleagueFilterOptions> {
-            return localVarFp.getColleagueFilterOptions(requestQuery, options).then((request) => request(axios, basePath));
+        getColleagueFilterOptions1(requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseColleagueFilterOptions> {
+            return localVarFp.getColleagueFilterOptions1(requestQuery, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -7476,15 +7307,15 @@ export interface CalibrationApiGetCalibrationStatisticsRequest {
 }
 
 /**
- * Request parameters for getColleagueFilterOptions operation in CalibrationApi.
+ * Request parameters for getColleagueFilterOptions1 operation in CalibrationApi.
  * @export
- * @interface CalibrationApiGetColleagueFilterOptionsRequest
+ * @interface CalibrationApiGetColleagueFilterOptions1Request
  */
-export interface CalibrationApiGetColleagueFilterOptionsRequest {
+export interface CalibrationApiGetColleagueFilterOptions1Request {
     /**
      * 
      * @type {RequestQuery}
-     * @memberof CalibrationApiGetColleagueFilterOptions
+     * @memberof CalibrationApiGetColleagueFilterOptions1
      */
     readonly requestQuery: RequestQuery
 }
@@ -7847,13 +7678,13 @@ export class CalibrationApi extends BaseAPI {
     /**
      * 
      * @summary Get filters by permissions and selected filters
-     * @param {CalibrationApiGetColleagueFilterOptionsRequest} requestParameters Request parameters.
+     * @param {CalibrationApiGetColleagueFilterOptions1Request} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CalibrationApi
      */
-    public getColleagueFilterOptions(requestParameters: CalibrationApiGetColleagueFilterOptionsRequest, options?: AxiosRequestConfig) {
-        return CalibrationApiFp(this.configuration).getColleagueFilterOptions(requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
+    public getColleagueFilterOptions1(requestParameters: CalibrationApiGetColleagueFilterOptions1Request, options?: AxiosRequestConfig) {
+        return CalibrationApiFp(this.configuration).getColleagueFilterOptions1(requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -9047,43 +8878,6 @@ export const ConfigEntryApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
-         * @summary Get colleagues by composite key
-         * @param {string} compositeKey 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        findColleaguesByCompositeKey: async (compositeKey: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'compositeKey' is not null or undefined
-            assertParamExists('findColleaguesByCompositeKey', 'compositeKey', compositeKey)
-            const localVarPath = `/config-entries/colleagues`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (compositeKey !== undefined) {
-                localVarQueryParameter['compositeKey'] = compositeKey;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @summary Get published config entry structure by root identifier
          * @param {string} entryUuid 
          * @param {*} [options] Override http request option.
@@ -9426,17 +9220,6 @@ export const ConfigEntryApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get colleagues by composite key
-         * @param {string} compositeKey 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async findColleaguesByCompositeKey(compositeKey: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListColleagueEntity>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.findColleaguesByCompositeKey(compositeKey, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @summary Get published config entry structure by root identifier
          * @param {string} entryUuid 
          * @param {*} [options] Override http request option.
@@ -9565,16 +9348,6 @@ export const ConfigEntryApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
-         * @summary Get colleagues by composite key
-         * @param {string} compositeKey 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        findColleaguesByCompositeKey(compositeKey: string, options?: any): AxiosPromise<RestResponseListColleagueEntity> {
-            return localVarFp.findColleaguesByCompositeKey(compositeKey, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @summary Get published config entry structure by root identifier
          * @param {string} entryUuid 
          * @param {*} [options] Override http request option.
@@ -9691,20 +9464,6 @@ export interface ConfigEntryApiDelete7Request {
      * @memberof ConfigEntryApiDelete7
      */
     readonly entryUuid: string
-}
-
-/**
- * Request parameters for findColleaguesByCompositeKey operation in ConfigEntryApi.
- * @export
- * @interface ConfigEntryApiFindColleaguesByCompositeKeyRequest
- */
-export interface ConfigEntryApiFindColleaguesByCompositeKeyRequest {
-    /**
-     * 
-     * @type {string}
-     * @memberof ConfigEntryApiFindColleaguesByCompositeKey
-     */
-    readonly compositeKey: string
 }
 
 /**
@@ -9841,18 +9600,6 @@ export class ConfigEntryApi extends BaseAPI {
      */
     public delete7(requestParameters: ConfigEntryApiDelete7Request, options?: AxiosRequestConfig) {
         return ConfigEntryApiFp(this.configuration).delete7(requestParameters.entryUuid, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Get colleagues by composite key
-     * @param {ConfigEntryApiFindColleaguesByCompositeKeyRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ConfigEntryApi
-     */
-    public findColleaguesByCompositeKey(requestParameters: ConfigEntryApiFindColleaguesByCompositeKeyRequest, options?: AxiosRequestConfig) {
-        return ConfigEntryApiFp(this.configuration).findColleaguesByCompositeKey(requestParameters.compositeKey, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -16056,15 +15803,15 @@ export const PerformanceCycleApiAxiosParamCreator = function (configuration?: Co
          * 
          * @summary Get performance cycles per colleague
          * @param {string} colleagueUuid 
-         * @param {string} allowedStatuses 
+         * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPmCyclesByColleague: async (colleagueUuid: string, allowedStatuses: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getPmCyclesByColleague: async (colleagueUuid: string, requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'colleagueUuid' is not null or undefined
             assertParamExists('getPmCyclesByColleague', 'colleagueUuid', colleagueUuid)
-            // verify required parameter 'allowedStatuses' is not null or undefined
-            assertParamExists('getPmCyclesByColleague', 'allowedStatuses', allowedStatuses)
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getPmCyclesByColleague', 'requestQuery', requestQuery)
             const localVarPath = `/colleagues/{colleagueUuid}/pm-cycles/`
                 .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -16078,8 +15825,8 @@ export const PerformanceCycleApiAxiosParamCreator = function (configuration?: Co
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (allowedStatuses !== undefined) {
-                localVarQueryParameter['allowedStatuses'] = allowedStatuses;
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
             }
 
 
@@ -16130,21 +15877,20 @@ export const PerformanceCycleApiAxiosParamCreator = function (configuration?: Co
             };
         },
         /**
-         * Performance cycle started
+         * Start performance cycle for colleague: manages colleague cycles or timeline points depending on modes
          * @summary Start performance cycle for colleague
          * @param {string} cycleUuid 
          * @param {string} colleagueUuid 
-         * @param {{ [key: string]: string; }} requestBody 
+         * @param {'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'} [colleagueCycleRecalculationMode] Colleague cycle recalculation mode (case-insensitive)
+         * @param {'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'} [timelinePointRecalculationMode] Timeline point recalculation mode (case-insensitive)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        startColleagueCycle: async (cycleUuid: string, colleagueUuid: string, requestBody: { [key: string]: string; }, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        startColleagueCycle: async (cycleUuid: string, colleagueUuid: string, colleagueCycleRecalculationMode?: 'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE', timelinePointRecalculationMode?: 'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE', options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'cycleUuid' is not null or undefined
             assertParamExists('startColleagueCycle', 'cycleUuid', cycleUuid)
             // verify required parameter 'colleagueUuid' is not null or undefined
             assertParamExists('startColleagueCycle', 'colleagueUuid', colleagueUuid)
-            // verify required parameter 'requestBody' is not null or undefined
-            assertParamExists('startColleagueCycle', 'requestBody', requestBody)
             const localVarPath = `/pm-cycles/{cycleUuid}/colleagues/{colleagueUuid}/start`
                 .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)))
                 .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)));
@@ -16155,9 +15901,72 @@ export const PerformanceCycleApiAxiosParamCreator = function (configuration?: Co
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (colleagueCycleRecalculationMode !== undefined) {
+                localVarQueryParameter['colleague-cycle-recalculation-mode'] = colleagueCycleRecalculationMode;
+            }
+
+            if (timelinePointRecalculationMode !== undefined) {
+                localVarQueryParameter['timeline-point-recalculation-mode'] = timelinePointRecalculationMode;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Start colleagues\' cycles for the performance cycle and list of colleagues: manages colleague cycles or timeline points depending on modes
+         * @summary Start colleagues\' cycles for the performance cycle and list of colleagues
+         * @param {string} cycleUuid 
+         * @param {'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'} [colleagueCycleRecalculationMode] Colleague cycle recalculation mode (case-insensitive), default: UPDATE
+         * @param {'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'} [timelinePointRecalculationMode] Timeline point recalculation mode (case-insensitive), default: MERGE
+         * @param {number} [batchSize] 
+         * @param {string} [batchDelay] 
+         * @param {string} [body] The plain list of colleagues\&#39; uuids
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startColleaguesCycle: async (cycleUuid: string, colleagueCycleRecalculationMode?: 'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE', timelinePointRecalculationMode?: 'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE', batchSize?: number, batchDelay?: string, body?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'cycleUuid' is not null or undefined
+            assertParamExists('startColleaguesCycle', 'cycleUuid', cycleUuid)
+            const localVarPath = `/pm-cycles/{cycleUuid}/colleagues/start`
+                .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (colleagueCycleRecalculationMode !== undefined) {
+                localVarQueryParameter['colleague-cycle-recalculation-mode'] = colleagueCycleRecalculationMode;
+            }
+
+            if (timelinePointRecalculationMode !== undefined) {
+                localVarQueryParameter['timeline-point-recalculation-mode'] = timelinePointRecalculationMode;
+            }
+
+            if (batchSize !== undefined) {
+                localVarQueryParameter['batch-size'] = batchSize;
+            }
+
+            if (batchDelay !== undefined) {
+                localVarQueryParameter['batch-delay'] = batchDelay;
+            }
 
 
     
@@ -16166,7 +15975,7 @@ export const PerformanceCycleApiAxiosParamCreator = function (configuration?: Co
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -16524,12 +16333,12 @@ export const PerformanceCycleApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get performance cycles per colleague
          * @param {string} colleagueUuid 
-         * @param {string} allowedStatuses 
+         * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPmCyclesByColleague(colleagueUuid: string, allowedStatuses: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListPMCycle>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getPmCyclesByColleague(colleagueUuid, allowedStatuses, options);
+        async getPmCyclesByColleague(colleagueUuid: string, requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListPMCycle>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPmCyclesByColleague(colleagueUuid, requestQuery, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -16544,16 +16353,33 @@ export const PerformanceCycleApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Performance cycle started
+         * Start performance cycle for colleague: manages colleague cycles or timeline points depending on modes
          * @summary Start performance cycle for colleague
          * @param {string} cycleUuid 
          * @param {string} colleagueUuid 
-         * @param {{ [key: string]: string; }} requestBody 
+         * @param {'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'} [colleagueCycleRecalculationMode] Colleague cycle recalculation mode (case-insensitive)
+         * @param {'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'} [timelinePointRecalculationMode] Timeline point recalculation mode (case-insensitive)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async startColleagueCycle(cycleUuid: string, colleagueUuid: string, requestBody: { [key: string]: string; }, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseVoid>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.startColleagueCycle(cycleUuid, colleagueUuid, requestBody, options);
+        async startColleagueCycle(cycleUuid: string, colleagueUuid: string, colleagueCycleRecalculationMode?: 'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE', timelinePointRecalculationMode?: 'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE', options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.startColleagueCycle(cycleUuid, colleagueUuid, colleagueCycleRecalculationMode, timelinePointRecalculationMode, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Start colleagues\' cycles for the performance cycle and list of colleagues: manages colleague cycles or timeline points depending on modes
+         * @summary Start colleagues\' cycles for the performance cycle and list of colleagues
+         * @param {string} cycleUuid 
+         * @param {'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'} [colleagueCycleRecalculationMode] Colleague cycle recalculation mode (case-insensitive), default: UPDATE
+         * @param {'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'} [timelinePointRecalculationMode] Timeline point recalculation mode (case-insensitive), default: MERGE
+         * @param {number} [batchSize] 
+         * @param {string} [batchDelay] 
+         * @param {string} [body] The plain list of colleagues\&#39; uuids
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async startColleaguesCycle(cycleUuid: string, colleagueCycleRecalculationMode?: 'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE', timelinePointRecalculationMode?: 'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE', batchSize?: number, batchDelay?: string, body?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseMapStringObject>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.startColleaguesCycle(cycleUuid, colleagueCycleRecalculationMode, timelinePointRecalculationMode, batchSize, batchDelay, body, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -16761,12 +16587,12 @@ export const PerformanceCycleApiFactory = function (configuration?: Configuratio
          * 
          * @summary Get performance cycles per colleague
          * @param {string} colleagueUuid 
-         * @param {string} allowedStatuses 
+         * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPmCyclesByColleague(colleagueUuid: string, allowedStatuses: string, options?: any): AxiosPromise<RestResponseListPMCycle> {
-            return localVarFp.getPmCyclesByColleague(colleagueUuid, allowedStatuses, options).then((request) => request(axios, basePath));
+        getPmCyclesByColleague(colleagueUuid: string, requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseListPMCycle> {
+            return localVarFp.getPmCyclesByColleague(colleagueUuid, requestQuery, options).then((request) => request(axios, basePath));
         },
         /**
          * Performance cycle published
@@ -16779,16 +16605,32 @@ export const PerformanceCycleApiFactory = function (configuration?: Configuratio
             return localVarFp.publish(pMCycle, options).then((request) => request(axios, basePath));
         },
         /**
-         * Performance cycle started
+         * Start performance cycle for colleague: manages colleague cycles or timeline points depending on modes
          * @summary Start performance cycle for colleague
          * @param {string} cycleUuid 
          * @param {string} colleagueUuid 
-         * @param {{ [key: string]: string; }} requestBody 
+         * @param {'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'} [colleagueCycleRecalculationMode] Colleague cycle recalculation mode (case-insensitive)
+         * @param {'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'} [timelinePointRecalculationMode] Timeline point recalculation mode (case-insensitive)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        startColleagueCycle(cycleUuid: string, colleagueUuid: string, requestBody: { [key: string]: string; }, options?: any): AxiosPromise<RestResponseVoid> {
-            return localVarFp.startColleagueCycle(cycleUuid, colleagueUuid, requestBody, options).then((request) => request(axios, basePath));
+        startColleagueCycle(cycleUuid: string, colleagueUuid: string, colleagueCycleRecalculationMode?: 'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE', timelinePointRecalculationMode?: 'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE', options?: any): AxiosPromise<RestResponseMapStringObject> {
+            return localVarFp.startColleagueCycle(cycleUuid, colleagueUuid, colleagueCycleRecalculationMode, timelinePointRecalculationMode, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Start colleagues\' cycles for the performance cycle and list of colleagues: manages colleague cycles or timeline points depending on modes
+         * @summary Start colleagues\' cycles for the performance cycle and list of colleagues
+         * @param {string} cycleUuid 
+         * @param {'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'} [colleagueCycleRecalculationMode] Colleague cycle recalculation mode (case-insensitive), default: UPDATE
+         * @param {'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'} [timelinePointRecalculationMode] Timeline point recalculation mode (case-insensitive), default: MERGE
+         * @param {number} [batchSize] 
+         * @param {string} [batchDelay] 
+         * @param {string} [body] The plain list of colleagues\&#39; uuids
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startColleaguesCycle(cycleUuid: string, colleagueCycleRecalculationMode?: 'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE', timelinePointRecalculationMode?: 'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE', batchSize?: number, batchDelay?: string, body?: string, options?: any): AxiosPromise<RestResponseMapStringObject> {
+            return localVarFp.startColleaguesCycle(cycleUuid, colleagueCycleRecalculationMode, timelinePointRecalculationMode, batchSize, batchDelay, body, options).then((request) => request(axios, basePath));
         },
         /**
          * Performance cycle started
@@ -17107,10 +16949,10 @@ export interface PerformanceCycleApiGetPmCyclesByColleagueRequest {
 
     /**
      * 
-     * @type {string}
+     * @type {RequestQuery}
      * @memberof PerformanceCycleApiGetPmCyclesByColleague
      */
-    readonly allowedStatuses: string
+    readonly requestQuery: RequestQuery
 }
 
 /**
@@ -17148,11 +16990,67 @@ export interface PerformanceCycleApiStartColleagueCycleRequest {
     readonly colleagueUuid: string
 
     /**
-     * 
-     * @type {{ [key: string]: string; }}
+     * Colleague cycle recalculation mode (case-insensitive)
+     * @type {'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'}
      * @memberof PerformanceCycleApiStartColleagueCycle
      */
-    readonly requestBody: { [key: string]: string; }
+    readonly colleagueCycleRecalculationMode?: 'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'
+
+    /**
+     * Timeline point recalculation mode (case-insensitive)
+     * @type {'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'}
+     * @memberof PerformanceCycleApiStartColleagueCycle
+     */
+    readonly timelinePointRecalculationMode?: 'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'
+}
+
+/**
+ * Request parameters for startColleaguesCycle operation in PerformanceCycleApi.
+ * @export
+ * @interface PerformanceCycleApiStartColleaguesCycleRequest
+ */
+export interface PerformanceCycleApiStartColleaguesCycleRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof PerformanceCycleApiStartColleaguesCycle
+     */
+    readonly cycleUuid: string
+
+    /**
+     * Colleague cycle recalculation mode (case-insensitive), default: UPDATE
+     * @type {'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'}
+     * @memberof PerformanceCycleApiStartColleaguesCycle
+     */
+    readonly colleagueCycleRecalculationMode?: 'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'
+
+    /**
+     * Timeline point recalculation mode (case-insensitive), default: MERGE
+     * @type {'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'}
+     * @memberof PerformanceCycleApiStartColleaguesCycle
+     */
+    readonly timelinePointRecalculationMode?: 'CREATE' | 'UPDATE' | 'DELETE' | 'MERGE'
+
+    /**
+     * 
+     * @type {number}
+     * @memberof PerformanceCycleApiStartColleaguesCycle
+     */
+    readonly batchSize?: number
+
+    /**
+     * 
+     * @type {string}
+     * @memberof PerformanceCycleApiStartColleaguesCycle
+     */
+    readonly batchDelay?: string
+
+    /**
+     * The plain list of colleagues\&#39; uuids
+     * @type {string}
+     * @memberof PerformanceCycleApiStartColleaguesCycle
+     */
+    readonly body?: string
 }
 
 /**
@@ -17412,7 +17310,7 @@ export class PerformanceCycleApi extends BaseAPI {
      * @memberof PerformanceCycleApi
      */
     public getPmCyclesByColleague(requestParameters: PerformanceCycleApiGetPmCyclesByColleagueRequest, options?: AxiosRequestConfig) {
-        return PerformanceCycleApiFp(this.configuration).getPmCyclesByColleague(requestParameters.colleagueUuid, requestParameters.allowedStatuses, options).then((request) => request(this.axios, this.basePath));
+        return PerformanceCycleApiFp(this.configuration).getPmCyclesByColleague(requestParameters.colleagueUuid, requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -17428,7 +17326,7 @@ export class PerformanceCycleApi extends BaseAPI {
     }
 
     /**
-     * Performance cycle started
+     * Start performance cycle for colleague: manages colleague cycles or timeline points depending on modes
      * @summary Start performance cycle for colleague
      * @param {PerformanceCycleApiStartColleagueCycleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -17436,7 +17334,19 @@ export class PerformanceCycleApi extends BaseAPI {
      * @memberof PerformanceCycleApi
      */
     public startColleagueCycle(requestParameters: PerformanceCycleApiStartColleagueCycleRequest, options?: AxiosRequestConfig) {
-        return PerformanceCycleApiFp(this.configuration).startColleagueCycle(requestParameters.cycleUuid, requestParameters.colleagueUuid, requestParameters.requestBody, options).then((request) => request(this.axios, this.basePath));
+        return PerformanceCycleApiFp(this.configuration).startColleagueCycle(requestParameters.cycleUuid, requestParameters.colleagueUuid, requestParameters.colleagueCycleRecalculationMode, requestParameters.timelinePointRecalculationMode, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Start colleagues\' cycles for the performance cycle and list of colleagues: manages colleague cycles or timeline points depending on modes
+     * @summary Start colleagues\' cycles for the performance cycle and list of colleagues
+     * @param {PerformanceCycleApiStartColleaguesCycleRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PerformanceCycleApi
+     */
+    public startColleaguesCycle(requestParameters: PerformanceCycleApiStartColleaguesCycleRequest, options?: AxiosRequestConfig) {
+        return PerformanceCycleApiFp(this.configuration).startColleaguesCycle(requestParameters.cycleUuid, requestParameters.colleagueCycleRecalculationMode, requestParameters.timelinePointRecalculationMode, requestParameters.batchSize, requestParameters.batchDelay, requestParameters.body, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -19212,6 +19122,43 @@ export const ReportApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
+         * @summary Get filters by permissions and roles and selected filters
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getColleagueFilterOptions: async (requestQuery: RequestQuery, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'requestQuery' is not null or undefined
+            assertParamExists('getColleagueFilterOptions', 'requestQuery', requestQuery)
+            const localVarPath = `/reports/filters`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (requestQuery !== undefined) {
+                localVarQueryParameter['requestQuery'] = requestQuery;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get Feedback Details Statistics Report Data with filters
          * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
@@ -19730,7 +19677,7 @@ export const ReportApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
-         * @summary Get Feedback Statistics Report Data with filters
+         * @summary Get total reporting colleagues count with filters
          * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -19817,6 +19764,17 @@ export const ReportApiFp = function(configuration?: Configuration) {
          */
         async getCalibrationSessionReport(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCalibrationSessionReport(requestQuery, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get filters by permissions and roles and selected filters
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getColleagueFilterOptions(requestQuery: RequestQuery, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseColleagueFilterOptions>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getColleagueFilterOptions(requestQuery, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -19975,7 +19933,7 @@ export const ReportApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get Feedback Statistics Report Data with filters
+         * @summary Get total reporting colleagues count with filters
          * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -20033,6 +19991,16 @@ export const ReportApiFactory = function (configuration?: Configuration, basePat
          */
         getCalibrationSessionReport(requestQuery: RequestQuery, options?: any): AxiosPromise<any> {
             return localVarFp.getCalibrationSessionReport(requestQuery, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get filters by permissions and roles and selected filters
+         * @param {RequestQuery} requestQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getColleagueFilterOptions(requestQuery: RequestQuery, options?: any): AxiosPromise<RestResponseColleagueFilterOptions> {
+            return localVarFp.getColleagueFilterOptions(requestQuery, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -20176,7 +20144,7 @@ export const ReportApiFactory = function (configuration?: Configuration, basePat
         },
         /**
          * 
-         * @summary Get Feedback Statistics Report Data with filters
+         * @summary Get total reporting colleagues count with filters
          * @param {RequestQuery} requestQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -20239,6 +20207,20 @@ export interface ReportApiGetCalibrationSessionReportRequest {
      * 
      * @type {RequestQuery}
      * @memberof ReportApiGetCalibrationSessionReport
+     */
+    readonly requestQuery: RequestQuery
+}
+
+/**
+ * Request parameters for getColleagueFilterOptions operation in ReportApi.
+ * @export
+ * @interface ReportApiGetColleagueFilterOptionsRequest
+ */
+export interface ReportApiGetColleagueFilterOptionsRequest {
+    /**
+     * 
+     * @type {RequestQuery}
+     * @memberof ReportApiGetColleagueFilterOptions
      */
     readonly requestQuery: RequestQuery
 }
@@ -20510,6 +20492,18 @@ export class ReportApi extends BaseAPI {
 
     /**
      * 
+     * @summary Get filters by permissions and roles and selected filters
+     * @param {ReportApiGetColleagueFilterOptionsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ReportApi
+     */
+    public getColleagueFilterOptions(requestParameters: ReportApiGetColleagueFilterOptionsRequest, options?: AxiosRequestConfig) {
+        return ReportApiFp(this.configuration).getColleagueFilterOptions(requestParameters.requestQuery, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Get Feedback Details Statistics Report Data with filters
      * @param {ReportApiGetFeedbackDetailsReportRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -20678,7 +20672,7 @@ export class ReportApi extends BaseAPI {
 
     /**
      * 
-     * @summary Get Feedback Statistics Report Data with filters
+     * @summary Get total reporting colleagues count with filters
      * @param {ReportApiGetTotalColleagueCountRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -22924,17 +22918,21 @@ export const ReviewSharingApiAxiosParamCreator = function (configuration?: Confi
         /**
          * 
          * @summary Get all shared reviews by their manager
+         * @param {string} cycleUuid 
          * @param {string} colleagueUuid 
          * @param {string} code 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSharedReviewsForColleague: async (colleagueUuid: string, code: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getSharedReviewsForColleague: async (cycleUuid: string, colleagueUuid: string, code: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'cycleUuid' is not null or undefined
+            assertParamExists('getSharedReviewsForColleague', 'cycleUuid', cycleUuid)
             // verify required parameter 'colleagueUuid' is not null or undefined
             assertParamExists('getSharedReviewsForColleague', 'colleagueUuid', colleagueUuid)
             // verify required parameter 'code' is not null or undefined
             assertParamExists('getSharedReviewsForColleague', 'code', code)
-            const localVarPath = `/colleagues/{colleagueUuid}/review-codes/{code}/sharing`
+            const localVarPath = `/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/review-codes/{code}/sharing/reviews`
+                .replace(`{${"cycleUuid"}}`, encodeURIComponent(String(cycleUuid)))
                 .replace(`{${"colleagueUuid"}}`, encodeURIComponent(String(colleagueUuid)))
                 .replace(`{${"code"}}`, encodeURIComponent(String(code)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -23098,13 +23096,14 @@ export const ReviewSharingApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get all shared reviews by their manager
+         * @param {string} cycleUuid 
          * @param {string} colleagueUuid 
          * @param {string} code 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSharedReviewsForColleague(colleagueUuid: string, code: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListReview>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getSharedReviewsForColleague(colleagueUuid, code, options);
+        async getSharedReviewsForColleague(cycleUuid: string, colleagueUuid: string, code: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RestResponseListReview>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSharedReviewsForColleague(cycleUuid, colleagueUuid, code, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -23159,13 +23158,14 @@ export const ReviewSharingApiFactory = function (configuration?: Configuration, 
         /**
          * 
          * @summary Get all shared reviews by their manager
+         * @param {string} cycleUuid 
          * @param {string} colleagueUuid 
          * @param {string} code 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSharedReviewsForColleague(colleagueUuid: string, code: string, options?: any): AxiosPromise<RestResponseListReview> {
-            return localVarFp.getSharedReviewsForColleague(colleagueUuid, code, options).then((request) => request(axios, basePath));
+        getSharedReviewsForColleague(cycleUuid: string, colleagueUuid: string, code: string, options?: any): AxiosPromise<RestResponseListReview> {
+            return localVarFp.getSharedReviewsForColleague(cycleUuid, colleagueUuid, code, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -23212,6 +23212,13 @@ export const ReviewSharingApiFactory = function (configuration?: Configuration, 
  * @interface ReviewSharingApiGetSharedReviewsForColleagueRequest
  */
 export interface ReviewSharingApiGetSharedReviewsForColleagueRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof ReviewSharingApiGetSharedReviewsForColleague
+     */
+    readonly cycleUuid: string
+
     /**
      * 
      * @type {string}
@@ -23327,7 +23334,7 @@ export class ReviewSharingApi extends BaseAPI {
      * @memberof ReviewSharingApi
      */
     public getSharedReviewsForColleague(requestParameters: ReviewSharingApiGetSharedReviewsForColleagueRequest, options?: AxiosRequestConfig) {
-        return ReviewSharingApiFp(this.configuration).getSharedReviewsForColleague(requestParameters.colleagueUuid, requestParameters.code, options).then((request) => request(this.axios, this.basePath));
+        return ReviewSharingApiFp(this.configuration).getSharedReviewsForColleague(requestParameters.cycleUuid, requestParameters.colleagueUuid, requestParameters.code, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

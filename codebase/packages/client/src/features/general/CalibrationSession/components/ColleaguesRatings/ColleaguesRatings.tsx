@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
+import { ColleagueSimple, PMCycleStatusEnum, ReviewStatusEnum, TotalCount } from '@pma/openapi';
 import { calibrationReviewsMetaSelector, colleagueUUIDSelector } from '@pma/store';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
-import { ColleagueSimple, ReviewStatusEnum, TotalCount } from '@pma/openapi';
+
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
@@ -44,8 +45,7 @@ const ColleaguesRatings: FC<Props> = ({
 
   const { pathname } = useLocation();
 
-  //TODO: change comma separated args change to object with defined keys
-  const handleView = (rating: string, userUuid: string, uuid = 'new') => {
+  const handleView = <T extends string, U extends 'new'>(rating: T, userUuid: T, uuid: T | U, cycleUuid: T) => {
     if (sessionUuid && rating === Ratings.Unsubmitted.toLowerCase()) {
       navigate(
         buildPath(
@@ -59,7 +59,7 @@ const ColleaguesRatings: FC<Props> = ({
             backPath: pathname,
             activeList,
             period,
-            currentCycle: 'CURRENT',
+            currentCycle: cycleUuid,
           },
         },
       );
@@ -75,7 +75,7 @@ const ColleaguesRatings: FC<Props> = ({
           backPath: pathname,
           activeList,
           period,
-          currentCycle: 'CURRENT',
+          currentCycle: cycleUuid,
         },
       },
     );
@@ -84,8 +84,6 @@ const ColleaguesRatings: FC<Props> = ({
   return (
     <div className={css(styles)}>
       {Object.entries(data).map(([title, data]) => {
-        //@ts-ignore
-
         if (title === Ratings.Unsubmitted.toLowerCase() && activeList === View.TABLE) return null;
 
         const ratingStatistics = statistics?.[title.toUpperCase()];
@@ -132,8 +130,18 @@ const ColleaguesRatings: FC<Props> = ({
                               {!!data?.length &&
                                 data.map((item, i) => {
                                   const lineManagerUuid = item?.colleague?.lineManager?.uuid;
+                                  const colleagueUuid = item?.colleague?.uuid as string;
+                                  const reviewUuid = item?.review?.uuid as string;
+                                  const cycleUuid = item?.pmCycle?.uuid as string;
+                                  const pmCycleStatus = item?.pmCycle?.status;
 
-                                  const isDisabled =
+                                  const isDisabledByCycle =
+                                    pmCycleStatus &&
+                                    title === Ratings.Unsubmitted.toLowerCase() &&
+                                    (pmCycleStatus === PMCycleStatusEnum.Finished ||
+                                      pmCycleStatus === PMCycleStatusEnum.Completed);
+
+                                  const isDisabledByReview =
                                     title === Ratings.Unsubmitted.toLowerCase() &&
                                     isPerform &&
                                     lineManagerUuid !== userUuid &&
@@ -151,11 +159,11 @@ const ColleaguesRatings: FC<Props> = ({
                                         isCollapsed={activeList !== View.TABLE}
                                         colleague={item.colleague as ColleagueSimple}
                                         viewCustomStyles={{
-                                          pointerEvents: isDisabled ? 'none' : 'all',
-                                          opacity: isDisabled ? '0.4' : '1',
+                                          pointerEvents: isDisabledByCycle || isDisabledByReview ? 'none' : 'all',
+                                          opacity: isDisabledByCycle || isDisabledByReview ? '0.4' : '1',
                                         }}
                                         onClick={() => {
-                                          handleView(title, item?.colleague?.uuid as string, item?.review?.uuid);
+                                          handleView(title, colleagueUuid, reviewUuid, cycleUuid);
                                         }}
                                         properties={activeList === View.LIST ? item?.review?.properties : {}}
                                       />

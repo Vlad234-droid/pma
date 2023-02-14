@@ -5,13 +5,15 @@ import {
   colleagueUUIDSelector,
   getCalibrationPointSelector,
 } from '@pma/store';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { role, usePermission } from 'features/general/Permission';
 import { Status } from 'config/enum';
 import { isDateFromISOAfterNow } from 'utils';
 
 export const usePermissions = () => {
+  const { state } = useLocation();
+  const { currentCycle: cycle } = (state as any) || {};
   const { uuid, userUuid: colleagueUuid } = useParams<{ uuid: string; userUuid: string }>() as {
     uuid: string;
     userUuid: string;
@@ -28,7 +30,8 @@ export const usePermissions = () => {
   const { managerUuid } = useSelector(colleagueInfo);
   const calibrationReview = useSelector(calibrationReviewDataSelector(colleagueUuid)) || {};
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
-  const { endTime } = useSelector(getCalibrationPointSelector(colleagueUuid, currentCycle));
+
+  const { endTime } = useSelector(getCalibrationPointSelector(colleagueUuid, cycle || currentCycle));
   const isFinished = isDateFromISOAfterNow(endTime);
 
   const directReport = userUuid === managerUuid;
