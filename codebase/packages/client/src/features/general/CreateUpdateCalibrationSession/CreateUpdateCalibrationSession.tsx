@@ -15,11 +15,8 @@ import { Page } from 'pages';
 import { buildPath } from 'features/general/Routes/utils';
 import Spinner from 'components/Spinner';
 import { Icon as IconComponent } from 'components/Icon';
-import { InfoBlock } from 'components/InfoBlock';
 import { paramsReplacer } from 'utils';
-
 import { useTranslation } from 'components/Translation';
-import { TriggerModal } from '../Modal';
 import { Form } from './components/Form';
 import useFilter from './hooks/useFilter';
 import { CalibrationSessionUiType } from './types';
@@ -128,19 +125,6 @@ const CreateUpdateCalibrationSession: FC<Props> = ({ onClose }) => {
         </span>
         <div>
           <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
-            <TriggerModal
-              triggerComponent={
-                <InfoBlock
-                  text={t(
-                    'need_help_to_write_calibration_session',
-                    'Do you need help to start your calibration session?',
-                  )}
-                />
-              }
-              title={t('alibration_session', 'Calibration session')}
-            >
-              <div>HelpModal</div>
-            </TriggerModal>
             <div className={css(helperTextStyle)}>
               {t('complete_all_fields', 'Please complete all fields before moving on.')}
             </div>
@@ -179,7 +163,7 @@ const iconLeftPositionStyle: CreateRule<{ mobileScreen: boolean }> =
   });
 
 const helperTextStyle: Rule = ({ theme }) => ({
-  padding: '24px 0 20px 0',
+  padding: '0px 24px 0 20px 0',
   fontSize: theme.font.fixed.f18.fontSize,
   lineHeight: theme.font.fluid.f18.lineHeight,
   letterSpacing: '0px',
