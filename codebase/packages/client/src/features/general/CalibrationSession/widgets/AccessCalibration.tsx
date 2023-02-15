@@ -29,8 +29,8 @@ const AccessCalibration: FC = () => {
 
   const isStartedPoint =
     ![Status.NOT_STARTED, Status.COMPLETED].includes(TLPStatus) &&
-    isDateFromISOAfterNow(startTime) &&
-    isDateFromISOBeforeNow(endTime);
+    isDateFromISOBeforeNow(startTime) &&
+    isDateFromISOAfterNow(endTime);
 
   if (isAnniversaryColleague || loading) return null;
 

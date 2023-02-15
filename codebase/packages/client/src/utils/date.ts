@@ -112,6 +112,6 @@ export const getDepthByYears = (startYear = 2021) => {
   return diffYears(now, start) + 1;
 };
 
-export const isDateFromISOBeforeNow = (date: string) => DateTime.now() <= DateTime.fromISO(date);
+export const isDateFromISOBeforeNow = (date: string) => DateTime.now() >= DateTime.fromISO(date);
 
-export const isDateFromISOAfterNow = (date: string) => DateTime.now() >= DateTime.fromISO(date);
+export const isDateFromISOAfterNow = (date: string) => DateTime.now() <= DateTime.fromISO(date);

@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { TileWrapper } from 'components/Tile';
@@ -33,8 +33,8 @@ const TeamMateProfile: FC<Props> = ({ uuid, status, employee, fullTeamView = fal
     !!startTime &&
     !!endTime &&
     ![Status.NOT_STARTED, Status.COMPLETED].includes(TLPStatus) &&
-    isDateFromISOAfterNow(startTime) &&
-    isDateFromISOBeforeNow(endTime);
+    isDateFromISOBeforeNow(startTime) &&
+    isDateFromISOAfterNow(endTime);
 
   return (
     <div data-test-id='team-mate-profile'>

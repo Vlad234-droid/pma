@@ -9,7 +9,7 @@ import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { role, usePermission } from 'features/general/Permission';
 import { Status } from 'config/enum';
-import { isDateFromISOAfterNow } from 'utils';
+import { isDateFromISOBeforeNow } from 'utils';
 
 export const usePermissions = () => {
   const { state } = useLocation();
@@ -30,9 +30,8 @@ export const usePermissions = () => {
   const { managerUuid } = useSelector(colleagueInfo);
   const calibrationReview = useSelector(calibrationReviewDataSelector(colleagueUuid)) || {};
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
-
   const { endTime } = useSelector(getCalibrationPointSelector(colleagueUuid, cycle || currentCycle));
-  const isFinished = isDateFromISOAfterNow(endTime);
+  const isPointFinished = isDateFromISOBeforeNow(endTime);
 
   const directReport = userUuid === managerUuid;
   const isNew = uuid === 'new';
@@ -51,7 +50,7 @@ export const usePermissions = () => {
     calibrationReview?.status === Status.APPROVED || calibrationReview?.status === Status.WAITING_FOR_COMPLETION;
 
   const checkPerformMode = () => {
-    if (isFinished) return true;
+    if (isPointFinished) return true;
     if (sessionModeCreate) return false;
     if (sessionMode) return !editablePPSession;
     if (isPerformForTA && isLNwithTA) return !isDraft && LNDisabledStatuses;
