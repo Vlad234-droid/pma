@@ -178,7 +178,6 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
                   placeholder={t('choose_an_area', 'Choose an area')}
                   onBlur={() => handleBlur('targetType')}
                   error={errors['targetType']?.message}
-                  //@ts-ignore
                   onChange={({ target: { value } }) => {
                     if (get(formValues, 'targetId') && value !== TargetType.OBJECTIVE) {
                       setValue('targetId', '', { shouldValidate: false });
