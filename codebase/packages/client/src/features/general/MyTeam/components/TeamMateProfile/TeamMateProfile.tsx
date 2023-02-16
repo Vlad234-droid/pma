@@ -33,8 +33,8 @@ const TeamMateProfile: FC<Props> = ({ uuid, status, employee, fullTeamView = fal
     !!startTime &&
     !!endTime &&
     ![Status.NOT_STARTED, Status.COMPLETED].includes(TLPStatus) &&
-    isDateFromISOBeforeNow(startTime) &&
-    isDateFromISOAfterNow(endTime);
+    isDateFromISOAfterNow(startTime) &&
+    isDateFromISOBeforeNow(endTime);
 
   return (
     <div data-test-id='team-mate-profile'>

@@ -25,8 +25,8 @@ const ActionCount: FC = () => {
 
       return (
         ![Status.NOT_STARTED, Status.COMPLETED].includes(status) &&
-        isDateFromISOBeforeNow(startTime) &&
-        isDateFromISOAfterNow(endTime)
+        isDateFromISOAfterNow(startTime) &&
+        isDateFromISOBeforeNow(endTime)
       );
     });
 

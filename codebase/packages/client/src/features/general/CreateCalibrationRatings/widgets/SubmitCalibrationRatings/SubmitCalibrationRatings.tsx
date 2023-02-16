@@ -12,7 +12,7 @@ import {
 
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
-import { paramsReplacer, isDateFromISOBeforeNow, isDateFromISOAfterNow } from 'utils';
+import { paramsReplacer, isDateFromISOAfterNow } from 'utils';
 import BaseWidget from 'components/BaseWidget';
 import Spinner from 'components/Spinner';
 import { useTranslation } from 'components/Translation';
@@ -49,8 +49,7 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   const hasStatistics = statisticsKeys.length > 0;
   const status = hasStatistics ? statisticsKeys[0] : reviewStatus;
   const isActivePoint = TLPStatus !== Status.NOT_STARTED && isDateFromISOAfterNow(startTime);
-
-  const isFinished = isDateFromISOBeforeNow(endTime);
+  const isFinished = isDateFromISOAfterNow(endTime);
 
   const isSubmitting = uuid === 'new' || status === Status.DRAFT;
   const isEditing = !isSubmitting && status === Status.WAITING_FOR_APPROVAL;
