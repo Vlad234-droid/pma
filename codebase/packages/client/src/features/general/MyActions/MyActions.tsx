@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import useDispatch from 'hooks/useDispatch';
+import { useTenant, Tenant } from 'features/general/Permission';
 // TODO: get SortBy from common type
 import { SortBy } from 'features/general/Filters';
 import { useSelector } from 'react-redux';
@@ -12,7 +13,7 @@ import {
   SchemaActions,
 } from '@pma/store';
 
-import { ActionStatus, Status } from 'config/enum';
+import { ActionStatus, CycleType, Status } from 'config/enum';
 import { Checkbox } from 'components/Form';
 import ApprovalWidget from './components/ApprovalWidget';
 import { SuccessModalProvider } from './context/successModalContext';
@@ -28,6 +29,7 @@ type Props = {
 
 const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) => {
   const dispatch = useDispatch();
+  const tenant = useTenant();
   const { css } = useStyle();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
@@ -40,7 +42,36 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
     ? [Status.STARTED, Status.FINISHED, Status.FINISHING]
     : [Status.STARTED, Status.FINISHED, Status.FINISHING, Status.COMPLETED];
 
-  const colleagues = useSelector((state) => getEmployeesWithReviewStatuses(state, status, searchValue, sortValue));
+  const employees = useSelector((state) => getEmployeesWithReviewStatuses(state, status, searchValue, sortValue));
+  // todo
+  const colleagues = useMemo(
+    () =>
+      tenant === Tenant.GENERAL
+        ? employees
+            .map((colleague) => {
+              const cycleUuids = colleague.cycles
+                .filter((cycle) => cycle.type === CycleType.FISCAL)
+                .map(({ uuid }) => uuid);
+              const excludeTimeline =
+                colleague.timeline
+                  ?.filter(
+                    (timeline) =>
+                      timeline?.code === 'EYR' &&
+                      cycleUuids.includes(timeline?.cycleUuid) &&
+                      [Status.LOCKED, Status.FINISHING, Status.COMPLETED].includes(timeline?.status),
+                  )
+                  .map((timeline) => timeline.uuid) || [];
+
+              return {
+                ...colleague,
+                timeline: colleague.timeline.filter((timeline) => !excludeTimeline.includes(timeline.uuid)),
+                reviews: colleague.reviews.filter((review) => !excludeTimeline.includes(review.tlPointUuid)),
+              };
+            })
+            .filter((colleague) => !!colleague?.reviews?.length)
+        : employees,
+    [employees, tenant],
+  );
 
   const reviewsForApproval = useMemo(
     () => colleagues.filter(({ uuid }) => uuid && checkedItems.includes(uuid)),

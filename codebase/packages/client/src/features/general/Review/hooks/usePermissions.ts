@@ -29,16 +29,24 @@ export const usePermissions = (reviewType: ReviewType.MYR | ReviewType.EYR) => {
     reviewType === ReviewType.EYR &&
     canPeopleTeamPerform &&
     review?.status === Status.APPROVED &&
-    (timeline?.status === Status.LOCKED || timeline?.status === Status.FINISHING);
+    [Status.LOCKED, Status.FINISHING, Status.COMPLETED].includes(timeline?.status);
+
+  const yerLockedForLineManagerCondition =
+    reviewType === ReviewType.EYR &&
+    isLineManager &&
+    [Status.LOCKED, Status.FINISHING, Status.COMPLETED].includes(timeline?.status);
 
   const cycleCompletedCondition = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
   const declineCondition =
     !cycleCompletedCondition &&
     !yerLockedCondition &&
+    !yerLockedForLineManagerCondition &&
     isPerform &&
     (review.status === Status.APPROVED || review.status === Status.WAITING_FOR_APPROVAL);
   const approveCondition =
-    !cycleCompletedCondition && (yerLockedCondition || (isPerform && review.status === Status.WAITING_FOR_APPROVAL));
+    !cycleCompletedCondition &&
+    !yerLockedForLineManagerCondition &&
+    (yerLockedCondition || (isPerform && review.status === Status.WAITING_FOR_APPROVAL));
 
   return {
     timeline,
