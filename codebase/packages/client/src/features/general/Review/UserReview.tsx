@@ -3,41 +3,29 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import {
   ColleagueActions,
-  colleagueCurrentCycleSelector,
-  colleagueCycleDataSelector,
   Component,
-  currentUserSelector,
   ExpressionValueType,
-  getColleagueMetaSelector,
-  getColleagueSelector,
-  getReviewByTypeSelector,
   getReviewSchema,
-  getTimelineByReviewTypeSelector,
   ReviewsActions,
-  reviewsMetaSelector,
   SchemaActions,
-  schemaMetaSelector,
   Statuses,
   TimelineActions,
-  timelinesMetaSelector,
 } from '@pma/store';
-import { useParams } from 'react-router';
 
-import { ReviewType, Status } from 'config/enum';
 import { TriggerModal } from 'features/general/Modal/components/TriggerModal';
+import { Icon as IconComponent, SuccessMark } from 'components/Icon';
 import { useTranslation } from 'components/Translation';
 import { ProfileInfo } from 'components/ProfileInfo';
 import SuccessModal from 'components/SuccessModal';
-import { Icon as IconComponent, SuccessMark } from 'components/Icon';
 import Spinner from 'components/Spinner';
 
 import { LineManagerButtons } from './components/LineManagerButtons';
 import { ReviewHelpModal } from './components/ReviewHelp';
 import { InfoBlock } from 'components/InfoBlock';
-import { formTagComponents } from 'utils/schema';
-import { Review } from 'config/types';
 import ReviewForm from './components/ReviewForm';
-import { role, usePermission } from '../Permission';
+import { formTagComponents } from 'utils/schema';
+import { ReviewType } from 'config/enum';
+import { useMetaData, usePermissions } from './hooks';
 
 export type Props = {
   reviewType: ReviewType.MYR | ReviewType.EYR;
@@ -46,36 +34,36 @@ export type Props = {
 
 const UserReview: FC<Props> = ({ reviewType, onClose }) => {
   const { css, theme, matchMedia } = useStyle();
-  const isPerform = usePermission([role.EXECUTIVE, role.LINE_MANAGER]);
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
-  const { uuid } = useParams<{ uuid: string }>();
-  const colleagueUuid = uuid!;
-
-  const colleague = useSelector(getColleagueSelector(colleagueUuid));
-  const { loaded: colleagueLoaded } = useSelector(getColleagueMetaSelector);
-
   const [successModal, setSuccessModal] = useState<Statuses.DECLINED | Statuses.APPROVED | null>(null);
-  const { info } = useSelector(currentUserSelector);
-  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
-  const cycle = useSelector(colleagueCycleDataSelector(colleagueUuid, currentCycle));
+
   const dispatch = useDispatch();
-  const review: Review = useSelector(getReviewByTypeSelector(reviewType)) || {};
-  const formValues = review?.properties || {};
 
-  const { loading: reviewLoading, loaded: reviewLoaded, saving, saved } = useSelector(reviewsMetaSelector);
-  const { loading: schemaLoading, loaded: schemaLoaded } = useSelector(schemaMetaSelector);
-  const { loading: timelineLoading } = useSelector(timelinesMetaSelector) || {};
   const schema = useSelector(getReviewSchema(reviewType));
+  const {
+    colleagueLoaded,
+    reviewLoading,
+    reviewLoaded,
+    saving,
+    saved,
+    schemaLoading,
+    schemaLoaded,
+    timelineLoading,
+    info,
+  } = useMetaData();
+  const {
+    declineCondition,
+    approveCondition,
+    currentCycle,
+    colleague,
+    colleagueUuid,
+    timeline,
+    review,
+    yerLockedCondition,
+  } = usePermissions(reviewType);
 
-  const timeline = useSelector(getTimelineByReviewTypeSelector(reviewType, colleagueUuid, currentCycle)) || ({} as any);
-
-  const cycleCompletedCondition = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
-  const declineCondition =
-    !cycleCompletedCondition &&
-    isPerform &&
-    (review.status === Status.APPROVED || review.status === Status.WAITING_FOR_APPROVAL);
-  const approveCondition = !cycleCompletedCondition && isPerform && review.status === Status.WAITING_FOR_APPROVAL;
+  const formValues = review?.properties || {};
 
   const { components = [] as Component[] } = schema;
 
@@ -211,7 +199,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
             </TriggerModal>
             <ReviewForm
               components={formTagComponents(filteredComponent, theme)}
-              readonly={true}
+              readonly={!yerLockedCondition}
               onClose={onClose}
               onSubmit={handleSubmitData}
               onSaveDraft={handleSaveDraft}
