@@ -12,16 +12,17 @@ export const TEST_ID = 'priorities-accordion';
 
 export type ExternalAccordionProps = {
   objectives: Objective[];
+  children?: (T) => JSX.Element;
 };
 
-const ExternalAccordion: FC<ExternalAccordionProps> = ({ objectives }) => {
+const ExternalAccordion: FC<ExternalAccordionProps> = ({ objectives, children }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
   return (
     <Accordion id='objective-accordion'>
       <div data-test-id={TEST_ID}>
-        {objectives.map(({ id, subTitle, description, status, lastUpdatedTime }) => {
+        {objectives.map(({ id, uuid, subTitle, description, status, lastUpdatedTime }) => {
           const sentences = description.split('. ');
           const firstSentence = sentences.shift();
           const restSentences = sentences.join('. ');
@@ -41,6 +42,7 @@ const ExternalAccordion: FC<ExternalAccordionProps> = ({ objectives }) => {
               </div>
               <Panel>
                 <div className={css({ lineHeight: '20px', fontSize: '16px' })}>{restSentences}</div>
+                {children ? children({ status, uuid }) : null}
               </Panel>
               <div className={css({ paddingBottom: '25px' })} />
             </Section>

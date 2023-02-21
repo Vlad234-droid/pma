@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { Rule, Button } from '@pma/dex-wrapper';
 import { ConfirmModal } from 'components/ConfirmModal';
 import { IconButton } from 'components/IconButton';
-import { Graphics } from 'components/Icon';
+import { Graphics, IconProps } from 'components/Icon';
 
 type CommonButtonProps = {
   onSave: (params?: any) => void;
@@ -17,6 +17,7 @@ type ButtonWithIconProps = CommonButtonProps & {
   withIcon: boolean;
   graphic: Graphics;
   iconSize?: number;
+  iconProps?: Omit<IconProps, 'graphic' | 'iconStyles'>;
   styles?: Rule;
 };
 
@@ -24,6 +25,7 @@ type ButtonWithoutIconProps = CommonButtonProps & {
   withIcon?: never;
   graphic?: never;
   iconSize?: never;
+  iconProps?: never;
   styles?: Rule[];
 };
 
@@ -40,6 +42,7 @@ const ButtonWithConfirmation: FC<Props> = ({
   withIcon,
   graphic,
   iconSize = 16,
+  iconProps = {},
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -47,7 +50,7 @@ const ButtonWithConfirmation: FC<Props> = ({
     <>
       {withIcon && graphic ? (
         <IconButton
-          iconProps={{ size: `${iconSize}px` }}
+          iconProps={{ size: `${iconSize}px`, ...iconProps }}
           onPress={() => setIsOpen(true)}
           graphic={graphic}
           customVariantRules={{ default: !Array.isArray(styles) ? styles : {} }}

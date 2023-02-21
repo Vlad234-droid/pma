@@ -15,3 +15,8 @@ export type Objective = {
   uuid: string;
   explanations?: Explanation[];
 };
+
+export enum ReviewAction {
+  APPROVE = 'APPROVE',
+  DECLINE = 'DECLINE',
+}

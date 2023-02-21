@@ -20,7 +20,7 @@ import useDispatch from 'hooks/useDispatch';
 
 const useObjectivesData = (colleagueUuid: string) => {
   const dispatch = useDispatch();
-  const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
+  const { loaded: reviewLoaded, loading: reviewLoading, saved: reviewSaved } = useSelector(reviewsMetaSelector);
   const { loaded: timelineLoaded, loading: timelineLoading } = useSelector(timelinesMetaSelector);
   const data = useSelector(filterReviewsByTypeSelector(ReviewType.QUARTER));
   const [objectives, setObjectives] = useState<Objective[]>([]);
@@ -41,6 +41,10 @@ const useObjectivesData = (colleagueUuid: string) => {
     dispatch(TimelineActions.getUserTimeline({ colleagueUuid, cycleUuid: currentCycle }));
     //dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid }));
   }, [colleagueUuid, currentCycle]);
+
+  useEffect(() => {
+    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: currentCycle } }));
+  }, [reviewSaved]);
 
   return { objectives, meta: { loaded: reviewLoaded | timelineLoaded, loading: reviewLoading | timelineLoading } };
 };
