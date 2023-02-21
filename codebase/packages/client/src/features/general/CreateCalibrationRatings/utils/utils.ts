@@ -58,7 +58,7 @@ export const defaultValues = {
 
 export const STANDARD_CALIBRATION_FORM_CODE = 'forms/standard_calibration.form';
 
-export const buildData = (data: any, colleagueUuid) => {
+export const buildData = (data: any, colleagueUuid, cycleUuid = 'CURRENT') => {
   const { status, ...properties } = data;
   return {
     data: {
@@ -69,6 +69,6 @@ export const buildData = (data: any, colleagueUuid) => {
       status,
     },
     colleagueUuid,
-    cycleUuid: 'CURRENT',
+    cycleUuid,
   };
 };

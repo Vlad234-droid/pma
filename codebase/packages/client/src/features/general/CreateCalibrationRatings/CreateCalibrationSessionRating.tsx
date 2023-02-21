@@ -34,7 +34,7 @@ const CreateCalibrationSessionRating = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { backPath, activeList } = (state as any) || {};
+  const { backPath, activeList, currentCycle: cycleUuid } = (state as any) || {};
   const { profile } = useSelector(getColleagueSelector(colleagueUuid)) || {};
 
   const { components } = useSelector(getFormByCode(STANDARD_CALIBRATION_FORM_CODE)) || {};
@@ -53,7 +53,12 @@ const CreateCalibrationSessionRating = () => {
       ...values,
     };
     data.status = isStarted ? Status.APPROVED : Status.WAITING_FOR_APPROVAL;
-    dispatch(CalibrationReviewAction.saveCalibrationSessionReview({ ...buildData(data, colleagueUuid), sessionUuid }));
+    dispatch(
+      CalibrationReviewAction.saveCalibrationSessionReview({
+        ...buildData(data, colleagueUuid, cycleUuid),
+        sessionUuid,
+      }),
+    );
   };
 
   if (!components || loading || colleagueLoading || csLoading) return null;

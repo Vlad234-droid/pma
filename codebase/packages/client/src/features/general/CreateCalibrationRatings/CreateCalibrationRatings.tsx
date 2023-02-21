@@ -37,7 +37,7 @@ const CreateCalibrationRatings: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { backPath, activeList, prevBackPath, period, filters } = (state as any) || {};
+  const { backPath, activeList, prevBackPath, period, filters, currentCycle: cycleUuid } = (state as any) || {};
 
   const { profile } = useSelector(getColleagueSelector(colleagueUuid)) || {};
 
@@ -53,7 +53,7 @@ const CreateCalibrationRatings: FC = () => {
     };
     setCurrentStatus(data.status);
     setSuccessTitle(() => t('submit_calibration_ratings', 'Submit calibration ratings'));
-    dispatch(CalibrationReviewAction.saveCalibrationReview(buildData(data, colleagueUuid)));
+    dispatch(CalibrationReviewAction.saveCalibrationReview(buildData(data, colleagueUuid, cycleUuid)));
   };
 
   useEffect(() => {
@@ -85,12 +85,12 @@ const CreateCalibrationRatings: FC = () => {
         ? t('submit_calibration_ratings', 'Submit calibration ratings')
         : t('calibration_ratings', 'Calibration ratings'),
     );
-    dispatch(CalibrationReviewAction.updateCalibrationReview(buildData(data, colleagueUuid)));
+    dispatch(CalibrationReviewAction.updateCalibrationReview(buildData(data, colleagueUuid, cycleUuid)));
   };
 
   const handleBack = () =>
     navigate(backPath || buildPath(paramsReplacer(Page.USER_REVIEWS, { ':uuid': colleagueUuid as string })), {
-      state: { activeList, backPath: prevBackPath, period, filters },
+      state: { activeList, backPath: prevBackPath, period, filters, currentCycle: cycleUuid },
     });
 
   if (!components || loading || colleagueLoading) return null;
@@ -126,7 +126,7 @@ const CreateCalibrationRatings: FC = () => {
         ),
         search: sessionMode ? new URLSearchParams({ sessionMode }).toString() : '',
       },
-      { replace: true, state: { backPath, prevBackPath, activeList, period, filters } },
+      { replace: true, state: { backPath, prevBackPath, activeList, period, filters, currentCycle: cycleUuid } },
     );
   }
 
