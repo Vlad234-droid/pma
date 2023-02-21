@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { getAllReviews, getColleaguesSchemas } from '@pma/store';
@@ -35,8 +35,14 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
   const { t } = useTranslation();
   const tenant = useTenant();
   const reviews = useSelector(getAllReviews) || [];
+  const { cyclesUuid, reviewsUuid } = useMemo(() => {
+    return {
+      cyclesUuid: [...new Set(colleague?.timeline?.map(({ cycleUuid }) => cycleUuid))] as string[],
+      reviewsUuid: colleague?.reviews?.map(({ uuid }) => uuid),
+    };
+  }, [colleague.uuid]);
 
-  const { loaded, loading } = useFetchColleagueReviews(colleagueExpanded, colleague);
+  const { loaded, loading } = useFetchColleagueReviews(colleagueExpanded, cyclesUuid, reviewsUuid);
 
   const reviewSchemaMap = useSelector(getColleaguesSchemas(colleague.uuid)) || {};
 
