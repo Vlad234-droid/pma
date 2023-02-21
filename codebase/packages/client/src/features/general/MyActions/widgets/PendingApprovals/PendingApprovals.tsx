@@ -1,7 +1,5 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { getEmployeesWithReviewStatuses } from '@pma/store';
 import { useStyle, colors, Rule, fontWeight, CreateRule } from '@pma/dex-wrapper';
 
 import { useTranslation } from 'components/Translation';
@@ -9,12 +7,13 @@ import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
+import useFilteredEmployee from '../../hook/useFilteredEmployee';
 import { Status } from 'config/enum';
 
 const PendingApprovals: FC = () => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
-  const employee = useSelector((state) => getEmployeesWithReviewStatuses(state, Status.PENDING)) || [];
+  const employee = useFilteredEmployee(Status.PENDING);
 
   const waitingCount = employee?.length;
 
