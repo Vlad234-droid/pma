@@ -52,16 +52,8 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
     timelineLoading,
     info,
   } = useMetaData();
-  const {
-    declineCondition,
-    approveCondition,
-    currentCycle,
-    colleague,
-    colleagueUuid,
-    timeline,
-    review,
-    yerLockedCondition,
-  } = usePermissions(reviewType);
+  const { declineCondition, approveCondition, currentCycle, colleague, colleagueUuid, timeline, review, readonly } =
+    usePermissions(reviewType);
 
   const formValues = review?.properties || {};
 
@@ -199,7 +191,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
             </TriggerModal>
             <ReviewForm
               components={formTagComponents(filteredComponent, theme)}
-              readonly={!yerLockedCondition}
+              readonly={readonly}
               onClose={onClose}
               onSubmit={handleSubmitData}
               onSaveDraft={handleSaveDraft}
