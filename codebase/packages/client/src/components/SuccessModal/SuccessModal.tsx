@@ -33,7 +33,7 @@ const SuccessModal: FC<Props> = ({
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
-    <WrapperModal title={title} onClose={onClose} onOverlayClick={onClose}>
+    <WrapperModal title={title} onClose={onClose}>
       {loading ? (
         <Spinner fullHeight />
       ) : (
