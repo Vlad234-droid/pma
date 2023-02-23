@@ -3,7 +3,7 @@ import { Epic, isActionOf } from 'typesafe-actions';
 import { from, of } from 'rxjs';
 import { combineEpics } from 'redux-observable';
 import { catchError, filter, map, mergeMap, takeUntil } from 'rxjs/operators';
-import { getManagerReviews, getManagerCalibrations } from './actions';
+import { getManagerCalibrations, getManagerReviews } from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 export const getManagerReviewsEpic: Epic = (action$, _, { api }) =>
@@ -16,6 +16,9 @@ export const getManagerReviewsEpic: Epic = (action$, _, { api }) =>
         map(({ data }) => getManagerReviews.success({ [status]: data })),
         catchError((e) => {
           const errors = e?.data?.errors;
+          if (errors?.[0].code === 'PM_CYCLE_NOT_FOUND_COLLEAGUE') {
+            return of(getManagerReviews.success({ [status]: [] }));
+          }
           return concatWithErrorToast(
             of(getManagerReviews.failure(errors?.[0])),
             errorPayloadConverter({ ...errors?.[0], title: 'Managers fetch error' }),
