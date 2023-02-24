@@ -27,7 +27,7 @@ const ApproveModal: FC<Props> = ({ onSave, onClose }) => {
       )}
       onSave={onSave}
       onClose={onClose}
-      submitBtnTitle={t('approve_objectives', tenant === Tenant.GENERAL ? 'Approve' : 'Agree', { ns: tenant })}
+      submitBtnTitle={t('approve_objectives', tenant === Tenant.GENERAL ? 'Approve' : 'Complete', { ns: tenant })}
     >
       <div className={css({ padding: '16px 0' })}>
         {t(
