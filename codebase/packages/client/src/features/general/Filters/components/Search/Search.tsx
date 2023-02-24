@@ -11,9 +11,10 @@ type Props = {
   iconStyles?: Rule;
   onSearch: (value: string) => void;
   value: string;
+  placeholder?: string;
 };
 
-const Search: FC<Props> = ({ focus, onFocus, iconStyles, onSearch, value }) => {
+const Search: FC<Props> = ({ focus, onFocus, iconStyles, onSearch, value, placeholder }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
@@ -41,7 +42,7 @@ const Search: FC<Props> = ({ focus, onFocus, iconStyles, onSearch, value }) => {
           name='search'
           value={focus ? value : ''}
           onChange={handleSearch}
-          placeholder={focus ? t('search_keyword', 'Search keyword') : ''}
+          placeholder={focus ? (placeholder ? placeholder : t('search_keyword', 'Search keyword')) : ''}
           customStyles={{
             ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),
             ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),

@@ -3,7 +3,7 @@ import { ColleaguesActions, getColleaguesSelector } from '@pma/store';
 import { buildSearchColleaguesQuery, extendQuery } from 'utils';
 import { SearchOption } from 'config/enum';
 
-const useSearchColleagues = (fields: Record<string, string> = {}) => {
+const useSearchColleagues = (fields: Record<string, string | boolean> = {}) => {
   const dispatch = useDispatch();
   const colleagues = useSelector(getColleaguesSelector) || [];
 

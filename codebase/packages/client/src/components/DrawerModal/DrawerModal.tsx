@@ -8,7 +8,7 @@ import { Icon } from '../Icon';
 export const WRAPPER_ID = 'wrapper-id';
 
 const DrawerModal2: FC<{
-  title: string;
+  title?: string;
   onSelect: (T) => void;
   active: SearchOption;
   onClose: () => void;
@@ -18,7 +18,7 @@ const DrawerModal2: FC<{
   return (
     <div className={css(drawerContentStyle)} data-test-id={WRAPPER_ID}>
       <div className={css(headerStyle)}>
-        {title && <p className={css(titleStyle)}>{title}</p>}
+        <p className={css(titleStyle)}>{title}</p>
         <Icon graphic='cancel' invertColors={false} onClick={onClose} iconStyles={modalCloseOptionStyle} />
       </div>
       <div className={css(labelStyle)}>

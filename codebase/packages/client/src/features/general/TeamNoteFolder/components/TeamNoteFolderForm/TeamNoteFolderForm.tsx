@@ -46,7 +46,7 @@ const TeamNoteFolderForm: FC<Props> = ({ onSubmit, onClose, colleagueUuid }) => 
     <form className={css({ marginTop: '40px', fontWeight: theme.font.weight.bold })} data-test-id={FORM_WRAPPER}>
       <ColleaguesFinder
         onSelect={(value) => setValue('referenceColleagueUuid', value, { shouldValidate: true })}
-        options={{ 'manager-uuid_eq': colleagueUuid }}
+        options={{ 'manager-uuid_eq': colleagueUuid, includePermissionCheck: false }}
         value={
           values.referenceColleagueUuid
             ? `${selectedColleague?.colleague?.profile?.firstName} ${selectedColleague?.colleague?.profile?.lastName}`

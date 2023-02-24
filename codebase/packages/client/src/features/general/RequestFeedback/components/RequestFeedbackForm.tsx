@@ -135,6 +135,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
         <form className={css({ marginTop: '8px' })}>
           <ColleaguesFinder
             searchOption={active}
+            options={{ includePermissionCheck: false }}
             onSelect={handleSelect}
             onBlur={() => handleBlur('colleagues')}
             selected={formValues.colleagues || []}

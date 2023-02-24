@@ -11,7 +11,10 @@ export const isNegative = (num: number): boolean => num < 0;
 export const upperCaseFirstLetter = <T extends string>(string: T): string =>
   string.charAt(0).toUpperCase() + string.slice(1);
 
-export const extendQuery = <T extends QueryType, U extends Record<string, string>>(query: T, fields: U): T & U => ({
+export const extendQuery = <T extends QueryType, U extends Record<string, string | boolean>>(
+  query: T,
+  fields: U,
+): T & U => ({
   ...query,
   ...fields,
 });

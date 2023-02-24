@@ -17,7 +17,7 @@ type Props = {
   onSelect: (person: any) => void;
   error?: string;
   value?: string;
-  options?: Record<string, string>;
+  options?: Record<string, string | boolean>;
   searchOption?: SearchOption;
   customStyles?: CSSProperties | Rule | Styles | {};
   inputStyles?: CSSProperties | Rule | Styles | {};

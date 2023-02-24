@@ -1,4 +1,5 @@
 import { createAsyncAction, createAction } from 'typesafe-actions';
+import { initialState } from './reducer';
 
 export const getColleagues = createAsyncAction(
   'colleagues/GET_COLLEAGUES_REQUEST',
@@ -21,10 +22,13 @@ export const getColleague = createAsyncAction(
 export const clearColleagueList = createAction('colleagues/CLEAR')<undefined>();
 export const clearColleague = createAction('colleague/CLEAR')<undefined>();
 
+export const changeColleaguesMeta = createAction('colleagues/meta/CHANGE')<Partial<typeof initialState.meta>>();
+
 export const Actions = {
   getColleagues: getColleagues.request,
   getProfileColleague: getProfileColleague.request,
   getColleague: getColleague.request,
   clearColleagueList,
   clearColleague,
+  changeColleaguesMeta,
 };

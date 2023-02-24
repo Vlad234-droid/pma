@@ -58,7 +58,7 @@ const AddNoteModal: FC<Props> = ({ onSubmit, onClose, defaultValues }) => {
     <form className={css({ marginTop: '40px', fontWeight: theme.font.weight.bold })} data-test-id={MODAL_WRAPPER}>
       <ColleaguesFinder
         onSelect={(value) => setValue('referenceColleagueUuid', value, { shouldValidate: true })}
-        options={{ 'manager-uuid_eq': colleagueUuid }}
+        options={{ 'manager-uuid_eq': colleagueUuid, includePermissionCheck: false }}
         value={
           !Object.keys(defaultValues).length
             ? values.referenceColleagueUuid

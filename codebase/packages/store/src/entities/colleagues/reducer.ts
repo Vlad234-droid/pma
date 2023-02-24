@@ -1,9 +1,9 @@
 import { createReducer } from 'typesafe-actions';
-import { getColleagues, clearColleagueList, getColleague, clearColleague } from './actions';
+import { getColleagues, clearColleagueList, getColleague, clearColleague, changeColleaguesMeta } from './actions';
 
 export const initialState = {
   list: [],
-  meta: { loading: false, loaded: false, error: null },
+  meta: { loading: false, loaded: false, error: null, updated: false },
   profile: [],
   colleague: {},
 };
@@ -16,7 +16,7 @@ export default createReducer(initialState)
   .handleAction(getColleagues.success, (state, { payload }) => ({
     ...state,
     list: payload,
-    meta: { ...state.meta, loading: false, loaded: true },
+    meta: { ...state.meta, loading: false, loaded: true, updated: true },
   }))
   .handleAction(getColleagues.failure, (state, { payload }) => ({
     ...state,
@@ -44,4 +44,8 @@ export default createReducer(initialState)
   .handleAction(clearColleague, (state) => ({
     ...state,
     colleague: {},
+  }))
+  .handleAction(changeColleaguesMeta, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, ...payload },
   }));

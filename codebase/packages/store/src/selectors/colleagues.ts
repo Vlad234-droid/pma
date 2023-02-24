@@ -5,6 +5,8 @@ import { RootState } from 'typesafe-actions';
 //@ts-ignore
 export const colleaguesSelector = (state: RootState) => state.colleagues;
 
+export const colleaguesMetaSelector = createSelector(colleaguesSelector, (colleagues) => colleagues.meta);
+
 export const getColleaguesSelector = createSelector(colleaguesSelector, (colleagues: any) => {
   return colleagues?.list;
 });

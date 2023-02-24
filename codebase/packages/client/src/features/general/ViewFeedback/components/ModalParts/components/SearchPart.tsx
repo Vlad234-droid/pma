@@ -48,6 +48,7 @@ const SearchPart: FC<Props> = ({ setValue, selectedColleague, date, setError, fo
           setValue('targetColleagueUuid', targetColleagueUuid, { shouldValidate: true });
         }}
         selected={[]}
+        options={{ includePermissionCheck: false }}
         value={getColleagueName(selectedColleague)}
         searchOption={active}
         customStyles={{ marginTop: '0px', width: '100%' }}

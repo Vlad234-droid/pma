@@ -113,6 +113,7 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
           setValue('targetColleagueUuid', colleagueUuid, { shouldValidate: true });
         }}
         selected={[]}
+        options={{ includePermissionCheck: false }}
         value={getColleagueName(selectedColleague)}
         error={get(errors, 'targetColleagueUuid.message')}
       />
