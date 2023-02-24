@@ -10,14 +10,10 @@ import { useParams } from 'react-router-dom';
 import { role, usePermission } from 'features/general/Permission';
 import { Review, ReviewType, Status } from 'config/types';
 
-export const usePermissions = (reviewType: ReviewType.MYR | ReviewType.EYR) => {
+export const useMYRPermissions = (reviewType: ReviewType.MYR | ReviewType.EYR) => {
   const { uuid } = useParams<{ uuid: string }>();
 
-  const isPeopleTeam = usePermission([role.PEOPLE_TEAM]);
   const isLineManager = usePermission([role.LINE_MANAGER]);
-  const isTalentAdmin = usePermission([role.TALENT_ADMIN]);
-
-  const isTalentAdminPerform = isTalentAdmin && !isLineManager && !isPeopleTeam;
 
   const colleagueUuid = uuid!;
   const colleague = useSelector(getColleagueSelector(colleagueUuid));
@@ -26,35 +22,20 @@ export const usePermissions = (reviewType: ReviewType.MYR | ReviewType.EYR) => {
   const cycle = useSelector(colleagueCycleDataSelector(colleagueUuid, currentCycle));
   const timeline = useSelector(getTimelineByReviewTypeSelector(reviewType, colleagueUuid, currentCycle)) || ({} as any);
 
-  const yerOpenForPT =
-    reviewType === ReviewType.EYR &&
-    isPeopleTeam &&
-    review?.status === Status.APPROVED &&
-    [Status.LOCKED, Status.FINISHING, Status.COMPLETED].includes(timeline?.status);
-
-  const yerLockedForLN =
-    isLineManager &&
-    reviewType === ReviewType.EYR &&
-    [Status.LOCKED, Status.FINISHING, Status.COMPLETED].includes(timeline?.status);
-
   const cycleCompletedCondition = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
 
   const declineCondition =
-    !isTalentAdminPerform &&
     !cycleCompletedCondition &&
-    !yerLockedForLN &&
+    isLineManager &&
     (review.status === Status.APPROVED || review.status === Status.WAITING_FOR_APPROVAL);
 
-  const approveCondition =
-    !isTalentAdminPerform &&
-    !cycleCompletedCondition &&
-    ((!yerLockedForLN && review.status === Status.WAITING_FOR_APPROVAL) || yerOpenForPT);
+  const approveCondition = isLineManager && !cycleCompletedCondition && review.status === Status.WAITING_FOR_APPROVAL;
 
   return {
     timeline,
     declineCondition,
     approveCondition,
-    readonly: !yerOpenForPT,
+    readonly: true,
     currentCycle,
     colleague,
     colleagueUuid,

@@ -20,12 +20,13 @@ import SuccessModal from 'components/SuccessModal';
 import Spinner from 'components/Spinner';
 
 import { LineManagerButtons } from './components/LineManagerButtons';
+import { PeopleTeamButtons } from './components/PeopleTeamButtons';
 import { ReviewHelpModal } from './components/ReviewHelp';
 import { InfoBlock } from 'components/InfoBlock';
 import ReviewForm from './components/ReviewForm';
 import { formTagComponents } from 'utils/schema';
-import { ReviewType } from 'config/enum';
-import { useMetaData, usePermissions } from './hooks';
+import { ReviewType, Status } from 'config/enum';
+import { useMetaData, useMYRPermissions, useEYRPermissions } from './hooks';
 
 export type Props = {
   reviewType: ReviewType.MYR | ReviewType.EYR;
@@ -52,8 +53,9 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
     timelineLoading,
     info,
   } = useMetaData();
+
   const { declineCondition, approveCondition, currentCycle, colleague, colleagueUuid, timeline, review, readonly } =
-    usePermissions(reviewType);
+    reviewType === ReviewType.EYR ? useEYRPermissions(reviewType) : useMYRPermissions(reviewType);
 
   const formValues = review?.properties || {};
 
@@ -78,13 +80,13 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
   }, [saved, successModal]);
 
   useEffect(() => {
-    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: currentCycle } }));
+    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: currentCycle || 'CURRENT' } }));
   }, [currentCycle]);
 
   useEffect(() => {
     if (reviewLoaded) {
       dispatch(SchemaActions.getSchema({ colleagueUuid, cycleUuid: currentCycle || 'CURRENT' }));
-      dispatch(TimelineActions.getUserTimeline({ colleagueUuid, cycleUuid: currentCycle }));
+      dispatch(TimelineActions.getUserTimeline({ colleagueUuid, cycleUuid: currentCycle || 'CURRENT' }));
     }
   }, [reviewLoaded]);
 
@@ -98,8 +100,19 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
     //todo not used for manager view
   };
 
-  const handleSubmitData = async () => {
-    //todo not used for manager view
+  const handleSubmitData = async (data) => {
+    dispatch(
+      ReviewsActions.updateReviews({
+        pathParams: { colleagueUuid: info.colleagueUUID, code: reviewType, cycleUuid: currentCycle || 'CURRENT' },
+        data: [
+          {
+            status: Status.APPROVED,
+            properties: { ...data },
+          },
+        ],
+      }),
+    );
+    setSuccessModal(Statuses.APPROVED);
   };
 
   const handleUpdateStatusReview = (status: Statuses.DECLINED | Statuses.APPROVED) => {
@@ -110,7 +123,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
           pathParams: {
             colleagueUuid: colleague?.colleagueUUID,
             approverUuid: info.colleagueUUID,
-            cycleUuid: currentCycle,
+            cycleUuid: currentCycle || 'currentCycle',
             code: timeline?.code || reviewType,
             status: status,
           },
@@ -118,7 +131,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
             reason: '',
             status: status,
             code: timeline?.code || reviewType,
-            cycleUuid: currentCycle,
+            cycleUuid: currentCycle || 'currentCycle',
             colleagueUuid: colleague?.colleagueUUID,
             // @ts-ignore
             reviews: [review],
@@ -198,14 +211,21 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
               reviewType={reviewType}
               defaultValues={formValues}
               reviewStatus={review?.status}
-              customButtons={() => (
-                <LineManagerButtons
-                  onClose={onClose}
-                  onSave={handleUpdateStatusReview}
-                  canDecline={declineCondition}
-                  canApprove={approveCondition}
-                />
-              )}
+              customButtons={
+                !readonly
+                  ? (isValid = false, onSubmit) => (
+                      //@ts-ignore
+                      <PeopleTeamButtons isValid={isValid} onClose={onClose} onSave={onSubmit} />
+                    )
+                  : () => (
+                      <LineManagerButtons
+                        onClose={onClose}
+                        onSave={handleUpdateStatusReview}
+                        canDecline={declineCondition}
+                        canApprove={approveCondition}
+                      />
+                    )
+              }
             />
           </div>
         </div>

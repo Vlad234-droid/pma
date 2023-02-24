@@ -1,2 +1,3 @@
-export { usePermissions } from './usePermissions';
+export { useEYRPermissions } from './useEYRPermissions';
+export { useMYRPermissions } from './useMYRPermissions';
 export { useMetaData } from './useMetaData';

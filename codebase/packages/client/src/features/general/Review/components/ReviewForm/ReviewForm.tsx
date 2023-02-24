@@ -24,7 +24,7 @@ export type Props = {
   components: any;
   defaultValues: any;
   reviewStatus: Status;
-  customButtons?: () => JSX.Element;
+  customButtons?: (isValid?: boolean, onSubmit?: () => void) => JSX.Element;
 };
 
 const overallRatingListeners: string[] = ['what_rating', 'how_rating'];
@@ -104,7 +104,7 @@ const ReviewForm: FC<Props> = ({
         <div className={css(wrapperStyle)}>
           <div className={css(buttonWrapperStyle({ mobileScreen }))}>
             {customButtons ? (
-              customButtons()
+              customButtons(isValid, handleSubmit(onSubmit))
             ) : (
               <ReviewButtons
                 isValid={isValid}
