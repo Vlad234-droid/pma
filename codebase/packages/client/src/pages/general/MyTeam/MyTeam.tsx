@@ -1,19 +1,19 @@
-import React, { FC, useState, useMemo } from 'react';
-import { Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
+import React, { FC, useMemo, useState } from 'react';
+import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 
-import { View, ViewFilters, default as MyTeam } from 'features/general/MyTeam';
+import { default as MyTeam, View, ViewFilters } from 'features/general/MyTeam';
 import {
   ActionCountWidget,
   CalibrationCount,
-  PendingApprovalsWidget,
   OutstandingActionsWidget,
+  PendingApprovalsWidget,
 } from 'features/general/MyActions';
 import ViewNavigation from 'features/general/ViewNavigation';
-import { Filters, getEmployeesSortingOptions, useSearch, useSorting } from 'features/general/Filters';
+import { Filters, getEmployeesSortingOptions, SortBy, useSearch, useSorting } from 'features/general/Filters';
 import { CanPerform, role, useTenant } from 'features/general/Permission';
 
 import { useTranslation } from 'components/Translation';
-import { useLocation, type Location } from 'react-router-dom';
+import { type Location, useLocation } from 'react-router-dom';
 
 export const TEST_ID = 'my-team';
 
@@ -37,6 +37,8 @@ const MyTeamPage: FC = () => {
 
   const handleChangeView = (view: View) => {
     setView(view);
+    setSearchValue('');
+    setSortValue(SortBy.AZ);
   };
   const showActions = view === View.DIRECT_REPORTS;
 

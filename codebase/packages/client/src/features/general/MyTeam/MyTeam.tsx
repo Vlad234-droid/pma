@@ -12,9 +12,11 @@ import {
 import useDispatch from 'hooks/useDispatch';
 import { SortBy } from 'features/general/Filters';
 import { View } from './config/types';
-import Spinner from 'components/Spinner';
-import { Employee, Status } from 'config/types';
 import TeamMateProfile from './components/TeamMateProfile';
+import { useTranslation } from 'components/Translation';
+import Spinner from 'components/Spinner';
+import { Plug } from 'components/Plug';
+import { Employee, Status } from 'config/types';
 import { getLastTimelineStatus } from './utils';
 
 type Props = {
@@ -26,6 +28,7 @@ type Props = {
 const MyTeam: FC<Props> = ({ view, searchValue, sortValue }) => {
   const { loaded } = useSelector(getManagersMetaSelector) || {};
   const { css } = useStyle();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const currentSelector = view === View.FULL_TEAM ? getAllEmployeesWithManagerSearch : getAllEmployees;
   const colleagues = useSelector((state) => currentSelector(state, 'ALL', searchValue, sortValue)) || [];
@@ -45,6 +48,9 @@ const MyTeam: FC<Props> = ({ view, searchValue, sortValue }) => {
   }, [colleagueUuid, view]);
 
   if (!loaded) return <Spinner />;
+
+  if (!colleagues?.length)
+    return <Plug text={t('there_are_currently_no_colleagues', 'There are currently no colleagues to display')} />;
 
   return (
     <div className={css(listStyles)}>
