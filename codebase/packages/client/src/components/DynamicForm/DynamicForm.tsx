@@ -56,7 +56,8 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
         const value = get(formValues, `${prefixKey}${key}`);
         const error = get(errors, `${prefixKey}${key}.message`);
 
-        const readonly = expression?.auth?.permission?.read?.length > 0;
+        const writable = expression?.auth?.permission?.write?.length > 0;
+        const readonly = expression?.auth?.permission?.read?.length > 0 && !writable;
 
         if (type === FormType.TEXT) {
           return (
@@ -98,7 +99,7 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
                 key={`${prefixKey}${key}`}
                 name={`${prefixKey}${key}`}
                 label={label}
-                Element={onlyView ? Text : Textarea}
+                Element={onlyView && !writable ? Text : Textarea}
                 Wrapper={Item}
                 setValue={setValue}
                 value={value}
