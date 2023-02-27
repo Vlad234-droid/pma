@@ -1,4 +1,7 @@
-# Create rc-tag and branch from the tag
+#!/bin/sh
+
+#  Inline script is used in the Azure Devops pipeline
+#  Create rc-tag and branch from the tag
 #
 #  variables:
 #    RC_VERSION
