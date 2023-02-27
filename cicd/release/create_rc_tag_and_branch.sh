@@ -1,12 +1,11 @@
 #!/bin/sh
 
-#  Inline script is used in the Azure Devops pipeline
+#  Script is used in the Azure Devops pipeline
 #  Create rc-tag and branch from the tag
 #
 #  variables:
 #    RC_VERSION
 #  env:
-#    SYSTEM_ACCESS_TOKEN: $(System.AccessToken)
 #    BUILD_SOURCE_BRANCH_NAME: $(Build.SourceBranchName)
 
 version=$RC_VERSION

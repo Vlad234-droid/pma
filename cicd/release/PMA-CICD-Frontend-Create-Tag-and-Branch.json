@@ -36,7 +36,7 @@
 	"tags": [],
 	"_links": {
 		"self": {
-			"href": "https://dev.azure.com/PerformanceManagementApp/f4f3a9b1-7486-45c5-b6b9-fb795ac3a762/_apis/build/Definitions/25?revision=2"
+			"href": "https://dev.azure.com/PerformanceManagementApp/f4f3a9b1-7486-45c5-b6b9-fb795ac3a762/_apis/build/Definitions/25?revision=3"
 		},
 		"web": {
 			"href": "https://dev.azure.com/PerformanceManagementApp/f4f3a9b1-7486-45c5-b6b9-fb795ac3a762/_build/definition?definitionId=25"
@@ -74,8 +74,8 @@
 							"definitionType": "task"
 						},
 						"inputs": {
-							"targetType": "inline",
-							"filePath": "",
+							"targetType": "filePath",
+							"filePath": "$(Build.SourcesDirectory)/cicd/release/create_rc_tag_and_branch.sh",
 							"arguments": "",
 							"script": "version=$RC_VERSION\ncurrent_branch=$BUILD_SOURCE_BRANCH_NAME\n\ntag_name=rc-$version\nbranch_name=v$version\n\nif [[ -z $version ]]; then\n  echo \"Please set RC_VERSION variable before run\"\n  exit 1\nfi\nif [[ -z $current_branch ]]; then\n  current_branch=\"master\"\nfi\n#git pull origin $current_branch\n\necho \"Tag $tag_name creating from $current_branch...\"\ngit tag -a $tag_name -m \"Release candidate tag $tag_name created from $current_branch\"\n\nif [[ $? -ne 0 ]]; then\n  exit 2\nfi\necho \"Tag $tag_name pushing...\"\ngit push origin $tag_name\n\nif [[ $? -ne 0 ]]; then\n  exit 3\nfi\necho \"Branch $branch_name from tag $tag_name creating...\"\ngit branch $branch_name $tag_name\n\nif [[ $? -ne 0 ]]; then\n  exit 4\nfi\necho \"Branch $branch_name pushing...\"\ngit push origin $branch_name\n\nif [[ $? -ne 0 ]]; then\n  exit 5\nfi",
 							"workingDirectory": "",
@@ -172,13 +172,13 @@
 	},
 	"id": 25,
 	"name": "PMA-CICD-Frontend-Create-Tag-and-Branch",
-	"url": "https://dev.azure.com/PerformanceManagementApp/f4f3a9b1-7486-45c5-b6b9-fb795ac3a762/_apis/build/Definitions/25?revision=2",
+	"url": "https://dev.azure.com/PerformanceManagementApp/f4f3a9b1-7486-45c5-b6b9-fb795ac3a762/_apis/build/Definitions/25?revision=3",
 	"uri": "vstfs:///Build/Definition/25",
 	"path": "\\Release",
 	"type": 2,
 	"queueStatus": 0,
-	"revision": 2,
-	"createdDate": "2023-02-23T17:32:42.530Z",
+	"revision": 3,
+	"createdDate": "2023-02-27T10:22:53.273Z",
 	"project": {
 		"id": "f4f3a9b1-7486-45c5-b6b9-fb795ac3a762",
 		"name": "PMA-CICD",
