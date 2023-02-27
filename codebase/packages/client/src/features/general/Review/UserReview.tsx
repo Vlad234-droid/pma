@@ -203,7 +203,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
               <ReviewHelpModal />
             </TriggerModal>
             <ReviewForm
-              components={formTagComponents(filteredComponent, theme)}
+              components={formTagComponents(components, theme)}
               readonly={readonly}
               onClose={onClose}
               onSubmit={handleSubmitData}
