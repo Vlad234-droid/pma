@@ -19,6 +19,7 @@
   "decline_reason": "Decline reason",
   "decline_review_agreement": "Done, you’ve rejected this form as it doesn't reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.",
   "declined": "Declined",
+  "approve_declined": "Declined",
   "objectives_or_reviews": "objectives and / or reviews",
   "you_have_rejected": "You’ve rejected this form as it doesn't reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.",
   "my_actions_approve_modal_title": "Submit objectives or reviews",

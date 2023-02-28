@@ -23,6 +23,7 @@
   "decline_reason": "Request amend reason",
   "decline_review_agreement": "Done, you've requested the form to be amended as it doesn't reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.",
   "declined": "Request to amend",
+  "approve_declined": "Request amend priorities and / or reviews",
   "objectives_or_reviews": "priorities and / or reviews",
   "you_have_rejected": "You've requested the form to be amended as it doesn't reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.",
   "my_actions_approve_modal_title": "Agree priorities or reviews",
