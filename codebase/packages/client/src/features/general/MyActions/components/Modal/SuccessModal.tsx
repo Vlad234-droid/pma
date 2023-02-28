@@ -41,10 +41,7 @@ const ReviewSuccessModal: FC<{
     [ActionStatus.COMPLETED]: t('completed', 'Completed'),
     [ActionStatus.APPROVED]: t('approved', 'Approved'),
     [ActionStatus.COMPLETE_DECLINED]: t('declined', 'Declined'),
-    [ActionStatus.APPROVE_DECLINED]: t(
-      'request_amend_priorities_and_or_reviews',
-      'Request amend priorities and / or reviews',
-    ),
+    [ActionStatus.APPROVE_DECLINED]: t('approve_declined', 'Declined', { ns: tenant }),
   };
 
   const description = {
