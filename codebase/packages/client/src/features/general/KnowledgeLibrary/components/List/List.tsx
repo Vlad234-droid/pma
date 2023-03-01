@@ -2,7 +2,7 @@ import React, { FC, useMemo } from 'react';
 import { useStyle, Rule } from '@pma/dex-wrapper';
 
 import Tile from '../Tile';
-import { Tenant, useTenant } from 'features/general/Permission';
+import { useTenant } from 'features/general/Permission';
 import { TFunction, useTranslation } from 'components/Translation';
 
 import { Item } from '../../types';
@@ -21,18 +21,11 @@ const List: FC<Props> = ({ title, data = [], customRule = {} }) => {
   const getTitle = useTitle(t);
   const tenant = useTenant();
 
-  //TODO: remove in future
-  const mappedData = data.map(({ title, link, ...rest }) => ({
-    link: title === 'system_guidance_and_faqs_title' && tenant === Tenant.BANK ? '' : link,
-    title,
-    ...rest,
-  }));
-
   return (
     <div data-test-id={TEST_ID} className={css(customRule)}>
       {title && <div className={css(titleRule)}>{title}</div>}
       <div className={css(wrapperRule)}>
-        {mappedData.map(({ id, img, title, description, imgDescription, link = '', withTenant }) => (
+        {data.map(({ id, img, title, description, imgDescription, link = '', withTenant }) => (
           <Tile
             key={id}
             img={img}
