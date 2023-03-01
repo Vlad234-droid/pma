@@ -145,7 +145,7 @@ const ColleaguesRatings: FC<Props> = ({
                                     title === Ratings.Unsubmitted.toLowerCase() &&
                                     isPerform &&
                                     lineManagerUuid !== userUuid &&
-                                    (item?.review?.status === ReviewStatusEnum.Draft || true);
+                                    item?.review?.status === ReviewStatusEnum.Draft;
 
                                   const discussWithPP = JSON.parse(
                                     item?.review?.properties?.discuss_with_pp ?? 'false',
@@ -159,8 +159,13 @@ const ColleaguesRatings: FC<Props> = ({
                                         isCollapsed={activeList !== View.TABLE}
                                         colleague={item.colleague as ColleagueSimple}
                                         viewCustomStyles={{
-                                          pointerEvents: isDisabledByCycle || isDisabledByReview ? 'none' : 'all',
-                                          opacity: isDisabledByCycle || isDisabledByReview ? '0.4' : '1',
+                                          pointerEvents: isDisabledByReview ? 'none' : 'all',
+                                          opacity: isDisabledByReview ? '0.4' : '1',
+                                          ...(isDisabledByCycle
+                                            ? {
+                                                display: 'none',
+                                              }
+                                            : {}),
                                         }}
                                         onClick={() => {
                                           handleView(title, colleagueUuid, reviewUuid, cycleUuid);
