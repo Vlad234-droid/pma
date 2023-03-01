@@ -42,6 +42,7 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
     <>
       {borderedComponents.filter(dependentFilter).map((component) => {
         const {
+          canWrite = false,
           id,
           key = '',
           label = '',
@@ -56,8 +57,7 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
         const value = get(formValues, `${prefixKey}${key}`);
         const error = get(errors, `${prefixKey}${key}.message`);
 
-        const writable = expression?.auth?.permission?.write?.length > 0;
-        const readonly = expression?.auth?.permission?.read?.length > 0 && !writable;
+        const readonly = expression?.auth?.permission?.read?.length > 0;
 
         if (type === FormType.TEXT) {
           return (
@@ -99,13 +99,13 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
                 key={`${prefixKey}${key}`}
                 name={`${prefixKey}${key}`}
                 label={label}
-                Element={onlyView && !writable ? Text : Textarea}
+                Element={canWrite ? Textarea : onlyView ? Text : Textarea}
                 Wrapper={Item}
                 setValue={setValue}
                 value={value}
                 error={error}
                 placeholder={description}
-                readonly={readonly}
+                readonly={readonly && !canWrite}
               />
             </div>
           );

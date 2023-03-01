@@ -1,11 +1,12 @@
 import React, { FC } from 'react';
+import { Statuses } from '@pma/store';
 import { Button, Rule } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 
 type Props = {
   isValid: boolean;
   onClose: () => void;
-  onSave: () => void;
+  onSave: (status: Statuses.APPROVED) => void;
 };
 
 export const PeopleTeamButtons: FC<Props> = ({ isValid, onClose, onSave }) => {
@@ -14,7 +15,7 @@ export const PeopleTeamButtons: FC<Props> = ({ isValid, onClose, onSave }) => {
       <Button onPress={onClose} styles={[buttonWhiteStyle]}>
         <Trans i18nKey='cancel'>Cancel</Trans>
       </Button>
-      <Button onPress={onSave} styles={[buttonBlueStyle]} isDisabled={!isValid}>
+      <Button onPress={() => onSave(Statuses.APPROVED)} styles={[buttonBlueStyle]} isDisabled={!isValid}>
         <Trans i18nKey='submit'>Submit</Trans>
       </Button>
     </>

@@ -100,7 +100,7 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
   }, [saved, successModal]);
 
   useEffect(() => {
-    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: currentCycle } }));
+    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: currentCycle || 'CURRENT' } }));
   }, [currentCycle]);
 
   useEffect(() => {
@@ -112,7 +112,7 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
   const handleSaveDraft = (data) => {
     dispatch(
       ReviewsActions.updateReviews({
-        pathParams: { colleagueUuid: info.colleagueUUID, code: reviewType, cycleUuid: currentCycle },
+        pathParams: { colleagueUuid: info.colleagueUUID, code: reviewType, cycleUuid: currentCycle || 'CURRENT' },
         data: [
           {
             status: Status.DRAFT,
@@ -126,7 +126,7 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
   const handleSubmitData = async (data) => {
     dispatch(
       ReviewsActions.updateReviews({
-        pathParams: { colleagueUuid: info.colleagueUUID, code: reviewType, cycleUuid: currentCycle },
+        pathParams: { colleagueUuid: info.colleagueUUID, code: reviewType, cycleUuid: currentCycle || 'CURRENT' },
         data: [
           {
             status: Status.WAITING_FOR_APPROVAL,

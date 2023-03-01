@@ -54,6 +54,7 @@ export enum ExpressionValueType {
   OPEN = 'open',
   CLOSE = 'close',
   OVERALL_RATING = 'overall_rating',
+  LM_FEEDBACK = 'lm_my_feedback',
 }
 
 export enum FormType {
@@ -93,6 +94,7 @@ export interface Component {
 export interface BorderedComponent extends Component {
   borderStyle?: Styles;
   level?: number;
+  canWrite?: boolean;
 }
 
 // to rename after use new scheme

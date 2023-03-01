@@ -26,7 +26,8 @@ import { InfoBlock } from 'components/InfoBlock';
 import ReviewForm from './components/ReviewForm';
 import { formTagComponents } from 'utils/schema';
 import { ReviewType, Status } from 'config/enum';
-import { useMetaData, useMYRPermissions, useEYRPermissions } from './hooks';
+import { useEYRPermissions, useMetaData, useMYRPermissions } from './hooks';
+import { role, usePermission } from '../Permission';
 
 export type Props = {
   reviewType: ReviewType.MYR | ReviewType.EYR;
@@ -38,10 +39,12 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
   const [successModal, setSuccessModal] = useState<Statuses.DECLINED | Statuses.APPROVED | null>(null);
+  const isLineManager = usePermission([role.LINE_MANAGER]);
 
   const dispatch = useDispatch();
 
   const schema = useSelector(getReviewSchema(reviewType));
+
   const {
     colleagueLoaded,
     reviewLoading,
@@ -65,9 +68,21 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
     () =>
       components?.filter((component) => {
         const { key = '', expression = {} } = component;
+        const canWrite =
+          isLineManager &&
+          key === ExpressionValueType.LM_FEEDBACK &&
+          (review?.status === Status.WAITING_FOR_APPROVAL || review?.status === Status.APPROVED);
+        if (canWrite) component.canWrite = true;
+
         const value = key && review?.properties?.[key] ? review.properties[key] : '';
         const keyVisibleOnEmptyValue = ExpressionValueType.OVERALL_RATING;
-        return !(expression?.auth?.permission?.read?.length && !value && key !== keyVisibleOnEmptyValue);
+        const visibleLnFeedback = ExpressionValueType.LM_FEEDBACK;
+        return !(
+          expression?.auth?.permission?.read?.length &&
+          !value &&
+          key !== keyVisibleOnEmptyValue &&
+          key !== visibleLnFeedback
+        );
       }),
     [components, review],
   );
@@ -100,22 +115,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
     //todo not used for manager view
   };
 
-  const handleSubmitData = async (data) => {
-    dispatch(
-      ReviewsActions.updateReviews({
-        pathParams: { colleagueUuid: info.colleagueUUID, code: reviewType, cycleUuid: currentCycle || 'CURRENT' },
-        data: [
-          {
-            status: Status.APPROVED,
-            properties: { ...data },
-          },
-        ],
-      }),
-    );
-    setSuccessModal(Statuses.APPROVED);
-  };
-
-  const handleUpdateStatusReview = (status: Statuses.DECLINED | Statuses.APPROVED) => {
+  const handleUpdateReview = async (data, status) => {
     if (colleague?.colleagueUUID) {
       dispatch(
         ReviewsActions.updateReviewStatus({
@@ -123,7 +123,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
           pathParams: {
             colleagueUuid: colleague?.colleagueUUID,
             approverUuid: info.colleagueUUID,
-            cycleUuid: currentCycle || 'currentCycle',
+            cycleUuid: currentCycle || 'CURRENT',
             code: timeline?.code || reviewType,
             status: status,
           },
@@ -131,10 +131,10 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
             reason: '',
             status: status,
             code: timeline?.code || reviewType,
-            cycleUuid: currentCycle || 'currentCycle',
+            cycleUuid: currentCycle || 'CURRENT',
             colleagueUuid: colleague?.colleagueUUID,
-            // @ts-ignore
-            reviews: [review],
+            //@ts-ignore
+            reviews: [{ ...review, properties: { ...data } }],
           },
         }),
       );
@@ -203,10 +203,10 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
               <ReviewHelpModal />
             </TriggerModal>
             <ReviewForm
-              components={formTagComponents(components, theme)}
+              components={formTagComponents(filteredComponent, theme)}
               readonly={readonly}
               onClose={onClose}
-              onSubmit={handleSubmitData}
+              onSubmit={handleUpdateReview}
               onSaveDraft={handleSaveDraft}
               reviewType={reviewType}
               defaultValues={formValues}
@@ -214,13 +214,12 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
               customButtons={
                 !readonly
                   ? (isValid = false, onSubmit) => (
-                      //@ts-ignore
-                      <PeopleTeamButtons isValid={isValid} onClose={onClose} onSave={onSubmit} />
+                      <PeopleTeamButtons isValid={isValid} onClose={onClose} onSave={(status) => onSubmit(status)} />
                     )
-                  : () => (
+                  : (_, onSubmit) => (
                       <LineManagerButtons
                         onClose={onClose}
-                        onSave={handleUpdateStatusReview}
+                        onSave={(status) => onSubmit(status)}
                         canDecline={declineCondition}
                         canApprove={approveCondition}
                       />

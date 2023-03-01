@@ -16,7 +16,7 @@ import { formTagComponents } from 'utils/schema';
 import { ReviewButtons } from '../ReviewButtons';
 
 export type Props = {
-  onSubmit: (data: any) => void;
+  onSubmit: (data: any, status?: any) => void;
   onSaveDraft: (data: any) => void;
   onClose: () => void;
   reviewType: ReviewType.MYR | ReviewType.EYR;
@@ -24,7 +24,7 @@ export type Props = {
   components: any;
   defaultValues: any;
   reviewStatus: Status;
-  customButtons?: (isValid?: boolean, onSubmit?: () => void, formValues?: object) => JSX.Element;
+  customButtons?: (isValid: boolean, onSubmit: (data) => void) => JSX.Element;
 };
 
 const overallRatingListeners: string[] = ['what_rating', 'how_rating'];
@@ -104,7 +104,7 @@ const ReviewForm: FC<Props> = ({
         <div className={css(wrapperStyle)}>
           <div className={css(buttonWrapperStyle({ mobileScreen }))}>
             {customButtons ? (
-              customButtons(isValid, handleSubmit(onSubmit), formValues)
+              customButtons(isValid, handleSubmit(onSubmit))
             ) : (
               <ReviewButtons
                 isValid={isValid}
