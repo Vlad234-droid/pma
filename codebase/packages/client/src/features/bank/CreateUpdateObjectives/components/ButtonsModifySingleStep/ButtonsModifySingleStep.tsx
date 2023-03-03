@@ -1,24 +1,41 @@
 import React, { FC } from 'react';
 import { Button, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
+import { Status } from '../../../../../config/enum';
 
 type ButtonsProps = {
   onSaveAndExit: () => void;
   isValid: boolean;
   onSubmit: (T?) => void;
+  status?: Status;
+  onClose: () => void;
 };
 
-const Buttons: FC<ButtonsProps> = ({ onSubmit, onSaveAndExit, isValid }) => {
+const Buttons: FC<ButtonsProps> = ({ onSubmit, onSaveAndExit, isValid, status, onClose }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+
+  const renderExitButton = () => {
+    if (status === Status.APPROVED) {
+      return (
+        <Button onPress={onClose} styles={[buttonWhiteStyle]}>
+          <Trans i18nKey='close'>Close</Trans>
+        </Button>
+      );
+    }
+
+    return (
+      <Button onPress={onSaveAndExit} styles={[buttonWhiteStyle]}>
+        <Trans i18nKey='save_and_exit'>Save and exit</Trans>
+      </Button>
+    );
+  };
 
   return (
     <div className={css(containerStyle)}>
       <div className={css(wrapperStyle)}>
         <div className={css(buttonWrapperStyle({ mobileScreen }))}>
-          <Button onPress={onSaveAndExit} styles={[buttonWhiteStyle]}>
-            <Trans i18nKey='save_and_exit'>Save and exit</Trans>
-          </Button>
+          {renderExitButton()}
           <Button onPress={onSubmit} styles={[buttonBlueStyle]} isDisabled={!isValid}>
             <Trans i18nKey='submit'>Submit</Trans>
           </Button>
