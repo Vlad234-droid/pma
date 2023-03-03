@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Button, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
-import { Status } from '../../../../../config/enum';
+import { Status } from 'config/enum';
 
 type ButtonsProps = {
   onSaveAndExit: () => void;
