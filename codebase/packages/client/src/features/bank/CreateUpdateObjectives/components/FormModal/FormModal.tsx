@@ -156,6 +156,8 @@ const FormModal: FC<FormModal> = ({
                             onSaveAndExit={() => onSaveAsDraft(formValues)}
                             isValid={canModify && isCurrentValid}
                             onSubmit={handleSubmit(onSubmit)}
+                            status={currentValue.status}
+                            onClose={onClose}
                           />
                         </>
                       ) : (
