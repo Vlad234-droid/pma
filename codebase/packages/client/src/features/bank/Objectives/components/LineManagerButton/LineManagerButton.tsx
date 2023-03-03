@@ -6,7 +6,7 @@ import ButtonWithConfirmation from 'components/ButtonWithConfirmation';
 import { ReviewAction } from '../../type';
 
 export type Props = {
-  onAction: (action: ReviewAction, status?: Status, uuid?: string, number?: number) => void;
+  onAction: (action: ReviewAction, status: Status, uuid?: string, number?: number) => void;
   status?: Status;
   number?: number;
   uuid?: string;
@@ -23,31 +23,49 @@ export const LineManagerButton: FC<Props> = ({ status, uuid, number, onAction, i
 
   return (
     <>
-      <div className={css(titleStyle)}>Agree or request amend to this priority {number}</div>
+      <div className={css(titleStyle)}>
+        {isBulkUpdate
+          ? t('LineManagerButton_priorities_agree_or_amend_plural_confirmation', { ns: 'bank' })
+          : t('LineManagerButton_priorities_agree_or_amend_singular_confirmation', { number, ns: 'bank' })}
+      </div>
       <div className={css({ display: 'flex' })}>
         <ButtonWithConfirmation
           withIcon
-          onSave={() => (status ? onAction(ReviewAction.DECLINE, status, uuid) : onAction(ReviewAction.DECLINE))}
+          onSave={() =>
+            status
+              ? onAction(ReviewAction.DECLINE, status, uuid)
+              : onAction(ReviewAction.DECLINE, Status.WAITING_FOR_APPROVAL)
+          }
           graphic={'cancel'}
           styles={iconButtonStyles({ disabled: false })}
           iconSize={16}
           buttonName={t('amend', 'Amend')}
-          confirmationTitle={'Amends to priority'}
+          confirmationTitle={isBulkUpdate ? 'Ammends to priorities' : 'Amends to priority'}
           confirmationDescription={
-            'You are requesting your colleague to make amends to their priority. This is what your colleague will receive “Your manager has reviewed your priority but wants to discuss this further, they’ll be in contact shortly”.'
+            isBulkUpdate
+              ? t('LineManagerButton_amend_confirmation_description_plural', { ns: 'bank' })
+              : t('LineManagerButton_amend_confirmation_description_singular', { ns: 'bank' })
           }
           confirmationButtonTitle={t('amend', 'Amend')}
         />
         <ButtonWithConfirmation
           withIcon
-          onSave={() => (status ? onAction(ReviewAction.APPROVE, status, uuid) : onAction(ReviewAction.APPROVE))}
+          onSave={() =>
+            status
+              ? onAction(ReviewAction.APPROVE, status, uuid)
+              : onAction(ReviewAction.APPROVE, Status.WAITING_FOR_APPROVAL)
+          }
           graphic={'check'}
           styles={iconButtonStyles({ disabled: false, invertColors: true })}
           iconSize={16}
           iconProps={{ invertColors: true }}
           buttonName={t('agree', 'Agree')}
-          confirmationTitle={'Agree to priority'}
-          confirmationDescription={'Please ensure you have talked to your colleague prior to agreeing this priority.'}
+          confirmationTitle={isBulkUpdate ? 'Agree to priorities' : 'Agree to priority'}
+          confirmationDescription={
+            isBulkUpdate
+              ? t('LineManagerButton_agree_confirmation_description_plural', { ns: 'bank' })
+              : t('LineManagerButton_agree_confirmation_description_singular', { ns: 'bank' })
+          }
           confirmationButtonTitle={t('agree', 'Agree')}
         />
       </div>

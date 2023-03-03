@@ -45,7 +45,11 @@ const UserObjectives: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const { uuid } = useParams<{ uuid: string }>();
-  const [showSuccessModal, setSuccessModal] = useState<ReviewAction | null>(null);
+  const [successModal, setSuccessModal] = useState<{
+    reviewAction?: ReviewAction;
+    isBulkUpdate?: boolean;
+    shouldShowModal: boolean;
+  }>({ shouldShowModal: false });
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
   const cycle = useSelector(colleagueCycleDataSelector(colleagueUuid, currentCycle));
@@ -62,8 +66,14 @@ const UserObjectives: FC = () => {
     meta: { loading, loaded },
   } = useObjectivesData(uuid as string);
 
-  const handleUpdateReview = (action: ReviewAction, currentStatus: Status, reviewUuid?: string) => {
-    setSuccessModal(action);
+  const prioritiesWaitingForAproval =
+    priorities.filter(
+      (priority) =>
+        priority.status === Status.WAITING_FOR_APPROVAL || priority.status === Status.WAITING_FOR_COMPLETION,
+    ).length > 1;
+
+  const handleUpdateReviews = (action: ReviewAction, currentStatus: Status, filterReviewUuid?: string) => {
+    setSuccessModal({ reviewAction: action, isBulkUpdate: !filterReviewUuid, shouldShowModal: true });
     dispatch(
       ReviewsActions.updateReviewStatus({
         updateParams: {},
@@ -76,26 +86,34 @@ const UserObjectives: FC = () => {
         },
         data: {
           colleagueUuid: uuid,
-          reviews: priorities.filter((priority) => priority.uuid === reviewUuid),
+          reviews: filterReviewUuid
+            ? priorities.filter((priority) => priority.uuid === filterReviewUuid)
+            : priorities.filter((priority) => priority.status === Status.WAITING_FOR_APPROVAL),
         },
       }),
     );
   };
 
-  if (showSuccessModal) {
+  if (successModal?.shouldShowModal) {
+    const bulkDescription =
+      successModal.reviewAction === ReviewAction.APPROVE
+        ? t('UserObjectives_priorities_agree_plural_desc', { ns: 'bank' })
+        : t('UserObjectives_priorities_amend_plural_desc', { ns: 'bank' });
+
+    const singleDescription =
+      successModal.reviewAction === ReviewAction.APPROVE
+        ? t('UserObjectives_priorities_agree_singular_desc', { ns: 'bank' })
+        : t('UserObjectives_priorities_amend_singular_desc', { ns: 'bank' });
+
     return (
       <SuccessModal
         title={'Quarterly Priorities'}
         onClose={() => {
-          setSuccessModal(null);
+          setSuccessModal({ shouldShowModal: false });
           dispatch(ReviewsActions.updateReviewMeta({ saved: false }));
         }}
-        description={
-          showSuccessModal === ReviewAction.APPROVE
-            ? 'You have agreed your colleagues priority.'
-            : 'You have asked for quarterly priority to be reviewed and will be in touch with colleague soon to discuss their reasons.'
-        }
-        mark={showSuccessModal === ReviewAction.APPROVE ? <SuccessMark /> : <ExclamationMark />}
+        description={successModal.isBulkUpdate ? bulkDescription : singleDescription}
+        mark={successModal.reviewAction === ReviewAction.APPROVE ? <SuccessMark /> : <ExclamationMark />}
         loading={saving}
       />
     );
@@ -103,6 +121,13 @@ const UserObjectives: FC = () => {
   if (loading) return <Spinner fullHeight />;
   if (!canShowObjectives) return null;
 
+  const renderBatchButtons = () => {
+    return (
+      <>
+        <LineManagerButton onAction={handleUpdateReviews} isBulkUpdate={true} />
+      </>
+    );
+  };
   return (
     <>
       {loaded && !objectives.length ? (
@@ -122,8 +147,9 @@ const UserObjectives: FC = () => {
           }}
         >
           <ExternalAccordion objectives={objectives}>
-            {(props) => <LineManagerButton {...props} onAction={handleUpdateReview} />}
+            {(props) => <LineManagerButton {...props} onAction={handleUpdateReviews} />}
           </ExternalAccordion>
+          {prioritiesWaitingForAproval && renderBatchButtons()}
         </Section>
       )}
     </>
