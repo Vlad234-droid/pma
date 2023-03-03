@@ -767,5 +767,6 @@
   "downloaded_report": "You have downloaded the report onto your device.",
   "agree_priorities_and_or_reviews": "Agree priorities and / or reviews",
   "search_colleague": "Search colleague",
-  "there_are_currently_no_colleagues": "There are currently no colleagues to display"
+  "there_are_currently_no_colleagues": "There are currently no colleagues to display",
+  "agreed": "Agreed"
 }

@@ -57,7 +57,7 @@ const ReviewSuccessModal: FC<{
 
   const title = useMemo(() => {
     if (tenant === Tenant.BANK && actionStatus === ActionStatus.APPROVED) {
-      return t('agree_priorities_and_or_reviews', 'Agree priorities and / or reviews');
+      return t('agreed', 'Agreed');
     }
 
     return titleMap[actionStatus];
