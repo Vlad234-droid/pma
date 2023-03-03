@@ -15,27 +15,19 @@ const Buttons: FC<ButtonsProps> = ({ onSubmit, onSaveAndExit, isValid, status, o
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
-  const renderExitButton = () => {
-    if (status === Status.APPROVED) {
-      return (
-        <Button onPress={onClose} styles={[buttonWhiteStyle]}>
-          <Trans i18nKey='close'>Close</Trans>
-        </Button>
-      );
-    }
-
-    return (
-      <Button onPress={onSaveAndExit} styles={[buttonWhiteStyle]}>
-        <Trans i18nKey='save_and_exit'>Save and exit</Trans>
-      </Button>
-    );
-  };
-
   return (
     <div className={css(containerStyle)}>
       <div className={css(wrapperStyle)}>
         <div className={css(buttonWrapperStyle({ mobileScreen }))}>
-          {renderExitButton()}
+          {status === Status.APPROVED ? (
+            <Button onPress={onClose} styles={[buttonWhiteStyle]}>
+              <Trans i18nKey='close'>Close</Trans>
+            </Button>
+          ) : (
+            <Button onPress={onSaveAndExit} styles={[buttonWhiteStyle]}>
+              <Trans i18nKey='save_and_exit'>Save and exit</Trans>
+            </Button>
+          )}
           <Button onPress={onSubmit} styles={[buttonBlueStyle]} isDisabled={!isValid}>
             <Trans i18nKey='submit'>Submit</Trans>
           </Button>
