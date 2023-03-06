@@ -45,7 +45,8 @@ const AnnualReview: FC<Props> = ({ colleagueUuid, isUserView }) => {
   const tlPoint = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid, currentCycle));
   const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, currentCycle));
 
-  const { summaryStatus, startTime, endTime, lastUpdatedTime, statistics = {} } = tlPoint || {};
+  const { summaryStatus, startTime, lastUpdatedTime, statistics = {}, properties } = tlPoint || {};
+  const endTime = properties?.OVERDUE_DATE;
 
   const status = (Object.keys(statistics)[0] || summaryStatus) as Status;
 

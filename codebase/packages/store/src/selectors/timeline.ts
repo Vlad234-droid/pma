@@ -44,34 +44,47 @@ export const timelineStartedSelector = (colleagueUuid: string, cycle = 'CURRENT'
 export const timelinesMetaSelector = createSelector(timelineSelector, (timeline) => timeline.meta);
 
 export const getTimelineSelector = (colleagueUuid: string, cycle = 'CURRENT') =>
-  createSelector(usersSelector, timelineSelector, (user, timeline) => {
-    // TODO: bugfix. extract to separate function
-    const uuid = colleagueUuid === USER.current ? user?.current.info.colleague.colleagueUUID : colleagueUuid;
-    const data = timeline.data?.[uuid]?.[cycle];
+  createSelector(
+    usersSelector,
+    timelineSelector,
+    timelineTypesAvailabilitySelector(colleagueUuid, cycle),
+    (user, timeline, timelineTypes) => {
+      const isAnniversary =
+        !!timelineTypes[ReviewType.EYR] &&
+        !timelineTypes[ReviewType.MYR] &&
+        !timelineTypes[ReviewType.OBJECTIVE] &&
+        !timelineTypes[ReviewType.QUARTER];
 
-    const isActive = (status) => status !== TimelineStatus.STARTED && status !== TimelineStatus.NOT_STARTED;
-    const getStartDate = (startTime, endTime, code) => getDateString(code === Type.EYR ? endTime : startTime, code);
-    const getDateString = (time, code) =>
-      ['Q1', 'Q3'].includes(code)
-        ? ''
-        : `${new Date(time).toLocaleString('default', { month: 'long' })} ${new Date(time).getFullYear()}`;
+      // TODO: bugfix. extract to separate function
+      const uuid = colleagueUuid === USER.current ? user?.current.info.colleague.colleagueUUID : colleagueUuid;
+      const data = timeline.data?.[uuid]?.[cycle];
 
-    const filteredData = data?.filter(({ properties }) => properties?.TIMELINE_POINT_HIDDEN !== 'true') || [];
-    const result = { codes: [], types: [], summaryStatuses: [], descriptions: [], startDates: [], currentStep: 0 };
+      const isActive = (status) => status !== TimelineStatus.STARTED && status !== TimelineStatus.NOT_STARTED;
+      const getStartDate = (startTime, endTime, properties, code) =>
+        getDateString(code === Type.EYR ? (isAnniversary ? properties?.OVERDUE_DATE : endTime) : startTime, code);
+      const getDateString = (time, code) =>
+        ['Q1', 'Q3'].includes(code)
+          ? ''
+          : `${new Date(time).toLocaleString('default', { month: 'long' })} ${new Date(time).getFullYear()}`;
 
-    filteredData.forEach(({ code, type, description, summaryStatus, startTime, endTime }, index) => {
-      const { codes, types, summaryStatuses, descriptions, startDates, currentStep } = result as any;
+      const filteredData = data?.filter(({ properties }) => properties?.TIMELINE_POINT_HIDDEN !== 'true') || [];
+      const result = { codes: [], types: [], summaryStatuses: [], descriptions: [], startDates: [], currentStep: 0 };
 
-      codes.push(code);
-      types.push(type);
-      summaryStatuses.push(summaryStatus);
-      descriptions.push(description);
-      startDates.push(getStartDate(startTime, endTime, code));
-      result.currentStep = isActive(summaryStatus) ? index : currentStep;
-    });
+      filteredData.forEach(({ code, type, description, summaryStatus, startTime, endTime, properties }, index) => {
+        const { codes, types, summaryStatuses, descriptions, startDates, currentStep } = result as any;
 
-    return result;
-  });
+        codes.push(code);
+        types.push(type);
+        summaryStatuses.push(summaryStatus);
+        descriptions.push(description);
+
+        startDates.push(getStartDate(startTime, endTime, properties, code));
+        result.currentStep = isActive(summaryStatus) ? index : currentStep;
+      });
+
+      return result;
+    },
+  );
 
 export const getCalibrationPointSelector = (colleagueUuid: string, cycle = 'CURRENT') =>
   createSelector(usersSelector, timelineSelector, (user, timeline) => {
