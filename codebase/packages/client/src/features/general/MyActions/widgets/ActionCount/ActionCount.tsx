@@ -8,17 +8,19 @@ import { TileWrapper } from 'components/Tile';
 import { useTranslation } from 'components/Translation';
 import { Icon } from 'components/Icon';
 import useDispatch from 'hooks/useDispatch';
+import useFilteredEmployee from '../../hook/useFilteredEmployee';
 
 const ActionCount: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const pendingEmployee = useSelector((state) => getEmployeesWithReviewStatuses(state, Status.PENDING)) || [];
   const draftEmployee = useSelector((state) => getEmployeesWithReviewStatuses(state, Status.DRAFT)) || [];
 
-  const waitingCount = pendingEmployee.length;
-  const draftCount = draftEmployee.length;
+  const pendingEmployee = useFilteredEmployee(Status.PENDING) || [];
+
+  const waitingCount = pendingEmployee?.length;
+  const draftCount = draftEmployee?.length;
 
   useEffect(() => {
     if (colleagueUuid) {
