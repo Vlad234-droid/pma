@@ -29,14 +29,11 @@ const TimeLines: FC<Props> = ({ employee }) => {
         acc[tlPoint.colleagueCycleUuid] = [...(acc[tlPoint.colleagueCycleUuid] || []), tlPoint];
         return acc;
       }, {} as Record<string, Timeline[]>);
-    return (
-      Object.keys(gropedByCycle)
-        .map((colleagueCycleUuid) => [...gropedByCycle[colleagueCycleUuid]])
-        .sort(([{ startTime }], [{ startTime: sEndTime }]) => filterByDate(startTime, sEndTime))[0]
-        ?.sort(({ endTime }, { endTime: sEndTime }) => filterByDate(endTime, sEndTime)) || []
-    );
-  }, [JSON.stringify(timelines)]);
 
+    return Object.keys(gropedByCycle)
+      .map((colleagueCycleUuid) => [...gropedByCycle[colleagueCycleUuid]])
+      .sort(([{ startTime }], [{ startTime: sEndTime }]) => filterByDate(startTime, sEndTime))[0];
+  }, [JSON.stringify(timelines)]);
   return (
     <>
       <div data-test-id='timelines' className={css(wrapperStyles)}>
