@@ -38,7 +38,7 @@ const TimeLines: FC<Props> = ({ employee }) => {
     <>
       <div data-test-id='timelines' className={css(wrapperStyles)}>
         <div className={css(listStyles)}>
-          {currentTLPoints.map((review) => {
+          {currentTLPoints?.map((review) => {
             const [graphics, color, title] = getIcon(review.summaryStatus, t);
 
             return (
