@@ -138,6 +138,7 @@ export const getOutstandingPendingEmployees: Selector<RootState, any, any> = cre
   [managersReviewsSelector, (_, search?: string) => search, (_, __?, sort?: SortBy) => sort],
   // @ts-ignore
   ({ data }, search = '', sort) => {
+    //TODO: will always return [], {[status]: []}
     const filteredData = data ? sortEmployeesFn(searchEmployeesFn(data, search), sort) : [];
 
     const employeeOverdueAnniversary = filteredData?.filter(

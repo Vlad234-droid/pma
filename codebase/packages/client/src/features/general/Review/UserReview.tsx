@@ -40,6 +40,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
   const { t } = useTranslation();
   const [successModal, setSuccessModal] = useState<Statuses.DECLINED | Statuses.APPROVED | null>(null);
   const isLineManager = usePermission([role.LINE_MANAGER]);
+  const isPeopleTeam = usePermission([role.PEOPLE_TEAM]);
 
   const dispatch = useDispatch();
 
@@ -68,21 +69,29 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
     () =>
       components?.filter((component) => {
         const { key = '', expression = {} } = component;
-        const canWrite =
+        const canLMWrite =
+          ![Status.LOCKED, Status.FINISHING, Status.COMPLETED].includes(timeline?.status) &&
           isLineManager &&
-          key === ExpressionValueType.LM_FEEDBACK &&
           (review?.status === Status.WAITING_FOR_APPROVAL || review?.status === Status.APPROVED);
+        const canPTWrite =
+          isPeopleTeam &&
+          review?.status === Status.APPROVED &&
+          [Status.LOCKED, Status.FINISHING, Status].includes(timeline?.status);
+
+        const isBlocked =
+          [Status.LOCKED, Status.FINISHING, Status.COMPLETED].includes(timeline?.status) &&
+          review?.status === Status.WAITING_FOR_APPROVAL;
+
+        const canWrite = key === ExpressionValueType.LM_FEEDBACK && (canLMWrite || canPTWrite);
+
         if (canWrite) component.canWrite = true;
 
         const value = key && review?.properties?.[key] ? review.properties[key] : '';
         const keyVisibleOnEmptyValue = ExpressionValueType.OVERALL_RATING;
         const visibleLnFeedback = ExpressionValueType.LM_FEEDBACK;
-        return !(
-          expression?.auth?.permission?.read?.length &&
-          !value &&
-          key !== keyVisibleOnEmptyValue &&
-          key !== visibleLnFeedback
-        );
+        const isKeyVisible = expression?.auth?.permission?.read?.length && !value && key !== keyVisibleOnEmptyValue;
+        const isLNFeedbackVisible = key !== visibleLnFeedback;
+        return isBlocked ? !isKeyVisible : !(isKeyVisible && isLNFeedbackVisible);
       }),
     [components, review],
   );
