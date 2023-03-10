@@ -71,6 +71,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
         cycleUuid,
         colleagueUuid: colleague.uuid,
         reviews: colleagueReviews
+          .filter(({ status }) => status === prevStatus)
           .filter(({ tlPointUuid }) => tlPointUuid === tlUuid)
           .map(({ number, type, properties }) => {
             if (type === ReviewType.MYR) {
