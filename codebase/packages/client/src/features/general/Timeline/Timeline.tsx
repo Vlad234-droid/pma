@@ -64,14 +64,15 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   }, [options]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setValue(value);
+    const { value: currentValue } = e.target;
+    if (value === currentValue) return;
+    setValue(currentValue);
     if (isUserView) {
       dispatch(ReviewsActions.clearReviewData());
-      dispatch(UserActions.changeCurrentCycles(value));
+      dispatch(UserActions.changeCurrentCycles(currentValue));
       return;
     }
-    dispatch(ColleagueActions.changeColleagueCurrentCycle({ value, colleagueUuid }));
+    dispatch(ColleagueActions.changeColleagueCurrentCycle({ value: currentValue, colleagueUuid }));
   };
 
   useEffect(() => {

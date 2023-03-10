@@ -5,36 +5,32 @@ import { fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 import { default as ShareObjectivesModal } from './ShareObjectivesModal';
-import { Status } from 'config/enum';
+
+jest.mock('features/general/Review', () => ({
+  ...(jest.requireActual('features/general/Review') as any),
+  transformReviewsToObjectives: () => [
+    {
+      id: 1,
+      title: 'title',
+      subTitle: 'subTitle',
+      description: 'description',
+      explanations: [
+        {
+          title: 'explanation title',
+          description: 'explanation description',
+        },
+      ],
+      declineReason: 'declineReason',
+      status: 'WAITING_FOR_APPROVAL',
+    },
+  ],
+}));
 
 describe('<ShareObjectivesModal />', () => {
   it('render ShareObjectivesModal', async () => {
-    const objectives = [
-      {
-        id: 1,
-        title: 'title',
-        subTitle: 'subTitle',
-        description: 'description',
-        explanations: [
-          {
-            title: 'explanation title',
-            description: 'explanation description',
-          },
-        ],
-        declineReason: 'declineReason',
-        status: Status.WAITING_FOR_APPROVAL,
-      },
-    ];
     const onClose = jest.fn();
     const manager = 'Test Manager';
-    render(
-      <ShareObjectivesModal
-        objectives={objectives}
-        onClose={onClose}
-        manager={manager}
-        description='You have 1 shared objectives'
-      />,
-    );
+    render(<ShareObjectivesModal onClose={onClose} manager={manager} description='You have 1 shared objectives' />);
 
     expect(screen.getByText(/You have 1 shared objectives/)).toBeInTheDocument();
     expect(screen.getByText(/From Test Manager/)).toBeInTheDocument();

@@ -1,11 +1,10 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, colors, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import {
   colleagueCycleSelector,
   currentUserSelector,
   getAllSharedObjectives,
-  getReviewSchema,
   hasStatusInReviews,
   isSharedSelector,
   ReviewSharingActions,
@@ -24,10 +23,6 @@ import { ReviewType, Status } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 import { usePermission, role, useTenant, Tenant } from 'features/general/Permission';
 
-//TODO: should move to general types
-import * as T from 'features/general/Review/types';
-//TODO: should move to src/utils
-import { transformReviewsToObjectives } from 'features/general/Review/utils';
 import { useTimelineContainer } from 'contexts/timelineContext';
 
 export type ShareWidgetBaseProps = {
@@ -78,7 +73,6 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
   const [isConfirmDeclineModalOpen, setIsConfirmDeclineModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isViewObjectivesModalOpen, setIsViewObjectivesModalOpen] = useState(false);
-  const [objectives, setObjectives] = useState<T.Objective[]>([]);
   const tenant = useTenant();
 
   // TODO: add selectors
@@ -94,15 +88,12 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
   const { code: currentCode } = currentTimelines[ReviewType.QUARTER] || { code: '' };
   const isCompleted = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
 
-  const { components = [] } = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const sharedObjectives = useSelector(getAllSharedObjectives);
-  const formElements = components.filter((component) => component.type != 'text');
   const isManager = usePermission([role.LINE_MANAGER]);
   const manager = info.manager;
 
   const isManagerShared = isManager && isShared;
   const sharedObjectivesCount = sharedObjectives.length;
-  const formElementsCount = formElements.length;
 
   const handleShareSaveBtnClick = async () => {
     setIsConfirmDeclineModalOpen(false);
@@ -133,7 +124,7 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
     setIsViewObjectivesModalOpen(true);
   };
 
-  const { type, title, description, actionTitle, handleClick, confirm, success, view } = getContent(
+  const { title, description, actionTitle, handleClick, confirm, success, view } = getContent(
     {
       hasApprovedObjective: hasApproved,
       isManager,
@@ -148,10 +139,6 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
     },
     t,
   );
-
-  useEffect(() => {
-    sharedObjectivesCount && setObjectives(transformReviewsToObjectives(sharedObjectives, formElements, tenant));
-  }, [sharedObjectivesCount, formElementsCount, type]);
 
   const isDisplayed = title === 'N/A' || isCompleted || (!stopShare && !hasApproved && !sharing && !isManager);
 
@@ -209,7 +196,7 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
       )}
       {isViewObjectivesModalOpen && (
         <WrapperModal title={title} onClose={() => setIsViewObjectivesModalOpen(false)}>
-          <ShareObjectivesModal manager={manager} objectives={objectives} description={view.countDescription} />
+          <ShareObjectivesModal manager={manager} description={view.countDescription} />
         </WrapperModal>
       )}
     </>

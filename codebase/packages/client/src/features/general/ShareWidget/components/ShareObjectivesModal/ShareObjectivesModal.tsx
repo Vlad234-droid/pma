@@ -3,17 +3,32 @@ import { Trans } from 'components/Translation';
 import { useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 import { Icon as IconComponent } from 'components/Icon';
 import Accordion, { ObjectiveAccordionProps } from 'features/general/Objectives/components/Accordion';
+import { useSelector } from 'react-redux';
+import { getAllSharedObjectives, getReviewSchema } from '@pma/store';
+import { ReviewType } from 'config/enum';
+import { useTenant } from 'features/general/Permission';
+import { transformReviewsToObjectives } from 'features/general/Review';
+import { Review } from 'config/types';
 
 export type Props = {
   manager: string;
-  objectives?: ObjectiveAccordionProps['objectives'];
   onClose?: () => void;
   description: string;
 };
 
-export const ShareObjectivesModal: FC<Props> = ({ manager, onClose, objectives = [], description }) => {
+export const ShareObjectivesModal: FC<Props> = ({ manager, onClose, description }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+
+  const tenant = useTenant();
+  const { components = [] } = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
+  const sharedObjectives: Review[] = useSelector(getAllSharedObjectives);
+  const formElements = components.filter((component) => component.type != 'text');
+  const objective: ObjectiveAccordionProps['objectives'] = transformReviewsToObjectives(
+    sharedObjectives,
+    formElements,
+    tenant,
+  );
 
   return (
     <div className={css(containerStyle)}>
@@ -30,7 +45,7 @@ export const ShareObjectivesModal: FC<Props> = ({ manager, onClose, objectives =
           </div>
         </div>
         <div>
-          <Accordion objectives={objectives} canShowStatus={false} isButtonsVisible={false} />
+          {objective.length && <Accordion objectives={objective} canShowStatus={false} isButtonsVisible={false} />}
         </div>
       </div>
     </div>
