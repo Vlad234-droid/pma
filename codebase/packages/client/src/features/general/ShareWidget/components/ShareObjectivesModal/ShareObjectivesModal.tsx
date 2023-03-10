@@ -24,7 +24,7 @@ export const ShareObjectivesModal: FC<Props> = ({ manager, onClose, description 
   const { components = [] } = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const sharedObjectives: Review[] = useSelector(getAllSharedObjectives);
   const formElements = components.filter((component) => component.type != 'text');
-  const objective: ObjectiveAccordionProps['objectives'] = transformReviewsToObjectives(
+  const objectives: ObjectiveAccordionProps['objectives'] = transformReviewsToObjectives(
     sharedObjectives,
     formElements,
     tenant,
@@ -45,7 +45,7 @@ export const ShareObjectivesModal: FC<Props> = ({ manager, onClose, description 
           </div>
         </div>
         <div>
-          {objective.length && <Accordion objectives={objective} canShowStatus={false} isButtonsVisible={false} />}
+          {objectives.length && <Accordion objectives={objectives} canShowStatus={false} isButtonsVisible={false} />}
         </div>
       </div>
     </div>
