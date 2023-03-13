@@ -7,13 +7,14 @@ import {
   getTimelineByReviewTypeSelector,
 } from '@pma/store';
 import { useParams } from 'react-router-dom';
-import { role, usePermission } from 'features/general/Permission';
+
 import { Review, ReviewType, Status } from 'config/types';
+import { usePermissions } from './usePermissions';
 
 export const useMYRPermissions = (reviewType: ReviewType.MYR | ReviewType.EYR) => {
   const { uuid } = useParams<{ uuid: string }>();
 
-  const isLineManager = usePermission([role.LINE_MANAGER]);
+  const { isLineManager } = usePermissions();
 
   const colleagueUuid = uuid!;
   const colleague = useSelector(getColleagueSelector(colleagueUuid));

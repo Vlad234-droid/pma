@@ -3,6 +3,7 @@ import { createSelector } from 'reselect';
 import { RootState } from 'typesafe-actions';
 import { Statuses } from '../config/types';
 import { filterByDate } from '../utils/date';
+import { colleagueUUIDSelector } from './users';
 
 //@ts-ignore
 export const colleagueSelector = (state: RootState) => state.colleague;
@@ -27,6 +28,13 @@ export const getColleagueSelector = (uuid: string) =>
         job: workRelationships?.job?.name,
       },
     };
+  });
+
+export const isDirectReportSelector = (colleagueUuid: string) =>
+  createSelector(colleagueUUIDSelector, getColleagueSelector(colleagueUuid), (userUuid, colleague): boolean => {
+    const { workRelationships } = colleague;
+    const [{ managerUUID = '' } = {}] = workRelationships || [];
+    return userUuid === managerUUID;
   });
 
 export const getColleagueCycleSelector = (uuid: string) =>

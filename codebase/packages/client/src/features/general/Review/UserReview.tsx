@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import {
   ColleagueActions,
@@ -11,6 +10,7 @@ import {
   Statuses,
   TimelineActions,
 } from '@pma/store';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { TriggerModal } from 'features/general/Modal/components/TriggerModal';
 import { Icon as IconComponent, SuccessMark } from 'components/Icon';
@@ -26,8 +26,7 @@ import { InfoBlock } from 'components/InfoBlock';
 import ReviewForm from './components/ReviewForm';
 import { formTagComponents } from 'utils/schema';
 import { ReviewType, Status } from 'config/enum';
-import { useEYRPermissions, useMetaData, useMYRPermissions } from './hooks';
-import { role, usePermission } from '../Permission';
+import { useEYRPermissions, useMetaData, useMYRPermissions, usePermissions } from './hooks';
 
 export type Props = {
   reviewType: ReviewType.MYR | ReviewType.EYR;
@@ -39,9 +38,6 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
   const [successModal, setSuccessModal] = useState<Statuses.DECLINED | Statuses.APPROVED | null>(null);
-  const isLineManager = usePermission([role.LINE_MANAGER]);
-  const isPeopleTeam = usePermission([role.PEOPLE_TEAM]);
-
   const dispatch = useDispatch();
 
   const schema = useSelector(getReviewSchema(reviewType));
@@ -58,6 +54,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
     info,
   } = useMetaData();
 
+  const { isPeopleTeam, isLineManager } = usePermissions();
   const { declineCondition, approveCondition, currentCycle, colleague, colleagueUuid, timeline, review, readonly } =
     reviewType === ReviewType.EYR ? useEYRPermissions(reviewType) : useMYRPermissions(reviewType);
 

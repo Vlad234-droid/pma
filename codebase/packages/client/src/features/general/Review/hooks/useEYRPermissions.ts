@@ -7,17 +7,13 @@ import {
   getTimelineByReviewTypeSelector,
 } from '@pma/store';
 import { useParams } from 'react-router-dom';
-import { role, usePermission } from 'features/general/Permission';
 import { Review, ReviewType, Status } from 'config/types';
+import { usePermissions } from './usePermissions';
 
 export const useEYRPermissions = (reviewType: ReviewType.MYR | ReviewType.EYR) => {
   const { uuid } = useParams<{ uuid: string }>();
 
-  const isPeopleTeam = usePermission([role.PEOPLE_TEAM]);
-  const isLineManager = usePermission([role.LINE_MANAGER]);
-  const isTalentAdmin = usePermission([role.TALENT_ADMIN]);
-
-  const isTalentAdminPerform = isTalentAdmin && !isLineManager && !isPeopleTeam;
+  const { isPeopleTeam, isLineManager, isTalentAdmin } = usePermissions();
 
   const colleagueUuid = uuid!;
   const colleague = useSelector(getColleagueSelector(colleagueUuid));
@@ -40,13 +36,13 @@ export const useEYRPermissions = (reviewType: ReviewType.MYR | ReviewType.EYR) =
   const cycleCompletedCondition = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
 
   const declineCondition =
-    !isTalentAdminPerform &&
+    !isTalentAdmin &&
     !cycleCompletedCondition &&
     yerOpenForLN &&
     (review.status === Status.APPROVED || review.status === Status.WAITING_FOR_APPROVAL);
 
   const approveCondition =
-    !isTalentAdminPerform &&
+    !isTalentAdmin &&
     !cycleCompletedCondition &&
     ((yerOpenForLN && review.status === Status.WAITING_FOR_APPROVAL) || yerOpenForPT);
 
