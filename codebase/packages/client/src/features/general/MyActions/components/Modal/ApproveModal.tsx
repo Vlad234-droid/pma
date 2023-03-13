@@ -12,7 +12,7 @@ type Props = {
   approveKey?: string;
 };
 
-const ApproveModal: FC<Props> = ({ onSave, onClose, approveKey = 'approve_objectives' }) => {
+const ApproveModal: FC<Props> = ({ onSave, onClose, approveKey = 'approve' }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const tenant = useTenant();
