@@ -16,7 +16,6 @@ const ApproveModal: FC<Props> = ({ onSave, onClose, approveKey = 'approve_object
   const { t } = useTranslation();
   const { css } = useStyle();
   const tenant = useTenant();
-  console.log(approveKey);
 
   return (
     <ConfirmModal
