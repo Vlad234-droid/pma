@@ -165,6 +165,7 @@ export const CreateUpdatePDPForm: FC<Props> = ({
               return (
                 <React.Fragment key={`${currentTab - 1}${idx}`}>
                   <Field
+                    label={label}
                     name={key}
                     isOnTop={true}
                     Element={Datepicker}
