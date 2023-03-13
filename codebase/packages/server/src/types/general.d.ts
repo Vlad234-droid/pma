@@ -88,7 +88,11 @@ declare namespace NodeJS {
     SPLUNK_SOURCETYPE: string;
     SPLUNK_TOKEN_SECRET: string;
 
+    //build information
     CICD_RELEASE_RELEASENAME: string | undefined;
+    CICD_BUILD_DEFINITIONNAME: string | undefined;
+    CICD_BUILD_BUILDNUMBER: string | undefined;
+    CICD_BUILD_SOURCEVERSION: string | undefined;
   }
 
   export interface Process {

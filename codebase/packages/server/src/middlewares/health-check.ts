@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
+import { release } from 'os';
 
 import { Request, Response, Router } from 'express';
-
 import { isPROD, ProcessConfig } from '../config';
 import { getColleagueInboxApiConfig } from './my-inbox/api-config';
 import { extractAuthToken } from './proxy';
@@ -21,7 +21,33 @@ export const healthCheckMiddleware = (processConfig: ProcessConfig) => {
     res.send(healthStatus);
   });
 
+  router.get('/_environment', async (req, res) => {
+    const envCheck = await getEnvironmentCheck(processConfig, req, res);
+
+    res.send(envCheck);
+  });
+
   return router;
+};
+const getEnvironmentCheck = async (processConfig: ProcessConfig, req: Request, res: Response) => {
+  const { status, version } = await getHealthCheck(processConfig, req, res);
+
+  const build = {
+    artifact: processConfig.artifact(),
+    number: processConfig.number(),
+    server: processConfig.applicationUrl(),
+    version,
+    hash: processConfig.hash(),
+  };
+
+  const os = { arch: process.arch, name: process.platform, version: release() };
+
+  return {
+    status,
+    version,
+    build,
+    os,
+  };
 };
 
 const getHealthCheck = async (processConfig: ProcessConfig, req: Request, res: Response) => {
@@ -47,7 +73,6 @@ const getHealthCheck = async (processConfig: ProcessConfig, req: Request, res: R
 
 const pmaApiCheck = async (processConfig: ProcessConfig, authToken?: string) => {
   const apiUrl = processConfig.apiServerUrl();
-
   return fetch(apiUrl + '/_status', {
     headers: {
       Authorization: `Bearer ${authToken}`,
