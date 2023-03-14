@@ -77,7 +77,7 @@ const FormModal: FC<FormModal> = ({
   const currentValue = formValues.data?.[currentPriorityIndex] || {};
   const isCurrentValid = propertiesSchema.isValidSync(currentValue?.properties);
   const canModify = currentValue?.status
-    ? [Status.DECLINED, Status.DRAFT, Status.APPROVED].includes(currentValue.status)
+    ? [Status.DECLINED, Status.DRAFT, Status.APPROVED, Status.REQUESTED_TO_AMEND].includes(currentValue.status)
     : false;
 
   const {

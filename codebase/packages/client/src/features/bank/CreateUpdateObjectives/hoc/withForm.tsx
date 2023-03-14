@@ -107,11 +107,19 @@ export function withForm<
     const saveData = (priorities: Objective[]) => {
       if (useSingleStep && editNumber) {
         const [priority] = priorities;
+
         if (priority.number === editNumber) {
           dispatch(
             ReviewsActions.updateReview({
               pathParams: { ...pathParams, number: priority.number },
-              data: [{ number: priority.number, properties: priority.properties, status: Status.WAITING_FOR_APPROVAL }],
+              data: [
+                {
+                  number: priority.number,
+                  properties: priority.properties,
+                  status:
+                    priority?.status === Status.REQUESTED_TO_AMEND ? Status.APPROVED : Status.WAITING_FOR_APPROVAL,
+                },
+              ],
             }),
           );
           setFormState(FormStateType.SUBMITTED);

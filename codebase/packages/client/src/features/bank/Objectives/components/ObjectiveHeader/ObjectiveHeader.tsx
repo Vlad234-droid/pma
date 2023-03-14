@@ -20,6 +20,7 @@ export const ObjectiveHeader: FC<
       ? t('submitted_date', { date: new Date(lastUpdatedTime || '') })
       : t('full_date', { date: new Date(lastUpdatedTime || '') });
   const statusComponent = status ? <StatusBadge status={status} text={text} styles={{ marginRight: '20px' }} /> : null;
+
   return (
     <Header headingLevel={1} title={title} status={status} component={statusComponent} {...rest}>
       <ObjectiveTileHeader {...{ subTitle, description, withSpacing: false }} />

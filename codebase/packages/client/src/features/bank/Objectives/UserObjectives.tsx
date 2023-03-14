@@ -36,7 +36,7 @@ const statusMap: Record<ReviewAction, Record<Status.WAITING_FOR_APPROVAL | Statu
   },
   [ReviewAction.DECLINE]: {
     [Status.WAITING_FOR_APPROVAL]: Status.DECLINED,
-    [Status.WAITING_FOR_COMPLETION]: Status.APPROVED,
+    [Status.WAITING_FOR_COMPLETION]: Status.REQUESTED_TO_AMEND,
   },
 };
 
@@ -66,11 +66,10 @@ const UserObjectives: FC = () => {
     meta: { loading, loaded },
   } = useObjectivesData(uuid as string);
 
-  const prioritiesWaitingForAproval =
-    priorities.filter(
-      (priority) =>
-        priority.status === Status.WAITING_FOR_APPROVAL || priority.status === Status.WAITING_FOR_COMPLETION,
-    ).length > 1;
+  const prioritiesWaitingForApproval = priorities?.some(
+    (priority) =>
+      priority?.status === Status.WAITING_FOR_COMPLETION || priority?.status === Status.WAITING_FOR_APPROVAL,
+  );
 
   const handleUpdateReviews = (action: ReviewAction, currentStatus: Status, filterReviewUuid?: string) => {
     setSuccessModal({ reviewAction: action, isBulkUpdate: !filterReviewUuid, shouldShowModal: true });
@@ -121,13 +120,6 @@ const UserObjectives: FC = () => {
   if (loading) return <Spinner fullHeight />;
   if (!canShowObjectives) return null;
 
-  const renderBatchButtons = () => {
-    return (
-      <>
-        <LineManagerButton onAction={handleUpdateReviews} isBulkUpdate={true} />
-      </>
-    );
-  };
   return (
     <>
       {loaded && !objectives.length ? (
@@ -149,7 +141,7 @@ const UserObjectives: FC = () => {
           <ExternalAccordion objectives={objectives}>
             {(props) => <LineManagerButton {...props} onAction={handleUpdateReviews} />}
           </ExternalAccordion>
-          {prioritiesWaitingForAproval && renderBatchButtons()}
+          {prioritiesWaitingForApproval && <LineManagerButton onAction={handleUpdateReviews} isBulkUpdate={true} />}
         </Section>
       )}
     </>
