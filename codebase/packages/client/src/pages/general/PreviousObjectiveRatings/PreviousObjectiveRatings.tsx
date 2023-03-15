@@ -1,8 +1,6 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router';
 import { useStyle, CreateRule } from '@pma/dex-wrapper';
-import { colleagueInfo } from '@pma/store';
-import { useSelector } from 'react-redux';
 
 import { YearSwitch } from 'components/YearSwitch';
 import { ProfileTileWrapper } from 'components/ProfileTileWrapper';
@@ -16,8 +14,13 @@ const PreviousObjectiveRatings: FC = () => {
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const navigate = useNavigate();
 
-  const { firstName, lastName, businessType, managerSirName, managerName, job, department } =
-    useSelector(colleagueInfo);
+  const firstName = '';
+  const lastName = '';
+  const businessType = '';
+  const managerSirName = '';
+  const managerName = '';
+  const job = '';
+  const department = '';
 
   const handleChange = (/*year*/) => {
     //TODO: dispatch(...)

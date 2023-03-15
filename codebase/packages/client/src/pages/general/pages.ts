@@ -39,8 +39,6 @@ import CalibrationSessionList, { CreateCalibrationSession } from './CalibrationS
 import CalibrationSessionOverview, { CalibrationSession } from './CalibrationSession';
 import RespondNewFeedback from './RespondNewFeedback';
 import ReportStatistics from './ReportStatistics';
-import PreviousObjectiveRatings from './PreviousObjectiveRatings';
-import PreviousReviewForms from './PreviousReviewForms';
 import Review from './Review';
 import UserReview from './UserReview';
 import UpdateObjectives, { CreateObjective } from './CreateUpdateObjectives';
@@ -473,20 +471,22 @@ const pages: Record<Page, PageComponent> = {
   //   perform: [role.ADMIN],
   //   tenant: [tenant.BANK, tenant.GENERAL],
   // },
-  [Page.PREVIOUS_OBJECTIVES_RATINGS]: {
-    Element: PreviousObjectiveRatings,
-    title: (_, t) => t('objectives'),
-    withHeader: true,
-    perform: [role.LINE_MANAGER],
-    tenant: [Tenant.BANK, Tenant.GENERAL],
-  },
-  [Page.PREVIOUS_REVIEW_FORMS]: {
-    Element: PreviousReviewForms,
-    title: (_, t) => t('review_forms'),
-    withHeader: true,
-    perform: [role.LINE_MANAGER],
-    tenant: [Tenant.BANK, Tenant.GENERAL],
-  },
+  // TODO: enabled when content of page meets business requirements
+  // [Page.PREVIOUS_OBJECTIVES_RATINGS]: {
+  //   Element: PreviousObjectiveRatings,
+  //   title: (_, t) => t('objectives'),
+  //   withHeader: true,
+  //   perform: [role.LINE_MANAGER],
+  //   tenant: [Tenant.BANK, Tenant.GENERAL],
+  // },
+  // TODO: enabled when content of page meets business requirements
+  // [Page.PREVIOUS_REVIEW_FORMS]: {
+  //   Element: PreviousReviewForms,
+  //   title: (_, t) => t('review_forms'),
+  //   withHeader: true,
+  //   perform: [role.LINE_MANAGER],
+  //   tenant: [Tenant.BANK, Tenant.GENERAL],
+  // },
   [Page.NOT_FOUND]: {
     Element: NotFound,
     title: (_, t) => t('title_not_found'),

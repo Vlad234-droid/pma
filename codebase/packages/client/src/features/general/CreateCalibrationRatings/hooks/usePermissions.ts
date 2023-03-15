@@ -1,9 +1,8 @@
 import {
   calibrationReviewDataSelector,
   colleagueCurrentCycleSelector,
-  colleagueInfo,
-  colleagueUUIDSelector,
   getCalibrationPointSelector,
+  isDirectReportSelector,
 } from '@pma/store';
 import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -26,14 +25,12 @@ export const usePermissions = () => {
   const isPerformForLN = usePermission([role.LINE_MANAGER]);
   const isPerformForTA = usePermission([role.TALENT_ADMIN]);
 
-  const userUuid = useSelector(colleagueUUIDSelector);
-  const { managerUuid } = useSelector(colleagueInfo);
   const calibrationReview = useSelector(calibrationReviewDataSelector(colleagueUuid)) || {};
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
   const { endTime } = useSelector(getCalibrationPointSelector(colleagueUuid, cycle || currentCycle));
   const isFinished = isDateFromISOAfterNow(endTime);
+  const isDirectReport = useSelector(isDirectReportSelector(colleagueUuid));
 
-  const directReport = userUuid === managerUuid;
   const isNew = uuid === 'new';
 
   const isDraft = calibrationReview?.status === Status.DRAFT || isNew;
@@ -42,8 +39,8 @@ export const usePermissions = () => {
     calibrationReview?.status === Status.COMPLETED ||
     calibrationReview?.status === Status.WAITING_FOR_COMPLETION;
 
-  const isLNwithPP = isPerformForLN && isPerformForPP && directReport;
-  const isLNwithTA = isPerformForLN && isPerformForTA && directReport;
+  const isLNwithPP = isPerformForLN && isPerformForPP && isDirectReport;
+  const isLNwithTA = isPerformForLN && isPerformForTA && isDirectReport;
   const sessionModeCreate = sessionMode && isDraft;
 
   const editablePPSession =

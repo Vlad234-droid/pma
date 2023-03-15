@@ -54,7 +54,10 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   const isSubmitting = uuid === 'new' || status === Status.DRAFT;
   const isEditing = !isSubmitting && status === Status.WAITING_FOR_APPROVAL;
   const isViewing =
-    !isLineManager || isFinished || (!isSubmitting && !isEditing && status !== Status.WAITING_FOR_APPROVAL);
+    reviewStatus === Status.APPROVED ||
+    !isLineManager ||
+    isFinished ||
+    (!isSubmitting && !isEditing && status !== Status.WAITING_FOR_APPROVAL);
 
   useEffect(() => {
     if (!isActivePoint || isAnniversaryColleague || !hasStatistics) return;
@@ -88,7 +91,7 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
       background={isViewing ? 'white' : 'tescoBlue'}
       onClick={() =>
         navigate(buildPath(paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':userUuid': userUuid, ':uuid': uuid })), {
-          state: { backPath: pathname, prevBackPath: backPath, filters },
+          state: { backPath: pathname, prevBackPath: backPath, filters, currentCycle },
         })
       }
     />

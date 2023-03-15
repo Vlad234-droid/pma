@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
-import { getReviewsWithStatuses, ReviewsActions, reviewsMetaSelector, SchemaActions, colleagueInfo } from '@pma/store';
+import { getReviewsWithStatuses, ReviewsActions, reviewsMetaSelector, SchemaActions } from '@pma/store';
 
 import { getCurrentYear } from 'utils';
-//import { useFetchColleague } from 'features/general/RatingsTiles/hooks/useFetchColleague';
 import Spinner from 'components/Spinner';
 import { Backward } from 'components/Backward';
 import { YearSwitch } from 'components/YearSwitch';
@@ -29,12 +28,14 @@ const PreviousReviewForms = () => {
   const { uuid } = useParams<{ uuid: string }>();
   const { loading, loaded } = useSelector(reviewsMetaSelector);
   const reviews = useSelector(getReviewsWithStatuses);
-  const { firstName, lastName, businessType, managerSirName, managerName, job, department } =
-    useSelector(colleagueInfo);
-
+  const firstName = '';
+  const lastName = '';
+  const businessType = '';
+  const managerSirName = '';
+  const managerName = '';
+  const job = '';
+  const department = '';
   const [year, setYear] = useState<number>(Number(getCurrentYear()));
-
-  //useFetchColleague(uuid);
 
   useEffect(() => {
     if (uuid) {
