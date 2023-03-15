@@ -2,7 +2,9 @@ import React, { FC } from 'react';
 import { Trans } from 'components/Translation';
 import { useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 import { Icon as IconComponent } from 'components/Icon';
-import Accordion, { ObjectiveAccordionProps } from 'features/general/Objectives/components/Accordion';
+import ObjectivesList, {
+  ObjectivesListProps,
+} from 'features/general/Objectives/components/ObjectivesList/ObjectivesList';
 import { useSelector } from 'react-redux';
 import { getAllSharedObjectives, getReviewSchema } from '@pma/store';
 import { ReviewType } from 'config/enum';
@@ -24,7 +26,7 @@ export const ShareObjectivesModal: FC<Props> = ({ manager, onClose, description 
   const { components = [] } = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const sharedObjectives: Review[] = useSelector(getAllSharedObjectives);
   const formElements = components.filter((component) => component.type != 'text');
-  const objectives: ObjectiveAccordionProps['objectives'] = transformReviewsToObjectives(
+  const objectives: ObjectivesListProps['objectives'] = transformReviewsToObjectives(
     sharedObjectives,
     formElements,
     tenant,
@@ -44,9 +46,7 @@ export const ShareObjectivesModal: FC<Props> = ({ manager, onClose, description 
             <Trans i18nKey='from_person' values={{ person: manager }} defaults='From {{ person }}' />
           </div>
         </div>
-        <div>
-          {objectives.length && <Accordion objectives={objectives} canShowStatus={false} isButtonsVisible={false} />}
-        </div>
+        <div>{objectives.length && <ObjectivesList objectives={objectives} />}</div>
       </div>
     </div>
   );
