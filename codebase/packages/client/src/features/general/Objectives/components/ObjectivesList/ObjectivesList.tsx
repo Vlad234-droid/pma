@@ -13,7 +13,7 @@ const ObjectivesList: FC<ObjectivesListProps> = ({ objectives }) => {
   const { css } = useStyle();
 
   return (
-    <div>
+    <div data-test-id='objective-list'>
       {objectives.map(({ id, title, subTitle, description, explanations }) => {
         return (
           <div key={id} className={css(divStyles)}>
