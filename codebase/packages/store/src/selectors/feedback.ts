@@ -60,7 +60,10 @@ export const getViewFeedbacksSelector = (read, defaultSerializer) =>
       feedbacks: { view },
     } = feedback;
 
-    return view?.filter((item) => item.read === read).map(defaultSerializer) ?? [];
+    return {
+      filteredFeedbacks: view?.filter((item) => item.read === read).map(defaultSerializer) ?? [],
+      hasSomeFeedbacks: !!view?.length,
+    };
   });
 
 export const getRespondedFeedbacksSelector = (status) =>

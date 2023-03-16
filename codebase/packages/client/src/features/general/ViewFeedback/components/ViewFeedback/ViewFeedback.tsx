@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,6 +28,7 @@ import { Page } from 'pages';
 import { buildPath } from 'features/general/Routes';
 import debounce from 'lodash.debounce';
 import { buildSearchFeedbacksQuery, getSortString } from 'utils';
+import { Plug } from '../../../../../components/Plug';
 
 export const WRAPPER = 'wrapper';
 
@@ -98,15 +99,16 @@ const ViewFeedback: FC = () => {
     getViewFeedbacks(filterFeedbacks);
   }, [colleagueUuid, filterFeedbacks]);
 
-  const submittedCompletedNotes = useSelector(getViewFeedbacksSelector(isRead, defaultSerializer)) || [];
+  const { filteredFeedbacks, hasSomeFeedbacks } =
+    useSelector(getViewFeedbacksSelector(isRead, defaultSerializer)) || [];
 
   useEffect(() => {
-    if (!submittedCompletedNotes.length) {
+    if (!filteredFeedbacks.length) {
       return;
     }
 
     if (isRead) {
-      submittedCompletedNotes.forEach(
+      filteredFeedbacks.forEach(
         (item) =>
           item.targetId &&
           item.targetId !== Tesco.TescoBank &&
@@ -114,6 +116,20 @@ const ViewFeedback: FC = () => {
       );
     }
   }, [isRead]);
+
+  const plugElement = useMemo(() => {
+    return hasSomeFeedbacks ? (
+      <Plug
+        title={t('no_feedback_records_title', 'No feedback records to view.')}
+        text={t('no_filtered_feedback_records_text', 'You can request feedback from the feedback home page.')}
+      />
+    ) : (
+      <Plug
+        title={t('no_feedback_records_title', 'No feedback records to view.')}
+        text={t('no_feedback_records_text', 'You can request feedback from the feedback home page')}
+      />
+    );
+  }, [hasSomeFeedbacks]);
 
   return (
     <>
@@ -171,7 +187,7 @@ const ViewFeedback: FC = () => {
           </div>
         </div>
         <div className={css(reverseItemsStyled)}>
-          <DraftList items={submittedCompletedNotes} />
+          <DraftList items={filteredFeedbacks} plugElement={plugElement} />
           <div className={css(buttonsActionsStyle({ mobileScreen }))}>
             <div className={css(buttonContainerStyle)}>
               <div className={css({ display: 'inline-flex' })}>
