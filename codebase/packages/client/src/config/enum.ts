@@ -26,6 +26,7 @@ export enum ActionStatus {
   APPROVED = 'APPROVED',
   APPROVE_DECLINED = 'APPROVE_DECLINED',
   COMPLETE_DECLINED = 'COMPLETE_DECLINED',
+  REQUESTED_TO_AMEND = 'REQUESTED_TO_AMEND',
 }
 
 // todo use for timeline this statuses. should be changed in many places

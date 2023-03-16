@@ -30,6 +30,7 @@ const ReviewSuccessModal: FC<{
   const actionStatusMap = {
     [`${Status.WAITING_FOR_COMPLETION}-${Status.COMPLETED}`]: ActionStatus.COMPLETED,
     [`${Status.WAITING_FOR_COMPLETION}-${Status.APPROVED}`]: ActionStatus.COMPLETE_DECLINED,
+    [`${Status.WAITING_FOR_COMPLETION}-${Status.REQUESTED_TO_AMEND}`]: ActionStatus.REQUESTED_TO_AMEND,
     [`${Status.WAITING_FOR_APPROVAL}-${Status.APPROVED}`]: ActionStatus.APPROVED,
     [`${Status.WAITING_FOR_APPROVAL}-${Status.DECLINED}`]: ActionStatus.APPROVE_DECLINED,
   };
@@ -42,6 +43,7 @@ const ReviewSuccessModal: FC<{
     [ActionStatus.APPROVED]: t('approved', 'Approved'),
     [ActionStatus.COMPLETE_DECLINED]: t('declined', 'Declined'),
     [ActionStatus.APPROVE_DECLINED]: t('approve_declined', 'Declined', { ns: tenant }),
+    [ActionStatus.REQUESTED_TO_AMEND]: t('my_objectives_and_reviews', { ns: 'bank' }),
   };
 
   const description = {
@@ -53,6 +55,7 @@ const ReviewSuccessModal: FC<{
     [ActionStatus.COMPLETED]: t('you_have_completed', { ns: tenant }),
     [ActionStatus.COMPLETE_DECLINED]: t('you_have_rejected', { ns: tenant }),
     [ActionStatus.APPROVE_DECLINED]: t('you_have_rejected', { ns: tenant }),
+    [ActionStatus.REQUESTED_TO_AMEND]: t('UserObjectives_priorities_amend_singular_desc', { ns: 'bank' }),
   };
 
   const title = useMemo(() => {
@@ -76,7 +79,12 @@ const ReviewSuccessModal: FC<{
       title={title}
       onClose={handleClose}
       mark={
-        [ActionStatus.APPROVE_DECLINED, ActionStatus.COMPLETE_DECLINED, ActionStatus.ERROR].includes(actionStatus) ? (
+        [
+          ActionStatus.APPROVE_DECLINED,
+          ActionStatus.COMPLETE_DECLINED,
+          ActionStatus.ERROR,
+          ActionStatus.REQUESTED_TO_AMEND,
+        ].includes(actionStatus) ? (
           <ExclamationMark />
         ) : (
           <SuccessMark />
