@@ -2,7 +2,12 @@ import React, { FC, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
-import { colleagueUUIDSelector, timelinesMetaSelector, timelineTypesAvailabilitySelector } from '@pma/store';
+import {
+  colleagueUUIDSelector,
+  reviewsMetaSelector,
+  timelinesMetaSelector,
+  timelineTypesAvailabilitySelector,
+} from '@pma/store';
 
 import { useTranslation } from 'components/Translation';
 import { ReviewsSection, CompletedReviewsSection, ReviewFilesSection } from 'features/general/Review';
@@ -23,7 +28,9 @@ const ObjectivesPage: FC = () => {
   const canShowReviewTitle =
     (!timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR]) || !timelineTypes[ReviewType.OBJECTIVE];
 
-  const { loading } = useSelector(timelinesMetaSelector);
+  const { loading: timelineLoading } = useSelector(timelinesMetaSelector);
+  const { loading: reviewsLoading } = useSelector(reviewsMetaSelector);
+
   const { setLinkTitle } = useHeaderContainer();
 
   useEffect(() => {
@@ -81,7 +88,7 @@ const ObjectivesPage: FC = () => {
 
   return (
     <div>
-      <div>{loading ? null : <CreateButton withIcon />}</div>
+      <div>{timelineLoading || reviewsLoading ? null : <CreateButton withIcon />}</div>
       <div className={css(bodyBlockStyles({ mobileScreen }))}>
         <div className={css(bodyWrapperStyles)}>
           <Timeline colleagueUuid={colleagueUuid} />
