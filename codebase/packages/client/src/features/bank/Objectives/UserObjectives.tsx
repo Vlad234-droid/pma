@@ -66,10 +66,11 @@ const UserObjectives: FC = () => {
     meta: { loading, loaded },
   } = useObjectivesData(uuid as string);
 
-  const prioritiesWaitingForApproval = priorities?.some(
-    (priority) =>
-      priority?.status === Status.WAITING_FOR_COMPLETION || priority?.status === Status.WAITING_FOR_APPROVAL,
-  );
+  const prioritiesWaitingForApproval =
+    priorities.filter(
+      (priority) =>
+        priority.status === Status.WAITING_FOR_APPROVAL || priority.status === Status.WAITING_FOR_COMPLETION,
+    ).length > 1;
 
   const handleUpdateReviews = (action: ReviewAction, currentStatus: Status, filterReviewUuid?: string) => {
     setSuccessModal({ reviewAction: action, isBulkUpdate: !filterReviewUuid, shouldShowModal: true });
