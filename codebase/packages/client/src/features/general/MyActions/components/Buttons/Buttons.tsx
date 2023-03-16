@@ -127,7 +127,13 @@ const Buttons: FC<Props> = ({ code, cycleUuid, onUpdate, isDisabled, status, rev
         {isOpenDeclinePopup && (
           <DeclineModal onSave={handleDecline} onClose={() => toggleOpenDeclinePopup(false)} code={code} />
         )}
-        {isOpenApprovePopup && <ApproveModal onSave={handleApprove} onClose={() => toggleOpenApprovePopup(false)} />}
+        {isOpenApprovePopup && (
+          <ApproveModal
+            approveKey={Status.WAITING_FOR_APPROVAL === status ? 'approve' : 'complete'}
+            onSave={handleApprove}
+            onClose={() => toggleOpenApprovePopup(false)}
+          />
+        )}
       </div>
     </div>
   );
