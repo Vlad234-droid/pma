@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import React, { FC, memo, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Button, Rule, useStyle } from '@pma/dex-wrapper';
@@ -10,6 +10,7 @@ import {
   getReviewSchema,
   getTimelineByCodeSelector,
   isReviewsNumbersInStatus,
+  userPerformanceCyclesSelector,
 } from '@pma/store';
 
 import { IconButton } from 'components/IconButton';
@@ -19,6 +20,7 @@ import { USER } from 'config/constants';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import { REVIEW_MODIFICATION_MODE, reviewModificationMode } from '../../utils';
+import { filterByDate } from 'utils';
 
 export type Props = {
   withIcon?: boolean;
@@ -28,8 +30,11 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const navigate = useNavigate();
+
+  const [cycleStatus, setCycleStatus] = useState<Status | null>(null);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
+  const cycles = useSelector(userPerformanceCyclesSelector);
 
   const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const { markup = { max: 0, min: 0 } } = schema;
@@ -43,7 +48,21 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
   const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const modificationMode = reviewModificationMode(countReviews, objectiveSchema);
 
+  useEffect(() => {
+    if (currentCycle !== 'CURRENT') {
+      setCycleStatus(cycles?.find(({ uuid }) => currentCycle === uuid)?.status);
+    } else {
+      const startedCycle =
+        cycles
+          .filter(({ status }) => status === Status.STARTED)
+          .sort(({ endTime }, { endTime: nextEndTime }) => filterByDate(endTime, nextEndTime))[0] || {};
+      setCycleStatus(cycles?.find(({ uuid }) => uuid === startedCycle?.uuid)?.status);
+    }
+  }, [currentCycle]);
+
   const isAvailable =
+    cycleStatus !== Status.FINISHED &&
+    cycleStatus !== Status.COMPLETED &&
     (reviewsMinNumbersInStatusApproved ||
       timelineObjective?.status === Status.DRAFT ||
       originObjectives?.length === 0) &&
