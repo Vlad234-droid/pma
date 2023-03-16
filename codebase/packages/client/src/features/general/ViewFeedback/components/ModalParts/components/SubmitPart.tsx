@@ -7,14 +7,11 @@ import { inDayRange } from 'utils/date';
 import useSubmittedCompletedNotes from '../../..//hooks/useSubmittedCompletedNotes';
 import DraftList from '../../DraftList';
 import { defaultSerializer } from '../../DraftItem';
-import { Plug } from '../../../../../../components/Plug';
-import { useTranslation } from 'components/Translation';
 
 export const WRAPPER = 'part-wrapper';
 
 const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, searchDate, onChange }) => {
   const { css } = useStyle();
-  const { t } = useTranslation();
   const [selected, setSelected] = useState<string[]>([]);
 
   const filterFn = (item) => {
@@ -51,13 +48,7 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, searchDate, onChange 
     <div data-test-id={WRAPPER}>
       <div className={css({ height: '2px', background: '#E5E5E5' })} />
       <div className={css({ marginTop: '16px' })}>
-        <DraftList
-          items={submittedCompletedNotes}
-          downloadable={false}
-          selectable
-          onChange={setSelected as any}
-          plugElement={<Plug text={t('no_feedback_records_to_be_displayed', 'No feedback records to be displayed.')} />}
-        />
+        <DraftList items={submittedCompletedNotes} downloadable={false} selectable onChange={setSelected as any} />
       </div>
     </div>
   );

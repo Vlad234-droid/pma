@@ -7,6 +7,8 @@ import Spinner from 'components/Spinner';
 // eslint-disable-next-line import/no-named-as-default
 import DraftItem, { DraftItem as DraftItemType } from '../DraftItem';
 import { Checkbox } from 'components/Form';
+import { Plug } from 'components/Plug';
+import { useTranslation } from 'components/Translation';
 
 export const WRAPPER = 'list-wrapper';
 
@@ -14,23 +16,25 @@ type Selectable = Record<string, boolean>;
 
 type Props = {
   items: DraftItemType[];
-  plugElement: JSX.Element;
+
   selectable?: boolean;
   downloadable?: boolean;
   uniqueSelect?: boolean;
   uncheck?: boolean;
   onChange?: (items: string[]) => void;
+  plugElement?: JSX.Element;
 };
 
 const DraftList: FC<Props> = ({
   items = [],
-  plugElement,
   selectable = false,
   downloadable = true,
   uniqueSelect = false,
   uncheck = false,
   onChange,
+  plugElement,
 }) => {
+  const { t } = useTranslation();
   const { loaded } = useSelector(getLoadedStateSelector);
 
   const [selected, setSelected] = useState<Selectable>({});
@@ -85,7 +89,9 @@ const DraftList: FC<Props> = ({
               <DraftItem item={item} downloadable={downloadable} />
             </div>
           ))
-        : plugElement}
+        : plugElement || (
+            <Plug text={t('no_feedback_records_to_be_displayed', 'No feedback records to be displayed.')} />
+          )}
     </div>
   );
 };
