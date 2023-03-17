@@ -47,7 +47,7 @@ const itemSettingsBorderStyle: Rule = ({ theme }) => ({
   ':before': {
     position: 'absolute',
     width: '100%',
-    content: '',
+    content: "''",
     left: 20,
     top: '-2px',
     height: '2px',
