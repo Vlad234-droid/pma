@@ -20,9 +20,8 @@ export const BurgerBottom = () => {
 const menuDrawerSettingsStyle: Rule = ({ theme }) => ({
   background: theme.colors.white,
   height: '100%',
-  padding: '6px 0 0 0',
 
-  '> *:first-child': {
-    borderTop: 'unset',
+  '> *:first-child:before': {
+    display: 'none',
   },
 });
