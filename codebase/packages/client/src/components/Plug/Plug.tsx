@@ -13,9 +13,10 @@ type PlugProps = {
   graphic?: Graphics;
   customStyle?: Styles | CSSProperties | Rule | {};
   testId?: string;
+  title?: string;
 };
 
-export const Plug: FC<PlugProps> = ({ text, customStyle = {}, closable = false, graphic = 'information' }) => {
+export const Plug: FC<PlugProps> = ({ text, customStyle = {}, closable = false, graphic = 'information', title }) => {
   return (
     <TileWrapper
       customStyle={{
@@ -33,6 +34,7 @@ export const Plug: FC<PlugProps> = ({ text, customStyle = {}, closable = false, 
         customStyle={{
           background: theme.colors.tescoLightGray,
         }}
+        title={title}
       />
     </TileWrapper>
   );

@@ -16,11 +16,13 @@ type Selectable = Record<string, boolean>;
 
 type Props = {
   items: DraftItemType[];
+
   selectable?: boolean;
   downloadable?: boolean;
   uniqueSelect?: boolean;
   uncheck?: boolean;
   onChange?: (items: string[]) => void;
+  plugElement?: JSX.Element;
 };
 
 const DraftList: FC<Props> = ({
@@ -30,6 +32,7 @@ const DraftList: FC<Props> = ({
   uniqueSelect = false,
   uncheck = false,
   onChange,
+  plugElement,
 }) => {
   const { t } = useTranslation();
   const { loaded } = useSelector(getLoadedStateSelector);
@@ -68,31 +71,30 @@ const DraftList: FC<Props> = ({
 
   return (
     <div className={css(wrapperRule)} data-test-id={WRAPPER}>
-      {loaded && items.length && Object.keys(selected).length ? (
-        items.map((item) => (
-          <div key={item.uuid} className={css(itemsWrapperRule)}>
-            {selectable && (
-              <div className={css(checkBoxRule)} data-test-id='checkboxes'>
-                <Checkbox
-                  id='selectAll'
-                  name={item.uuid}
-                  onChange={() => setSelected((selected) => ({ ...selected, [item.uuid]: !selected[item.uuid] }))}
-                  checked={selected[item.uuid]}
-                  disabled={canSelect(item.uuid)}
-                  indeterminate={false}
-                />
-              </div>
-            )}
-            <DraftItem item={item} downloadable={downloadable} />
-          </div>
-        ))
-      ) : (
-        <Plug text={t('no_feedback_records_to_be_displayed', 'No feedback records to be displayed.')} />
-      )}
+      {loaded && items.length && Object.keys(selected).length
+        ? items.map((item) => (
+            <div key={item.uuid} className={css(itemsWrapperRule)}>
+              {selectable && (
+                <div className={css(checkBoxRule)} data-test-id='checkboxes'>
+                  <Checkbox
+                    id='selectAll'
+                    name={item.uuid}
+                    onChange={() => setSelected((selected) => ({ ...selected, [item.uuid]: !selected[item.uuid] }))}
+                    checked={selected[item.uuid]}
+                    disabled={canSelect(item.uuid)}
+                    indeterminate={false}
+                  />
+                </div>
+              )}
+              <DraftItem item={item} downloadable={downloadable} />
+            </div>
+          ))
+        : plugElement || (
+            <Plug text={t('no_feedback_records_to_be_displayed', 'No feedback records to be displayed.')} />
+          )}
     </div>
   );
 };
-
 const wrapperRule: Rule = {
   flex: '3 1 676px',
   display: 'flex',
