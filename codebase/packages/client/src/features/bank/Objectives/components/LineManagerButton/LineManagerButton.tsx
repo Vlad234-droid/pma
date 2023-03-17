@@ -40,7 +40,12 @@ export const LineManagerButton: FC<Props> = ({ status, uuid, number, onAction, i
           styles={iconButtonStyles({ disabled: false })}
           iconSize={16}
           buttonName={t('amend', 'Amend')}
-          confirmationTitle={isBulkUpdate ? 'Ammends to priorities' : 'Amends to priority'}
+          confirmationTitle={t(
+            isBulkUpdate
+              ? 'LineManagerButton_amend_confirmation_title_plural'
+              : 'LineManagerButton_amend_confirmation_title_singular',
+            { ns: 'bank' },
+          )}
           confirmationDescription={
             isBulkUpdate
               ? t('LineManagerButton_amend_confirmation_description_plural', { ns: 'bank' })
@@ -60,7 +65,12 @@ export const LineManagerButton: FC<Props> = ({ status, uuid, number, onAction, i
           iconSize={16}
           iconProps={{ invertColors: true }}
           buttonName={t('agree', 'Agree')}
-          confirmationTitle={isBulkUpdate ? 'Agree to priorities' : 'Agree to priority'}
+          confirmationTitle={t(
+            isBulkUpdate
+              ? 'LineManagerButton_agree_confirmation_title_plural'
+              : 'LineManagerButton_agree_confirmation_title_singular',
+            { ns: 'bank' },
+          )}
           confirmationDescription={
             isBulkUpdate
               ? t('LineManagerButton_agree_confirmation_description_plural', { ns: 'bank' })

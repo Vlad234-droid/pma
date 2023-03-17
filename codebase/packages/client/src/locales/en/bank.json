@@ -56,14 +56,18 @@
   "system_guidance_and_faqs_title": "System guidance and FAQs",
   "everyday_feedback_lets_you_share": "Everyday feedback lets you share your feedback with your colleagues across any work level and function in real time. This type of feedback lets a colleague know what they're doing great at, the opportunities they have to be even better and how to make improvements continuously, meaning they can take the feedback onboard and start to make changes straight away. It can and should relate to any part of their full contribution: someone's personal development, their impact on others, their day job or quarterly priorities. Colleagues have the option to request Everyday feedback, focusing on any area of interest.",
   "hint_review_7": "Make sure what you write properly captures the conversation you and your manager had – remember they will be sent this for their agreement.",
-  "UserObjectives_priorities_agree_plural_desc": "Done! You have agreed your colleague priorities",
-  "UserObjectives_priorities_amend_plural_desc": "Done! You've requested the form to be amended as it doesn’t reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.",
-  "UserObjectives_priorities_agree_singular_desc": "You have agreed your colleagues priority.",
+  "UserObjectives_priorities_agree_plural_desc": "You have agreed your colleague priorities.",
+  "UserObjectives_priorities_amend_plural_desc": "You've requested the form to be amended as it doesn’t reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.",
+  "UserObjectives_priorities_agree_singular_desc": "You have agreed your colleague priority.",
   "UserObjectives_priorities_amend_singular_desc": "You have asked for quarterly priority to be reviewed and will be in touch with colleague soon to discuss their reasons.",
   "LineManagerButton_priorities_agree_or_amend_singular_confirmation": "Agree or request amend to this priority {{number}}",
   "LineManagerButton_priorities_agree_or_amend_plural_confirmation": "Agree or request amend to all colleague priorities",
   "LineManagerButton_amend_confirmation_description_plural": "You are requesting your colleague to make amends to their priorities. This is what your colleague will receive “Your manager has reviewed your priority but wants to discuss this further, they’ll be in contact shortly“.",
   "LineManagerButton_amend_confirmation_description_singular": "You are requesting your colleague to make amends to their priority. This is what your colleague will receive “Your manager has reviewed your priority but wants to discuss this further, they’ll be in contact shortly”.",
   "LineManagerButton_agree_confirmation_description_singular": "Please ensure you have talked to your colleague prior to agreeing this priority.",
-  "LineManagerButton_agree_confirmation_description_plural": "Please ensure you have talked to your colleague prior to agreeing all these priorities."
+  "LineManagerButton_agree_confirmation_description_plural": "Please ensure you have talked to your colleague prior to agreeing all these priorities.",
+  "LineManagerButton_amend_confirmation_title_plural": "Amends to priorities",
+  "LineManagerButton_amend_confirmation_title_singular": "Amends to priority",
+  "LineManagerButton_agree_confirmation_title_plural": "Agree to priorities",
+  "LineManagerButton_agree_confirmation_title_singular": "Agree to priority"
 }
