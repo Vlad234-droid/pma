@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router';
-import { Rule, CreateRule, Styles, useStyle } from '@pma/dex-wrapper';
+import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { Page } from 'pages';
 import { Status } from 'config/enum';
 import { paramsReplacer, Tenant } from 'utils';
@@ -43,7 +43,9 @@ const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives, handleCom
           const sentences = description.split('. ');
           const firstSentence = sentences.shift();
           const restSentences = sentences.join('. ');
-          const isEnabled = [Status.DRAFT, Status.DECLINED, Status.APPROVED].includes(status);
+          const isEnabled = [Status.DRAFT, Status.DECLINED, Status.APPROVED, Status.REQUESTED_TO_AMEND].includes(
+            status,
+          );
           const isRemovable = status === Status.DRAFT && objectives.length > 1;
 
           return (

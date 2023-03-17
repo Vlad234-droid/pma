@@ -72,26 +72,57 @@ const UserObjectives: FC = () => {
         priority.status === Status.WAITING_FOR_APPROVAL || priority.status === Status.WAITING_FOR_COMPLETION,
     ).length > 1;
 
-  const handleUpdateReviews = (action: ReviewAction, currentStatus: Status, filterReviewUuid?: string) => {
-    setSuccessModal({ reviewAction: action, isBulkUpdate: !filterReviewUuid, shouldShowModal: true });
-    dispatch(
-      ReviewsActions.updateReviewStatus({
-        updateParams: {},
-        pathParams: {
-          colleagueUuid: uuid!,
-          approverUuid: colleagueUuid,
-          cycleUuid: cycle.uuid,
-          code,
-          status: statusMap[action][currentStatus],
-        },
-        data: {
-          colleagueUuid: uuid,
-          reviews: filterReviewUuid
-            ? priorities.filter((priority) => priority.uuid === filterReviewUuid)
-            : priorities.filter((priority) => priority.status === Status.WAITING_FOR_APPROVAL),
-        },
-      }),
-    );
+  const handleUpdateReviews = ({
+    action,
+    currentStatus,
+    reviewUuid,
+  }: {
+    action: ReviewAction;
+    currentStatus?: Status;
+    reviewUuid?: string;
+  }) => {
+    const isBulkUpdate = !reviewUuid;
+
+    if (isBulkUpdate) {
+      for (const item of priorities?.filter((priority) =>
+        [Status.WAITING_FOR_COMPLETION, Status.WAITING_FOR_APPROVAL].includes(priority?.status),
+      )) {
+        dispatch(
+          ReviewsActions.updateReviewStatus({
+            updateParams: {},
+            pathParams: {
+              colleagueUuid: uuid!,
+              approverUuid: colleagueUuid,
+              cycleUuid: cycle.uuid,
+              code,
+              status: statusMap[action][item?.status],
+            },
+            data: {
+              colleagueUuid: uuid,
+              reviews: priorities.filter((priority) => priority.status === item?.status),
+            },
+          }),
+        );
+      }
+    } else {
+      dispatch(
+        ReviewsActions.updateReviewStatus({
+          updateParams: {},
+          pathParams: {
+            colleagueUuid: uuid!,
+            approverUuid: colleagueUuid,
+            cycleUuid: cycle.uuid,
+            code,
+            status: statusMap[action][currentStatus!],
+          },
+          data: {
+            colleagueUuid: uuid,
+            reviews: priorities.filter((priority) => priority.uuid === reviewUuid),
+          },
+        }),
+      );
+    }
+    setSuccessModal({ reviewAction: action, isBulkUpdate, shouldShowModal: true });
   };
 
   if (successModal?.shouldShowModal) {
@@ -140,7 +171,7 @@ const UserObjectives: FC = () => {
           }}
         >
           <ExternalAccordion objectives={objectives}>
-            {(props) => <LineManagerButton {...props} onAction={handleUpdateReviews} />}
+            {({ status, uuid }) => <LineManagerButton status={status} uuid={uuid} onAction={handleUpdateReviews} />}
           </ExternalAccordion>
           {prioritiesWaitingForApproval && <LineManagerButton onAction={handleUpdateReviews} isBulkUpdate={true} />}
         </Section>
@@ -149,9 +180,9 @@ const UserObjectives: FC = () => {
   );
 };
 
-export default UserObjectives;
-
 const tileStyles: Rule = {
   display: 'flex',
   alignItems: 'center',
 };
+
+export default UserObjectives;

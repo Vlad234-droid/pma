@@ -122,8 +122,13 @@ export const BaseHeader: FC<HeaderProps> = ({ children, headingLevel, disabled, 
 };
 
 const Header: FC<
-  Omit<HeaderProps, 'children'> & { title: string; status?: Status; component?: React.ReactNode | null }
-> = ({ title, component, children, ...props }) => {
+  Omit<HeaderProps, 'children'> & {
+    title: string;
+    status?: Status;
+    component?: React.ReactNode | null;
+    isExpandable?: boolean;
+  }
+> = ({ title, component, children, isExpandable = true, ...props }) => {
   const { css } = useStyle();
 
   return (
@@ -142,7 +147,7 @@ const Header: FC<
               <h3 className={css(accordionHeaderTitleStyles)}>{title}</h3>
               {component}
             </div>
-            <ExpandButton extraStyles={marginRightStyles} />
+            {isExpandable && <ExpandButton extraStyles={marginRightStyles} />}
           </div>
           {children && <div>{children}</div>}
         </div>

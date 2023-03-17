@@ -6,7 +6,15 @@ import ButtonWithConfirmation from 'components/ButtonWithConfirmation';
 import { ReviewAction } from '../../type';
 
 export type Props = {
-  onAction: (action: ReviewAction, status: Status, uuid?: string, number?: number) => void;
+  onAction: ({
+    action,
+    currentStatus,
+    reviewUuid,
+  }: {
+    action: ReviewAction;
+    currentStatus?: Status;
+    reviewUuid?: string;
+  }) => void;
   status?: Status;
   number?: number;
   uuid?: string;
@@ -33,8 +41,8 @@ export const LineManagerButton: FC<Props> = ({ status, uuid, number, onAction, i
           withIcon
           onSave={() =>
             status
-              ? onAction(ReviewAction.DECLINE, status, uuid)
-              : onAction(ReviewAction.DECLINE, Status.WAITING_FOR_APPROVAL)
+              ? onAction({ action: ReviewAction.DECLINE, currentStatus: status, reviewUuid: uuid })
+              : onAction({ action: ReviewAction.DECLINE })
           }
           graphic={'cancel'}
           styles={iconButtonStyles({ disabled: false })}
@@ -57,8 +65,8 @@ export const LineManagerButton: FC<Props> = ({ status, uuid, number, onAction, i
           withIcon
           onSave={() =>
             status
-              ? onAction(ReviewAction.APPROVE, status, uuid)
-              : onAction(ReviewAction.APPROVE, Status.WAITING_FOR_APPROVAL)
+              ? onAction({ action: ReviewAction.APPROVE, currentStatus: status, reviewUuid: uuid })
+              : onAction({ action: ReviewAction.APPROVE })
           }
           graphic={'check'}
           styles={iconButtonStyles({ disabled: false, invertColors: true })}

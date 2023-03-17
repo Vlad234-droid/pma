@@ -1,12 +1,9 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { colleagueUUIDSelector, ReviewsActions } from '@pma/store';
 import { Employee, ReviewType, Status } from 'config/types';
 import { getEmployeeTimeline } from 'features/general/MyActions/utils';
 import { useTranslation } from 'components/Translation';
 import Approval from 'components/Approval';
 import { useTenant } from 'features/general/Permission';
-import useDispatch from 'hooks/useDispatch';
 import { ApproveModal, DeclineModal, SavingModal } from '../Modal';
 import { useSuccessModalContext } from '../../context/successModalContext';
 import { Tenant } from 'utils';
@@ -30,7 +27,7 @@ const statusMap: Record<Action, Record<Status.WAITING_FOR_APPROVAL | Status.WAIT
   },
   [Action.DECLINE]: {
     [Status.WAITING_FOR_APPROVAL]: Status.DECLINED,
-    [Status.WAITING_FOR_COMPLETION]: Status.APPROVED,
+    [Status.WAITING_FOR_COMPLETION]: Status.REQUESTED_TO_AMEND,
   },
 };
 
@@ -45,7 +42,6 @@ const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave, onUpdate }) =>
   const [currentReview, setCurrentReview] = useState<Employee | null>(null);
   const currentTimeline = currentReview ? getEmployeeTimeline(currentReview) : [];
 
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [processing, setProcessing] = useState<boolean>(false);
 
   useEffect(() => {
