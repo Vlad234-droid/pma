@@ -28,7 +28,7 @@ import { Page } from 'pages';
 import { buildPath } from 'features/general/Routes';
 import debounce from 'lodash.debounce';
 import { buildSearchFeedbacksQuery, getSortString } from 'utils';
-import { Plug } from '../../../../../components/Plug';
+import { Plug } from 'components/Plug';
 
 export const WRAPPER = 'wrapper';
 

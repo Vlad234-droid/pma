@@ -4,7 +4,7 @@ import { SubmitPartProps } from './type';
 import { FeedbackStatus } from 'config/enum';
 import { inDayRange } from 'utils/date';
 
-import useSubmittedCompletedNotes from '../../..//hooks/useSubmittedCompletedNotes';
+import useSubmittedCompletedNotes from '../../../hooks/useSubmittedCompletedNotes';
 import DraftList from '../../DraftList';
 import { defaultSerializer } from '../../DraftItem';
 
