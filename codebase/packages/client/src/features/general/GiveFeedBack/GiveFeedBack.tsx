@@ -71,7 +71,6 @@ const GiveFeedBack: FC = () => {
   const handleBtnClick = () => navigate(buildPath(paramsReplacer(Page.GIVE_NEW_FEEDBACK, { ':uuid': 'new' })));
 
   const { feedbackList, hasSomeFeedbacks } = useSelector(getGiveFeedbacksSelector(status)) || [];
-
   const plugElement = useMemo(() => {
     if (!hasSomeFeedbacks) {
       return (
@@ -96,7 +95,7 @@ const GiveFeedBack: FC = () => {
         />
       );
     }
-  }, [hasSomeFeedbacks]);
+  }, [hasSomeFeedbacks, status]);
 
   return (
     <div>
