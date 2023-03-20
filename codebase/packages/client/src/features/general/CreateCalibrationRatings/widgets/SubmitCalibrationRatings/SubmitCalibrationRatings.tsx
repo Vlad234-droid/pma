@@ -5,20 +5,21 @@ import {
   CalibrationReviewAction,
   calibrationReviewDataSelector,
   calibrationReviewMetaSelector,
-  isAnniversaryTimelineType,
-  getCalibrationPointSelector,
   colleagueCurrentCycleSelector,
+  getCalibrationPointSelector,
+  isAnniversaryTimelineType,
 } from '@pma/store';
 
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
-import { paramsReplacer, isDateFromISOAfterNow } from 'utils';
+import { isDateFromISOAfterNow, paramsReplacer } from 'utils';
 import BaseWidget from 'components/BaseWidget';
 import Spinner from 'components/Spinner';
 import { useTranslation } from 'components/Translation';
 import useDispatch from 'hooks/useDispatch';
 import { Status } from 'config/enum';
 import { role, usePermission } from 'features/general/Permission';
+import { useCurrentCycle } from 'hooks/useCurrentCycle';
 
 type Props = {
   userUuid: string;
@@ -31,6 +32,7 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   const { pathname, state } = useLocation();
   const { backPath, filters } = (state as any) || {};
   const isLineManager = usePermission([role.LINE_MANAGER]);
+  const { status: cycleStatus } = useCurrentCycle(userUuid);
 
   const calibrationReview = useSelector(calibrationReviewDataSelector(userUuid)) || null;
   const currentCycle = useSelector(colleagueCurrentCycleSelector(userUuid));
@@ -45,15 +47,19 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   const { loading } = useSelector(calibrationReviewMetaSelector);
 
   const { uuid = 'new', status: reviewStatus } = calibrationReview || {};
+
   const statisticsKeys = Object.keys(statistics);
   const hasStatistics = statisticsKeys.length > 0;
   const status = hasStatistics ? statisticsKeys[0] : reviewStatus;
   const isActivePoint = TLPStatus !== Status.NOT_STARTED && isDateFromISOAfterNow(startTime);
   const isFinished = isDateFromISOAfterNow(endTime);
 
+  const TLPOrCycleCompleted = TLPStatus === Status.COMPLETED || cycleStatus === Status.COMPLETED;
+
   const isSubmitting = uuid === 'new' || status === Status.DRAFT;
   const isEditing = !isSubmitting && status === Status.WAITING_FOR_APPROVAL;
   const isViewing =
+    TLPOrCycleCompleted ||
     reviewStatus === Status.APPROVED ||
     !isLineManager ||
     isFinished ||
