@@ -20,9 +20,10 @@ import { buildPath } from '../../../Routes';
 type Props = {
   list: Array<any>;
   canEdit: boolean;
+  plugElement?: JSX.Element;
 };
 
-const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
+const FeedbackBlock: FC<Props> = ({ list, canEdit, plugElement }) => {
   const { loaded } = useSelector(getLoadedStateSelector);
 
   const { css } = useStyle();
@@ -31,7 +32,9 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
 
   if (!loaded) return <Spinner />;
   if (loaded && !list.length)
-    return <Plug text={t('no_feedback_records_to_be_displayed', 'No feedback records to be displayed.')} />;
+    return (
+      plugElement || <Plug text={t('no_feedback_records_to_be_displayed', 'No feedback records to be displayed.')} />
+    );
 
   return (
     <>
