@@ -71,7 +71,7 @@ const GiveFeedBack: FC = () => {
   const handleBtnClick = () => navigate(buildPath(paramsReplacer(Page.GIVE_NEW_FEEDBACK, { ':uuid': 'new' })));
 
   const { feedbackList, hasSomeFeedbacks } = useSelector(getGiveFeedbacksSelector(status)) || [];
-  const plugElement = useMemo(() => {
+  const getPlugElement = () => {
     if (!hasSomeFeedbacks) {
       return (
         <Plug
@@ -95,7 +95,7 @@ const GiveFeedBack: FC = () => {
         />
       );
     }
-  }, [hasSomeFeedbacks, status]);
+  };
 
   return (
     <div>
@@ -129,7 +129,7 @@ const GiveFeedBack: FC = () => {
       </div>
       <div>
         <div className={css(draftsStyle)} data-test-id={LIST_WRAPPER}>
-          <FeedbackBlock list={feedbackList} canEdit={status === FeedbackStatus.DRAFT} plugElement={plugElement} />
+          <FeedbackBlock list={feedbackList} canEdit={status === FeedbackStatus.DRAFT} plugElement={getPlugElement()} />
         </div>
       </div>
     </div>
