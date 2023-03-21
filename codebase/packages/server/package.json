@@ -7,7 +7,7 @@
     "run:dev": "cross-env NODE_PORT=4000 env-cmd --no-override -f .env ts-node-dev -r tsconfig-paths/register --respawn --inspect --no-notify --files src/index.ts",
     "run:prod": "env-cmd --silent --no-override --fallback -f .env.${BUILD_ENV} ts-node --transpile-only -- src/index.ts",
     "run:debug": "env-cmd --silent --no-override --fallback -f .env.${BUILD_ENV} node -r source-map-support/register --inspect build/index.js",
-    "start:prod": "node build/index.js",
+    "start:prod": "node -r newrelic build/index.js",
     "build:prod": "tsc -p .",
     "clean": "rimraf build",
     "clean:all": "yarn clean && rimraf node_modules"
@@ -34,7 +34,8 @@
     "redux-first-router": "^2.1.5",
     "type-is": "~1.6.18",
     "yn": "^4.0.0",
-    "yup": "^0.32.9"
+    "yup": "^0.32.9",
+    "newrelic": "^9.13.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
