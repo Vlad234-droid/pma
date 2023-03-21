@@ -75,17 +75,17 @@ const RespondFeedback: FC = () => {
     if (!hasSomeFeedbacks) {
       return (
         <Plug
-          title={t('no_respond_feedbacks_title', 'You have no feedback requests to view.')}
-          text={t('no_respond_feedbacks_text', 'When you receive a feedback request, you will see it here.')}
+          title={t('no_feedback_requests_title', 'You have no feedback requests to view.')}
+          text={t('no_feedback_requests_text', 'When you receive a feedback request, you will see it here.')}
         />
       );
     }
     if (status === FeedbackStatus.PENDING) {
       return (
         <Plug
-          title={t('no_respond_pending_feedbacks_title', 'You have no pending feedback requests.')}
+          title={t('no_pending_feedback_requests_title', 'You have no pending feedback requests.')}
           text={t(
-            'no_respond_pending_feedbacks_text',
+            'no_pending_feedback_requests_text',
             `To see requests for feedback that you have already responded to, please switch to the 'completed' tab`,
           )}
         />
@@ -93,9 +93,9 @@ const RespondFeedback: FC = () => {
     } else {
       return (
         <Plug
-          title={t('no_respond_completed_feedbacks_title', 'You have no completed feedback requests.')}
+          title={t('no_completed_feedback_requests_title', 'You have no completed feedback requests.')}
           text={t(
-            'no_respond_completed_feedbacks_text',
+            'no_completed_feedback_requests_text',
             `To see feedback requests you have not responded to, please switch to the 'pending' ta`,
           )}
         />
