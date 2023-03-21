@@ -51,7 +51,7 @@ export const getGiveFeedbacksSelector = (status) =>
       feedbacks: { give },
     } = feedback;
 
-    return give?.filter((item) => item.status === status) ?? [];
+    return { feedbackList: give?.filter((item) => item.status === status) ?? [], hasSomeFeedbacks: !!give.length };
   });
 
 export const getViewFeedbacksSelector = (read, defaultSerializer) =>
