@@ -24,21 +24,21 @@ const FeedbackInfo: FC<Props> = ({ onClickMore }) => {
   const { css } = useStyle();
   const { uuid } = useParams<{ uuid: string }>();
   const tenant = useTenant();
-  const pendingNotes = useSelector(getRespondedFeedbacksSelector(FeedbackStatus.PENDING)) || [];
+  const { feedbackList } = useSelector(getRespondedFeedbacksSelector(FeedbackStatus.PENDING)) || [];
   const { feedbackItems, targetColleagueProfile, targetType, targetId } =
     useSelector(feedbackByUuidSelector(uuid)) || {};
   const review = useSelector(getReviewByUuidS) || [];
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (pendingNotes.length) {
-      for (const item of pendingNotes) {
+    if (feedbackList.length) {
+      for (const item of feedbackList) {
         if (item.targetId && item.targetId !== Tesco.TescoBank) {
           dispatch(ReviewsActions.getReviewByUuid({ uuid: item.targetId }));
         }
       }
     }
-  }, [pendingNotes.length]);
+  }, [feedbackList.length]);
 
   const toneOfVoice =
     tenant === Tenant.GENERAL

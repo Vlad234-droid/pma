@@ -72,7 +72,10 @@ export const getRespondedFeedbacksSelector = (status) =>
       feedbacks: { respond },
     } = feedback;
 
-    return respond?.filter((item) => item.status === status) ?? [];
+    return {
+      feedbackList: respond?.filter((item) => item.status === status) ?? [],
+      hasSomeFeedbacks: !!respond.length,
+    };
   });
 
 export const getLoadedStateSelector = createSelector(feedbackSelector, ({ feedbacks: { meta } }) => meta);

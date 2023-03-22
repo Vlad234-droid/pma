@@ -21,7 +21,7 @@ import { buildPath } from 'features/general/Routes';
 
 export const TEST_ID = 'expand_button';
 
-const DraftItem: FC<DraftItemProps> = ({ status, list, canEdit }) => {
+const DraftItem: FC<DraftItemProps> = ({ status, list, canEdit, plugElement }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -43,7 +43,9 @@ const DraftItem: FC<DraftItemProps> = ({ status, list, canEdit }) => {
   if (!loaded) return null;
 
   if (!list.length)
-    return <Plug text={t('no_feedback_records_to_be_displayed', 'No feedback records to be displayed.')} />;
+    return (
+      plugElement || <Plug text={t('no_feedback_records_to_be_displayed', 'No feedback records to be displayed.')} />
+    );
 
   return (
     <>

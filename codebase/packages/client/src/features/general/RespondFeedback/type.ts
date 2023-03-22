@@ -90,4 +90,5 @@ export type DraftItemProps = {
   status: FeedbackStatus;
   list: any;
   canEdit: boolean;
+  plugElement?: JSX.Element;
 };
