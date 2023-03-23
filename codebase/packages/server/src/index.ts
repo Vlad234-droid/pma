@@ -132,7 +132,7 @@ const { environment, apiEnv, port, applicationContextPath, splunkEnabled, splunk
     config.camundaServerUrl() && router.use('/camunda', camundaProxyMiddleware(config));
     config.swaggerServerUrl() && router.use(swaggerProxyMiddleware(config));
 
-    router.use(healthCheckMiddleware(config));
+    router.use('/health-check', healthCheckMiddleware(config));
 
     const myInboxMiddleware = await myInboxConfig(config);
     myInboxMiddleware && router.use(myInboxMiddleware);
