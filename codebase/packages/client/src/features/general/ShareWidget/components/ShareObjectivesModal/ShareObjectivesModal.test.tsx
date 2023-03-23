@@ -34,8 +34,8 @@ describe('<ShareObjectivesModal />', () => {
 
     expect(screen.getByText(/You have 1 shared objectives/)).toBeInTheDocument();
     expect(screen.getByText(/From Test Manager/)).toBeInTheDocument();
-    expect(screen.getByTestId('objective-list')).toBeInTheDocument();
-    expect(screen.getAllByTestId('objective-list').length).toEqual(1);
+    expect(screen.getByTestId('objective-accordion')).toBeInTheDocument();
+    expect(screen.getAllByTestId('objective-accordion').length).toEqual(1);
 
     fireEvent.click(screen.getByTestId('arrowleft'));
     expect(onClose).toBeCalled();
