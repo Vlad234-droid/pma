@@ -6,7 +6,7 @@ import ObjectivesList, {
   ObjectivesListProps,
 } from 'features/general/Objectives/components/ObjectivesList/ObjectivesList';
 import { useSelector } from 'react-redux';
-import { getAllSharedObjectives, getReviewSchema } from '@pma/store';
+import { getAllSharedObjectives, getReviewSchema, getSharedObjectivesFormElements } from '@pma/store';
 import { ReviewType } from 'config/enum';
 import { useTenant } from 'features/general/Permission';
 import { transformReviewsToObjectives } from 'features/general/Review';
@@ -23,9 +23,8 @@ export const ShareObjectivesModal: FC<Props> = ({ manager, onClose, description 
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const tenant = useTenant();
-  const { components = [] } = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const sharedObjectives: Review[] = useSelector(getAllSharedObjectives);
-  const formElements = components.filter((component) => component.type != 'text');
+  const formElements = useSelector(getSharedObjectivesFormElements);
   const objectives: ObjectivesListProps['objectives'] = transformReviewsToObjectives(
     sharedObjectives,
     formElements,

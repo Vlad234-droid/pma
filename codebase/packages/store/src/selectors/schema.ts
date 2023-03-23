@@ -113,6 +113,14 @@ export const getReviewSchema = (code?: string, withForms = true) =>
     return reviewMarkup;
   });
 
+export const getSharedObjectivesFormElements = createSelector(
+  getReviewSchema(ReviewType.OBJECTIVE, true),
+  (reviewSchema) => {
+    const components = reviewSchema?.components ?? [];
+    return components.filter((component) => component.type != 'text');
+  },
+);
+
 export const getExpressionListenersKeys =
   (code: string, withForms = true) =>
   (expressionValue: string) =>
