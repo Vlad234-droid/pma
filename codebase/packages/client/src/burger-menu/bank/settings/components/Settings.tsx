@@ -12,13 +12,10 @@ const List = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
   return (
-    <>
-      <div className={css(itemSettingsBorderStyle, { marginLeft: '20px' })} />
-      <Link to={buildPath(Page.SETTINGS)} className={css(itemSettingsStyle)}>
-        <Icon graphic={'settingsGear'} />
-        <span className={css(itemSettingsTextStyle)}>{t('settings', 'Settings')}</span>
-      </Link>
-    </>
+    <Link to={buildPath(Page.SETTINGS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+      <Icon graphic={'settingsGear'} />
+      <span className={css(itemSettingsTextStyle)}>{t('settings', 'Settings')}</span>
+    </Link>
   );
 };
 
@@ -45,7 +42,16 @@ const itemSettingsStyle: Rule = ({ theme }) => ({
 });
 
 const itemSettingsBorderStyle: Rule = ({ theme }) => ({
-  // @ts-ignore
-  backgroundColor: theme.colors.lightGray,
-  height: '2px',
+  position: 'relative',
+  marginTop: '2px',
+  ':before': {
+    position: 'absolute',
+    width: '100%',
+    content: "''",
+    left: 20,
+    top: '-2px',
+    height: '2px',
+    // @ts-ignore
+    backgroundColor: theme.colors.lightGray,
+  },
 });

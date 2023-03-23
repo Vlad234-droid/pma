@@ -43,8 +43,8 @@ const MyReview: FC<ReviewFormType> = ({ reviewType, onClose }) => {
   const { t } = useTranslation();
   const { uuid } = useParams<{ uuid: string }>();
   const { info } = useSelector(currentUserSelector);
-  const colleagueUuid = info.colleagueUUID;
   const isUserView = useSelector(uuidCompareSelector(uuid));
+  const colleagueUuid = uuid ?? info.colleagueUUID;
 
   const [successModal, setSuccessModal] = useState(false);
   const dispatch = useDispatch();

@@ -31,7 +31,7 @@ export const updateCalibrationReview = createAsyncAction(
 
 export const clearCalibrationReview = createAction('calibration/review-rating/CLEAR')<undefined>();
 
-export const changeCalibrationReviewMeta = createAction('calibration/review-rating/CLEAR')<
+export const changeCalibrationReviewMeta = createAction('calibration/review-rating/CHANGE')<
   Partial<typeof initialState.meta>
 >();
 

@@ -1,11 +1,11 @@
-import React, { FC, useState, useEffect, useCallback } from 'react';
-import { Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  FeedbackActions,
   colleagueUUIDSelector,
-  getRespondedFeedbacksSelector,
+  FeedbackActions,
   getLoadedStateSelector,
+  getRespondedFeedbacksSelector,
 } from '@pma/store';
 
 import { FilterModal } from '../Shared/components/FilterModal';
@@ -17,11 +17,14 @@ import Spinner from 'components/Spinner';
 import { initialState } from './config';
 
 import { buildSearchFeedbacksQuery, getSortString } from 'utils';
+import { Plug } from '../../../components/Plug';
+import { useTranslation } from '../../../components/Translation';
 
 export const RESPOND_FEEDBACK_CONTAINER = 'respond_feedback_container';
 
 const RespondFeedback: FC = () => {
   const { css, matchMedia } = useStyle();
+  const { t } = useTranslation();
   const medium = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const dispatch = useDispatch();
 
@@ -66,7 +69,39 @@ const RespondFeedback: FC = () => {
 
   const hasActiveFilter = Object.values(filterFeedbacks).some((f) => f);
 
-  const feedbackList = useSelector(getRespondedFeedbacksSelector(status)) || [];
+  const { feedbackList, hasSomeFeedbacks } = useSelector(getRespondedFeedbacksSelector(status)) || [];
+
+  const getPlugElement = () => {
+    if (!hasSomeFeedbacks) {
+      return (
+        <Plug
+          title={t('no_feedback_requests_title', 'You have no feedback requests to view.')}
+          text={t('no_feedback_requests_text', 'When you receive a feedback request, you will see it here.')}
+        />
+      );
+    }
+    if (status === FeedbackStatus.PENDING) {
+      return (
+        <Plug
+          title={t('no_pending_feedback_requests_title', 'You have no pending feedback requests.')}
+          text={t(
+            'no_pending_feedback_requests_text',
+            `To see requests for feedback that you have already responded to, please switch to the 'completed' tab`,
+          )}
+        />
+      );
+    } else {
+      return (
+        <Plug
+          title={t('no_completed_feedback_requests_title', 'You have no completed feedback requests.')}
+          text={t(
+            'no_completed_feedback_requests_text',
+            `To see feedback requests you have not responded to, please switch to the 'pending' ta`,
+          )}
+        />
+      );
+    }
+  };
 
   return (
     <>
@@ -104,7 +139,12 @@ const RespondFeedback: FC = () => {
           {!loaded ? (
             <Spinner />
           ) : (
-            <DraftItem status={status} list={feedbackList} canEdit={status === FeedbackStatus.PENDING} />
+            <DraftItem
+              status={status}
+              list={feedbackList}
+              canEdit={status === FeedbackStatus.PENDING}
+              plugElement={getPlugElement()}
+            />
           )}
         </div>
       </div>

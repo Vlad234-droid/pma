@@ -134,6 +134,7 @@ const ColleaguesRatings: FC<Props> = ({
                                   const reviewUuid = item?.review?.uuid as string;
                                   const cycleUuid = item?.pmCycle?.uuid as string;
                                   const pmCycleStatus = item?.pmCycle?.status;
+                                  const reviewStatus = item?.review?.status;
 
                                   const isDisabledByCycle =
                                     pmCycleStatus &&
@@ -142,10 +143,11 @@ const ColleaguesRatings: FC<Props> = ({
                                       pmCycleStatus === PMCycleStatusEnum.Completed);
 
                                   const isDisabledByReview =
-                                    title === Ratings.Unsubmitted.toLowerCase() &&
-                                    isPerform &&
-                                    lineManagerUuid !== userUuid &&
-                                    item?.review?.status === ReviewStatusEnum.Draft;
+                                    !reviewStatus ||
+                                    (title === Ratings.Unsubmitted.toLowerCase() &&
+                                      isPerform &&
+                                      lineManagerUuid !== userUuid &&
+                                      reviewStatus === ReviewStatusEnum.Draft);
 
                                   const discussWithPP = JSON.parse(
                                     item?.review?.properties?.discuss_with_pp ?? 'false',

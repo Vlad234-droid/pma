@@ -19,7 +19,7 @@ const Buttons: FC<ButtonsProps> = ({ onSubmit, onSaveAndExit, isValid, status, o
     <div className={css(containerStyle)}>
       <div className={css(wrapperStyle)}>
         <div className={css(buttonWrapperStyle({ mobileScreen }))}>
-          {status === Status.APPROVED ? (
+          {status && [Status.APPROVED, Status.DECLINED].includes(status) ? (
             <Button onPress={onClose} styles={[buttonWhiteStyle]}>
               <Trans i18nKey='close'>Close</Trans>
             </Button>

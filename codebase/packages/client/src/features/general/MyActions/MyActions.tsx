@@ -27,6 +27,7 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
+
   const isPending = status === ActionStatus.PENDING;
   const reviewStatuses = isPending
     ? [Status.WAITING_FOR_APPROVAL, Status.WAITING_FOR_COMPLETION]

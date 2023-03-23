@@ -41,7 +41,7 @@ const TITLES: Record<string, [string, string]> = {
 
 const statusMap: Record<Status.WAITING_FOR_APPROVAL | Status.WAITING_FOR_COMPLETION, (approve: boolean) => Status> = {
   [Status.WAITING_FOR_APPROVAL]: (approve) => (approve ? Status.APPROVED : Status.DECLINED),
-  [Status.WAITING_FOR_COMPLETION]: (approve) => (approve ? Status.COMPLETED : Status.APPROVED),
+  [Status.WAITING_FOR_COMPLETION]: (approve) => (approve ? Status.COMPLETED : Status.REQUESTED_TO_AMEND),
 };
 
 const Buttons: FC<Props> = ({ code, cycleUuid, onUpdate, isDisabled, status, reviewType, tlPointUuid }) => {
@@ -127,7 +127,13 @@ const Buttons: FC<Props> = ({ code, cycleUuid, onUpdate, isDisabled, status, rev
         {isOpenDeclinePopup && (
           <DeclineModal onSave={handleDecline} onClose={() => toggleOpenDeclinePopup(false)} code={code} />
         )}
-        {isOpenApprovePopup && <ApproveModal onSave={handleApprove} onClose={() => toggleOpenApprovePopup(false)} />}
+        {isOpenApprovePopup && (
+          <ApproveModal
+            approveKey={Status.WAITING_FOR_APPROVAL === status ? 'approve' : 'complete'}
+            onSave={handleApprove}
+            onClose={() => toggleOpenApprovePopup(false)}
+          />
+        )}
       </div>
     </div>
   );

@@ -55,6 +55,8 @@ const environmentParameters: Array<keyof NodeJS.ProcessEnv> = [
   'SPLUNK_ENABLED',
   'SPLUNK_SOURCETYPE',
   'SPLUNK_SOURCE',
+  //newrelic
+  'NEW_RELIC_LICENSE_KEY',
 ];
 
 /**
@@ -84,6 +86,7 @@ const optionalEnvironmentParameters = [
   'SPLUNK_ENABLED',
   'SPLUNK_SOURCETYPE',
   'SPLUNK_SOURCE',
+  'NEW_RELIC_LICENSE_KEY',
 ];
 
 export class EnvAccessor {

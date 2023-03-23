@@ -12,6 +12,8 @@ import { FeedbackBlock, RadioBtns } from './components';
 import { FilterModal } from '../Shared/components/FilterModal';
 import { prepareData } from './config';
 import { buildPath } from '../Routes';
+import { Plug } from '../../../components/Plug';
+import { useTranslation } from '../../../components/Translation';
 
 export const FEEDBACK_WRAPPER = 'feedback-wrapper';
 export const LIST_WRAPPER = 'list-wrapper';
@@ -30,6 +32,7 @@ const GiveFeedBack: FC = () => {
   const { css, matchMedia } = useStyle();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [focus, setFocus] = useState(false);
   const [filterModal, setFilterModal] = useState(false);
@@ -67,7 +70,32 @@ const GiveFeedBack: FC = () => {
 
   const handleBtnClick = () => navigate(buildPath(paramsReplacer(Page.GIVE_NEW_FEEDBACK, { ':uuid': 'new' })));
 
-  const feedbackList = useSelector(getGiveFeedbacksSelector(status)) || [];
+  const { feedbackList, hasSomeFeedbacks } = useSelector(getGiveFeedbacksSelector(status)) || [];
+  const getPlugElement = () => {
+    if (!hasSomeFeedbacks) {
+      return (
+        <Plug
+          title={t('no_given_feedbacks_title', 'You have not given any feedback yet.')}
+          text={t('no_given_feedbacks_text', `Select the 'Give feedback' option to get started.`)}
+        />
+      );
+    }
+    if (status === FeedbackStatus.DRAFT) {
+      return (
+        <Plug
+          title={t('no_given_draft_feedbacks_title', 'You have no feedback currently saved as draft.')}
+          text={t('no_given_feedbacks_text', `Select the 'Give feedback' option to get started.`)}
+        />
+      );
+    } else {
+      return (
+        <Plug
+          title={t('no_given_shared_feedbacks_title', 'You have not shared any feedback yet.')}
+          text={t('no_given_feedbacks_text', `Select the 'Give feedback' option to get started.`)}
+        />
+      );
+    }
+  };
 
   return (
     <div>
@@ -101,7 +129,7 @@ const GiveFeedBack: FC = () => {
       </div>
       <div>
         <div className={css(draftsStyle)} data-test-id={LIST_WRAPPER}>
-          <FeedbackBlock list={feedbackList} canEdit={status === FeedbackStatus.DRAFT} />
+          <FeedbackBlock list={feedbackList} canEdit={status === FeedbackStatus.DRAFT} plugElement={getPlugElement()} />
         </div>
       </div>
     </div>

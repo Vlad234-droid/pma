@@ -6,7 +6,15 @@ import ButtonWithConfirmation from 'components/ButtonWithConfirmation';
 import { ReviewAction } from '../../type';
 
 export type Props = {
-  onAction: (action: ReviewAction, status: Status, uuid?: string, number?: number) => void;
+  onAction: ({
+    action,
+    currentStatus,
+    reviewUuid,
+  }: {
+    action: ReviewAction;
+    currentStatus?: Status;
+    reviewUuid?: string;
+  }) => void;
   status?: Status;
   number?: number;
   uuid?: string;
@@ -33,14 +41,19 @@ export const LineManagerButton: FC<Props> = ({ status, uuid, number, onAction, i
           withIcon
           onSave={() =>
             status
-              ? onAction(ReviewAction.DECLINE, status, uuid)
-              : onAction(ReviewAction.DECLINE, Status.WAITING_FOR_APPROVAL)
+              ? onAction({ action: ReviewAction.DECLINE, currentStatus: status, reviewUuid: uuid })
+              : onAction({ action: ReviewAction.DECLINE })
           }
           graphic={'cancel'}
           styles={iconButtonStyles({ disabled: false })}
           iconSize={16}
           buttonName={t('amend', 'Amend')}
-          confirmationTitle={isBulkUpdate ? 'Ammends to priorities' : 'Amends to priority'}
+          confirmationTitle={t(
+            isBulkUpdate
+              ? 'LineManagerButton_amend_confirmation_title_plural'
+              : 'LineManagerButton_amend_confirmation_title_singular',
+            { ns: 'bank' },
+          )}
           confirmationDescription={
             isBulkUpdate
               ? t('LineManagerButton_amend_confirmation_description_plural', { ns: 'bank' })
@@ -52,15 +65,20 @@ export const LineManagerButton: FC<Props> = ({ status, uuid, number, onAction, i
           withIcon
           onSave={() =>
             status
-              ? onAction(ReviewAction.APPROVE, status, uuid)
-              : onAction(ReviewAction.APPROVE, Status.WAITING_FOR_APPROVAL)
+              ? onAction({ action: ReviewAction.APPROVE, currentStatus: status, reviewUuid: uuid })
+              : onAction({ action: ReviewAction.APPROVE })
           }
           graphic={'check'}
           styles={iconButtonStyles({ disabled: false, invertColors: true })}
           iconSize={16}
           iconProps={{ invertColors: true }}
           buttonName={t('agree', 'Agree')}
-          confirmationTitle={isBulkUpdate ? 'Agree to priorities' : 'Agree to priority'}
+          confirmationTitle={t(
+            isBulkUpdate
+              ? 'LineManagerButton_agree_confirmation_title_plural'
+              : 'LineManagerButton_agree_confirmation_title_singular',
+            { ns: 'bank' },
+          )}
           confirmationDescription={
             isBulkUpdate
               ? t('LineManagerButton_agree_confirmation_description_plural', { ns: 'bank' })

@@ -1,10 +1,26 @@
 import React from 'react';
 import { renderWithTheme as render } from 'utils/test';
 import Graph, { BAR_WRAPPER } from './Graph';
+const { ResizeObserver } = window;
 
 import { Rating } from 'config/enum';
 
 describe('Graph', () => {
+  beforeEach(() => {
+    //@ts-ignore
+    delete window.ResizeObserver;
+    window.ResizeObserver = jest.fn().mockImplementation(() => ({
+      observe: jest.fn(),
+      unobserve: jest.fn(),
+      disconnect: jest.fn(),
+    }));
+  });
+
+  afterEach(() => {
+    window.ResizeObserver = ResizeObserver;
+    jest.restoreAllMocks();
+  });
+
   const props = {
     title: 'Graph title',
     currentData: {

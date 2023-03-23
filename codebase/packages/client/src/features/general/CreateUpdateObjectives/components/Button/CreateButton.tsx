@@ -19,15 +19,16 @@ import { USER } from 'config/constants';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import { REVIEW_MODIFICATION_MODE, reviewModificationMode } from '../../utils';
+import { useCurrentCycle } from 'hooks/useCurrentCycle';
 
 export type Props = {
   withIcon?: boolean;
 };
-
 const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const navigate = useNavigate();
+
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
 
@@ -43,7 +44,10 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
   const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const modificationMode = reviewModificationMode(countReviews, objectiveSchema);
 
+  const { status: cycleStatus } = useCurrentCycle();
+
   const isAvailable =
+    cycleStatus !== Status.COMPLETED &&
     (reviewsMinNumbersInStatusApproved ||
       timelineObjective?.status === Status.DRAFT ||
       originObjectives?.length === 0) &&

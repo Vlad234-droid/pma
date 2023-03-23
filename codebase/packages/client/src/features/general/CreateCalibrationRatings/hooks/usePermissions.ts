@@ -1,15 +1,15 @@
 import {
   calibrationReviewDataSelector,
   colleagueCurrentCycleSelector,
-  colleagueInfo,
-  colleagueUUIDSelector,
   getCalibrationPointSelector,
+  isDirectReportSelector,
 } from '@pma/store';
 import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { role, usePermission } from 'features/general/Permission';
 import { Status } from 'config/enum';
 import { isDateFromISOAfterNow } from 'utils';
+import { useCurrentCycle } from 'hooks/useCurrentCycle';
 
 export const usePermissions = () => {
   const { state } = useLocation();
@@ -23,27 +23,28 @@ export const usePermissions = () => {
   const sessionMode = JSON.parse(searchParams.get('sessionMode') ?? 'false');
 
   const isPerformForPP = usePermission([role.PEOPLE_TEAM]);
-  const isPerformForLN = usePermission([role.LINE_MANAGER]);
+  const isPerformForLM = usePermission([role.LINE_MANAGER]);
   const isPerformForTA = usePermission([role.TALENT_ADMIN]);
 
-  const userUuid = useSelector(colleagueUUIDSelector);
-  const { managerUuid } = useSelector(colleagueInfo);
-  const calibrationReview = useSelector(calibrationReviewDataSelector(colleagueUuid)) || {};
-  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
-  const { endTime } = useSelector(getCalibrationPointSelector(colleagueUuid, cycle || currentCycle));
-  const isFinished = isDateFromISOAfterNow(endTime);
+  const { status: cycleStatus } = useCurrentCycle(colleagueUuid);
 
-  const directReport = userUuid === managerUuid;
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
+  const calibrationReview = useSelector(calibrationReviewDataSelector(colleagueUuid)) || {};
+  const { endTime, status: TLPStatus } = useSelector(getCalibrationPointSelector(colleagueUuid, cycle || currentCycle));
+  const isFinished =
+    isDateFromISOAfterNow(endTime) || TLPStatus === Status.COMPLETED || cycleStatus === Status.COMPLETED;
+  const isDirectReport = useSelector(isDirectReportSelector(colleagueUuid));
+
   const isNew = uuid === 'new';
 
   const isDraft = calibrationReview?.status === Status.DRAFT || isNew;
-  const LNDisabledStatuses =
+  const LMDisabledStatuses =
     calibrationReview?.status === Status.APPROVED ||
     calibrationReview?.status === Status.COMPLETED ||
     calibrationReview?.status === Status.WAITING_FOR_COMPLETION;
 
-  const isLNwithPP = isPerformForLN && isPerformForPP && directReport;
-  const isLNwithTA = isPerformForLN && isPerformForTA && directReport;
+  const isLMwithPP = isPerformForLM && isPerformForPP && isDirectReport;
+  const isLMwithTA = isPerformForLM && isPerformForTA && isDirectReport;
   const sessionModeCreate = sessionMode && isDraft;
 
   const editablePPSession =
@@ -53,11 +54,11 @@ export const usePermissions = () => {
     if (isFinished) return true;
     if (sessionModeCreate) return false;
     if (sessionMode) return !editablePPSession;
-    if (isPerformForTA && isLNwithTA) return !isDraft && LNDisabledStatuses;
-    if (isPerformForPP && isLNwithPP) return !isDraft && LNDisabledStatuses;
-    if (isPerformForPP && !isLNwithPP && !isLNwithTA && !sessionMode)
-      return (!isDraft && LNDisabledStatuses) || calibrationReview?.status === Status.WAITING_FOR_APPROVAL;
-    if (isPerformForLN && !isLNwithPP && !isLNwithTA) return !isDraft && LNDisabledStatuses;
+    if (isPerformForTA && isLMwithTA) return !isDraft && LMDisabledStatuses;
+    if (isPerformForPP && isLMwithPP) return !isDraft && LMDisabledStatuses;
+    if (isPerformForPP && !isLMwithPP && !isLMwithTA && !sessionMode)
+      return (!isDraft && LMDisabledStatuses) || calibrationReview?.status === Status.WAITING_FOR_APPROVAL;
+    if (isPerformForLM && !isLMwithPP && !isLMwithTA) return !isDraft && LMDisabledStatuses;
     if (isPerformForTA) return true;
     return true;
   };

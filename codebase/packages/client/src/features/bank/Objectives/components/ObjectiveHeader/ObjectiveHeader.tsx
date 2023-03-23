@@ -12,8 +12,9 @@ export const ObjectiveHeader: FC<
     description?: string;
     lastUpdatedTime?: string;
     status?: Status;
+    isExpandable?: boolean;
   }
-> = ({ title, subTitle, description, status, lastUpdatedTime, ...rest }) => {
+> = ({ title, subTitle, description, status, lastUpdatedTime, isExpandable = true, ...rest }) => {
   const { t } = useTranslation();
   const text =
     status === Status.WAITING_FOR_APPROVAL
@@ -22,7 +23,14 @@ export const ObjectiveHeader: FC<
   const statusComponent = status ? <StatusBadge status={status} text={text} styles={{ marginRight: '20px' }} /> : null;
 
   return (
-    <Header headingLevel={1} title={title} status={status} component={statusComponent} {...rest}>
+    <Header
+      headingLevel={1}
+      title={title}
+      status={status}
+      component={statusComponent}
+      isExpandable={isExpandable}
+      {...rest}
+    >
       <ObjectiveTileHeader {...{ subTitle, description, withSpacing: false }} />
     </Header>
   );

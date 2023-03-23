@@ -51,7 +51,7 @@ export const getGiveFeedbacksSelector = (status) =>
       feedbacks: { give },
     } = feedback;
 
-    return give?.filter((item) => item.status === status) ?? [];
+    return { feedbackList: give?.filter((item) => item.status === status) ?? [], hasSomeFeedbacks: !!give.length };
   });
 
 export const getViewFeedbacksSelector = (read, defaultSerializer) =>
@@ -60,7 +60,10 @@ export const getViewFeedbacksSelector = (read, defaultSerializer) =>
       feedbacks: { view },
     } = feedback;
 
-    return view?.filter((item) => item.read === read).map(defaultSerializer) ?? [];
+    return {
+      filteredFeedbacks: view?.filter((item) => item.read === read).map(defaultSerializer) ?? [],
+      hasSomeFeedbacks: !!view?.length,
+    };
   });
 
 export const getRespondedFeedbacksSelector = (status) =>
@@ -69,7 +72,10 @@ export const getRespondedFeedbacksSelector = (status) =>
       feedbacks: { respond },
     } = feedback;
 
-    return respond?.filter((item) => item.status === status) ?? [];
+    return {
+      feedbackList: respond?.filter((item) => item.status === status) ?? [],
+      hasSomeFeedbacks: !!respond.length,
+    };
   });
 
 export const getLoadedStateSelector = createSelector(feedbackSelector, ({ feedbacks: { meta } }) => meta);

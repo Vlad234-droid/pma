@@ -55,9 +55,11 @@ enum Page {
   REPORT = 'report',
   REPORT_DOWNLOAD = 'report/download',
   REPORT_STATISTICS = 'report/:type',
-  PREVIOUS_OBJECTIVES_RATINGS = 'previous-objective-ratings/:uuid',
-  PREVIOUS_REVIEW_FORMS = 'previous-review-forms/:uuid',
   NOT_FOUND = '404',
+  // TODO: enabled when content of page meets business requirements
+  // PREVIOUS_OBJECTIVES_RATINGS = 'previous-objective-ratings/:uuid',
+  // TODO: enabled when content of page meets business requirements
+  // PREVIOUS_REVIEW_FORMS = 'previous-review-forms/:uuid',
   // TODO: enabled when content of page meets business requirements
   // ADMINISTRATION = 'administration',
 }

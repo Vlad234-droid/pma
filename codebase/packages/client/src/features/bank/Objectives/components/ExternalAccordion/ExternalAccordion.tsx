@@ -7,6 +7,7 @@ import { useTranslation } from 'components/Translation';
 import { Objective } from '../../type';
 
 import { ObjectiveHeader } from '../ObjectiveHeader';
+import { Status } from 'config/enum';
 
 export const TEST_ID = 'priorities-accordion';
 
@@ -26,11 +27,13 @@ const ExternalAccordion: FC<ExternalAccordionProps> = ({ objectives, children })
           const sentences = description.split('. ');
           const firstSentence = sentences.shift();
           const restSentences = sentences.join('. ');
+          const isExpandable = [Status.WAITING_FOR_COMPLETION, Status.WAITING_FOR_APPROVAL].includes(status);
 
           return (
             <Section key={id}>
               <div className={css({ '& > div': { paddingBottom: 0 } } as Styles)}>
                 <ObjectiveHeader
+                  isExpandable={isExpandable}
                   {...{
                     title: t('objective_number', { ns: Tenant.BANK, number: id }),
                     subTitle,

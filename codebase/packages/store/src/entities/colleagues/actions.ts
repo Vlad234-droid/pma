@@ -13,22 +13,13 @@ export const getProfileColleague = createAsyncAction(
   'colleagues/GET_PROFILE_COLLEAGUE_FAILURE',
 )<any, any, Error>();
 
-export const getColleague = createAsyncAction(
-  'colleague/GET_COLLEAGUE_REQUEST',
-  'colleague/GET_COLLEAGUE_SUCCESS',
-  'colleague/GET_COLLEAGUE_FAILURE',
-)<any, any, Error>();
-
 export const clearColleagueList = createAction('colleagues/CLEAR')<undefined>();
-export const clearColleague = createAction('colleague/CLEAR')<undefined>();
 
 export const changeColleaguesMeta = createAction('colleagues/meta/CHANGE')<Partial<typeof initialState.meta>>();
 
 export const Actions = {
   getColleagues: getColleagues.request,
   getProfileColleague: getProfileColleague.request,
-  getColleague: getColleague.request,
   clearColleagueList,
-  clearColleague,
   changeColleaguesMeta,
 };

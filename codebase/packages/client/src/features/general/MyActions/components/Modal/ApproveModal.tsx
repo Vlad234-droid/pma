@@ -9,9 +9,10 @@ import { Tenant, useTenant } from 'features/general/Permission';
 type Props = {
   onSave: (hasReason?: boolean, reason?: string) => void;
   onClose: () => void;
+  approveKey?: string;
 };
 
-const ApproveModal: FC<Props> = ({ onSave, onClose }) => {
+const ApproveModal: FC<Props> = ({ onSave, onClose, approveKey = 'approve' }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const tenant = useTenant();
@@ -27,7 +28,7 @@ const ApproveModal: FC<Props> = ({ onSave, onClose }) => {
       )}
       onSave={onSave}
       onClose={onClose}
-      submitBtnTitle={t('approve_objectives', tenant === Tenant.GENERAL ? 'Approve' : 'Complete', { ns: tenant })}
+      submitBtnTitle={t(approveKey, tenant === Tenant.GENERAL ? 'Approve' : 'Complete', { ns: tenant })}
     >
       <div className={css({ padding: '16px 0' })}>
         {t(
