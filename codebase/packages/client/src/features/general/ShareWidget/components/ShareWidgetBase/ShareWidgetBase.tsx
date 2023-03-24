@@ -10,6 +10,7 @@ import {
   ReviewSharingActions,
   sharingObjectivesMetaSelector,
   userCurrentCycleTypeSelector,
+  getSharedObjectivesFormElements,
 } from '@pma/store';
 
 import { TileWrapper } from 'components/Tile';
@@ -95,6 +96,8 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
   const isManagerShared = isManager && isShared;
   const sharedObjectivesCount = sharedObjectives.length;
 
+  const isUserWithObjectivesInCycle = useSelector(getSharedObjectivesFormElements)?.length > 0;
+
   const handleShareSaveBtnClick = async () => {
     setIsConfirmDeclineModalOpen(false);
     setTimeout(() => setIsSuccessModalOpen(true), 500);
@@ -140,9 +143,13 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
     t,
   );
 
-  const isDisplayed = title === 'N/A' || isCompleted || (!stopShare && !hasApproved && !sharing && !isManager);
+  const notDisplay =
+    title === 'N/A' ||
+    isCompleted ||
+    (!stopShare && !hasApproved && !sharing && !isManager) ||
+    !isUserWithObjectivesInCycle;
 
-  if (isDisplayed) {
+  if (notDisplay) {
     return null;
   }
 

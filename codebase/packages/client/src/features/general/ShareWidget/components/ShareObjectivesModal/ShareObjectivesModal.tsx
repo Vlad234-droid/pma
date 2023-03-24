@@ -4,8 +4,7 @@ import { useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 import { Icon as IconComponent } from 'components/Icon';
 import Accordion, { ObjectiveAccordionProps } from 'features/general/Objectives/components/Accordion';
 import { useSelector } from 'react-redux';
-import { getAllSharedObjectives, getReviewSchema } from '@pma/store';
-import { ReviewType } from 'config/enum';
+import { getAllSharedObjectives, getSharedObjectivesFormElements } from '@pma/store';
 import { useTenant } from 'features/general/Permission';
 import { transformReviewsToObjectives } from 'features/general/Review';
 import { Review } from 'config/types';
@@ -21,9 +20,8 @@ export const ShareObjectivesModal: FC<Props> = ({ manager, onClose, description 
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const tenant = useTenant();
-  const { components = [] } = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const sharedObjectives: Review[] = useSelector(getAllSharedObjectives);
-  const formElements = components.filter((component) => component.type != 'text');
+  const formElements = useSelector(getSharedObjectivesFormElements);
   const objectives: ObjectiveAccordionProps['objectives'] = transformReviewsToObjectives(
     sharedObjectives,
     formElements,
