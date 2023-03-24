@@ -72,12 +72,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
         colleagueUuid: colleague.uuid,
         reviews: colleagueReviews
           .filter(({ status, tlPointUuid }) => status === prevStatus && tlPointUuid === tlUuid)
-          .map(({ number, type, properties }) => {
-            if (type === ReviewType.MYR) {
-              return { number };
-            }
-            return { number, properties };
-          }),
+          .map(({ number, properties }) => ({ number, properties })),
       };
       onUpdate(data);
       setIsOpenSuccessModal(true);
