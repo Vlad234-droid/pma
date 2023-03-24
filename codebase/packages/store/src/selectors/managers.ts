@@ -134,12 +134,10 @@ const isAnniversaryTimeline = (timeline: any) => {
   );
 };
 
-export const getOutstandingPendingEmployees: Selector<RootState, any, any> = createSelector(
+export const getOutstandingPendingEmployees = createSelector(
   [managersReviewsSelector, (_, search?: string) => search, (_, __?, sort?: SortBy) => sort],
-  // @ts-ignore
-  ({ data }, search = '', sort) => {
-    //TODO: will always return [], {[status]: []}
-    const filteredData = data ? sortEmployeesFn(searchEmployeesFn(data, search), sort) : [];
+  ({ ALL }, search = '', sort) => {
+    const filteredData = ALL ? sortEmployeesFn(searchEmployeesFn(ALL, search), sort) : [];
 
     const employeeOverdueAnniversary = filteredData?.filter(
       (employee) =>

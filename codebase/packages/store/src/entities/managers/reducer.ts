@@ -1,7 +1,19 @@
+import { Employee } from '@pma/client/src/config/types';
 import { createReducer } from 'typesafe-actions';
 import { getManagerReviews, getManagerCalibrations } from './actions';
 
-export const initialState = {
+export type ManagersState = {
+  reviews: {
+    data: { PENDING?: Employee[]; ALL?: Employee[]; DRAFT?: Employee[] };
+    meta: { loading: boolean; loaded: boolean; error: null | any };
+  };
+  calibrations: {
+    data: {};
+    meta: { loading: boolean; loaded: boolean; error: null | any };
+  };
+};
+
+export const initialState: ManagersState = {
   reviews: {
     data: {},
     meta: { loading: false, loaded: false, error: null },
