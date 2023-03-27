@@ -78,6 +78,7 @@ const NoteDetail: FC<Props> = ({ note, onEdit, onClose }) => {
           onOverlayClick={() => {
             setConfirmModal(() => false);
           }}
+          submitBtnTitle={t('delete')}
         />
       )}
       <ArrowLeftIcon onClick={onClose} testId={ARROW_LEFT} />

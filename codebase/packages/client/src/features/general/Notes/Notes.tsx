@@ -82,6 +82,7 @@ const NotesComposition: FC = () => {
           }}
           onCancel={handleCloseModal}
           testId={CONFIRM_MODAL_ID}
+          submitBtnTitle={t('add')}
         />
       )}
       <div className={css({ paddingRight: '40px', position: 'relative' })}>
@@ -113,5 +114,5 @@ const iconBtnAddStyle: Rule = ({ theme }) => ({
 
 const iconAddStyle: Rule = {
   marginRight: '10px',
-  marginTop: '2px',
+  marginTop: '1px',
 };
