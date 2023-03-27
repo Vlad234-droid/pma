@@ -34,7 +34,7 @@ FROM node-base AS codebase
 
 WORKDIR /opt/src/
 
-COPY --chmod=0644 ./codebase/yarn.lock ./codebase/lerna.json ./codebase/.npmrc ./codebase/packages/server/newrelic.js ../bootstrap/
+COPY --chmod=0644 ./codebase/yarn.lock ./codebase/lerna.json ./codebase/.npmrc ../bootstrap/
 COPY --chmod=0644 ./codebase ./
 
 # copying monorepo directory structure, only folders with package.json file
