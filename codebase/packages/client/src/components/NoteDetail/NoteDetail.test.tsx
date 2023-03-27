@@ -37,7 +37,7 @@ describe('NoteDetail feature', () => {
     expect(wrapper).toBeInTheDocument();
   });
   it('it should call onClose prop on confirm modal', async () => {
-    const { getByTestId, getByText } = render(
+    const { getByTestId, getAllByText } = render(
       <BrowserRouter>
         <NoteDetail {...props} />
       </BrowserRouter>,
@@ -46,7 +46,7 @@ describe('NoteDetail feature', () => {
     fireEvent.click(deleteBtn);
     const modal = getByTestId(CONFIRM_MODAL);
     expect(modal).toBeInTheDocument();
-    const confirmBtn = getByText(/submit/i);
+    const confirmBtn = getAllByText(/Delete/i)[3];
     fireEvent.click(confirmBtn);
     expect(onClose).toHaveBeenCalledTimes(1);
   });
