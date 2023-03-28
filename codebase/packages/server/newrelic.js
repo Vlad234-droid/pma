@@ -28,6 +28,9 @@ exports.config = {
    * attributes include/exclude lists.
    */
   allow_all_headers: true,
+  utilization: {
+    detect_aws: false
+  },
   attributes: {
     /**
      * Prefix of attributes to exclude from all destinations. Allows * as wildcard
@@ -42,10 +45,12 @@ exports.config = {
       'request.headers.authorization',
       'request.headers.proxyAuthorization',
       'request.headers.setCookie*',
+      'request.headers.x*',
       'response.headers.cookie',
       'response.headers.authorization',
       'response.headers.proxyAuthorization',
       'response.headers.setCookie*',
+      'response.headers.x*'
     ]
   }
 }
