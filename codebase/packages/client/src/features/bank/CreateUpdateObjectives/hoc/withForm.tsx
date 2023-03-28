@@ -93,7 +93,15 @@ export function withForm<
         dispatch(
           ReviewsActions.updateReview({
             pathParams: { ...pathParams, number: priority.number },
-            data: [{ number: priority.number, properties: priority.properties, status: Status.DRAFT }],
+            data: [
+              {
+                number: priority.number,
+                properties: priority.properties,
+                status: [Status.DECLINED, Status.REQUESTED_TO_AMEND]?.includes(priority?.status as Status)
+                  ? priority?.status
+                  : Status.DRAFT,
+              },
+            ],
           }),
         );
         setLocalObjectives((current) =>
