@@ -120,13 +120,13 @@ const ViewFeedback: FC = () => {
   const plugElement = useMemo(() => {
     return hasSomeFeedbacks ? (
       <Plug
-        title={t('no_feedback_records_title', 'No feedback records to view.')}
+        title={t('no_feedback_records_title', 'You have no feedback to view.')}
         text={t('no_filtered_feedback_records_text', 'You can request feedback from the feedback home page.')}
       />
     ) : (
       <Plug
-        title={t('no_feedback_records_title', 'No feedback records to view.')}
-        text={t('no_feedback_records_text', 'You can request feedback from the feedback home page')}
+        title={t('no_feedback_records_title', 'You have no feedback to view.')}
+        text={t('no_feedback_records_text', 'When you receive feedback, you will see it here')}
       />
     );
   }, [hasSomeFeedbacks]);
