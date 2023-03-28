@@ -37,6 +37,16 @@ export const isDirectReportSelector = (colleagueUuid: string) =>
     return userUuid === managerUUID;
   });
 
+export const isDirectReportPlusOneSelector = (colleagueUuid: string) =>
+  createSelector(colleagueUUIDSelector, getColleagueSelector(colleagueUuid), (userUuid, colleague): boolean => {
+    const { workRelationships } = colleague;
+    const [{ manager = {} } = {}] = workRelationships || [];
+    const { workRelationships: managerWorkRelationships } = manager;
+    const [{ managerUUID = '' } = {}] = managerWorkRelationships || [];
+
+    return userUuid === managerUUID;
+  });
+
 export const getColleagueCycleSelector = (uuid: string) =>
   createSelector(colleagueSelector, ({ data }: any) => {
     const { cycles = [] } = data[uuid] || {};

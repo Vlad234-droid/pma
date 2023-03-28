@@ -67,6 +67,20 @@ export const getUserTimelineEpic: Epic = (action$, _, { api }) =>
     mergeMap(({ payload }) =>
       from(api.getTimeline(payload)).pipe(
         mergeMap((response: any) => {
+          if (!response.data.length) {
+            return of(
+              addModalError({
+                title: 'timeline_is_empty',
+                description: 'please_contact_their_line_manager',
+              }),
+              getUserTimeline.success({
+                colleagueUuid: payload.colleagueUuid,
+                cycleUuid: payload.cycleUuid,
+                success: response.success,
+                data: response.data,
+              }),
+            );
+          }
           return of(
             getUserTimeline.success({
               colleagueUuid: payload.colleagueUuid,
@@ -76,8 +90,22 @@ export const getUserTimelineEpic: Epic = (action$, _, { api }) =>
             }),
           );
         }),
-        catchError((e) => {
-          const errors = e?.data?.errors;
+        catchError(({ status, data }) => {
+          if (status === 404) {
+            return of(
+              addModalError({
+                title: 'timeline_is_empty',
+                description: 'please_contact_their_line_manager',
+              }),
+              getUserTimeline.success({
+                colleagueUuid: payload.colleagueUuid,
+                cycleUuid: payload.cycleUuid,
+                success: data.success,
+                data: data.data,
+              }),
+            );
+          }
+          const errors = data?.errors;
           return concatWithErrorToast(
             of(getUserTimeline.failure(errors?.[0])),
             errorPayloadConverter({ ...errors?.[0], title: 'Timeline fetch error' }),

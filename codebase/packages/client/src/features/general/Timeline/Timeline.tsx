@@ -47,7 +47,9 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   }, [cycles]);
 
   useEffect(() => {
-    dispatch(TimelineActions.getTimeline({ colleagueUuid, cycleUuid: currentCycle }));
+    isUserView
+      ? dispatch(TimelineActions.getTimeline({ colleagueUuid, cycleUuid: currentCycle }))
+      : dispatch(TimelineActions.getUserTimeline({ colleagueUuid, cycleUuid: currentCycle }));
   }, [currentCycle]);
 
   useEffect(() => {
