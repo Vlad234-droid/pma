@@ -135,6 +135,7 @@ WORKDIR /home/app
 
 COPY --chmod=0755 ./scripts/start.sh ./
 COPY --from=codebase /opt/bootstrap/ ./
+COPY --from=codebase /opt/src/packages/server/newrelic.js ./
 COPY --from=build /root/.npmrc /root
 COPY --from=build /opt/build/ ./
 
