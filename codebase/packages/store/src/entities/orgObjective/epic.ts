@@ -4,7 +4,13 @@ import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 
-import { getOrgObjectives, createOrgObjective, createAndPublishOrgObjective, getOrgAuditLogs } from './actions';
+import {
+  getOrgObjectives,
+  createOrgObjective,
+  createAndPublishOrgObjective,
+  getOrgAuditLogs,
+  getOrgPublishedObjectives,
+} from './actions';
 
 export const getOrgObjectivesEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
@@ -19,6 +25,21 @@ export const getOrgObjectivesEpic: Epic = (action$, _, { api }) =>
         takeUntil(action$.pipe(filter(isActionOf(getOrgObjectives.cancel)))),
       ),
     ),
+  );
+
+export const getOrgPublishedObjectivesEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(getOrgPublishedObjectives.request)),
+    switchMap(({ payload }) => {
+      return from(api.getOrgPublishedObjectives(payload)).pipe(
+        // @ts-ignore
+        map(({ data }) => {
+          return getOrgPublishedObjectives.success(data);
+        }),
+        catchError(({ errors }) => of(getOrgPublishedObjectives.failure(errors))),
+        takeUntil(action$.pipe(filter(isActionOf(getOrgPublishedObjectives.cancel)))),
+      );
+    }),
   );
 
 export const getOrgAuditLogsEpic: Epic = (action$, _, { api }) =>
@@ -100,6 +121,7 @@ export const createAndPublishOrgObjectiveEpic: Epic = (action$, _, { api }) =>
 
 export default combineEpics(
   getOrgObjectivesEpic,
+  getOrgPublishedObjectivesEpic,
   createOrgObjectiveEpic,
   getOrgAuditLogsEpic,
   createAndPublishOrgObjectiveEpic,
