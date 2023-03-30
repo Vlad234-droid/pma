@@ -33,9 +33,7 @@ export const getOrgPublishedObjectivesEpic: Epic = (action$, _, { api }) =>
     switchMap(({ payload }) => {
       return from(api.getOrgPublishedObjectives(payload)).pipe(
         // @ts-ignore
-        map(({ data }) => {
-          return getOrgPublishedObjectives.success(data);
-        }),
+        map(({ data }) => getOrgPublishedObjectives.success(data)),
         catchError(({ errors }) => of(getOrgPublishedObjectives.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(getOrgPublishedObjectives.cancel)))),
       );
