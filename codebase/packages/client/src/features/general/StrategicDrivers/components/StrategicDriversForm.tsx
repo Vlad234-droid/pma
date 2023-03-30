@@ -3,13 +3,7 @@ import { useSelector } from 'react-redux';
 import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 import * as Yup from 'yup';
 import useDispatch from 'hooks/useDispatch';
-import {
-  OrgObjectiveActions,
-  orgObjectivesSelector,
-  orgObjectivesMetaSelector,
-  Status,
-  colleagueCycleYearSelector,
-} from '@pma/store';
+import { OrgObjectiveActions, orgObjectivesSelector, orgObjectivesMetaSelector, Status } from '@pma/store';
 import GenericForm from 'components/GenericForm';
 import { Input } from 'components/Form';
 import { InfoModal } from 'features/general/Modal';
@@ -59,7 +53,6 @@ const StrategicDriversForm: FC = () => {
   const { css } = useStyle();
   const dispatch = useDispatch();
   const orgObjectives = useSelector(orgObjectivesSelector) || [];
-  const cycleYear = useSelector(colleagueCycleYearSelector);
 
   const { status, loading, loaded } = useSelector(orgObjectivesMetaSelector);
 
@@ -86,7 +79,7 @@ const StrategicDriversForm: FC = () => {
   };
 
   useEffect(() => {
-    dispatch(OrgObjectiveActions.getOrgPublishedObjectives({ year: cycleYear }));
+    dispatch(OrgObjectiveActions.getOrgObjectives({}));
   }, []);
 
   const handleCancel = () => {
