@@ -1,7 +1,12 @@
 import React, { useEffect } from 'react';
 import { useStyle, Rule } from '@pma/dex-wrapper';
 import { useSelector } from 'react-redux';
-import { OrgObjectiveActions, orgObjectivesSelector, orgObjectivesMetaSelector } from '@pma/store';
+import {
+  OrgObjectiveActions,
+  orgObjectivesSelector,
+  orgObjectivesMetaSelector,
+  colleagueCycleYearSelector,
+} from '@pma/store';
 
 import useDispatch from 'hooks/useDispatch';
 import Spinner from 'components/Spinner';
@@ -16,9 +21,10 @@ const ObjectivesView = () => {
 
   const orgObjectives = useSelector(orgObjectivesSelector) || [];
   const { loaded } = useSelector(orgObjectivesMetaSelector);
+  const cycleYear = useSelector(colleagueCycleYearSelector);
 
   useEffect(() => {
-    dispatch(OrgObjectiveActions.getOrgObjectives({}));
+    dispatch(OrgObjectiveActions.getOrgPublishedObjectives({ year: cycleYear }));
   }, []);
 
   if (!loaded) {

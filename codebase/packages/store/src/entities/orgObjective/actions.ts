@@ -26,6 +26,13 @@ export const getOrgObjectives = createAsyncAction(
   'orgObjectives/FETCH_ALL_CANCEL',
 )<any, any, Error>();
 
+export const getOrgPublishedObjectives = createAsyncAction(
+  'orgPublishedObjectives/FETCH_ALL_REQUEST',
+  'orgPublishedObjectives/FETCH_ALL_SUCCESS',
+  'orgPublishedObjectives/FETCH_ALL_FAILURE',
+  'orgPublishedObjectives/FETCH_ALL_CANCEL',
+)<any, any, Error>();
+
 export const getOrgAuditLogs = createAsyncAction(
   'orgObjectives/FETCH_AUDIT_REQUEST',
   'orgObjectives/FETCH_AUDIT_SUCCESS',
@@ -40,6 +47,7 @@ export const clearOrgObjectiveData = createAction('orgObjectives/CLEAR')<undefin
 export const Actions = {
   createOrgObjective: createOrgObjective.request,
   getOrgObjectives: getOrgObjectives.request,
+  getOrgPublishedObjectives: getOrgPublishedObjectives.request,
   createAndPublishOrgObjective: createAndPublishOrgObjective.request,
   publishOrgObjective: publishOrgObjective.request,
   getOrgAuditLogs: getOrgAuditLogs.request,

@@ -1,4 +1,5 @@
 import httpClient from '../config/client';
+import qs from 'qs';
 
 // const colleagueUuid = localStorage.getItem('colleagueUuid');
 
@@ -27,6 +28,14 @@ export const getOrgAuditLogs = <T>(params: any) => {
 export const getOrgObjectives = <T>() => {
   const domain = `/org-objectives`;
   return httpClient.get(`${domain}`);
+};
+
+export const getOrgPublishedObjectives = (params) => {
+  const domain = `/org-objectives/published`;
+  return httpClient.get(`${domain}`, {
+    params,
+    paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'indices' }),
+  });
 };
 
 //auditLogsSelector

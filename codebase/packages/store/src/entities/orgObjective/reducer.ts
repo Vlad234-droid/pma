@@ -7,6 +7,7 @@ import {
   publishOrgObjective,
   getOrgAuditLogs,
   changeOrgObjectiveMetaStatus,
+  getOrgPublishedObjectives,
 } from './actions';
 
 import { Status } from '../../config/types';
@@ -58,6 +59,20 @@ export default createReducer(initialState)
     meta: { ...state.meta, loading: false, loaded: true },
   }))
   .handleAction(getOrgObjectives.failure, (state, { payload }) => ({
+    ...state,
+    objectives: [],
+    meta: { ...state.meta, error: payload, loading: false, loaded: true },
+  }))
+  .handleAction(getOrgPublishedObjectives.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true, error: null, loaded: false },
+  }))
+  .handleAction(getOrgPublishedObjectives.success, (state, { payload }) => ({
+    ...state,
+    objectives: payload,
+    meta: { ...state.meta, loading: false, loaded: true },
+  }))
+  .handleAction(getOrgPublishedObjectives.failure, (state, { payload }) => ({
     ...state,
     objectives: [],
     meta: { ...state.meta, error: payload, loading: false, loaded: true },

@@ -109,6 +109,13 @@ export const colleagueCycleSelector = (state: RootState) => {
   return users.current.metadata.colleagueCycle;
 };
 
+export const colleagueCycleYearSelector = (state: RootState) => {
+  const users = usersSelector(state);
+  const startTime = users.current.metadata.colleagueCycle.startTime || Date.now();
+
+  return new Date(startTime).getFullYear();
+};
+
 export const colleagueCurrentCycleSelector = (colleagueUuid: string) => (state: RootState) => {
   const users = usersSelector(state);
   const colleague = colleagueSelector(state);

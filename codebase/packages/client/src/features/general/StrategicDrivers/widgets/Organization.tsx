@@ -5,7 +5,12 @@ import { useStyle, Rule, Button, Styles, colors } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Icon, Graphics } from 'components/Icon';
 import useDispatch from 'hooks/useDispatch';
-import { OrgObjectiveActions, orgObjectivesSelector, colleagueCycleSelector } from '@pma/store';
+import {
+  OrgObjectiveActions,
+  orgObjectivesSelector,
+  colleagueCycleSelector,
+  colleagueCycleYearSelector,
+} from '@pma/store';
 import { useSelector } from 'react-redux';
 import { Status } from 'config/enum';
 
@@ -23,6 +28,7 @@ const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
   const dispatch = useDispatch();
 
   const cycle = useSelector(colleagueCycleSelector);
+  const cycleYear = useSelector(colleagueCycleYearSelector);
   const orgObjectives = useSelector(orgObjectivesSelector) || [];
   const hasObjectives = !!orgObjectives.length;
   const isCompleted = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
@@ -39,7 +45,7 @@ const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
 
   useEffect(() => {
     if (!isCompleted) {
-      dispatch(OrgObjectiveActions.getOrgObjectives({}));
+      dispatch(OrgObjectiveActions.getOrgPublishedObjectives({ year: cycleYear }));
     }
   }, [isCompleted]);
 
