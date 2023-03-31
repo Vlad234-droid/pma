@@ -120,3 +120,4 @@ environment:
   SPLUNK_ENABLED: true
   SPLUNK_SOURCETYPE: colleague_pma
   SPLUNK_SOURCE: colleague_pma_pte
+  NEW_RELIC_APP_NAME: 214-pma-pte-azure
