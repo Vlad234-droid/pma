@@ -11,6 +11,8 @@ export const getContent = (
   const isGeneral = tenant === Tenant.GENERAL;
 
   switch (status) {
+    case Status.COMPLETED:
+      return ['roundTick', 'green', 'white', true, false, t('review_form_completed', 'Completed'), t('view', 'View')];
     case Status.NOT_STARTED:
       return [
         'calender',
@@ -80,8 +82,6 @@ export const getContent = (
           : t('review_form_waiting_for_agreement', 'Waiting for agreement'),
         t('view', 'View'),
       ];
-    case Status.COMPLETED:
-      return ['roundTick', 'green', 'white', true, false, t('review_form_completed', 'Completed'), t('view', 'View')];
     default:
       return [
         'roundAlert',
