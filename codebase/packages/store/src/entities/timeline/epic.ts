@@ -70,7 +70,7 @@ export const getUserTimelineEpic: Epic = (action$, _, { api }) =>
           if (!response.data.length) {
             return of(
               addModalError({
-                title: 'timeline_is_empty',
+                title: 'you_do_not_have_access_to_this_colleagues_page',
                 description: 'please_contact_their_line_manager',
               }),
               getUserTimeline.success({
@@ -91,10 +91,10 @@ export const getUserTimelineEpic: Epic = (action$, _, { api }) =>
           );
         }),
         catchError(({ status, data }) => {
-          if (status === 404) {
+          if (status === 404 || status === 403) {
             return of(
               addModalError({
-                title: 'timeline_is_empty',
+                title: 'you_do_not_have_access_to_this_colleagues_page',
                 description: 'please_contact_their_line_manager',
               }),
               getUserTimeline.success({
