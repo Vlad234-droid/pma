@@ -11,6 +11,7 @@ import {
   deleteAllProcessTemplate,
 } from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
+import { convertFormsJsonToObject, filterFormsWithDependentKeys } from '../../utils/formExpression';
 
 export const getProcessTemplateEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
@@ -42,7 +43,15 @@ export const getProcessTemplateMetadataEpic: Epic = (action$, _, { api }) =>
         }),
       ).pipe(
         // @ts-ignore
-        map(({ data }) => getProcessTemplateMetadata.success({ data, fileUuid: payload.fileUuid })),
+        map(({ data }) => {
+          return getProcessTemplateMetadata.success({
+            data: {
+              ...data,
+              forms: filterFormsWithDependentKeys(convertFormsJsonToObject(data?.forms?.filter((form) => form))),
+            },
+            fileUuid: payload.fileUuid,
+          });
+        }),
         catchError((e) => {
           const errors = e?.data?.errors;
           return concatWithErrorToast(

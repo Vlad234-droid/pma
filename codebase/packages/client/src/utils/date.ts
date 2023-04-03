@@ -1,7 +1,10 @@
 import { min } from 'lodash';
-import { DateTime, DurationUnit } from 'luxon';
+import { DateTime, Duration, DurationUnit } from 'luxon';
+import { DurationObject } from 'luxon/src/duration';
 
 export { DateTime };
+
+export const parseDurationFromIso = (duration: string): DurationObject => Duration.fromISO(duration).toObject();
 
 const PRECISE_UNITS: Record<string, DurationUnit> = {
   days: 'hours',
@@ -10,6 +13,16 @@ const PRECISE_UNITS: Record<string, DurationUnit> = {
   seconds: 'milliseconds',
   years: 'years',
 };
+
+export const parseDurationToIso = (durationObject: DurationObject): string =>
+  Duration.fromObject(durationObject).toISO();
+
+export const fromDurationObjectToString = (duration, duration_map) =>
+  Object.entries(duration)
+    .filter(([_, value]) => value !== 0)
+    .sort(([a], [b]) => duration_map.indexOf(a) - duration_map.indexOf(b))
+    .map(([key, value]) => `${value} ${key}`)
+    .join(', ');
 
 export const EXPIRATION_DATE = 'expiration_date';
 

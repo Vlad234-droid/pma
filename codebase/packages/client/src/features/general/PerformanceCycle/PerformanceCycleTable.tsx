@@ -5,15 +5,18 @@ import { Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
 import { PerformanceCycleActions, getPerformanceCycleSelector, performanceCycleMetaSelector } from '@pma/store';
 
 import { BaseAccordion, BaseSection, Panel, ExpandButton } from 'components/Accordion';
-import useDispatch from 'hooks/useDispatch';
+import { buildPath } from 'features/general/Routes';
 import { TileWrapper } from 'components/Tile';
 import { Trans } from 'components/Translation';
 import Spinner from 'components/Spinner';
 import Action from 'components/Action';
 import LinkButton from 'components/LinkButton';
 import { Graphics } from 'components/Icon';
+
+import { Status } from 'config/enum';
 import { Page } from 'pages/general/types';
-import { Status } from './constants/type';
+import useDispatch from 'hooks/useDispatch';
+import { paramsReplacer } from 'utils';
 
 type Props = {
   cycleType: string;
@@ -90,7 +93,14 @@ const PerformanceCycleTable: FC<Props> = ({ cycleType }) => {
                     {
                       text: 'View',
                       action: () => {
-                        navigate(`/${Page.PERFORMANCE_CYCLE}/${uuid}`);
+                        navigate(
+                          buildPath(paramsReplacer(Page.CREATE_PERFORMANCE_CYCLE, { ':performanceCycleUuid': uuid })),
+                          {
+                            state: {
+                              isViewing: true,
+                            },
+                          },
+                        );
                       },
                       icon: 'view',
                     },
@@ -101,6 +111,16 @@ const PerformanceCycleTable: FC<Props> = ({ cycleType }) => {
                       text: 'Start',
                       action: () => handleStartPerformanceCycle(uuid),
                       icon: 'play',
+                    });
+                  }
+                  if (status !== Status.INACTIVE && status !== Status.COMPLETED) {
+                    items.push({
+                      text: 'Edit',
+                      action: () =>
+                        navigate(
+                          buildPath(paramsReplacer(Page.CREATE_PERFORMANCE_CYCLE, { ':performanceCycleUuid': uuid })),
+                        ),
+                      icon: 'edit',
                     });
                   }
                   if (status === Status.REGISTERED) {

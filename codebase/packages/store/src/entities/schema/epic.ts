@@ -21,7 +21,7 @@ export const getSchemaEpic: Epic = (action$, state$, { api }) =>
     switchMap(({ payload: { includeForms = true, ...rest } }) =>
       from(api.getColleagueMetadata({ ...rest, includeForms })).pipe(
         // @ts-ignore
-        mergeMap(({ success, data: schemaData }) => {
+        mergeMap(({ data: schemaData }) => {
           const state: any = state$.value;
 
           const schema = of(getSchema.success(schemaData));

@@ -1,7 +1,4 @@
 import React, { FC, useEffect, useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router';
-import { useSelector } from 'react-redux';
-import { v4 as uuid } from 'uuid';
 import {
   colleagueUUIDSelector,
   ConfigEntriesActions,
@@ -11,31 +8,45 @@ import {
   performanceCycleMetaSelector,
   Status,
 } from '@pma/store';
-import useDispatch from 'hooks/useDispatch';
+
+import { useNavigate, useParams } from 'react-router';
+import { useSelector } from 'react-redux';
+import { v4 as uuid } from 'uuid';
+
 import { buildPath } from 'features/general/Routes';
 import { useToast, Variant } from 'features/general/Toast';
-import Spinner from 'components/Spinner';
-import { formatDate, DATE_FORMAT, getISODateStringWithTimeFromDateString, checkExistedValue } from 'utils';
-import { CycleType } from 'config/enum';
 import PerformanceCycleForm from './components/PerformanceCycleForm';
-import { Status as PerformanceCycleStatus } from './constants/type';
+import Spinner from 'components/Spinner';
+import { CycleType, Status as PerformanceCycleStatus } from 'config/enum';
+import { formatDate, DATE_FORMAT, getISODateStringWithTimeFromDateString, checkExistedValue } from 'utils';
+import useDispatch from 'hooks/useDispatch';
+import useLocation from 'hooks/useLocation';
+
 import { Page } from 'pages/general/types';
 
 const CreatePerformanceCycle: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { state } = useLocation<{ isViewing?: boolean }>();
+  const { isViewing } = state || {};
+
   const { addToast } = useToast();
   const { performanceCycleUuid } = useParams<{ performanceCycleUuid: string }>();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const cycle = useSelector(performanceCycleByUuidSelector(performanceCycleUuid as string));
+
   const cycleForms = useSelector(performanceCycleFormsByUuidSelector(performanceCycleUuid as string));
   const { loaded: performanceCycleLoaded, status, error } = useSelector(performanceCycleMetaSelector);
 
   const getConfigEntriesByUuid = (uuid: string) => dispatch(ConfigEntriesActions.getConfigEntriesByUuid({ uuid }));
 
   const canEdit = useMemo(() => {
-    return cycle?.status === PerformanceCycleStatus.DRAFT || cycle?.status === PerformanceCycleStatus.REGISTERED;
+    return (
+      !isViewing &&
+      cycle?.status !== PerformanceCycleStatus.INACTIVE &&
+      cycle?.status !== PerformanceCycleStatus.COMPLETED
+    );
   }, [cycle]);
 
   useEffect(() => {
@@ -105,7 +116,6 @@ const CreatePerformanceCycle: FC = () => {
   }
 
   const handleSave = (data) => {
-    debugger;
     if (performanceCycleUuid === 'new') {
       dispatch(PerformanceCycleActions.createPerformanceCycle({ ...data, status: 'DRAFT' }));
       return;
@@ -113,10 +123,10 @@ const CreatePerformanceCycle: FC = () => {
     dispatch(PerformanceCycleActions.updatePerformanceCycle({ ...data, status: 'DRAFT' }));
   };
 
-  const handlePublish = (data) => {
+  const handlePublish = (data, status) => {
     const newData = {
       ...data,
-      status: 'REGISTERED',
+      status: status && status !== PerformanceCycleStatus.DRAFT ? status : PerformanceCycleStatus.REGISTERED,
       uuid: performanceCycleUuid === 'new' ? undefined : performanceCycleUuid,
     };
     if (performanceCycleUuid === 'new') {
@@ -126,9 +136,9 @@ const CreatePerformanceCycle: FC = () => {
     }
   };
 
-  const handleSubmit = ({ mode, ...data }) => {
+  const handleSubmit = ({ mode, status, ...data }) => {
     if (mode === 'PUBLISH') {
-      handlePublish(buildData(data));
+      handlePublish(buildData(data), status);
       return;
     }
     handleSave(buildData(data));

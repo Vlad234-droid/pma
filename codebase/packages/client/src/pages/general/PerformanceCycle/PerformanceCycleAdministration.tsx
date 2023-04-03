@@ -1,36 +1,29 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { PerformanceCycleTable } from 'features/general/PerformanceCycle';
 import { Button, useStyle, Rule } from '@pma/dex-wrapper';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+
+import { PerformanceCycleTable } from 'features/general/PerformanceCycle';
 import { buildPath } from 'features/general/Routes';
-import { Page } from 'pages/general/types';
-import { Icon } from 'components/Icon';
 import { Trans, useTranslation } from 'components/Translation';
-import { paramsReplacer } from 'utils';
+import { Icon } from 'components/Icon';
 import Select from 'components/Form/Select';
 
-import { Status } from 'features/general/PerformanceCycle/constants/type';
+import { paramsReplacer } from 'utils';
+import { Status } from 'config/enum';
+import { Page } from 'pages/general/types';
 
 const PerformanceCycleAdministration: FC = () => {
-  const [active, setActive] = useState(Status.STARTED);
   const navigate = useNavigate();
-  const { pathname, search } = useLocation();
+  const { search } = useLocation();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [active, setActive] = useState<Status>(Status.STARTED);
   const { css } = useStyle();
   const { t } = useTranslation();
 
-  useEffect(() => {
-    const status: Status = (new URLSearchParams(search).get('status') as Status) || Status.STARTED;
-    setActive(status);
-  }, [search]);
+  useEffect(() => setActive(() => (searchParams.get('status') || Status.STARTED) as Status), [search]);
 
-  const handleSelectFilter = (status: Status) => {
-    navigate({
-      pathname,
-      search: new URLSearchParams({
-        status,
-      }).toString(),
-    });
-  };
+  const handleSelectFilter = (status: Status) => setSearchParams({ status });
 
   const selectOptions = useMemo(() => {
     return [
@@ -43,13 +36,23 @@ const PerformanceCycleAdministration: FC = () => {
         value: Status.REGISTERED,
       },
       {
+        label: t('active_cycles'),
+        value: Status.ACTIVE,
+      },
+
+      {
         label: t('started_cycles'),
         value: Status.STARTED,
       },
       {
-        label: t('active_cycles'),
-        value: Status.ACTIVE,
+        label: t('finished'),
+        value: Status.FINISHED,
       },
+      {
+        label: t('completed'),
+        value: Status.COMPLETED,
+      },
+
       {
         label: t('inactive_cycles'),
         value: Status.INACTIVE,

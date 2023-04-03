@@ -16,6 +16,7 @@ import {
   startPerformanceCycle,
   getPerformanceCycleMappingKeys,
 } from './actions';
+import { convertFormsJsonToObject, filterFormsWithDependentKeys } from '../../utils/formExpression';
 
 export const getGetAllPerformanceCyclesEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
@@ -43,7 +44,10 @@ export const getGetPerformanceCyclesByUuidEpic: Epic = (action$, _, { api }) =>
       from(api.getPerformanceCycleByUuid(payload)).pipe(
         // @ts-ignore
         map(({ data }) => {
-          return getPerformanceCycleByUuid.success(data);
+          return getPerformanceCycleByUuid.success({
+            ...data,
+            forms: filterFormsWithDependentKeys(convertFormsJsonToObject(data?.forms?.filter((form) => form))),
+          });
         }),
         catchError((e) => {
           const errors = e?.data?.errors;

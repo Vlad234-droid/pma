@@ -23,6 +23,7 @@ import TemplatesModal from './TemplatesModal';
 import FormsViewer from './FormsViwer';
 import { createPMCycleSchema } from '../configs/schema';
 import { OBJECTIVE } from '../constants/constants';
+import { Status } from 'config/enum';
 
 type Props = {
   onSubmit: (data: any) => void;
@@ -65,6 +66,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
   };
 
   const templateDetails: any | undefined = useSelector(processTemplateByUuidSelector(template?.uuid));
+
   const mappingKeys = useSelector(performanceCycleMappingKeys);
   const mappingKeyOptions = useMemo(() => mappingKeys.map((value) => ({ label: value, value })), [mappingKeys]);
 
@@ -270,7 +272,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
             isTimelinePointsShow
               ? {
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(4, minmax(150px, 1fr)) repeat(2, minmax(80px, 100px))',
+                  gridTemplateColumns: 'repeat(7, minmax(150px, 1fr)) repeat(2, minmax(80px, 100px))',
                   gap: '8px',
                 }
               : containerStyle,
@@ -278,6 +280,9 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
         >
           <Item label={t('type_of_reviews', 'Type of reviews')} withIcon={false} marginBot={false} />
           <Item label={t('duration', 'Duration')} withIcon={false} marginBot={false} />
+          <Item label={t('pm_review_start_delay', 'Start delay')} withIcon={false} marginBot={false} />
+          <Item label={t('pm_review_lock', 'Review lock')} withIcon={false} marginBot={false} />
+          <Item label={t('pm_review_overdue', 'Review overdue')} withIcon={false} marginBot={false} />
           <Item label={t('before_start', 'Before start')} withIcon={false} marginBot={false} />
           <Item label={t('before_end', 'Before end')} withIcon={false} marginBot={false} />
           <div className={css(itemStyle, { maxWidth: '100px' })}>
@@ -286,7 +291,9 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
           <div className={css(itemStyle, { maxWidth: '100px' })}>
             <Item label={t('max', 'Max')} withIcon={false} marginBot={false} />
           </div>
-          {timelinePoints?.map((point: { reviewType: string }, index) => {
+          {timelinePoints?.map((point: { reviewType: string; type: string }, index) => {
+            const isTimeLinePoint = point.type === 'TIMELINE_POINT';
+            const isCalibrationPoint = point.reviewType === 'CALIBRATION';
             return (
               <Fragment key={index}>
                 <div className={css(itemStyle, { width: '100%' })}>
@@ -305,7 +312,45 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
                       setValue={setValue}
                       Element={DurationPicker}
                       value={get(formValues, `metadata.cycle.timelinePoints[${index}].properties.pm_review_duration`)}
-                      readonly={!canEdit}
+                      readonly={!canEdit || isTimeLinePoint}
+                    />
+                  </div>
+                </div>
+
+                <div className={css({ display: 'flex', gap: '8px' })}>
+                  <div className={css(itemStyle, { width: '100%' })}>
+                    <Field
+                      name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_lock`}
+                      setValue={setValue}
+                      Element={DurationPicker}
+                      value={get(formValues, `metadata.cycle.timelinePoints[${index}].properties.pm_review_lock`)}
+                      readonly={!canEdit || isCalibrationPoint || isTimeLinePoint}
+                    />
+                  </div>
+                </div>
+                <div className={css({ display: 'flex', gap: '8px' })}>
+                  <div className={css(itemStyle, { width: '100%' })}>
+                    <Field
+                      name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_overdue`}
+                      setValue={setValue}
+                      Element={DurationPicker}
+                      value={get(formValues, `metadata.cycle.timelinePoints[${index}].properties.pm_review_overdue`)}
+                      readonly={!canEdit || isCalibrationPoint || isTimeLinePoint}
+                    />
+                  </div>
+                </div>
+
+                <div className={css({ display: 'flex', gap: '8px' })}>
+                  <div className={css(itemStyle, { width: '100%' })}>
+                    <Field
+                      name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_start_delay`}
+                      setValue={setValue}
+                      Element={DurationPicker}
+                      value={get(
+                        formValues,
+                        `metadata.cycle.timelinePoints[${index}].properties.pm_review_start_delay`,
+                      )}
+                      readonly={!canEdit || isTimeLinePoint}
                     />
                   </div>
                 </div>
@@ -319,7 +364,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
                         formValues,
                         `metadata.cycle.timelinePoints[${index}].properties.pm_review_before_start`,
                       )}
-                      readonly={!canEdit}
+                      readonly={!canEdit || isTimeLinePoint}
                     />
                   </div>
                 </div>
@@ -330,7 +375,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
                       setValue={setValue}
                       Element={DurationPicker}
                       value={get(formValues, `metadata.cycle.timelinePoints[${index}].properties.pm_review_before_end`)}
-                      readonly={!canEdit}
+                      readonly={!canEdit || isTimeLinePoint}
                     />
                   </div>
                 </div>
@@ -373,8 +418,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
         <div
           className={css({ display: 'flex', justifyContent: 'flex-end', paddingBottom: '100px', maxWidth: '1300px' })}
         >
-          {/*@ts-ignore*/}
-          {defaultValues?.status !== 'REGISTERED' && (
+          {(!defaultValues?.status || defaultValues?.status === Status.DRAFT) && (
             <Button
               isDisabled={!isValid}
               mode='inverse'
@@ -384,11 +428,12 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
               {t('save_as_draft', 'Save as draft')}
             </Button>
           )}
-          {/*@ts-ignore*/}
           <Button
             isDisabled={!isValid}
             styles={[btnStyle]}
-            onPress={() => handleSubmit((data) => onSubmit({ ...data, mode: 'PUBLISH' }))()}
+            onPress={() =>
+              handleSubmit((data) => onSubmit({ ...data, mode: 'PUBLISH', status: defaultValues?.status }))()
+            }
           >
             {t('save', 'Save')}
           </Button>

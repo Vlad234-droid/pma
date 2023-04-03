@@ -1,9 +1,11 @@
-import React, { FC, useState, useRef, useEffect, useMemo, ChangeEvent } from 'react';
+import React, { FC, useState, useRef, useEffect, ChangeEvent } from 'react';
+import { DurationObject } from 'luxon/src/duration';
 import { Button, useStyle } from '@pma/dex-wrapper';
 import useClickOutside from 'hooks/useClickOutside';
 import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Input } from '../Input';
+import { fromDurationObjectToString, parseDurationFromIso, parseDurationToIso } from 'utils';
 
 type Event = { target: { value: string; name: string } };
 
@@ -15,56 +17,55 @@ export interface DurationField {
 }
 
 export const TEST_ID = 'duration-test-id';
+const duration_map = ['years', 'months', 'weeks', 'days'];
 
 export const DurationPicker: FC<DurationField> = ({ value, name, onChange, readonly = false }) => {
   const { css } = useStyle();
   const containerRef = useRef<HTMLDivElement>(null);
-  const [weeks, setWeeks] = useState('');
-  const [days, setDays] = useState('');
   const [isOpen, toggleOpen] = useState(false);
+  const [durationValue, setDurationValue] = useState<string>('');
+  const [durationObject, setDurationObject] = useState<DurationObject | {}>(() => ({}));
 
-  const setWeeksDays = () => {
-    const initWeeks = value?.match(/(\d+)(?=\s*W)/)?.[0] || '';
-    const initDays = value?.match(/(\d+)(?=\s*D)/)?.[0] || '';
-    if (initWeeks !== weeks) setWeeks(initWeeks);
-    if (initDays !== days) setDays(initDays);
+  const setDuration = () => {
+    const duration = parseDurationFromIso(value);
+    if (!Object.keys(duration).length) setDurationValue(() => '');
+    setDurationObject(() => duration);
+    setDurationValue(() => fromDurationObjectToString(duration, duration_map));
   };
 
   useEffect(() => {
-    setWeeksDays();
+    setDuration();
   }, [value]);
 
   useEffect(() => {
-    !isOpen && setWeeksDays();
+    !isOpen && setDuration();
   }, [isOpen]);
 
   useClickOutside(containerRef, () => {
     toggleOpen(false);
   });
 
-  const handleChange = () => {
-    let result = '';
-    if (weeks && weeks !== '0') result = `${result}${weeks}W`;
-    if (days && days !== '0') result = `${result}${days}D`;
-    if (result) result = `P${result}`;
-    onChange({ target: { value: result, name } });
+  const handleChangeDuration = ({ target: { name, value } }: ChangeEvent<HTMLInputElement>) => {
+    setDurationObject((prev) => ({
+      ...prev,
+      [name]: Number(value),
+    }));
   };
 
-  const displayValue = useMemo(
-    () => `${weeks ? `${weeks} weeks` : ''} ${days ? `${days} days` : ''}`.trim(),
-    [weeks, days],
-  );
-
-  const handleChangeDays = (e: ChangeEvent<HTMLInputElement>) => setDays(e.target.value);
-  const handleChangeWeeks = (e: ChangeEvent<HTMLInputElement>) => setWeeks(e.target.value);
   const handleDone = () => {
-    handleChange();
-    toggleOpen(!isOpen);
+    const value = parseDurationToIso(durationObject);
+    onChange({ target: { value, name } });
+    toggleOpen((prev) => !prev);
   };
 
   return (
     <div data-test-id={TEST_ID} className='dropdown-container' style={{ position: 'relative' }} ref={containerRef}>
-      <Input onFocus={() => !readonly && toggleOpen(!isOpen)} value={displayValue} readonly={readonly} />
+      <Input
+        onFocus={() => !readonly && toggleOpen(!isOpen)}
+        value={durationValue}
+        readonly={readonly}
+        customStyles={{ padding: '10px' }}
+      />
       {isOpen && (
         <TileWrapper
           customStyle={{
@@ -87,14 +88,24 @@ export const DurationPicker: FC<DurationField> = ({ value, name, onChange, reado
               gap: '8px',
             })}
           >
-            <label htmlFor='weeks'>
-              <Trans i18nKey={'weeks'}>weeks</Trans>
-            </label>
-            <Input name='weeks' type='number' min={0} value={weeks} id={'weeks'} onChange={handleChangeWeeks} />
-            <label htmlFor='days'>
-              <Trans i18nKey={'days'}>days</Trans>
-            </label>
-            <Input name='days' type='number' min={0} id={'days'} value={days} onChange={handleChangeDays} />
+            {duration_map.map((item) => {
+              return (
+                <>
+                  <label htmlFor={item}>
+                    <Trans i18nKey={item}>{item}</Trans>
+                  </label>
+                  <Input
+                    name={item}
+                    type='number'
+                    min={0}
+                    value={durationObject?.[item]?.toString() || ''}
+                    id={item}
+                    onChange={handleChangeDuration}
+                  />
+                </>
+              );
+            })}
+
             <Button data-test-id={'button'} onPress={handleDone}>
               <Trans i18nKey={'done'} />
             </Button>

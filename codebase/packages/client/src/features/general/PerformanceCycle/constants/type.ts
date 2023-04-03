@@ -5,7 +5,7 @@ export type Props = {
 export enum Status {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
-  DRAFT = 'DRAFT',
   REGISTERED = 'REGISTERED',
+  DRAFT = 'DRAFT',
   STARTED = 'STARTED',
 }
