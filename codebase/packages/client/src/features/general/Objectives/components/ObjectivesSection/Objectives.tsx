@@ -32,7 +32,7 @@ const Objectives: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const uuid = useSelector(colleagueUUIDSelector);
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
   const cycle = useSelector(colleagueCycleSelector);
-  const isCycleCompleted = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
+  const isCycleCompleted = cycle?.status && [Status.COMPLETED, Status.FINISHED].includes(cycle.status);
 
   const {
     objectives,

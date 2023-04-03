@@ -47,7 +47,7 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
   const { status: cycleStatus } = useCurrentCycle();
 
   const isAvailable =
-    cycleStatus !== Status.COMPLETED &&
+    ![Status.COMPLETED, Status.FINISHED].includes(cycleStatus) &&
     (reviewsMinNumbersInStatusApproved ||
       timelineObjective?.status === Status.DRAFT ||
       originObjectives?.length === 0) &&

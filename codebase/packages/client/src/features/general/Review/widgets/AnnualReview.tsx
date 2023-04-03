@@ -41,7 +41,7 @@ const AnnualReview: FC<Props> = ({ colleagueUuid, isUserView }) => {
   const cycle = isUserView
     ? useSelector(colleagueCycleSelector)
     : useSelector(colleagueCycleDataSelector(colleagueUuid, currentCycle));
-  const isCycleCompleted = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
+  const isCycleCompleted = cycle?.status && [Status.COMPLETED].includes(cycle.status);
   const tlPoint = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid, currentCycle));
   const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, currentCycle));
 

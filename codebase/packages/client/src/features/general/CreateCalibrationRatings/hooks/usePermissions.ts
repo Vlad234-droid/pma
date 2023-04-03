@@ -1,15 +1,10 @@
-import {
-  calibrationReviewDataSelector,
-  colleagueCurrentCycleSelector,
-  getCalibrationPointSelector,
-  isDirectReportSelector,
-} from '@pma/store';
+import { calibrationReviewDataSelector, colleagueCurrentCycleSelector, getCalibrationPointSelector } from '@pma/store';
 import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { role, usePermission } from 'features/general/Permission';
 import { Status } from 'config/enum';
 import { isDateFromISOAfterNow } from 'utils';
 import { useCurrentCycle } from 'hooks/useCurrentCycle';
+import { useRolesPermission } from 'hooks/useRolesPermission';
 
 export const usePermissions = () => {
   const { state } = useLocation();
@@ -22,9 +17,11 @@ export const usePermissions = () => {
 
   const sessionMode = JSON.parse(searchParams.get('sessionMode') ?? 'false');
 
-  const isPerformForPP = usePermission([role.PEOPLE_TEAM]);
-  const isPerformForLM = usePermission([role.LINE_MANAGER]);
-  const isPerformForTA = usePermission([role.TALENT_ADMIN]);
+  const {
+    isLineManager: isPerformForLM,
+    isTalentAdmin: isPerformForTA,
+    isPeopleTeam: isPerformForPP,
+  } = useRolesPermission(colleagueUuid);
 
   const { status: cycleStatus } = useCurrentCycle(colleagueUuid);
 
@@ -32,8 +29,9 @@ export const usePermissions = () => {
   const calibrationReview = useSelector(calibrationReviewDataSelector(colleagueUuid)) || {};
   const { endTime, status: TLPStatus } = useSelector(getCalibrationPointSelector(colleagueUuid, cycle || currentCycle));
   const isFinished =
-    isDateFromISOAfterNow(endTime) || TLPStatus === Status.COMPLETED || cycleStatus === Status.COMPLETED;
-  const isDirectReport = useSelector(isDirectReportSelector(colleagueUuid));
+    isDateFromISOAfterNow(endTime) ||
+    TLPStatus === Status.COMPLETED ||
+    [Status.COMPLETED, Status.FINISHED].includes(cycleStatus);
 
   const isNew = uuid === 'new';
 
@@ -43,8 +41,8 @@ export const usePermissions = () => {
     calibrationReview?.status === Status.COMPLETED ||
     calibrationReview?.status === Status.WAITING_FOR_COMPLETION;
 
-  const isLMwithPP = isPerformForLM && isPerformForPP && isDirectReport;
-  const isLMwithTA = isPerformForLM && isPerformForTA && isDirectReport;
+  const isLMwithPP = isPerformForLM && isPerformForPP;
+  const isLMwithTA = isPerformForLM && isPerformForTA;
   const sessionModeCreate = sessionMode && isDraft;
 
   const editablePPSession =

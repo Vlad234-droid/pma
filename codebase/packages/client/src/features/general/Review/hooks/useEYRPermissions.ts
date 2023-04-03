@@ -8,12 +8,12 @@ import {
 } from '@pma/store';
 import { useParams } from 'react-router-dom';
 import { Review, ReviewType, Status } from 'config/types';
-import { usePermissions } from './usePermissions';
+import { useRolesPermission } from 'hooks/useRolesPermission';
 
 export const useEYRPermissions = (reviewType: ReviewType.MYR | ReviewType.EYR) => {
   const { uuid } = useParams<{ uuid: string }>();
 
-  const { isPeopleTeam, isLineManager, isTalentAdmin } = usePermissions();
+  const { isPeopleTeam, isLineManager, isTalentAdmin } = useRolesPermission();
 
   const colleagueUuid = uuid!;
   const colleague = useSelector(getColleagueSelector(colleagueUuid));
@@ -33,7 +33,7 @@ export const useEYRPermissions = (reviewType: ReviewType.MYR | ReviewType.EYR) =
     reviewType === ReviewType.EYR &&
     ![Status.LOCKED, Status.FINISHING, Status.COMPLETED].includes(timeline?.status);
 
-  const cycleCompletedCondition = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
+  const cycleCompletedCondition = cycle?.status && [Status.COMPLETED, Status.FINISHED].includes(cycle.status);
 
   const declineCondition =
     !isTalentAdmin &&

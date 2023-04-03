@@ -26,7 +26,8 @@ import { InfoBlock } from 'components/InfoBlock';
 import ReviewForm from './components/ReviewForm';
 import { formTagComponents } from 'utils/schema';
 import { ReviewType, Status } from 'config/enum';
-import { useEYRPermissions, useMetaData, useMYRPermissions, usePermissions } from './hooks';
+import { useEYRPermissions, useMetaData, useMYRPermissions } from './hooks';
+import { useRolesPermission } from 'hooks/useRolesPermission';
 
 export type Props = {
   reviewType: ReviewType.MYR | ReviewType.EYR;
@@ -54,7 +55,7 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
     info,
   } = useMetaData();
 
-  const { isPeopleTeam, isLineManager } = usePermissions();
+  const { isPeopleTeam, isLineManager } = useRolesPermission();
   const { declineCondition, approveCondition, currentCycle, colleague, colleagueUuid, timeline, review, readonly } =
     reviewType === ReviewType.EYR ? useEYRPermissions(reviewType) : useMYRPermissions(reviewType);
 

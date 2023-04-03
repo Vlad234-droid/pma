@@ -31,7 +31,7 @@ const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
   const cycleYear = useSelector(colleagueCycleYearSelector);
   const orgObjectives = useSelector(orgObjectivesSelector) || [];
   const hasObjectives = !!orgObjectives.length;
-  const isCompleted = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
+  const isCompleted = cycle?.status && [Status.COMPLETED, Status.FINISHED].includes(cycle.status);
 
   const getContent = (): [Graphics, string, string] => {
     return [

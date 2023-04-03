@@ -9,12 +9,12 @@ import {
 import { useParams } from 'react-router-dom';
 
 import { Review, ReviewType, Status } from 'config/types';
-import { usePermissions } from './usePermissions';
+import { useRolesPermission } from 'hooks/useRolesPermission';
 
 export const useMYRPermissions = (reviewType: ReviewType.MYR | ReviewType.EYR) => {
   const { uuid } = useParams<{ uuid: string }>();
 
-  const { isLineManager } = usePermissions();
+  const { isLineManager } = useRolesPermission();
 
   const colleagueUuid = uuid!;
   const colleague = useSelector(getColleagueSelector(colleagueUuid));
@@ -23,7 +23,7 @@ export const useMYRPermissions = (reviewType: ReviewType.MYR | ReviewType.EYR) =
   const cycle = useSelector(colleagueCycleDataSelector(colleagueUuid, currentCycle));
   const timeline = useSelector(getTimelineByReviewTypeSelector(reviewType, colleagueUuid, currentCycle)) || ({} as any);
 
-  const cycleCompletedCondition = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
+  const cycleCompletedCondition = cycle?.status && [Status.COMPLETED, Status.FINISHED].includes(cycle.status);
 
   const declineCondition =
     !cycleCompletedCondition &&

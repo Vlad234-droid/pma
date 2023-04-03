@@ -54,7 +54,8 @@ const SubmitCalibrationRatings: FC<Props> = React.memo(({ userUuid }) => {
   const isActivePoint = TLPStatus !== Status.NOT_STARTED && isDateFromISOAfterNow(startTime);
   const isFinished = isDateFromISOAfterNow(endTime);
 
-  const TLPOrCycleCompleted = TLPStatus === Status.COMPLETED || cycleStatus === Status.COMPLETED;
+  const TLPOrCycleCompleted =
+    TLPStatus === Status.COMPLETED || [Status.COMPLETED, Status.FINISHED].includes(cycleStatus);
 
   const isSubmitting = uuid === 'new' || status === Status.DRAFT;
   const isEditing = !isSubmitting && status === Status.WAITING_FOR_APPROVAL;

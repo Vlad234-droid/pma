@@ -87,7 +87,7 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
   const hasApproved = hasApprovedObjective || hasApprovedPriorities;
   const { currentTimelines } = useTimelineContainer();
   const { code: currentCode } = currentTimelines[ReviewType.QUARTER] || { code: '' };
-  const isCompleted = cycle?.status && [Status.COMPLETED, Status.FINISHING].includes(cycle.status);
+  const isCompleted = cycle?.status && [Status.COMPLETED, Status.FINISHED].includes(cycle.status);
 
   const sharedObjectives = useSelector(getAllSharedObjectives);
   const isManager = usePermission([role.LINE_MANAGER]);
