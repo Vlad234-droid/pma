@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef, useMemo } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { Button, Icon, useStyle, Rule, CreateRule, colors } from '@pma/dex-wrapper';
+import { Button, useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 
 import { createYupSchema } from 'utils/yup';
 import { checkIsExistValue } from 'utils';
@@ -16,7 +16,7 @@ import { Attention } from 'components/Form';
 import DynamicForm from 'components/DynamicForm';
 import { IconButton, Position } from 'components/IconButton';
 import ObjectiveHelpModal from '../Modal/ObjectiveHelpModal';
-import { InfoBlock } from '../../../../../components/InfoBlock';
+import { InfoBlock } from 'components/InfoBlock';
 
 export type Props = {
   formElements: Array<any>;
