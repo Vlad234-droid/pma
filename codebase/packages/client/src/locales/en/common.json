@@ -720,6 +720,7 @@
   "performance_period_duration": "Performance period {{ startDate }} - {{ endDate }}",
   "your_review_due_by_date": "Your performance review form is due by {{ date }}",
   "need_help_to_write": "You have approved your colleague's",
+  "need_help_writing_your_objectives": "Need help writing your objectives?",
   "belowExpected": "Below expected",
   "quarter1": "Quarter 1",
   "quarter2": "Quarter 2",
