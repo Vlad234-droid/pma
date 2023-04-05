@@ -17,7 +17,7 @@ const Profile: FC = () => {
       <AuthConsumer>
         {({ user }) => {
           return (
-            <TileWrapper>
+            <TileWrapper customStyle={{ maxWidth: '856px' }}>
               <div className={css(cardWrapper({ mobileScreen }))}>
                 {user && <AvatarName user={user} />}
                 <PersonalInformation user={user} />

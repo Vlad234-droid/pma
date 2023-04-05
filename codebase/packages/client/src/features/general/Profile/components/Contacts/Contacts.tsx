@@ -9,10 +9,6 @@ export type DashboardProfileProps = {
 
 type Props = HTMLProps<HTMLInputElement> & DashboardProfileProps;
 
-const wrapperStyle = {
-  padding: '0',
-} as Styles;
-
 const bodyBlockStyle = {
   minWidth: '200px',
   display: 'grid',
@@ -73,14 +69,12 @@ const Contacts: FC<Props> = ({ user }) => {
   const { email } = user;
   return (
     <BasicTile title={t('Contacts', 'Contacts')} description={''} customStyle={tileStyle({ mobileScreen })}>
-      <div className={css(wrapperStyle)}>
-        <div className={css(bodyStyle)}>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
-              <Trans>Email address</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>{email}</span>
-          </div>
+      <div className={css(bodyStyle)}>
+        <div className={css(bodyBlockStyle)}>
+          <span className={css(titleStyle)}>
+            <Trans>Email address</Trans>
+          </span>
+          <span className={css(descriptionStyle)}>{email}</span>
         </div>
       </div>
     </BasicTile>
