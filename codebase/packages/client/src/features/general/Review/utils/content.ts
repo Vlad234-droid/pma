@@ -41,7 +41,7 @@ export const getContent = (
         true,
         true,
         isGeneral
-          ? t('review_form_declined_at_date', `Declined [${lastUpdatedTime}]`, { date: new Date(lastUpdatedTime) })
+          ? t('review_form_declined_at_date', `Declined ${lastUpdatedTime}`, { date: new Date(lastUpdatedTime) })
           : t('request_to_amend ', 'Request to amend'),
         viewOnly ? t('view', 'View') : t('view_and_edit', 'View and edit'),
       ];

@@ -32,7 +32,7 @@
   "objective_is_approved": "Well done! All {{count}} objective(s) have been approved.",
   "form_available_in_date": "The form will be available on {{date, d LLL yyyy}}.",
   "completed_at_date": "Completed {{date, d LLL yyyy}}",
-  "review_form_declined_at_date": "Declined [{{date, d LLL yyyy}}]",
+  "review_form_declined_at_date": "Declined {{date, d LLL yyyy}}",
   "objective_is_draft": "{{count}} objective(s) saved as a draft",
   "objective_is_pending": "{{count}} objective(s) are waiting for approval",
   "pending": "Pending",
