@@ -20,9 +20,7 @@ const PendingNotes: FC<PendingNotesProps> = ({ item }) => {
     <div data-test-id={NOTES_WRAPPER}>
       <div className={css({ marginBottom: '16px' })}>
         <h3 className={css(TileTitle)}>
-          <Trans i18nKey='colleague_requested_feedback'>
-            This colleague has requested feedback from you. Fill out the questions below to share your feedback.
-          </Trans>
+          <Trans i18nKey='colleague_requested_feedback_from_you'>This colleague has requested feedback from you.</Trans>
         </h3>
         <h3 className={css(SphereResondStyle)}>
           {getPropperTargetType(item.targetType, item.targetId, item.feedbackItems, review)}
