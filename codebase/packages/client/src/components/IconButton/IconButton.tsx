@@ -32,7 +32,7 @@ export const IconButton: FC<IconButtonProps> = memo(
           graphic={graphic}
           iconStyles={iconStyles}
           {...iconProps}
-          size={'17px'}
+          size={'24px'}
         />,
         children,
       ];

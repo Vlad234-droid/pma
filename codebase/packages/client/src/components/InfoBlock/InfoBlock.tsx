@@ -8,7 +8,7 @@ const InfoBlock: FC<{ text: string }> = ({ text }) => {
 
   return (
     <div className={css(wrapperStyle)} data-test-id={WRAPPER_ID}>
-      <Icon graphic='information' size={'18px'} />
+      <Icon graphic='information' size={'24px'} />
       <span className={css(textStyle)}>{text}</span>
     </div>
   );

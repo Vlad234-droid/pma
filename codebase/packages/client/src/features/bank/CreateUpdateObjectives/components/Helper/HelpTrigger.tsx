@@ -7,7 +7,7 @@ const HelpTrigger: FC = () => {
 
   return (
     <div className={css(wrapperStyle)}>
-      <Icon graphic='information' size={'18px'} />
+      <Icon graphic='information' size={'24px'} />
       <span className={css(textStyle)}>
         <Trans i18nKey='need_help_to_write' ns={'bank'}>
           Need help writing your priorities?
