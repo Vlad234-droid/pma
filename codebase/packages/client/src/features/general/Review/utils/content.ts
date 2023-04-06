@@ -55,7 +55,7 @@ export const getContent = (
         true,
         true,
         t('review_widget_saved_as_draft', 'Your form is currently saved as a draft'),
-        t('view_and_edit', 'View and edit'),
+        viewOnly ? t('view', 'View') : t('view_and_edit', 'View and edit'),
       ];
     case Status.APPROVED:
       return [
