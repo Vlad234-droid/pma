@@ -79,7 +79,7 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
       </div>
       <Attention />
       <div className={css(questionWrapper)}>
-        <Trans i18nKey='colleague_requested_feedback'>
+        <Trans i18nKey='colleague_requested_feedback_questions'>
           This colleague has requested feedback from you. Fill out the questions below to share your feedback.
         </Trans>
       </div>
