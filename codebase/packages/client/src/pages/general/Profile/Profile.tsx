@@ -11,13 +11,14 @@ export const TEST_ID = 'profile-test-page';
 const Profile: FC = () => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
   return (
     <div data-test-id={TEST_ID} className={css({ margin: '8px' })}>
       <AuthConsumer>
         {({ user }) => {
           return (
-            <TileWrapper customStyle={{ maxWidth: '856px' }}>
+            <TileWrapper customStyle={wrapperStyle({ mediumScreen })}>
               <div className={css(cardWrapper({ mobileScreen }))}>
                 {user && <AvatarName user={user} />}
                 <PersonalInformation user={user} />
@@ -31,7 +32,9 @@ const Profile: FC = () => {
     </div>
   );
 };
-
+const wrapperStyle: CreateRule<{ mediumScreen: boolean }> = ({ mediumScreen }) => ({
+  maxWidth: mediumScreen ? '100%' : '75%',
+});
 const cardWrapper: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
   display: 'flex',
   flexDirection: 'column',

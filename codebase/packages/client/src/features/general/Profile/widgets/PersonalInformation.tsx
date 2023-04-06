@@ -27,10 +27,6 @@ const PersonalInformation: FC<Props> = ({ user = {} }) => {
   );
 };
 
-// const wrapperStyle: Styles = {
-//   padding: '0',
-// };
-
 const bodyBlockStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
   minWidth: '200px',
   display: 'grid',
