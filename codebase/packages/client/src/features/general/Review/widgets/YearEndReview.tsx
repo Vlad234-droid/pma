@@ -18,6 +18,7 @@ import { buildPath } from 'features/general/Routes';
 import { paramsReplacer } from 'utils';
 import { ReviewType, Status } from 'config/enum';
 import { Page } from 'pages';
+import { useRolesPermission } from '../../../../hooks/useRolesPermission';
 
 type Props = {
   colleagueUuid: string;
@@ -28,6 +29,7 @@ const YearEndReview: FC<Props> = ({ colleagueUuid, isUserView }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const tenant = useTenant();
+  const rolesPermission = useRolesPermission();
   const navigate = useNavigate();
   const { pathname, state } = useLocation();
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
@@ -41,6 +43,9 @@ const YearEndReview: FC<Props> = ({ colleagueUuid, isUserView }) => {
   const { summaryStatus, startTime, lastUpdatedTime, statistics = {} } = tlPoint || {};
 
   const status = (Object.keys(statistics)[0] || summaryStatus) as Status;
+  const isLocked = tlPoint?.status === Status.LOCKED;
+  const canEditLockedStats = isLocked && rolesPermission.isPeopleTeam && status === Status.APPROVED;
+  const isViewOnly = canEditLockedStats ? false : isCycleCompleted || !isUserView || isLocked;
 
   if (!tlPoint) {
     return null;
@@ -53,12 +58,12 @@ const YearEndReview: FC<Props> = ({ colleagueUuid, isUserView }) => {
           status,
           startTime,
           lastUpdatedTime,
-          viewOnly: isCycleCompleted || !isUserView,
+          viewOnly: isViewOnly,
         },
         t,
         tenant,
       ),
-    [summaryStatus, startTime, lastUpdatedTime, isCycleCompleted, isUserView],
+    [summaryStatus, startTime, lastUpdatedTime, isCycleCompleted, isUserView, isLocked],
   );
   const disabled = isUserView
     ? status === Status.NOT_STARTED

@@ -68,7 +68,7 @@ export const getContent = (
           'review_form_approved',
           t('completed_at_date', `Completed ${lastUpdatedTime}`, { date: new Date(lastUpdatedTime) }),
         ),
-        t('view', 'View'),
+        viewOnly ? t('view', 'View') : t('view_and_edit', 'View and edit'),
       ];
     case Status.WAITING_FOR_APPROVAL:
       return [
