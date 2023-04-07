@@ -15,22 +15,16 @@ const PersonalInformation: FC<Props> = ({ user = {} }) => {
   const { fullName } = user;
   return (
     <BasicTile title={t('Personal', 'Personal information')} description={''} customStyle={tileStyle({ mobileScreen })}>
-      <div className={css(wrapperStyle)}>
-        <div className={css(bodyStyle)}>
-          <div className={css(bodyBlockStyle({ mobileScreen }))}>
-            <span className={css(titleStyle)}>
-              <Trans>Full name</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>{fullName}</span>
-          </div>
+      <div className={css(bodyStyle)}>
+        <div className={css(bodyBlockStyle({ mobileScreen }))}>
+          <span className={css(titleStyle)}>
+            <Trans>Full name</Trans>
+          </span>
+          <span className={css(descriptionStyle)}>{fullName}</span>
         </div>
       </div>
     </BasicTile>
   );
-};
-
-const wrapperStyle: Styles = {
-  padding: '0',
 };
 
 const bodyBlockStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({

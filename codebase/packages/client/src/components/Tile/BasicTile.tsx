@@ -54,13 +54,7 @@ export const BasicTile: FC<Props> = ({
   };
 
   return (
-    <TileWrapper
-      boarder={boarder}
-      hover={!disabled && hover}
-      customStyle={{
-        ...customStyle,
-      }}
-    >
+    <TileWrapper boarder={boarder} hover={!disabled && hover} customStyle={customStyle}>
       <div
         data-test-id={TEST_ID}
         className={css(wrapperStyle({ icon, isLink: !disabled && !!link }))}
