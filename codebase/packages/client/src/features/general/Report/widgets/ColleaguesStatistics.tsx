@@ -10,18 +10,29 @@ import { PieChart } from 'components/PieChart';
 import InfoTable from 'components/InfoTable';
 import { View } from 'features/general/Report/config';
 import { getReportTitles, getTitle, checkBusinessType, checkTableChart } from '../utils';
-import { ReportPage, ReportType, TitlesReport } from 'config/enum';
+import { ReportPage, ReportType, ReportTypeExtension, TitlesReport } from 'config/enum';
 import { isSingular } from 'utils';
 
 type Props = {
   type: ReportPage;
 };
 
+const calculateAnniversaryStats = (anniversary) => {
+  const anniversaryReportStart =
+    anniversary?.find(({ type }) => type === ReportType.EYR + ReportTypeExtension.START) || {};
+  const anniversaryReportEnd = anniversary?.find(({ type }) => type === ReportType.EYR + ReportTypeExtension.END) || {};
+
+  return {
+    totalCount: anniversaryReportStart.totalCount ?? 0 + anniversaryReportEnd.totalCount ?? 0,
+    completed:
+      anniversaryReportStart.statistics?.approved?.count ?? 0 + anniversaryReportEnd.statistics?.approved?.count ?? 0,
+  };
+};
+
 export const ColleaguesStatistics: FC<Props> = ({ type }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const anniversary = useSelector(getReportByType('anniversaryReviews'));
-  const anniversaryReport = anniversary?.find(({ type }) => type === ReportType.EYR) || {};
 
   const isBusinessType = checkBusinessType(type);
   const isTableChart = checkTableChart(type);
@@ -32,8 +43,8 @@ export const ColleaguesStatistics: FC<Props> = ({ type }) => {
         <TableWidget configKey={type}>
           {({ data }) => {
             const isAnniversary = type === ReportPage.REPORT_ANNIVERSARY_REVIEWS;
-            const totalCount = anniversaryReport.totalCount ?? 0;
-            const completed = anniversaryReport?.statistics?.approved?.count ?? 0;
+            const { totalCount = 0, completed = 0 } = calculateAnniversaryStats(anniversary);
+
             return isAnniversary ? (
               <>
                 <InfoTable
