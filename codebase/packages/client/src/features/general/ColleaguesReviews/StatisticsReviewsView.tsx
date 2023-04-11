@@ -83,7 +83,10 @@ export const StatisticsReviewsView: FC<Props> = ({
       {type &&
         Object.entries(listWithEmptyLabels).map(([title, data]) => {
           const total = reviews?.statistics?.[title]?.count ?? 0;
-          const hasMore = (data as any)?.length !== reviews?.statistics?.[title]?.count;
+          const hasMore =
+            !!(data as any)?.length &&
+            reviews?.statistics?.[title]?.count &&
+            (data as any)?.length !== reviews?.statistics?.[title]?.count;
 
           return (
             <Accordion

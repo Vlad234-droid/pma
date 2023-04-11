@@ -23,9 +23,10 @@ const calculateAnniversaryStats = (anniversary) => {
   const anniversaryReportEnd = anniversary?.find(({ type }) => type === ReportType.EYR + ReportTypeExtension.END) || {};
 
   return {
-    totalCount: anniversaryReportStart.totalCount ?? 0 + anniversaryReportEnd.totalCount ?? 0,
+    totalCount: (anniversaryReportStart.totalCount ?? 0) + (anniversaryReportEnd.totalCount ?? 0),
     completed:
-      anniversaryReportStart.statistics?.approved?.count ?? 0 + anniversaryReportEnd.statistics?.approved?.count ?? 0,
+      (anniversaryReportStart.statistics?.approved?.count ?? 0) +
+      (anniversaryReportEnd.statistics?.approved?.count ?? 0),
   };
 };
 
