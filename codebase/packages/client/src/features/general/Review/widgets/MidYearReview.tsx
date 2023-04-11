@@ -18,7 +18,7 @@ import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import { ReviewType, Status } from 'config/enum';
 import { paramsReplacer } from 'utils';
-import { useRolesPermission } from '../../../../hooks/useRolesPermission';
+import { useRolesPermission } from 'hooks/useRolesPermission';
 
 type Props = {
   colleagueUuid: string;
