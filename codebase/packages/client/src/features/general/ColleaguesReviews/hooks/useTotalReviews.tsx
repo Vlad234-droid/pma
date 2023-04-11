@@ -1,14 +1,13 @@
 import { getReportByType } from '@pma/store';
 import { useSelector } from 'react-redux';
 
-import { CycleStartEnd, ReportPage, ReportType } from 'config/enum';
+import { ReportTypeExtension, ReportPage, ReportType } from 'config/enum';
 
 const report = {
   [ReportPage.REPORT_SUBMITTED_OBJECTIVES]: {
     type: ReportType.OBJECTIVE,
     selectorType: 'review',
   },
-
   [ReportPage.REPORT_APPROVED_OBJECTIVES]: {
     type: ReportType.OBJECTIVE,
     selectorType: 'review',
@@ -47,7 +46,7 @@ const report = {
   },
 };
 
-export const useTotalReviews = (configKey: ReportPage, extensionKey?: CycleStartEnd) => {
+export const useTotalReviews = (configKey: ReportPage, extensionKey?: ReportTypeExtension) => {
   const reportData = report[configKey];
 
   const chartData = useSelector(getReportByType(reportData?.selectorType)) ?? [];

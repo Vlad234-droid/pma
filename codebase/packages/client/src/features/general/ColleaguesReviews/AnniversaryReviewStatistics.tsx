@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { useTranslation } from 'components/Translation';
 import { useTotalReviews } from './hooks';
 import { filterToRequest } from 'utils';
 import { List } from './config';
-import { CycleStartEnd, ReportPage } from 'config/enum';
+import { ReportTypeExtension, ReportPage } from 'config/enum';
 import { StatisticsReviewsView } from './StatisticsReviewsView';
 
 type Props = {
@@ -29,12 +30,15 @@ export const AnniversaryReviewStatistics: FC<Props> = ({
   filters,
 }) => {
   const { t } = useTranslation();
-  const reviewsStartingInThisYear = useTotalReviews(type, CycleStartEnd.START);
-  const reviewsEndingInThisYear = useTotalReviews(type, CycleStartEnd.END);
+  const { css } = useStyle();
+  const reviewsStartingInThisYear = useTotalReviews(type, ReportTypeExtension.START);
+  const reviewsEndingInThisYear = useTotalReviews(type, ReportTypeExtension.END);
 
   return (
     <div>
-      <h3>{t('cycles_ending_in_this_financial_year', 'Cycles ending in this financial year')}</h3>
+      <span className={css(titleStyles)}>
+        {t('cycles_ending_in_this_financial_year', 'Cycles ending in this financial year')}
+      </span>
       <StatisticsReviewsView
         type={type}
         year={year}
@@ -46,7 +50,9 @@ export const AnniversaryReviewStatistics: FC<Props> = ({
         filterValues={filterValues}
         filters={filters}
       />
-      <h3>{t('cycles_starting_in_this_financial_year', 'Cycles starting in this financial year')}</h3>
+      <span className={css(titleStyles)}>
+        {t('cycles_starting_in_this_financial_year', 'Cycles starting in this financial year')}
+      </span>
       <StatisticsReviewsView
         type={type}
         year={year}
@@ -61,3 +67,13 @@ export const AnniversaryReviewStatistics: FC<Props> = ({
     </div>
   );
 };
+
+const titleStyles: Rule = ({ theme }) => ({
+  fontStyle: 'normal',
+  fontWeight: '700',
+  fontSize: `${theme.font.fixed.f20.fontSize}`,
+  display: 'inline-block',
+  color: theme.colors.tescoBlue,
+  paddingTop: '30px',
+  paddingBottom: '16px',
+});

@@ -285,7 +285,7 @@ export enum Operand {
   NOT_EXIST = '_nexist',
 }
 
-export enum CycleStartEnd {
+export enum ReportTypeExtension {
   START = '_START',
   END = '_END',
 }
