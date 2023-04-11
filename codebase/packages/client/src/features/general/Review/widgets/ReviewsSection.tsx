@@ -5,7 +5,6 @@ import {
   colleagueCurrentCycleSelector,
   isAnniversaryTimelineType,
   timelineTypesAvailabilitySelector,
-  uuidCompareSelector,
 } from '@pma/store';
 
 import { AnnualReviewWidget, MidYearReviewWidget, YearEndReviewWidget } from './';

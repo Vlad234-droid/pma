@@ -26,4 +26,18 @@ export type ReviewStatistics = {
   totalCount: number;
 };
 
+export type ReportPageEmptyData = {
+  approved?: [];
+  'not-submitted'?: [];
+  submitted?: [];
+  'New to business'?: [];
+  'Below expected'?: [];
+  Great?: [];
+  Outstanding?: [];
+  Satisfactory?: [];
+  'new-to-business'?: [];
+  given?: [];
+  requested?: [];
+};
+
 export type List = Record<string, Array<Info> | []>;

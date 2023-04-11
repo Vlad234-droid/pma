@@ -284,3 +284,8 @@ export enum Operand {
   NULL = '_null',
   NOT_EXIST = '_nexist',
 }
+
+export enum CycleStartEnd {
+  START = '_START',
+  END = '_END',
+}
