@@ -34,7 +34,7 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
   const timelinePoint: Timeline = timelinePoints.find((timelinePoint) => timelinePoint.code === activeCode) as Timeline;
 
   const objectivesLen = timelinePoint?.statistics
-    ? Object.values(timelinePoint?.statistics).reduce((acc, el) => acc + Number(el), 0)
+    ? Object.values(timelinePoint?.statistics).reduce((acc, el) => acc + Number(el.count), 0)
     : 0;
 
   const { markup = { max: 0, min: 0 } } = schema;
