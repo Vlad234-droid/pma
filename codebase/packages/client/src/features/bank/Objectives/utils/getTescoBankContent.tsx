@@ -5,11 +5,11 @@ import { PriorityList } from 'features/bank/MainWidget';
 
 import { Page } from 'pages';
 import { Status } from 'config/enum';
-import { Colors } from 'config/types';
+import { Colors, TimelineStatistics } from 'config/types';
 
 export type ContentProps = {
   status?: Status;
-  statistics: Record<string, string>;
+  statistics: TimelineStatistics;
   count?: number;
   nextReviewDate?: string;
 };
@@ -32,7 +32,7 @@ export type ContentConfig = {
 
 export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
   const { status, statistics, nextReviewDate: date = '' } = props;
-  const count = Object.values(statistics).reduce((acc, el) => acc + Number(el), 0);
+  const count = Object.values(statistics).reduce((acc, el) => acc + Number(el.count), 0);
 
   const config: ContentConfig = {
     viewPage: Page.REVIEWS_VIEW,

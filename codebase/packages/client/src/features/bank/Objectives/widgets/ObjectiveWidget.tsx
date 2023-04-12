@@ -52,8 +52,7 @@ const ObjectiveWidget: FC = () => {
     { status, statistics: statistics || {}, nextReviewDate: date },
     t,
   );
-
-  const prioritiesCount = Object.values(statistics || {}).reduce((acc, el) => acc + Number(el), 0);
+  const prioritiesCount = Object.values(statistics || {}).reduce((acc, el) => acc + Number(el.count), 0);
 
   const handleClick = () => navigate(buildPath(viewPage), { state: { backPath: pathname } });
 
