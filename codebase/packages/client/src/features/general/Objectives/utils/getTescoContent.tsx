@@ -31,7 +31,7 @@ export type ContentConfig = {
 
 export const getTescoContent = (props: ContentProps, t: TFunction) => {
   const { status, statistics, nextReviewDate: date = '' } = props;
-  const count = status ? statistics?.[status] || 0 : 0;
+  const count = status ? statistics?.[status]?.count || 0 : 0;
 
   const isEditPage =
     statistics?.[Status.WAITING_FOR_APPROVAL] || statistics?.[Status.DECLINED] || statistics?.[Status.APPROVED];

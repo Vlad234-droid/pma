@@ -9,10 +9,6 @@ export type DashboardProfileProps = {
 
 type Props = HTMLProps<HTMLInputElement> & DashboardProfileProps;
 
-const wrapperStyle = {
-  padding: '0',
-} as Styles;
-
 const bodyBlockStyle = {
   minWidth: '200px',
   display: 'grid',
@@ -51,19 +47,13 @@ const bodyStyle: Rule = ({ theme }) => {
 };
 
 // TODO: Extract duplicate 11
-const tileStyle: CreateRule<{ mobileScreen }> =
+const tileStyle: CreateRule<{ mobileScreen: boolean }> =
   ({ mobileScreen }) =>
   ({ theme }) => ({
     fontSize: theme.font.fixed.f16.fontSize,
     lineHeight: theme.font.fixed.f16.lineHeight,
     letterSpacing: '0px',
-    ...(mobileScreen
-      ? {
-          padding: '6px 0 0',
-        }
-      : {
-          padding: '14px 10px 10px',
-        }),
+    padding: mobileScreen ? '6px 0 0' : '14px 10px 10px',
   });
 
 const Contacts: FC<Props> = ({ user }) => {
@@ -73,14 +63,12 @@ const Contacts: FC<Props> = ({ user }) => {
   const { email } = user;
   return (
     <BasicTile title={t('Contacts', 'Contacts')} description={''} customStyle={tileStyle({ mobileScreen })}>
-      <div className={css(wrapperStyle)}>
-        <div className={css(bodyStyle)}>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
-              <Trans>Email address</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>{email}</span>
-          </div>
+      <div className={css(bodyStyle)}>
+        <div className={css(bodyBlockStyle)}>
+          <span className={css(titleStyle)}>
+            <Trans>Email address</Trans>
+          </span>
+          <span className={css(descriptionStyle)}>{email}</span>
         </div>
       </div>
     </BasicTile>

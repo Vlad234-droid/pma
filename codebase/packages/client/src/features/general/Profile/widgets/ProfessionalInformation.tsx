@@ -9,10 +9,6 @@ export type DashboardProfileProps = {
 
 type Props = HTMLProps<HTMLInputElement> & DashboardProfileProps;
 
-const wrapperStyle = {
-  padding: '0',
-} as Styles;
-
 const bodyBlockStyle = {
   minWidth: '200px',
   display: 'grid',
@@ -44,12 +40,13 @@ const descriptionStyle: Rule = ({ theme }) => {
 };
 
 // TODO: Extract duplicate 10
-const bodyStyle = {
+const bodyStyle: Rule = {
   flexWrap: 'wrap',
   gap: '16px 8px',
   alignItems: 'center',
-  display: 'inline-flex',
-} as Styles;
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(max(200px,30%), 1fr))',
+};
 
 // TODO: Extract duplicate 11
 const tileStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
@@ -74,44 +71,42 @@ const ProfessionalInformation: FC<Props> = ({ user }) => {
       description={''}
       customStyle={tileStyle({ mobileScreen })}
     >
-      <div className={css(wrapperStyle)}>
-        <div className={css(bodyStyle)}>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
-              <Trans>Job title</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>{job}</span>
-          </div>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
-              <Trans>Department</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>{department}</span>
-          </div>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
-              <Trans>Business unit</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>{businessType}</span>
-          </div>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
-              <Trans>Line manager</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>{manager}</span>
-          </div>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
-              <Trans>Hire date</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>{hireDate}</span>
-          </div>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
-              <Trans>Location</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>{countryCode}</span>
-          </div>
+      <div className={css(bodyStyle)}>
+        <div className={css(bodyBlockStyle)}>
+          <span className={css(titleStyle)}>
+            <Trans>Job title</Trans>
+          </span>
+          <span className={css(descriptionStyle)}>{job}</span>
+        </div>
+        <div className={css(bodyBlockStyle)}>
+          <span className={css(titleStyle)}>
+            <Trans>Department</Trans>
+          </span>
+          <span className={css(descriptionStyle)}>{department}</span>
+        </div>
+        <div className={css(bodyBlockStyle)}>
+          <span className={css(titleStyle)}>
+            <Trans>Business unit</Trans>
+          </span>
+          <span className={css(descriptionStyle)}>{businessType}</span>
+        </div>
+        <div className={css(bodyBlockStyle)}>
+          <span className={css(titleStyle)}>
+            <Trans>Line manager</Trans>
+          </span>
+          <span className={css(descriptionStyle)}>{manager}</span>
+        </div>
+        <div className={css(bodyBlockStyle)}>
+          <span className={css(titleStyle)}>
+            <Trans>Hire date</Trans>
+          </span>
+          <span className={css(descriptionStyle)}>{hireDate}</span>
+        </div>
+        <div className={css(bodyBlockStyle)}>
+          <span className={css(titleStyle)}>
+            <Trans>Location</Trans>
+          </span>
+          <span className={css(descriptionStyle)}>{countryCode}</span>
         </div>
       </div>
     </BasicTile>

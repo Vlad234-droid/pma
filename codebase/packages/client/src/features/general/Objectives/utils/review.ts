@@ -5,9 +5,9 @@ import { Status } from 'config/enum';
  */
 export const checkIfCanEditAllObjective = (timelinePoint: any) => {
   const { properties, statistics } = timelinePoint || { properties: {}, statistics: {} };
-  const draftCount = Number(statistics?.[Status.DRAFT] || '0');
-  const declinedCount = Number(statistics?.[Status.DECLINED] || '0');
-  const waitingForApprovalCount = Number(statistics?.[Status.WAITING_FOR_APPROVAL] || '0');
+  const draftCount = Number(statistics?.[Status.DRAFT]?.count || '0');
+  const declinedCount = Number(statistics?.[Status.DECLINED]?.count || '0');
+  const waitingForApprovalCount = Number(statistics?.[Status.WAITING_FOR_APPROVAL]?.count || '0');
 
   if (waitingForApprovalCount > 0) {
     return false;
@@ -40,9 +40,9 @@ export const checkIfCanEditObjective = ({
  */
 export const checkIfCanDeleteObjective = ({ status, timelinePoint }: { status: Status; timelinePoint: any }) => {
   const { properties, statistics } = timelinePoint || { properties: {}, statistics: {} };
-  const draftCount = Number(statistics?.[Status.DRAFT] || '0');
-  const declinedCount = Number(statistics?.[Status.DECLINED] || '0');
-  const approvedCount = Number(statistics?.[Status.APPROVED] || '0');
+  const draftCount = Number(statistics?.[Status.DRAFT]?.count || '0');
+  const declinedCount = Number(statistics?.[Status.DECLINED]?.count || '0');
+  const approvedCount = Number(statistics?.[Status.APPROVED]?.count || '0');
   const min = Number(properties?.pm_review_min);
 
   const allowedStatus = [Status.APPROVED, Status.DECLINED, Status.DRAFT].includes(status);
