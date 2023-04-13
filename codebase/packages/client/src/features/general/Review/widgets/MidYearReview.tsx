@@ -40,13 +40,14 @@ const MidYearReview: FC<Props> = ({ colleagueUuid, isUserView }) => {
 
   const tlPoint = useSelector(getTimelineByCodeSelector(ReviewType.MYR, colleagueUuid, currentCycle));
 
-  const { summaryStatus, startTime, lastUpdatedTime, statistics = {} } = tlPoint || {};
+  const { summaryStatus, startTime, statistics = {} } = tlPoint || {};
 
   if (!tlPoint) {
     return null;
   }
 
   const status = (Object.keys(statistics)[0] || summaryStatus) as Status;
+  const lastUpdatedTime = statistics[status]?.lastUpdatedTime;
   const isLocked = tlPoint?.status === Status.LOCKED;
   const canEditLockedStats = isLocked && rolesPermission.isPeopleTeam && status === Status.APPROVED;
   const isViewOnly = canEditLockedStats ? false : isCycleCompleted || !isUserView || isLocked;
