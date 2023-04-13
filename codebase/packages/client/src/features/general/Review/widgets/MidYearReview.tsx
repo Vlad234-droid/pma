@@ -29,7 +29,7 @@ const MidYearReview: FC<Props> = ({ colleagueUuid, isUserView }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const tenant = useTenant();
-  const rolesPermission = useRolesPermission();
+  const { isPeopleTeam } = useRolesPermission();
   const navigate = useNavigate();
   const { pathname, state } = useLocation();
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
@@ -48,8 +48,7 @@ const MidYearReview: FC<Props> = ({ colleagueUuid, isUserView }) => {
 
   const status = (Object.keys(statistics)[0] || summaryStatus) as Status;
   const isLocked = tlPoint?.status === Status.LOCKED;
-  const canEditLockedStats = isLocked && rolesPermission.isPeopleTeam && status === Status.APPROVED;
-  const isViewOnly = canEditLockedStats ? false : isCycleCompleted || !isUserView || isLocked;
+  const canEditLockedState = isLocked && isPeopleTeam && status === Status.APPROVED;
 
   const [graphic, iconColor, background, shadow, hasDescription, content, buttonText] = useMemo(
     () =>
@@ -58,7 +57,8 @@ const MidYearReview: FC<Props> = ({ colleagueUuid, isUserView }) => {
           status,
           startTime,
           lastUpdatedTime,
-          viewOnly: isViewOnly,
+          viewOnly: isCycleCompleted || !isUserView,
+          canEditLockedState,
         },
         t,
         tenant,

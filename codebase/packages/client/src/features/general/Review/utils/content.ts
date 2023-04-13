@@ -4,7 +4,7 @@ import { Graphics } from 'components/Icon';
 import { Colors } from 'config/types';
 
 export const getContent = (
-  { status, startTime = '', lastUpdatedTime = '', viewOnly = false },
+  { status, startTime = '', lastUpdatedTime = '', viewOnly = false, canEditLockedState = false },
   t: TFunction,
   tenant: Tenant,
 ): [Graphics, Colors, Colors, boolean, boolean, string, string] => {
@@ -68,7 +68,7 @@ export const getContent = (
           'review_form_approved',
           t('completed_at_date', `Completed ${lastUpdatedTime}`, { date: new Date(lastUpdatedTime) }),
         ),
-        viewOnly ? t('view', 'View') : t('view_and_edit', 'View and edit'),
+        canEditLockedState ? t('view_and_edit', 'View and edit') : t('view', 'View'),
       ];
     case Status.WAITING_FOR_APPROVAL:
       return [
