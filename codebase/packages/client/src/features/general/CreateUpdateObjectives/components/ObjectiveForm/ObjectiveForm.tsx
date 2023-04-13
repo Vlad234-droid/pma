@@ -106,7 +106,6 @@ const ObjectiveForm: FC<Props> = ({
 
   const isCurrentValid = propertiesSchema.isValidSync(currentValues?.properties);
 
-  // @ts-ignore
   return (
     <div data-test-id={TEST_ID} className={css(containerStyle)}>
       <div className={css(wrapperStyle({ mobileScreen }))}>
@@ -170,7 +169,7 @@ const ObjectiveForm: FC<Props> = ({
                   )}
                   {!multiply || isLastStep ? (
                     <ButtonWithConfirmation
-                      isDisabled={!isValid}
+                      isDisabled={!isValid || !isCurrentValid}
                       onSave={handleSubmit(onSubmit)}
                       disabledBtnTooltip={t('action_enabled', 'Action enabled when mandatory fields are completed')}
                       styles={[buttonBlueStyle({ disabled: !isValid })]}
