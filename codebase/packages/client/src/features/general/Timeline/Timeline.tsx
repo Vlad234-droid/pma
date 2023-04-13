@@ -131,6 +131,7 @@ const wrapperStyle = {
 };
 
 const selectStyle: Rule = {
+  minWidth: '200px',
   zIndex: 9,
 };
 
