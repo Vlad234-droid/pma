@@ -7,6 +7,7 @@ import {
   OpenIdUserInfo,
 } from '@pma-connectors/onelogin';
 
+import { UI_LOGGER_PATH } from '@energon/splunk-logger-core';
 import { pmaUserDataResolver } from '../config/auth-data';
 import { isPROD, ProcessConfig } from '../config';
 import { Router } from 'express';
@@ -114,7 +115,7 @@ export const initializeOpenid = async ({
      * In case of error, calls containg that path framgents won't result in redirect.
      * Instead middleware will return an error with correct status. Could be used for AJAX calls.
      */
-    noRedirectPathFragments: ['/api'],
+    noRedirectPathFragments: ['/api', UI_LOGGER_PATH],
 
     /**
      * Optional, auth data cookie configuration
