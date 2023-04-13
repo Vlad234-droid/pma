@@ -10,6 +10,7 @@ import {
   getReviewByTypeSelector,
   getReviewSchema,
   getTimelineByReviewTypeSelector,
+  isAnniversaryTimelineType,
   ReviewsActions,
   reviewsMetaSelector,
   SchemaActions,
@@ -58,16 +59,17 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
   const { css, theme, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const [successModal, setSuccessModal] = useState(false);
   const { info } = useSelector(currentUserSelector);
   const colleagueUuid = info.colleagueUUID;
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
-  const dispatch = useDispatch();
   const review: Review = useSelector(getReviewByTypeSelector(reviewType)) || {};
   const colleagueCycle = useSelector(colleagueCycleSelector);
   const formValues = review?.properties || {};
 
+  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, currentCycle));
   const { loading: reviewLoading, loaded: reviewLoaded, saving, saved } = useSelector(reviewsMetaSelector);
   const { loading: schemaLoading, loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const schema = useSelector(getReviewSchema(reviewType));
@@ -78,7 +80,9 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
   const readonly =
     [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(review.status) ||
     [Status.LOCKED, Status.COMPLETED].includes(timelineReview?.status) ||
-    [Status.COMPLETED, Status.FINISHED].includes(colleagueCycle?.status);
+    isAnniversary
+      ? colleagueCycle?.status === Status.COMPLETED
+      : [Status.COMPLETED, Status.FINISHED].includes(colleagueCycle?.status);
 
   const { components = [] as Component[] } = schema;
 
