@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef, useMemo } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { Button, Icon, useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
+import { Button, useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 
 import { createYupSchema } from 'utils/yup';
 import { checkIsExistValue } from 'utils';
@@ -16,6 +16,7 @@ import { Attention } from 'components/Form';
 import DynamicForm from 'components/DynamicForm';
 import { IconButton, Position } from 'components/IconButton';
 import ObjectiveHelpModal from '../Modal/ObjectiveHelpModal';
+import { InfoBlock } from 'components/InfoBlock';
 
 export type Props = {
   formElements: Array<any>;
@@ -129,10 +130,7 @@ const ObjectiveForm: FC<Props> = ({
             <div data-test-id={HELP_TEST_ID} className={css(helpModalWrapperStyle)}>
               <TriggerModal
                 triggerComponent={
-                  <div className={css({ display: 'flex', alignItems: 'center' })}>
-                    <Icon graphic='information' />
-                    <span className={css(helpTitleStyle)}>Need help writing your objectives?</span>
-                  </div>
+                  <InfoBlock text={t('need_help_writing_your_objectives', 'Need help writing your objectives?')} />
                 }
                 title={'Writing your objectives'}
               >
@@ -280,12 +278,5 @@ const buttonBlueStyle: CreateRule<{ disabled: boolean }> =
 const stepIndicatorWrapperStyle: Rule = ({ theme }) => ({ padding: `0 0 ${theme.spacing.s5}` });
 
 const helpModalWrapperStyle: Rule = ({ theme }) => ({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' });
-
-const helpTitleStyle: Rule = ({ theme }) => ({
-  ...theme.font.fixed.f14,
-  letterSpacing: '0px',
-  color: theme.colors.tescoBlue,
-  padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
-});
 
 export default ObjectiveForm;

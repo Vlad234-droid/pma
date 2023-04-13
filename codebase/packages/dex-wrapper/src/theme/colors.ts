@@ -8,6 +8,7 @@ const colors = {
   tescoLightGray: '#F3F9F7',
   darkBlue: '#B3CDE6',
   paleOrange: '#FFDBC2',
+  hoverBlue: '#317EC4',
 };
 export default colors;
 export type Colors = keyof typeof colors;
