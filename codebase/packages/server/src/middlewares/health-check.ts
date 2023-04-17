@@ -26,10 +26,6 @@ export const healthCheckMiddleware = (processConfig: ProcessConfig) => {
 
     res.send(envCheck);
   });
-  router.get('/_test', async (req, res) => {
-    console.log('test***');
-    res.send({ message: 'test**' });
-  });
 
   return router;
 };
