@@ -22,7 +22,7 @@ import { ShareObjectivesModal } from '../ShareObjectivesModal';
 import SuccessModal from 'components/SuccessModal';
 import { ReviewType, Status } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
-import { usePermission, role, useTenant, Tenant } from 'features/general/Permission';
+import { role, Tenant, usePermission, useTenant } from 'features/general/Permission';
 
 import { useTimelineContainer } from 'contexts/timelineContext';
 
@@ -96,7 +96,8 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
   const isManagerShared = isManager && isShared;
   const sharedObjectivesCount = sharedObjectives.length;
 
-  const isUserWithObjectivesInCycle = useSelector(getSharedObjectivesFormElements)?.length > 0;
+  const isUserHavingApprovedPriorities = !!useSelector(hasStatusInReviews(ReviewType.QUARTER, Status.APPROVED));
+  const isUserEligibleToSharePriorities = isUserHavingApprovedPriorities || hasApproved;
 
   const handleShareSaveBtnClick = async () => {
     setIsConfirmDeclineModalOpen(false);
@@ -142,12 +143,11 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
     },
     t,
   );
-
   const notDisplay =
-    title === 'N/A' ||
-    isCompleted ||
+    title === 'N/A' || // false
+    isCompleted || // false
     (!stopShare && !hasApproved && !sharing && !isManager) ||
-    !isUserWithObjectivesInCycle;
+    !isUserEligibleToSharePriorities;
 
   if (notDisplay) {
     return null;
