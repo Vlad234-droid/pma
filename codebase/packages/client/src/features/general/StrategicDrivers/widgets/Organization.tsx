@@ -44,10 +44,8 @@ const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
   const [graphic, description, actionTitle] = getContent();
 
   useEffect(() => {
-    if (!isCompleted) {
-      dispatch(OrgObjectiveActions.getOrgPublishedObjectives({ year: cycleYear }));
-    }
-  }, [isCompleted]);
+    dispatch(OrgObjectiveActions.getOrgPublishedObjectives({ year: cycleYear }));
+  }, [isCompleted, cycleYear]);
 
   if (isCompleted || !hasObjectives) return null;
 
