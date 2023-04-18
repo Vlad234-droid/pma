@@ -80,9 +80,9 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
   const readonly =
     [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(review.status) ||
     [Status.LOCKED, Status.COMPLETED].includes(timelineReview?.status) ||
-    isAnniversary
+    (isAnniversary
       ? colleagueCycle?.status === Status.COMPLETED
-      : [Status.COMPLETED, Status.FINISHED].includes(colleagueCycle?.status);
+      : [Status.COMPLETED, Status.FINISHED].includes(colleagueCycle?.status));
 
   const { components = [] as Component[] } = schema;
 
