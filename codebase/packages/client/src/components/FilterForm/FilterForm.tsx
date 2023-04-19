@@ -34,6 +34,15 @@ type Props = {
   children?: (T: ChildrenProps) => JSX.Element;
 };
 
+type Filter<T> = Record<string, T> | boolean;
+const removeFalseProperties = (obj: Filter<Filter<boolean>>) =>
+  Object.keys(obj).reduce((acc, group) => {
+    const filtered = Object.entries(obj[group])
+      .filter(([_, v]) => v !== false)
+      .reduce((value, [k, v]) => ({ ...value, [k]: v }), {});
+    return Object.keys(filtered).length > 0 ? { ...acc, [group]: filtered } : acc;
+  }, {});
+
 const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = false, filters, onUpdate, children }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
@@ -54,7 +63,7 @@ const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = fa
   const values = getValues();
 
   useEffect(() => {
-    const subscription = onUpdate ? watch((data) => onUpdate(data)) : undefined;
+    const subscription = onUpdate ? watch((data) => onUpdate(removeFalseProperties(data))) : undefined;
     return () => {
       subscription && subscription.unsubscribe();
     };
