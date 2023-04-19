@@ -30,7 +30,7 @@ export type ContentConfig = {
 };
 
 export const getTescoContent = (props: ContentProps, t: TFunction) => {
-  const { status, statistics, nextReviewDate: date = '' } = props;
+  const { status, statistics = {}, nextReviewDate: date = '' } = props;
   const count = status ? statistics?.[status]?.count || 0 : 0;
 
   const isEditPage =
@@ -117,6 +117,7 @@ export const getTescoContent = (props: ContentProps, t: TFunction) => {
       buttonText: t('view', 'View'),
     },
     [Status.DECLINED]: {
+      viewPage: status === Status.DECLINED ? Page.EDIT_OBJECTIVES : Page.REVIEWS_VIEW,
       backgroundColor: 'tescoBlue',
       subTitle: (
         <Subtitle graphic='roundAlert'>
@@ -124,7 +125,8 @@ export const getTescoContent = (props: ContentProps, t: TFunction) => {
         </Subtitle>
       ),
       description: '',
-      buttonText: t('view', 'View'),
+      buttonText:
+        status === Status.DECLINED ? t('view_and_edit_objectives', 'View and edit objectives') : t('view', 'View'),
     },
     [Status.OVERDUE]: {
       viewPage: Page.REVIEWS_VIEW,

@@ -32,7 +32,9 @@ const ObjectiveWidget: FC = () => {
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
   if (!canShowObjectives || !timelineObjective) return null;
 
-  const { statistics, summaryStatus: status } = timelineObjective;
+  const { statistics = {}, summaryStatus } = timelineObjective;
+
+  const status = (Object.keys(statistics)[0] || summaryStatus) as Status;
 
   const date = timelineMYR?.startTime;
 
