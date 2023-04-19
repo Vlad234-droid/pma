@@ -4,6 +4,8 @@ import { CreateRule, Icon, ModalWithHeader, Rule, useStyle } from '@pma/dex-wrap
 import Details from 'components/Details';
 import { Page } from 'pages';
 import { buildPath } from 'features/general/Routes';
+import { paramsReplacer } from 'utils';
+import useLocation from 'hooks/useLocation';
 
 export const TEST_ID = 'popup-test-id';
 
@@ -16,6 +18,7 @@ export type Props = {
 
 const Popup: FC<Props> = ({ items }) => {
   const { css, matchMedia } = useStyle();
+  const { state } = useLocation<{ uuid?: string }>();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const navigate = useNavigate();
 
@@ -29,7 +32,10 @@ const Popup: FC<Props> = ({ items }) => {
       closeOptions={{
         closeOptionContent: <Icon graphic={'close'} invertColors={true} />,
         closeOptionStyles: {},
-        onClose: () => navigate(buildPath(Page.REVIEWS_VIEW)),
+        onClose: () =>
+          state?.uuid
+            ? navigate(buildPath(paramsReplacer(Page.USER_REVIEWS, { ':uuid': state.uuid })))
+            : navigate(buildPath(Page.REVIEWS_VIEW)),
       }}
     >
       <div data-test-id={TEST_ID} className={css(main)}>
