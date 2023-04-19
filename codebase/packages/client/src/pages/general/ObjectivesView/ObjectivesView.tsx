@@ -25,7 +25,7 @@ const ObjectivesView = () => {
 
   useEffect(() => {
     dispatch(OrgObjectiveActions.getOrgPublishedObjectives({ year: cycleYear }));
-  }, []);
+  }, [cycleYear]);
 
   if (!loaded) {
     return <Spinner data-test-id={SPINNER_ID} fullHeight />;
