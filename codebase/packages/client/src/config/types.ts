@@ -32,7 +32,7 @@ export type Timeline = {
   uuid: string;
   statistics?: TimelineStatistics;
   lastUpdatedTime?: string;
-  properties: any;
+  properties: Properties;
 };
 
 export type Review = {
@@ -83,4 +83,15 @@ export enum Mode {
   CREATE = 'create',
 }
 
+export type Properties = {
+  END_DATE?: string;
+  START_DATE?: string;
+  LOCK_DATE?: string;
+  OVERDUE_DATE?: string;
+  pm_review_max?: string;
+  pm_review_min?: string;
+  BEFORE_END_DATE?: string;
+  BEFORE_START_DATE?: string;
+  [key: string]: unknown;
+};
 export { ReviewType, Status, TimelineType };

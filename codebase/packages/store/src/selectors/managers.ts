@@ -137,7 +137,7 @@ const isAnniversaryTimeline = (timeline: any) => {
 export const getOutstandingPendingEmployees = createSelector(
   [managersReviewsSelector, (_, search?: string) => search, (_, __?, sort?: SortBy) => sort],
   ({ ALL }, search = '', sort) => {
-    const filteredData = ALL ? sortEmployeesFn(searchEmployeesFn(ALL, search), sort) : [];
+    const filteredData: Employee[] = ALL ? sortEmployeesFn(searchEmployeesFn(ALL, search), sort) : [];
 
     const employeeOverdueAnniversary = filteredData?.filter(
       (employee) =>
@@ -145,7 +145,10 @@ export const getOutstandingPendingEmployees = createSelector(
         employee.timeline.some(
           (review) =>
             review.reviewType === ReviewType.EYR &&
-            isAfterDeadline({ date: review.endTime, days: 7 }) &&
+            isAfterDeadline({
+              date: review?.properties?.OVERDUE_DATE || review?.properties?.END_DATE || review.endTime,
+              days: 7,
+            }) &&
             review.summaryStatus === Status.OVERDUE,
         ),
     );
@@ -156,7 +159,10 @@ export const getOutstandingPendingEmployees = createSelector(
         employee.timeline.some(
           (review) =>
             review.reviewType === ReviewType.EYR &&
-            isAfterDeadline({ date: review.endTime, days: 7 }) &&
+            isAfterDeadline({
+              date: review?.properties?.OVERDUE_DATE || review?.properties?.END_DATE || review.endTime,
+              days: 7,
+            }) &&
             review.summaryStatus === Status.OVERDUE,
         ),
     );
@@ -165,14 +171,23 @@ export const getOutstandingPendingEmployees = createSelector(
       employee.timeline.some(
         (review) =>
           review.reviewType === ReviewType.MYR &&
-          isAfterDeadline({ date: review.endTime, days: 7 }) &&
+          isAfterDeadline({
+            date: review?.properties?.OVERDUE_DATE || review?.properties?.END_DATE || review.endTime,
+            days: 7,
+          }) &&
           review.summaryStatus === Status.OVERDUE,
       ),
     );
 
     const employeeOverdueObjectives = filteredData?.filter((employee: Employee) =>
       employee.timeline.some(
-        (review) => review.code === ReviewType.OBJECTIVE && review.summaryStatus === Status.OVERDUE,
+        (review) =>
+          review.code === ReviewType.OBJECTIVE &&
+          isAfterDeadline({
+            date: review?.properties?.OVERDUE_DATE || review?.properties?.END_DATE || review.endTime,
+            days: 7,
+          }) &&
+          review.summaryStatus === Status.OVERDUE,
       ),
     );
 
