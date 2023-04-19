@@ -284,3 +284,8 @@ export enum Operand {
   NULL = '_null',
   NOT_EXIST = '_nexist',
 }
+
+export enum ReportTypeExtension {
+  START = '_START',
+  END = '_END',
+}

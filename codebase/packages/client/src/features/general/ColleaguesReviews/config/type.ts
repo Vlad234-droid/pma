@@ -11,7 +11,7 @@ export const initialFields: Record<'_start' | '_limit', number> = {
 
 export const defaultSort = { _sort: 'first-name:asc,last-name:asc' };
 
-export type Info = Omit<ColleagueInfo, 'manager'> & { uuid: string };
+export type Info = Omit<ColleagueInfo, 'manager'> & { uuid: string; type?: 'EYR_START' | 'EYR_END' };
 
 export type ReviewStatistics = {
   type: ReviewType;
@@ -24,6 +24,23 @@ export type ReviewStatistics = {
     }
   >;
   totalCount: number;
+};
+
+export type ReportPageTitle =
+  | 'approved'
+  | 'not-submitted'
+  | 'submitted'
+  | 'New to business'
+  | 'Below expected'
+  | 'Great'
+  | 'Outstanding'
+  | 'Satisfactory'
+  | 'new-to-business'
+  | 'given'
+  | 'requested';
+
+export type ReportPageEmptyData = {
+  [K in ReportPageTitle]?: [];
 };
 
 export type List = Record<string, Array<Info> | []>;

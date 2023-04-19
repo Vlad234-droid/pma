@@ -86,8 +86,9 @@ export const getAnniversaryReviewsStatisticsEpic: Epic = (action$, _, { api }) =
       return from(api.getColleaguesAnniversaryReviews(payload)).pipe(
         //@ts-ignore
         map(({ data }) => {
+          const dataWithType = payload.type ? data.map((e) => ({ ...e, type: payload.type })) : data;
           //@ts-ignore
-          return getAnniversaryReviewsStatistics.success({ data, status });
+          return getAnniversaryReviewsStatistics.success({ data: dataWithType, status });
         }),
         catchError(({ errors }) => of(getAnniversaryReviewsStatistics.failure(errors))),
       );
