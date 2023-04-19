@@ -252,33 +252,38 @@ export const useDetailsStatistics = (type, filters = {}) => {
         break;
       }
       case ReportPage.REPORT_ANNIVERSARY_REVIEWS: {
-        dispatch(
-          StatisticsAction.getAnniversaryReviewsStatistics({
-            ...filters,
-            ...initialFields,
-            ...defaultSort,
-            year,
-            status: 'not-submitted',
-          }),
-        );
-        dispatch(
-          StatisticsAction.getAnniversaryReviewsStatistics({
-            ...filters,
-            ...initialFields,
-            ...defaultSort,
-            year,
-            status: 'submitted',
-          }),
-        );
-        dispatch(
-          StatisticsAction.getAnniversaryReviewsStatistics({
-            ...filters,
-            ...initialFields,
-            ...defaultSort,
-            year,
-            status: 'approved',
-          }),
-        );
+        ['EYR_START', 'EYR_END'].forEach((type) => {
+          dispatch(
+            StatisticsAction.getAnniversaryReviewsStatistics({
+              ...filters,
+              ...initialFields,
+              ...defaultSort,
+              year,
+              status: 'not-submitted',
+              type,
+            }),
+          );
+          dispatch(
+            StatisticsAction.getAnniversaryReviewsStatistics({
+              ...filters,
+              ...initialFields,
+              ...defaultSort,
+              year,
+              status: 'submitted',
+              type,
+            }),
+          );
+          dispatch(
+            StatisticsAction.getAnniversaryReviewsStatistics({
+              ...filters,
+              ...initialFields,
+              ...defaultSort,
+              year,
+              status: 'approved',
+              type,
+            }),
+          );
+        });
         break;
       }
       case ReportPage.REPORT_WORK_LEVEL: {

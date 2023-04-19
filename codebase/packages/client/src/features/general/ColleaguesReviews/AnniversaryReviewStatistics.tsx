@@ -34,6 +34,13 @@ export const AnniversaryReviewStatistics: FC<Props> = ({
   const reviewsStartingInThisYear = useTotalReviews(type, ReportTypeExtension.START);
   const reviewsEndingInThisYear = useTotalReviews(type, ReportTypeExtension.END);
 
+  const listStartingEYR = {};
+  const listEndingEYR = {};
+  Object.keys(listWithEmptyLabels).forEach((label) => {
+    listStartingEYR[label] = listWithEmptyLabels[label].filter((element) => element.type === 'EYR_START');
+    listEndingEYR[label] = listWithEmptyLabels[label].filter((element) => element.type === 'EYR_END');
+  });
+
   return (
     <div>
       <span className={css(titleStyles)}>
@@ -42,13 +49,13 @@ export const AnniversaryReviewStatistics: FC<Props> = ({
       <StatisticsReviewsView
         type={type}
         year={year}
-        listWithEmptyLabels={listWithEmptyLabels}
+        listWithEmptyLabels={listEndingEYR}
         reviews={reviewsEndingInThisYear}
         isWLPage={isWLPage}
         toggleFullView={toggleFullView}
         isFullView={isFullView}
         filterValues={filterValues}
-        filters={filters}
+        filters={{ ...filters, type: 'EYR_END' }}
       />
       <span className={css(titleStyles)}>
         {t('cycles_starting_in_this_financial_year', 'Cycles starting in this financial year')}
@@ -56,13 +63,13 @@ export const AnniversaryReviewStatistics: FC<Props> = ({
       <StatisticsReviewsView
         type={type}
         year={year}
-        listWithEmptyLabels={listWithEmptyLabels}
+        listWithEmptyLabels={listStartingEYR}
         reviews={reviewsStartingInThisYear}
         isWLPage={isWLPage}
         toggleFullView={toggleFullView}
         isFullView={isFullView}
         filterValues={filterValues}
-        filters={filters}
+        filters={{ ...filters, type: 'EYR_START' }}
       />
     </div>
   );
