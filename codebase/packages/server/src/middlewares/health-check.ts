@@ -53,11 +53,7 @@ const getEnvironmentCheck = async (processConfig: ProcessConfig, req: Request, r
 const getHealthCheck = async (processConfig: ProcessConfig, req: Request, res: Response) => {
   const authToken = extractAuthToken(req, res);
 
-  const requests = [
-    pmaApiCheck(processConfig, authToken),
-    inboxApiCheck(processConfig, authToken),
-    processConfig.apiIdentityServerUrl() ? identityApiCheck(processConfig, authToken) : undefined,
-  ];
+  const requests = [pmaApiCheck(processConfig, authToken), inboxApiCheck(processConfig, authToken)];
 
   const results = await Promise.all(requests.filter((el) => el));
 
@@ -72,58 +68,60 @@ const getHealthCheck = async (processConfig: ProcessConfig, req: Request, res: R
 };
 
 const pmaApiCheck = async (processConfig: ProcessConfig, authToken?: string) => {
-  const apiUrl = processConfig.apiServerUrl();
-  return fetch(apiUrl + '/_status', {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  })
-    .then((result) => result.json())
-    .then((result) => ({
+  try {
+    const apiUrl = processConfig.apiServerUrl();
+    return fetch(apiUrl + '/_status', {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    })
+      .then((result) => result.json())
+      .then((result) => ({
+        name: 'pmaAPI',
+        type: 'DEPENDENCY',
+        description: 'PMA API',
+        checked: new Date().toISOString(),
+        status: result?.status || 'Fail',
+        version: result?.version,
+      }));
+  } catch (e) {
+    console.error('Cannot fetch pma API status', e);
+    return {
       name: 'pmaAPI',
       type: 'DEPENDENCY',
       description: 'PMA API',
       checked: new Date().toISOString(),
-      status: result?.status || 'Fail',
-      version: result?.version,
-    }));
+      status: 'Fail',
+    };
+  }
 };
 
 const inboxApiCheck = async (processConfig: ProcessConfig, authToken?: string) => {
-  const configEnvironment = isPROD(processConfig.environment()) ? 'prod' : processConfig.environment();
-  const apiUrl = getColleagueInboxApiConfig(configEnvironment).server;
-
-  return fetch(apiUrl + '/_status', {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  })
-    .then((result) => result.json())
-    .then((result) => ({
+  try {
+    const configEnvironment = isPROD(processConfig.environment()) ? 'prod' : processConfig.environment();
+    const apiUrl = getColleagueInboxApiConfig(configEnvironment).server;
+    return fetch(apiUrl + '/_status', {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    })
+      .then((result) => result.json())
+      .then((result) => ({
+        name: 'myInboxAPI',
+        type: 'DEPENDENCY',
+        description: 'My Inbox API',
+        checked: new Date().toISOString(),
+        status: result?.status || 'Fail',
+        version: result?.version,
+      }));
+  } catch (e) {
+    console.error('Cannot fetch myInbox API status', e);
+    return {
       name: 'myInboxAPI',
       type: 'DEPENDENCY',
       description: 'My Inbox API',
       checked: new Date().toISOString(),
-      status: result?.status || 'Fail',
-      version: result?.version,
-    }));
-};
-
-const identityApiCheck = async (processConfig: ProcessConfig, authToken?: string) => {
-  const apiUrl = processConfig.apiIdentityServerUrl();
-
-  return fetch(apiUrl + '/_status', {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  })
-    .then((result) => result.json())
-    .then((result) => ({
-      name: 'identityAPI',
-      type: 'DEPENDENCY',
-      description: 'Identity API',
-      checked: new Date().toISOString(),
-      status: result?.status || 'Fail',
-      version: result?.version,
-    }));
+      status: 'Fail',
+    };
+  }
 };
