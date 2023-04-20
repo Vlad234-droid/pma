@@ -35,7 +35,7 @@ const UserObjectivesPage = () => {
 
   const handleWidgetClick = () => {
     if (tenant === Tenant.GENERAL) {
-      navigate(buildPath(Page.STRATEGIC_DRIVERS));
+      navigate(buildPath(Page.STRATEGIC_DRIVERS), { state: { uuid } });
     } else {
       window.open('https://tescobank.sharepoint.com/sites/intranet/learn/ourbig6hub/Pages/default.aspx');
     }
