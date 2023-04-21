@@ -37,7 +37,6 @@ const ObjectiveWidget: FC = () => {
   const status = (Object.keys(statistics)[0] || summaryStatus) as Status;
 
   const date = timelineMYR?.startTime;
-
   const { subTitle, description, buttonText, backgroundColor, disabled, viewPage, widgetTitle } = getTescoContent(
     { status, statistics, nextReviewDate: date },
     t,
@@ -55,8 +54,8 @@ const ObjectiveWidget: FC = () => {
       buttonText={buttonText}
       backgroundColor={backgroundColor}
       disabled={disabled}
-      isClickable={!disabled && status !== Status.APPROVED}
-      mode={!disabled && status !== Status.APPROVED ? 'default' : 'inverse'}
+      isClickable={!disabled && status !== Status.APPROVED && status !== Status.COMPLETED}
+      mode={!disabled && status !== Status.APPROVED && status !== Status.COMPLETED ? 'default' : 'inverse'}
       customStyle={widgetStyles}
     />
   );

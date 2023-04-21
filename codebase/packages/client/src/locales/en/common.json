@@ -791,5 +791,6 @@
   "pm_review_lock": "Review lock",
   "pm_review_overdue": "Review overdue",
   "finished": "Finished",
-  "you_do_not_have_access_to_this_colleagues_page": "You do not have access to this colleagues page"
+  "you_do_not_have_access_to_this_colleagues_page": "You do not have access to this colleagues page",
+  "view_your_objectives": "View your objectives"
 }

@@ -128,6 +128,11 @@ export const getTescoContent = (props: ContentProps, t: TFunction) => {
       buttonText:
         status === Status.DECLINED ? t('view_and_edit_objectives', 'View and edit objectives') : t('view', 'View'),
     },
+    [Status.COMPLETED]: {
+      backgroundColor: 'white',
+      subTitle: <Subtitle graphic='roundTick'>{t('view_your_objectives', 'View your objectives')}</Subtitle>,
+      buttonText: t('view', 'View'),
+    },
     [Status.OVERDUE]: {
       viewPage: Page.REVIEWS_VIEW,
       backgroundColor: 'tescoBlue',
