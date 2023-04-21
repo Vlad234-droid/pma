@@ -41,5 +41,6 @@ export const useMYRPermissions = (reviewType: ReviewType.MYR | ReviewType.EYR) =
     colleague,
     colleagueUuid,
     review,
+    cycleCompletedCondition,
   };
 };

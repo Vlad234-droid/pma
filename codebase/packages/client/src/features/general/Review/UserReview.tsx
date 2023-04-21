@@ -56,8 +56,17 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
   } = useMetaData();
 
   const { isPeopleTeam, isLineManager } = useRolesPermission();
-  const { declineCondition, approveCondition, currentCycle, colleague, colleagueUuid, timeline, review, readonly } =
-    reviewType === ReviewType.EYR ? useEYRPermissions(reviewType) : useMYRPermissions(reviewType);
+  const {
+    declineCondition,
+    approveCondition,
+    currentCycle,
+    colleague,
+    colleagueUuid,
+    timeline,
+    review,
+    readonly,
+    cycleCompletedCondition,
+  } = reviewType === ReviewType.EYR ? useEYRPermissions(reviewType) : useMYRPermissions(reviewType);
 
   const formValues = review?.properties || {};
 
@@ -80,7 +89,8 @@ const UserReview: FC<Props> = ({ reviewType, onClose }) => {
           [Status.LOCKED, Status.FINISHING, Status.COMPLETED].includes(timeline?.status) &&
           review?.status === Status.WAITING_FOR_APPROVAL;
 
-        const canWrite = key === ExpressionValueType.LM_FEEDBACK && (canLMWrite || canPTWrite);
+        const canWrite =
+          key === ExpressionValueType.LM_FEEDBACK && (canLMWrite || canPTWrite) && !cycleCompletedCondition;
 
         if (canWrite) component.canWrite = true;
 
