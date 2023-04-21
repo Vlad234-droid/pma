@@ -33,14 +33,14 @@ export const useMYRPermissions = (reviewType: ReviewType.MYR | ReviewType.EYR) =
   const approveCondition = isLineManager && !cycleCompletedCondition && review.status === Status.WAITING_FOR_APPROVAL;
 
   return {
-    timeline,
+    cycleCompletedCondition,
     declineCondition,
     approveCondition,
     readonly: true,
-    currentCycle,
-    colleague,
     colleagueUuid,
+    currentCycle,
+    timeline,
+    colleague,
     review,
-    cycleCompletedCondition,
   };
 };
