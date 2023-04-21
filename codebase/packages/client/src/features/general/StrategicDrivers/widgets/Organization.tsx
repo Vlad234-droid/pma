@@ -27,11 +27,9 @@ const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const cycle = useSelector(colleagueCycleSelector);
   const cycleYear = useSelector(colleagueCycleYearSelector);
   const orgObjectives = useSelector(orgObjectivesSelector) || [];
   const hasObjectives = !!orgObjectives.length;
-  const isCompleted = cycle?.status && [Status.COMPLETED, Status.FINISHED].includes(cycle.status);
 
   const getContent = (): [Graphics, string, string] => {
     return [
@@ -47,7 +45,7 @@ const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
     dispatch(OrgObjectiveActions.getOrgPublishedObjectives({ year: cycleYear }));
   }, [cycleYear]);
 
-  if (isCompleted || !hasObjectives) return null;
+  if (!hasObjectives) return null;
 
   return (
     <TileWrapper customStyle={{ ...customStyle }}>
