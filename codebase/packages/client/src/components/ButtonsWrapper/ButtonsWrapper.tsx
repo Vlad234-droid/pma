@@ -39,7 +39,7 @@ const ButtonsWrapper: FC<ButtonsProps> = ({
   return (
     <div className={css(blockStyle, customStyles)}>
       <div className={css(wrapperStyle)}>
-        <div className={css(buttonsWrapper({ customButtons }))}>
+        <div className={css(buttonsWrapper)}>
           {customButtons ? (
             customButtons
           ) : (
@@ -93,17 +93,15 @@ const blockStyle: Rule = {
   width: '100%',
 };
 
-const buttonsWrapper: CreateRule<{ customButtons: JSX.Element | undefined }> =
-  ({ customButtons }) =>
-  ({ theme }) => {
-    const { matchMedia } = useStyle();
-    const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
-    return {
-      padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s9,
-      display: 'flex',
-      justifyContent: customButtons ? 'space-between' : 'center',
-    };
+const buttonsWrapper: Rule = ({ theme }) => {
+  const { matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  return {
+    padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s9,
+    display: 'flex',
+    justifyContent: 'center',
   };
+};
 
 const wrapperStyle: Rule = ({ theme }) => ({
   position: 'relative',

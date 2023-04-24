@@ -9,3 +9,8 @@ export enum Status {
   DRAFT = 'DRAFT',
   STARTED = 'STARTED',
 }
+
+export enum FormType {
+  GENERAL = 'GENERAL',
+  DETAILS = 'DETAILS',
+}

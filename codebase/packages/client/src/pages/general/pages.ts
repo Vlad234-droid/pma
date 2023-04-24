@@ -31,7 +31,7 @@ import OrganizationObjectives from './OrganizationObjectives';
 import ObjectivesView from './ObjectivesView';
 import Report from './Report';
 import ReportDownload from './ReportDownload';
-import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
+import { CreateUpdatePerformanceCyclePage, PerformanceCycleAdministration } from './PerformanceCycle';
 import { EditTip, TipsAdministration } from './Tips';
 import UserReviews from './UserReviews';
 import PeopleTeam from './PeopleTeam';
@@ -228,8 +228,7 @@ const pages: Record<Page, PageComponent> = {
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.CREATE_PERFORMANCE_CYCLE]: {
-    Element: CreatePerformanceCycle,
-    title: (_, t) => t('create_performance_cycle'),
+    Element: CreateUpdatePerformanceCyclePage,
     withHeader: true,
     backPath: Page.PERFORMANCE_CYCLE,
     perform: [role.TALENT_ADMIN, role.PROCESS_MANAGER, role.ADMIN],

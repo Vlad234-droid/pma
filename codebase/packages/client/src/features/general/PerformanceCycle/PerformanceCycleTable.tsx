@@ -1,36 +1,77 @@
-import React, { FC, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { FC, useEffect, useMemo, useState } from 'react';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+
 import { useSelector } from 'react-redux';
 import { Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
 import { PerformanceCycleActions, getPerformanceCycleSelector, performanceCycleMetaSelector } from '@pma/store';
 
-import { BaseAccordion, BaseSection, Panel, ExpandButton } from 'components/Accordion';
 import { buildPath } from 'features/general/Routes';
+import { BaseAccordion, BaseSection, Panel, ExpandButton } from 'components/Accordion';
+import { Trans, useTranslation } from 'components/Translation';
+import { IconButton } from 'components/IconButton';
+import LinkButton from 'components/LinkButton';
 import { TileWrapper } from 'components/Tile';
-import { Trans } from 'components/Translation';
+import { Graphics } from 'components/Icon';
+import Select from 'components/Form/Select';
 import Spinner from 'components/Spinner';
 import Action from 'components/Action';
-import LinkButton from 'components/LinkButton';
-import { Graphics } from 'components/Icon';
 
-import { Status } from 'config/enum';
 import { Page } from 'pages/general/types';
 import useDispatch from 'hooks/useDispatch';
 import { paramsReplacer } from 'utils';
+import { Status } from 'config/enum';
 
-type Props = {
-  cycleType: string;
-};
-
-const PerformanceCycleTable: FC<Props> = ({ cycleType }) => {
+const PerformanceCycleTable: FC = () => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const [cycleType, setActive] = useState<Status>(Status.STARTED);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { search } = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const data = useSelector(getPerformanceCycleSelector) || {};
   const { loading, loaded } = useSelector(performanceCycleMetaSelector);
 
-  const dispatch = useDispatch();
+  useEffect(() => setActive(() => (searchParams.get('status') || Status.STARTED) as Status), [search]);
+
+  const handleSelectFilter = (status: Status) => setSearchParams({ status });
+
+  const selectOptions = useMemo(() => {
+    return [
+      {
+        label: t('drafts'),
+        value: Status.DRAFT,
+      },
+      {
+        label: t('registered_cycles'),
+        value: Status.REGISTERED,
+      },
+      {
+        label: t('active_cycles'),
+        value: Status.ACTIVE,
+      },
+
+      {
+        label: t('started_cycles'),
+        value: Status.STARTED,
+      },
+      {
+        label: t('finished'),
+        value: Status.FINISHED,
+      },
+      {
+        label: t('completed'),
+        value: Status.COMPLETED,
+      },
+
+      {
+        label: t('inactive_cycles'),
+        value: Status.INACTIVE,
+      },
+    ];
+  }, []);
 
   const cycles = useMemo(() => {
     return data.filter((item) => item.status === cycleType);
@@ -57,9 +98,22 @@ const PerformanceCycleTable: FC<Props> = ({ cycleType }) => {
       <div className={css(headWrapperStyles({ mobileScreen }))}>
         <TileWrapper customStyle={{ padding: '24px' }}>
           <div className={css(headerRule)}>
-            {`${cycleType.charAt(0).toUpperCase() + cycleType.slice(1).toLowerCase()} Performance cycles (${
-              data.filter((item) => item.status === cycleType).length
-            })`}
+            <div className={css({ padding: '0px 10px', maxWidth: '272px' })}>
+              <Select
+                name={'cycles'}
+                placeholder={'Select Performance Cycle'}
+                options={selectOptions}
+                onChange={(e) => handleSelectFilter(e.target.value)}
+                value={cycleType}
+                representText={`Registered cycles (${data.filter((item) => item.status === cycleType).length})`}
+              />
+            </div>
+            <IconButton
+              graphic='information'
+              iconStyles={{ marginLeft: '15px' }}
+              data-test-id='iconButton'
+              onPress={() => console.log('')}
+            />
           </div>
           {loading || !loaded ? (
             <Spinner />
@@ -152,10 +206,10 @@ const PerformanceCycleTable: FC<Props> = ({ cycleType }) => {
                                 <td className={css(item)}>{createdBy}</td>
                                 <td className={css(lastItem)}>
                                   <div className={css(buttonsRule)}>
-                                    <ExpandButton />
                                     <LinkButton onClick={() => undefined}>
                                       <Action items={items} />
                                     </LinkButton>
+                                    <ExpandButton />
                                   </div>
                                 </td>
                               </tr>
@@ -222,7 +276,7 @@ const headWrapperStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen
 
 const item: Rule = { padding: '14px', textAlign: 'start' };
 
-const lastItem: Rule = { padding: '14px', textAlign: 'end' };
+const lastItem: Rule = { padding: '14px', textAlign: 'start' };
 
 const tableCell: Rule = ({ theme }) => ({ border: `1px solid ${theme.colors.alto}`, padding: '8px 10px' });
 
@@ -235,6 +289,7 @@ const headerRule: Rule = {
   fontWeight: 'bold',
   fontSize: '20px',
   paddingBottom: '24px',
+  display: 'inline-flex',
 };
 
 const tableRule: Rule = {
@@ -261,6 +316,9 @@ const matrixTableRule: Rule = ({ theme }) => ({
 
 const matrixHeadRule: Rule = ({ theme }) => ({ backgroundColor: theme.colors.tescoBlue, color: 'white' });
 
-const buttonsRule: Rule = { display: 'flex', flexDirection: 'row-reverse' };
+const buttonsRule: Rule = {
+  display: 'flex',
+  justifyContent: 'space-between',
+};
 
 export default PerformanceCycleTable;

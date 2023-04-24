@@ -17,6 +17,7 @@ export type ItemProps = {
   onKeyDown?: (e: KeyboardEvent) => void;
   testId?: string;
   iconCustomStyles?: Styles | Rule | CSSProperties | {};
+  onHover?: boolean;
 };
 
 export const Item: FC<ItemProps> = ({
@@ -32,9 +33,12 @@ export const Item: FC<ItemProps> = ({
   onKeyDown,
   testId = 'item',
   iconCustomStyles = {},
+  onHover = false,
 }) => {
   const { css } = useStyle(['lineHeight'], 'remove');
   const [recordingState, setRecordingState] = useState(false);
+  const [hover, setHover] = useState<boolean>(false);
+
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [hasFocus, setFocus] = useState(false);
 
@@ -47,12 +51,31 @@ export const Item: FC<ItemProps> = ({
     return inputRef.current && inputRef.current?.focus();
   };
 
+  const icon = (
+    <div
+      className={css(IconStyle, iconCustomStyles)}
+      onClick={() => {
+        setInputFocus();
+        onFocus && onFocus();
+      }}
+    >
+      {customIcon}
+    </div>
+  );
+
+  const renderIcon = () => {
+    if (onHover && hover && customIcon) return icon;
+    if (!onHover && !hover && customIcon) return icon;
+  };
+
   return (
     <div
       data-test-id={testId}
       className={css(wrapperItem({ marginBot }))}
       // @ts-ignore
       onKeyDown={onKeyDown}
+      onMouseEnter={() => onHover && setHover(() => true)}
+      onMouseLeave={() => onHover && setHover(() => false)}
     >
       {label && (
         <div className={css({ ...labelWrapperStyle, ...labelCustomStyle })}>
@@ -78,17 +101,8 @@ export const Item: FC<ItemProps> = ({
             {recordingState ? <Icon graphic='roundStop' /> : <Icon graphic='microphone' fill={colors.dustyGray} />}
           </div>
         )}
-        {customIcon && (
-          <div
-            className={css(IconStyle, iconCustomStyles)}
-            onClick={() => {
-              setInputFocus();
-              onFocus && onFocus();
-            }}
-          >
-            {customIcon}
-          </div>
-        )}
+
+        {renderIcon()}
       </div>
     </div>
   );

@@ -10,7 +10,6 @@ import {
   ReviewSharingActions,
   sharingObjectivesMetaSelector,
   userCurrentCycleTypeSelector,
-  getSharedObjectivesFormElements,
 } from '@pma/store';
 
 import { TileWrapper } from 'components/Tile';

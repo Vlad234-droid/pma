@@ -23,8 +23,9 @@ import useDispatch from 'hooks/useDispatch';
 import useLocation from 'hooks/useLocation';
 
 import { Page } from 'pages/general/types';
+import { PerformanceStepperProvider } from './context/PerformanceStepper';
 
-const CreatePerformanceCycle: FC = () => {
+const CreateUpdatePerformanceCycle: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { state } = useLocation<{ isViewing?: boolean }>();
@@ -78,6 +79,9 @@ const CreatePerformanceCycle: FC = () => {
 
   function buildData(data) {
     const { metadata, name, template, entryConfigKey, status, type, cycleType = CycleType.FISCAL } = data;
+
+    const templateType = entryConfigKey === 'group_c' ? CycleType.HIRING : type || cycleType;
+
     const startTime = getISODateStringWithTimeFromDateString(
       formatDate(metadata.cycle.properties.pm_cycle_start_time, DATE_FORMAT),
     );
@@ -101,7 +105,7 @@ const CreatePerformanceCycle: FC = () => {
       createdBy: {
         uuid: colleagueUuid,
       },
-      type: type || cycleType,
+      type: templateType,
       metadata: {
         ...metadata,
         cycle: {
@@ -166,13 +170,15 @@ const CreatePerformanceCycle: FC = () => {
     return <Spinner fullHeight />;
 
   return (
-    <PerformanceCycleForm
-      onSubmit={handleSubmit}
-      getConfigEntriesByUuid={getConfigEntriesByUuid}
-      defaultValues={defaultValues}
-      canEdit={performanceCycleUuid === 'new' || canEdit}
-    />
+    <PerformanceStepperProvider>
+      <PerformanceCycleForm
+        onSubmit={handleSubmit}
+        getConfigEntriesByUuid={getConfigEntriesByUuid}
+        defaultValues={defaultValues}
+        canEdit={performanceCycleUuid === 'new' || canEdit}
+      />
+    </PerformanceStepperProvider>
   );
 };
 
-export default CreatePerformanceCycle;
+export default CreateUpdatePerformanceCycle;

@@ -30,6 +30,7 @@ export interface InputField extends FormField {
 export type Option = {
   value: string | number;
   label: string;
+  description?: string;
 };
 
 export interface SelectField extends FormField {

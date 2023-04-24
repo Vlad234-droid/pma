@@ -2,11 +2,16 @@ import React, { FC, MouseEvent, useEffect, useRef, useState, CSSProperties } fro
 import mergeRefs from 'react-merge-refs';
 import { CreateRule, Rule, useStyle, Styles } from '@pma/dex-wrapper';
 
+import { useTranslation } from 'components/Translation';
+import { TileWrapper } from 'components/Tile';
+import { Input } from 'components/Form/Input';
+import { Item } from 'components/Form';
 import { Icon } from 'components/Icon';
+
 import useEventListener from 'hooks/useEventListener';
 
-import { SelectField, Option } from '../types';
 import { useFormContainer } from '../context/input';
+import { SelectField, Option } from '../types';
 
 const getSelectedOption = (options: Option[], value?: string | number) =>
   value ? options.filter((option) => option.value == value)[0] : undefined;
@@ -18,7 +23,7 @@ type CustomProps = {
 
 type SelectProps = SelectField & CustomProps;
 
-const Select: FC<SelectProps> = ({
+const SelectWithSearch: FC<SelectProps> = ({
   domRef,
   name,
   options,
@@ -34,10 +39,12 @@ const Select: FC<SelectProps> = ({
 }) => {
   const { css } = useStyle();
   const { inputRef } = useFormContainer();
+  const { t } = useTranslation();
   const ref = useRef<HTMLDivElement | null>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const [selected, setSelected] = useState<Option | undefined>();
+  const [filter, setFilteredValue] = useState<string>('');
 
   const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
     const element = event?.target as HTMLElement;
@@ -70,6 +77,16 @@ const Select: FC<SelectProps> = ({
     setOpen(false);
   };
 
+  const filteredTemplates = options?.filter((item) => {
+    if (
+      item.label.toLowerCase().includes(filter.toLowerCase()) ||
+      item.description?.toLowerCase().includes(filter.toLowerCase())
+    )
+      return item;
+  });
+
+  const handleSearchTemplate = ({ target }) => setFilteredValue(target.value);
+
   return (
     <div className={css(containerStyles, { ...wrapperStyles })} data-test-id={`select-${name}-wrapper`} ref={ref}>
       <button
@@ -92,27 +109,62 @@ const Select: FC<SelectProps> = ({
           />
         </div>
       </button>
+
       {isOpen && (
-        <div className={css(listWrapperStyles)}>
+        <TileWrapper customStyle={tileWrapperStyles} boarder={true}>
+          <Item
+            marginBot={false}
+            withIcon={true}
+            customIcon={<Icon size={'20px'} graphic='search' iconStyles={iconStyle} />}
+          >
+            <Input
+              placeholder={t('enter_template_name', 'Enter template name')}
+              value={filter}
+              onChange={handleSearchTemplate}
+              customStyles={{ borderRadius: '50px' }}
+            />
+          </Item>
+
           <div role='list' data-test-id={`${name}-list`} className={css(listStyles)}>
-            {options.map((item) => (
+            {(filter?.length >= 2 ? filteredTemplates : options).map((item) => (
               <button
                 type='button'
                 key={item.value}
                 className={css(optionStyles)}
                 onClick={(event) => handleSelect(event, item)}
               >
-                {item.label}
+                <div className={css(infoStyles)}>
+                  <p>{item.description}</p>
+                  <p>{item.label}</p>
+                </div>
               </button>
             ))}
           </div>
-        </div>
+        </TileWrapper>
       )}
     </div>
   );
 };
 
-export default Select;
+export default SelectWithSearch;
+
+const iconStyle: Rule = {
+  marginTop: '4px',
+};
+
+const infoStyles: Rule = ({ theme }) =>
+  ({
+    '& p': {
+      margin: 0,
+    },
+    '& > p:first-child': {
+      color: theme.colors.tescoBlue,
+      fontWeight: theme.font.weight.bold,
+    },
+    '& > p:last-child': {
+      fontSize: theme.font.fixed.f14.fontSize,
+    },
+  } as Styles);
 
 const containerStyles: Rule = {
   display: 'table',
@@ -164,24 +216,25 @@ const iconExpandStyles: Rule = {
   transform: 'rotate(180deg)',
 };
 
-const listWrapperStyles: Rule = {
+const tileWrapperStyles: Rule = () => ({
   display: 'block',
   position: 'absolute',
   zIndex: 999,
   width: '100%',
   paddingBottom: '10px',
-  pointerEvents: 'none',
-};
-
-const listStyles: Rule = ({ theme }) => ({
-  // @ts-ignore
-  border: `2px solid ${theme.colors.lightGray}`,
-  borderRadius: theme.border.radius.sm,
-  background: theme.colors.white,
-  maxHeight: '240px',
-  overflow: 'auto',
-  pointerEvents: 'auto',
+  padding: '24px 16px',
 });
+
+const listStyles: Rule = ({ theme }) =>
+  ({
+    borderRadius: theme.border.radius.sm,
+    background: theme.colors.white,
+    overflow: 'auto',
+    pointerEvents: 'auto',
+    '& > button:first-child': {
+      marginTop: '13px',
+    },
+  } as Styles);
 
 const optionStyles: Rule = ({ theme }) => ({
   display: 'block',
@@ -189,7 +242,7 @@ const optionStyles: Rule = ({ theme }) => ({
   fontSize: `${theme.font.fixed.f16.fontSize}`,
   lineHeight: `${theme.font.fixed.f16.lineHeight}`,
   letterSpacing: '0px',
-  padding: '10px 30px 10px 16px',
+  padding: '5px 24px 5px 0px',
   border: 'none',
   background: `${theme.colors.white}`,
   cursor: 'pointer',
