@@ -149,7 +149,7 @@ export const getOutstandingPendingEmployees = createSelector(
               date: review?.properties?.OVERDUE_DATE || review?.properties?.END_DATE || review.endTime,
               days: 7,
             }) &&
-            review.summaryStatus === Status.OVERDUE,
+            (review.summaryStatus === Status.OVERDUE || review.summaryStatus === Status.STARTED),
         ),
     );
 
@@ -163,7 +163,7 @@ export const getOutstandingPendingEmployees = createSelector(
               date: review?.properties?.OVERDUE_DATE || review?.properties?.END_DATE || review.endTime,
               days: 7,
             }) &&
-            review.summaryStatus === Status.OVERDUE,
+            (review.summaryStatus === Status.OVERDUE || review.summaryStatus === Status.STARTED),
         ),
     );
 
@@ -175,7 +175,7 @@ export const getOutstandingPendingEmployees = createSelector(
             date: review?.properties?.OVERDUE_DATE || review?.properties?.END_DATE || review.endTime,
             days: 7,
           }) &&
-          review.summaryStatus === Status.OVERDUE,
+          (review.summaryStatus === Status.OVERDUE || review.summaryStatus === Status.STARTED),
       ),
     );
 
@@ -187,7 +187,7 @@ export const getOutstandingPendingEmployees = createSelector(
             date: review?.properties?.OVERDUE_DATE || review?.properties?.END_DATE || review.endTime,
             days: 7,
           }) &&
-          review.summaryStatus === Status.OVERDUE,
+          (review.summaryStatus === Status.OVERDUE || review.summaryStatus === Status.STARTED),
       ),
     );
 

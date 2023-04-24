@@ -106,6 +106,7 @@ export const getUserTimelineEpic: Epic = (action$, _, { api }) =>
             );
           }
           const errors = data?.errors;
+
           return concatWithErrorToast(
             of(getUserTimeline.failure(errors?.[0])),
             errorPayloadConverter({ ...errors?.[0], title: 'Timeline fetch error' }),

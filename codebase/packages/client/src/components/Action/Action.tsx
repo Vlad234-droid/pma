@@ -21,7 +21,7 @@ const Action: FC<Props> = ({ items }) => {
   useClickOutside(ref, () => toggleOpen(false));
 
   return (
-    <div className={css({ position: 'relative' })} ref={ref} data-test-id={TEST_ID}>
+    <div className={css({ position: 'relative', marginLeft: '6px' })} ref={ref} data-test-id={TEST_ID}>
       <Icon graphic={'more'} onClick={handleOpen} containerTestId={ICON_TEST_ID} />
       {isOpen && (
         <div className={css(modalStyle)} data-test-id={ITEMS_TEST_ID}>
@@ -43,7 +43,7 @@ const modalStyle: Rule = ({ colors }) => ({
   position: 'absolute',
   display: 'flex',
   flexDirection: 'column',
-  right: 0,
+  right: '-6px',
   top: '100%',
   background: colors.white,
   zIndex: 2,

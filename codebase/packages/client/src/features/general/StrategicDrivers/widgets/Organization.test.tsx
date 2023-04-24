@@ -52,37 +52,9 @@ describe('Organization widget', () => {
   });
 
   describe('No objectives shared', () => {
-    it('it should not render Organization widget', () => {
+    it('it should not render Organization widget when there is no objectives', () => {
       const { queryByTestId } = render(<Organization {...props} />, {
-        orgObjectives: { objectives: ['test'] },
-        users: {
-          current: {
-            authenticated: true,
-            info: {
-              colleague: {
-                colleagueUUID: 'test-colleagueUuid',
-                profile: {
-                  firstName: 'Test fullName',
-                },
-              },
-              profileAttributes: [],
-            },
-            metadata: {
-              currentCycle: 'CURRENT',
-              colleagueCycle: {
-                endTime: '2024-03-31T23:59:59.000Z',
-                startTime: '2023-01-01T00:00:00.000Z',
-                uuid: 'f766ed5d-e159-4012-892f-27928d055c0b',
-                status: 'COMPLETED',
-                cycleType: 'FISCAL',
-              },
-            },
-          },
-          meta: {
-            loaded: true,
-            loading: false,
-          },
-        },
+        orgObjectives: { objectives: [] },
       });
       const wrapper = queryByTestId(TILE_WRAPPER);
 

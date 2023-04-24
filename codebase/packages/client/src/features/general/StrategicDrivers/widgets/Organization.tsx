@@ -5,14 +5,8 @@ import { useStyle, Rule, Button, Styles, colors } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Icon, Graphics } from 'components/Icon';
 import useDispatch from 'hooks/useDispatch';
-import {
-  OrgObjectiveActions,
-  orgObjectivesSelector,
-  colleagueCycleSelector,
-  colleagueCycleYearSelector,
-} from '@pma/store';
+import { OrgObjectiveActions, orgObjectivesSelector, colleagueCycleYearSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
-import { Status } from 'config/enum';
 
 export type Props = {
   onClick: () => void;

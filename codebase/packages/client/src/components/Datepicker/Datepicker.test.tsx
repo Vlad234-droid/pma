@@ -20,7 +20,7 @@ describe('Datepicker', () => {
     expect(datepicker).toBeInTheDocument();
   });
 
-  it('should onChange called correct time', () => {
+  it('should onChange called correct time', async () => {
     const onChange = jest.fn();
     const { getByTestId } = render(<Datepicker name='test' onChange={onChange} />);
     const value = '12/12/2022';
@@ -47,9 +47,7 @@ describe('Datepicker', () => {
     const { getByTestId } = render(<Datepicker name={name} onChange={onChange} value={value} />);
     const input = getByTestId(INPUT_TEST_ID);
     fireEvent.change(input, { target: { value: '' } });
-    expect(onChange).toBeCalledWith({
-      target: { name: 'test', type: 'date', value: '' },
-    });
+    expect(onChange).not.toBeCalled();
   });
 
   it('should onError when user enter invalid date', () => {

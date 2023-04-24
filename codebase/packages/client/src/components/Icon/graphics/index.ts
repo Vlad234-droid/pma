@@ -65,6 +65,8 @@ import { FileAttached } from './fileAttached';
 import { Upload } from './upload';
 import { Chart } from './chart';
 import { Clock } from './clock';
+import { EmptyCircle } from './emptyCircle';
+import { Dots } from './dots';
 
 /**
  * Each icon we add needs to have viewbox set to "0 0 24 24".
@@ -109,6 +111,7 @@ export type Graphics =
   | 'question'
   | 'roundAlert'
   | 'roundCircle'
+  | 'emptyCircle'
   | 'roundClock'
   | 'clock'
   | 'roundPencil'
@@ -138,11 +141,13 @@ export type Graphics =
   | 'link'
   | 'fileAttached'
   | 'chart'
+  | 'dots'
   | 'upload';
 
 export const icons: Record<Graphics, FCGraphicProps> = {
   attention: Attention,
   add: Add,
+  dots: Dots,
   roundChat: RoundChat,
   arrowLeft: ArrowLeft,
   arrowRight: ArrowRight,
@@ -179,6 +184,7 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   folder: Folder,
   archive: Archive,
   // arrowRight: ArrowRight,
+  emptyCircle: EmptyCircle,
   bell: Bell,
   notificationBell: NotificationBell,
   people: People,

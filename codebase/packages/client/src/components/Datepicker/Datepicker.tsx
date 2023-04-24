@@ -42,6 +42,7 @@ export const buildTargetObject = (value: string, name: string) => ({ target: { t
 const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isValid, isOnTop = false, readonly }) => {
   const [isOpen, toggleOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState<string | undefined>();
+
   const [date, changeDate] = useState<Date | undefined>();
   const { css } = useStyle();
   const { t } = useTranslation();
@@ -87,13 +88,19 @@ const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isVali
   );
 
   useEffect(() => {
-    if (currentValue === undefined) return;
-    dataChange(currentValue);
+    if (!currentValue) return;
+    const newValue = value && transformDateToString(new Date(value));
+    if (newValue !== currentValue) {
+      dataChange(currentValue);
+    }
   }, [currentValue]);
 
   useEffect(() => {
     if (value) {
-      setCurrentValue(transformDateToString(new Date(value)));
+      const newDateValue = transformDateToString(new Date(value));
+      if (newDateValue !== currentValue) {
+        setCurrentValue(newDateValue);
+      }
     }
   }, [value]);
 
@@ -172,8 +179,8 @@ const buttonRule: CreateRule<{ error: boolean }> =
   });
 
 const inputRule: Rule = {
-  borderTopLeftRadius: 0,
-  borderBottomLeftRadius: 0,
+  borderTopLeftRadius: '5px',
+  borderBottomLeftRadius: '5px',
   borderLeft: 0,
   paddingLeft: '57px',
 };

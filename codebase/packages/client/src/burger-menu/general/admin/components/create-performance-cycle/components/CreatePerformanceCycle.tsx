@@ -13,7 +13,7 @@ const List = () => {
   return (
     <Link to={buildPath(Page.PERFORMANCE_CYCLE)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
       <Icon graphic={'createCycle'} />
-      <span className={css(itemSettingsTextStyle)}>{t('create_performance_cycle', 'Create performance cycle')}</span>
+      <span className={css(itemSettingsTextStyle)}>{t('performance_cycle', 'Performance cycle')}</span>
     </Link>
   );
 };

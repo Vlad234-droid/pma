@@ -7,6 +7,7 @@ export const createPMCycleSchema = (t: TFunction) =>
   Yup.object().shape({
     name: Yup.string().required(),
     entryConfigKey: Yup.string().required(),
+    template: Yup.object().required(),
     metadata: Yup.object()
       .shape({
         cycle: Yup.object()

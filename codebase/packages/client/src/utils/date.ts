@@ -14,6 +14,19 @@ const PRECISE_UNITS: Record<string, DurationUnit> = {
   years: 'years',
 };
 
+export const convertDuration = (duration: string): string => {
+  const durationUnits = duration.match(/(\d+)\s*(years?|months?|weeks?|days?)/gi);
+  if (!durationUnits) return '';
+  return durationUnits.reduce((acc, unit, index) => {
+    const matchResult = unit.match(/(\d+)\s*(years?|months?|weeks?|days?)/i);
+    if (!matchResult) return acc;
+    const [_, value, unitType] = matchResult;
+    const singularUnitType = unitType.replace(/s$/, '');
+
+    return index ? `${acc}, ${parseInt(value)}${singularUnitType.charAt(0)}` : `${value}${singularUnitType.charAt(0)}`;
+  }, '');
+};
+
 export const parseDurationToIso = (durationObject: DurationObject): string =>
   Duration.fromObject(durationObject).toISO();
 
