@@ -18,7 +18,9 @@ ENV NODE_PORT=$NODE_PORT
 ENV HTTP_PROXY=$HTTP_PROXY
 ENV HTTPS_PROXY=$HTTPS_PROXY
 
-RUN apt-get update \
+RUN sed -i 's/stable\/updates/stable-security\/updates/' /etc/apt/sources.list \
+    && echo "deb http://archive.debian.org/debian stretch stretch-security main contrib non-free" > /etc/apt/sources.list \
+    && apt-get update \
     && apt-get install --yes --no-install-recommends \
     dos2unix \
     && rm -rf /var/lib/apt/lists/*
@@ -26,10 +28,10 @@ RUN apt-get update \
 RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
     echo "yarn cache folder: `yarn cache dir`" \
     && yarn config set "strict-ssl" false -g \
-    && yarn global add lerna@3.22.1 --prefix=/usr 
+    && yarn global add lerna@3.22.1 --prefix=/usr
 
 # ==============
-# codebase stage 
+# codebase stage
 # ==============
 FROM node-base AS codebase
 
@@ -74,15 +76,17 @@ ENV NPM_ACCESS_TOKEN=$NPM_ACCESS_TOKEN
 
 COPY --chmod=0755 ./scripts/create-npmrc.sh /root/create-npmrc.sh
 
-RUN apt-get update \
+RUN sed -i 's/stable\/updates/stable-security\/updates/' /etc/apt/sources.list \
+    && echo "deb http://archive.debian.org/debian stretch stretch-security main contrib non-free" > /etc/apt/sources.list \
+    && apt-get update \
     && apt-get install --yes --no-install-recommends \
     git \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 RUN dos2unix /root/create-npmrc.sh \
-    && bash /root/create-npmrc.sh --token $NPM_ACCESS_TOKEN \ 
-    && rm /root/create-npmrc.sh 
+    && bash /root/create-npmrc.sh --token $NPM_ACCESS_TOKEN \
+    && rm /root/create-npmrc.sh
 
 WORKDIR /opt/app
 
@@ -99,11 +103,11 @@ ENV SKIP_PREFLIGHT_CHECK=true
 # RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
 #     --mount=type=cache,id=node_modules,target=/opt/app/node_modules \
 #     rm -rf /usr/local/share/.cache/yarn/* \
-#     && rm -rf /opt/app/node_modules/* 
+#     && rm -rf /opt/app/node_modules/*
 
 RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
     --mount=type=cache,id=node_modules,target=/opt/app/node_modules \
-    yarn bootstrap:dev 
+    yarn bootstrap:dev
 
 RUN --mount=type=cache,id=node_modules,target=/opt/app/node_modules \
     yarn ws:client test:ci
@@ -155,7 +159,9 @@ ARG NODE_PORT
 ENV NODE_ENV=$NODE_ENV
 ENV NODE_PORT=$NODE_PORT
 
-RUN apt-get update \
+RUN sed -i 's/stable\/updates/stable-security\/updates/' /etc/apt/sources.list \
+    && echo "deb http://archive.debian.org/debian stretch stretch-security main contrib non-free" > /etc/apt/sources.list \
+    && apt-get update \
     && apt-get install --only-upgrade --yes dpkg \
     && apt-get install --only-upgrade --yes zlib1g \
     && rm -rf /var/lib/apt/lists/*
