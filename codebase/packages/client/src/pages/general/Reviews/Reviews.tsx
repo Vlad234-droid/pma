@@ -85,7 +85,6 @@ const ObjectivesPage: FC = () => {
   };
 
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
-  console.log('test123');
 
   return (
     <div>
