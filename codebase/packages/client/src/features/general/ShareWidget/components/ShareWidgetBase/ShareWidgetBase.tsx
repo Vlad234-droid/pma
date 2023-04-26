@@ -5,6 +5,7 @@ import {
   colleagueCycleSelector,
   currentUserSelector,
   getAllSharedObjectives,
+  getSharedObjectivesFormElements,
   hasStatusInReviews,
   isSharedSelector,
   ReviewSharingActions,
@@ -95,6 +96,8 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
   const isManagerShared = isManager && isShared;
   const sharedObjectivesCount = sharedObjectives.length;
 
+  const isUserWithObjectivesInCycle = useSelector(getSharedObjectivesFormElements)?.length > 0;
+
   const isUserHavingApprovedPriorities = !!useSelector(hasStatusInReviews(ReviewType.QUARTER, Status.APPROVED));
   const isUserEligibleToSharePriorities = isUserHavingApprovedPriorities || hasApproved;
 
@@ -147,7 +150,8 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
     title === 'N/A' ||
     isCompleted ||
     (!stopShare && !hasApproved && !sharing && !isManager) ||
-    (!stopShare && !isUserEligibleToSharePriorities);
+    (!stopShare && !isUserEligibleToSharePriorities) ||
+    !isUserWithObjectivesInCycle;
 
   if (notDisplay) {
     return null;
