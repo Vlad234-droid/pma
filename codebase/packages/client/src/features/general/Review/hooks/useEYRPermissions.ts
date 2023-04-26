@@ -5,6 +5,7 @@ import {
   getColleagueSelector,
   getReviewByTypeSelector,
   getTimelineByReviewTypeSelector,
+  isAnniversaryTimelineType,
 } from '@pma/store';
 import { useParams } from 'react-router-dom';
 import { Review, ReviewType, Status } from 'config/types';
@@ -20,6 +21,7 @@ export const useEYRPermissions = (reviewType: ReviewType.MYR | ReviewType.EYR) =
   const review: Review = useSelector(getReviewByTypeSelector(reviewType)) || {};
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
   const cycle = useSelector(colleagueCycleDataSelector(colleagueUuid, currentCycle));
+  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, currentCycle));
   const timeline = useSelector(getTimelineByReviewTypeSelector(reviewType, colleagueUuid, currentCycle)) || ({} as any);
 
   const yerOpenForPT =
@@ -33,7 +35,9 @@ export const useEYRPermissions = (reviewType: ReviewType.MYR | ReviewType.EYR) =
     reviewType === ReviewType.EYR &&
     ![Status.LOCKED, Status.FINISHING, Status.COMPLETED].includes(timeline?.status);
 
-  const cycleCompletedCondition = cycle?.status && [Status.COMPLETED, Status.FINISHED].includes(cycle.status);
+  const cycleCompletedCondition =
+    cycle?.status &&
+    (isAnniversary ? cycle.status === Status.COMPLETED : [Status.COMPLETED, Status.FINISHED].includes(cycle.status));
 
   const declineCondition =
     !isTalentAdmin &&
@@ -47,14 +51,15 @@ export const useEYRPermissions = (reviewType: ReviewType.MYR | ReviewType.EYR) =
     ((yerOpenForLN && review.status === Status.WAITING_FOR_APPROVAL) || yerOpenForPT);
 
   return {
-    timeline,
+    readonly: !yerOpenForPT || cycleCompletedCondition,
+    cycleCompletedCondition,
     declineCondition,
     approveCondition,
-    readonly: !yerOpenForPT || cycleCompletedCondition,
+    colleagueUuid,
+    isAnniversary,
     currentCycle,
     colleague,
-    colleagueUuid,
+    timeline,
     review,
-    cycleCompletedCondition,
   };
 };
