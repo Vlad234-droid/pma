@@ -15,6 +15,8 @@ import {
   cancelCalibrationSession,
 } from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
+import { getCalibrationStatisticsRatings } from '../calibrationStatisticsRatings/actions';
+import { Status } from '@pma/client/src/config/enum';
 
 export const getCalibrationSessionsEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
@@ -147,7 +149,14 @@ export const startCalibrationSessionEpic: Epic = (action$, state$, { api }) =>
           if (!success) {
             return from([startCalibrationSession.failure(new Error(errors?.[0].message || undefined))]);
           }
-          return from([startCalibrationSession.success({ data })]);
+          return from([
+            startCalibrationSession.success({ data }),
+            getCalibrationStatisticsRatings.request({
+              'colleague-cycle-status_in': [Status.FINISHED, Status.FINISHING, Status.STARTED, Status.COMPLETED],
+              'timeline-point-status_in': [Status.STARTED, Status.FINISHING, Status.COMPLETED],
+              year: new Date(data?.startTime).getFullYear(),
+            }),
+          ]);
         }),
         catchError((e) => {
           const errors = e?.data?.errors;
