@@ -147,8 +147,7 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
     title === 'N/A' ||
     isCompleted ||
     (!stopShare && !hasApproved && !sharing && !isManager) ||
-    (!stopShare && !isUserEligibleToSharePriorities) ||
-    (stopShare && !isShared);
+    (!stopShare && !isUserEligibleToSharePriorities);
 
   if (notDisplay) {
     return null;
