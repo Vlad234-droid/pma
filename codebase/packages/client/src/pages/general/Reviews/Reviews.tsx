@@ -80,7 +80,7 @@ const ObjectivesPage: FC = () => {
     if (tenant === Tenant.GENERAL) {
       navigate(buildPath(Page.STRATEGIC_DRIVERS));
     } else {
-      window.open('https://tescobank.sharepoint.com/sites/intranet/learn/ourbig6hub/Pages/default.aspx');
+      window.open('https://tescobank.sharepoint.com/sites/intranet/learn/OurBig3/Pages/default.aspx');
     }
   };
 
