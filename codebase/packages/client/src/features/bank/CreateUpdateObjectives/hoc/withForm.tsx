@@ -125,7 +125,9 @@ export function withForm<
                   number: priority.number,
                   properties: priority.properties,
                   status:
-                    priority?.status === Status.REQUESTED_TO_AMEND ? Status.APPROVED : Status.WAITING_FOR_APPROVAL,
+                    priority?.status === Status.REQUESTED_TO_AMEND
+                      ? Status.WAITING_FOR_COMPLETION
+                      : Status.WAITING_FOR_APPROVAL,
                 },
               ],
             }),
